@@ -14,10 +14,10 @@ Things seen during the builds of 14 and 15 November 2026 and left as they are. N
 
 ## Art (15 November)
 
-The 101 paintings from `ART_PROMPTS.md` are in the game (`game/public/assets/`), and so are the seasonal versions placed so far. Raw downloads stay in `art\incoming\` (not in the repository).
+The 101 paintings from `ART_PROMPTS.md` are in the game (`game/public/assets/`), and so are their 215 seasonal versions (spring, autumn and winter for 72 of them). Raw downloads stay in `art\incoming\` (not in the repository).
 
 - **Placing pictures.** `python game/tools/art-place/place.py [numbers]` cuts the raw files to the game's sizes and saves them; `--seasonal` does the same for `art\incoming\seasonal\` from its `manifest.json` (only new or changed files). Then `npm run tool -- assets-index` in `game`.
-- **Seasons.** A season's own painting is `<path>-<season>.jpg` beside the original; the game shows it in that season (`ASSET_DROP_IN.md` §5). Versions made by editing the original line up with it, so the village and room tables carry over; one painted from its own prompt (the skarn winter village) has its own table. The seasonal set is still being painted; run `--seasonal` again when more arrive.
+- **Seasons.** A season's own painting is `<path>-<season>.jpg` beside the original; the game shows it in that season (`ASSET_DROP_IN.md` §5). Versions made by editing the original line up with it, so the village and room tables carry over; one painted from its own prompt (the skarn winter village) has its own table. Run `--seasonal` again whenever a seasonal painting is added or redone.
 - **Fixes wanted** (from the review, list with paste-ready lines in `art\incoming\FIXES.md`): should fix #044 (stirrups) and #098 (a small cross on the lantern); could fix #051, #093, #097, #030, #088, #072, #073, #074, #064, #004, #063. After a fix, redo that picture's seasonal versions.
 - **No tint by the hour.** Final paintings are shown as painted: a night arrival shows a day painting. Either grade them by hour in CSS or ask for night versions of the scenes seen most.
 - **Event pictures waiting for their events** (17): fog, under sail, landfall, winter on the shore, ravens, comet, northern lights, the old mound, feast, the assembly, the duel, envoy, a bargain, harvest, the hunt, a raid, the shield wall. They have ids (`narrative.vignette.*`); give them to storylets or modules as those are written.
