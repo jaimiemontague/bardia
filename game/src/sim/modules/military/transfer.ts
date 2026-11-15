@@ -244,6 +244,7 @@ export function processTransfers(draft: GameState, ctx: SimContext): void {
           priority: 'high',
           vars: { holding: dest.name, lost: menLost, men: sumMen(arrived) },
           link: { kind: 'settlement', id: dest.id },
+          illustration: 'military.illus.transferIntercepted',
         });
       } else {
         ctx.notify('military.transfer.arrived', {

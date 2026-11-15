@@ -1,7 +1,8 @@
 /**
  * The Home Hall hub (SCR-05, game mode 'hub'; replaces the placeholder at priority 0), laid out by ARCHITECTURE
  * §20: the village picture is the screen. Its buildings and labels share one layout table (village.ts) inside a
- * box that keeps the viewBox aspect. Beside it, small and calm: the First Voyage (the current step large, the
+ * box that keeps the viewBox aspect. When the home's homeland has a final painting (`hub.panorama.home.<culture>`),
+ * that painting is the village, placed by its own table (PaintedVillage, paintedLayouts.ts). Beside it, small and calm: the First Voyage (the current step large, the
  * rest folded away), the town in three numbers, the Hirdmaster's Counsel one piece of advice at a time
  * (counsel.ts: most important first, each with its one action, "next" for the rest), the one gold button
  * (plan an expedition) and the time-at-home control (§7.3 waits through the core `wait` command).
@@ -21,6 +22,7 @@ import { formatNumber, tOr, useT } from '../../i18n/index';
 import { Button, Disclosure, Icon, IconButton, StatLine, Tooltip, type IconName } from '../../ui/index';
 import { shipTypeName, unitName } from '../expedition/names';
 import { harbourIce } from '../expedition/seaIce';
+import { useFinalPaintingInfo, useGameSeason } from '../../render/scenes/finalArt';
 import {
   capitalOf,
   computeCounsel,
@@ -33,7 +35,9 @@ import {
   type CounselTone,
 } from './counsel';
 import { VillageScene, type VillageModel } from './VillageScene';
-import { VIEW_H, VIEW_W, VILLAGE, shipsAtHome, spotTier, type HallBuildingId } from './village';
+import { PaintedVillage } from './PaintedVillage';
+import { homePaintingId, paintedLayout, paintingGrade, type PaintedLayout } from './paintedLayouts';
+import { VIEW_H, VIEW_W, VILLAGE, shipsAtHome, spotTier, type HallBuildingId, type HallSpot } from './village';
 import './hub.css';
 
 const WAITS: readonly { days: number; key: string }[] = [
@@ -227,10 +231,28 @@ function TimeAtHome({ pending }: { pending: boolean }): ReactElement {
   );
 }
 
-/** The village picture with its hotspots: the box that holds them keeps the viewBox aspect, centred like the SVG. */
+/** The label positions: the painting's own table when a painting is shown, else the procedural VILLAGE table. */
+function labelSpots(layout: PaintedLayout | null): readonly HallSpot[] {
+  if (!layout) return VILLAGE;
+  return VILLAGE.map((spot) => {
+    const [labelX, labelY] = layout.buildings[spot.id].label;
+    return { ...spot, labelX, labelY };
+  });
+}
+
+/**
+ * The village picture with its hotspots: the home's final painting when its homeland has one (placed by that
+ * painting's table, keyed by the season variant shown), else the procedural village. The box that holds the
+ * hotspots keeps the viewBox aspect, centred like the picture, so a label cannot drift off its building.
+ */
 function Village({ state, iced }: { state: GameState; iced: boolean }): ReactElement {
   const t = useT();
   const capital = capitalOf(state);
+  const culture = capital?.culture ?? state.factions[state.player.factionId]?.culture ?? '';
+  const painting = useFinalPaintingInfo(homePaintingId(culture));
+  const season = useGameSeason();
+  const layout = painting ? paintedLayout(culture, painting.variant) : null;
+  const [hot, setHot] = useState<HallBuildingId | null>(null);
   const shipsKey = capital
     ? shipsAtHome(state, capital.id)
         .map((s) => `${s.id}:${s.type}`)
@@ -249,12 +271,31 @@ function Village({ state, iced }: { state: GameState; iced: boolean }): ReactEle
     return { tiers, ships, building: queued > 0, fortTier, iced };
   }, [buildings, shipsKey, queued, fortTier, iced]);
   const open = (id: HallBuildingId) => navigation.open(`building.${id}`);
+  const openStrand = () => navigation.open('building.shipyard', { person: 'strand' });
   return (
-    <div className="hub-stage">
-      <VillageScene model={model} onOpen={open} />
+    <div className={`hub-stage${painting && layout ? ' is-painted' : ''}`}>
+      {painting && layout ? (
+        // The painting again, blurred and dark, fills the letterbox around the picture.
+        <img className="hub-painting-bleed" src={painting.url} alt="" draggable={false} aria-hidden="true" />
+      ) : (
+        <VillageScene model={model} onOpen={open} onShips={openStrand} />
+      )}
       {/* Exactly the viewBox's area of the scene (the SVG is centred with "meet"): the hotspots live here. */}
       <div className="hub-picture" style={{ aspectRatio: `${VIEW_W} / ${VIEW_H}` }}>
-        {VILLAGE.map((spot) => {
+        {painting && layout && (
+          <PaintedVillage
+            url={painting.url}
+            variant={painting.variant}
+            culture={culture}
+            layout={layout}
+            model={model}
+            grade={paintingGrade(painting.variant, season)}
+            hot={hot}
+            onOpen={open}
+            onShips={openStrand}
+          />
+        )}
+        {labelSpots(layout).map((spot) => {
           const tier = model.tiers[spot.id];
           const name = t(`hub.building.${spot.id}.name`);
           const tiered = spot.building !== null;
@@ -274,6 +315,10 @@ function Village({ state, iced }: { state: GameState; iced: boolean }): ReactEle
                 className={`hub-hotspot${tier <= 0 ? ' is-unbuilt' : ''}`}
                 style={{ left: `${(spot.labelX / VIEW_W) * 100}%`, top: `${(spot.labelY / VIEW_H) * 100}%` }}
                 onClick={() => open(spot.id)}
+                onMouseEnter={() => setHot(spot.id)}
+                onMouseLeave={() => setHot((h) => (h === spot.id ? null : h))}
+                onFocus={() => setHot(spot.id)}
+                onBlur={() => setHot((h) => (h === spot.id ? null : h))}
                 aria-label={tiered ? t('hub.hotspot.aria', { name, tier }) : name}
                 data-testid={`hotspot-${spot.id}`}
                 data-tier={tier}

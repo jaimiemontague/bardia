@@ -1,4 +1,1571 @@
 {
  "format": 1,
- "files": {}
+ "files": {
+  "battle/before.jpg": {
+   "bytes": 483869,
+   "hash": "7124f1ce",
+   "width": 1920,
+   "height": 1080
+  },
+  "battle/defeat.jpg": {
+   "bytes": 499052,
+   "hash": "6fb07f7e",
+   "width": 1920,
+   "height": 1080
+  },
+  "battle/victory.jpg": {
+   "bytes": 528919,
+   "hash": "3fca994d",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-caught-land-autumn.jpg": {
+   "bytes": 532417,
+   "hash": "01464816",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-caught-land-spring.jpg": {
+   "bytes": 553815,
+   "hash": "c9c74ffa",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-caught-land-winter.jpg": {
+   "bytes": 595069,
+   "hash": "78e90b0b",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-caught-land.jpg": {
+   "bytes": 557917,
+   "hash": "f1868e14",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-caught-sea-autumn.jpg": {
+   "bytes": 447476,
+   "hash": "ee0a904e",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-caught-sea-spring.jpg": {
+   "bytes": 443681,
+   "hash": "b1754402",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-caught-sea-winter.jpg": {
+   "bytes": 458033,
+   "hash": "59abb52a",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-caught-sea.jpg": {
+   "bytes": 451873,
+   "hash": "cd422021",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-land-patrol-autumn.jpg": {
+   "bytes": 486566,
+   "hash": "03f29063",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-land-patrol-spring.jpg": {
+   "bytes": 444032,
+   "hash": "ca6454d0",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-land-patrol-winter.jpg": {
+   "bytes": 484387,
+   "hash": "1010c29e",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-land-patrol.jpg": {
+   "bytes": 484150,
+   "hash": "d8385cc7",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-merchant.jpg": {
+   "bytes": 466440,
+   "hash": "aa8bdde9",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-outlaws-autumn.jpg": {
+   "bytes": 542674,
+   "hash": "7387fe61",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-outlaws-spring.jpg": {
+   "bytes": 533970,
+   "hash": "f4793ce6",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-outlaws-winter.jpg": {
+   "bytes": 587974,
+   "hash": "e90b76f2",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-outlaws.jpg": {
+   "bytes": 560340,
+   "hash": "5cf033e9",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-patrol-autumn.jpg": {
+   "bytes": 477880,
+   "hash": "d4354999",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-patrol-spring.jpg": {
+   "bytes": 467362,
+   "hash": "0814d50f",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-patrol-winter.jpg": {
+   "bytes": 494685,
+   "hash": "51769e19",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-patrol.jpg": {
+   "bytes": 480144,
+   "hash": "b632f4db",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-raiders-autumn.jpg": {
+   "bytes": 484854,
+   "hash": "92727623",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-raiders-spring.jpg": {
+   "bytes": 481048,
+   "hash": "7fc8ecb9",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-raiders-winter.jpg": {
+   "bytes": 502602,
+   "hash": "6f4d19c3",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-raiders.jpg": {
+   "bytes": 505282,
+   "hash": "cdeedced",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-warfleet-autumn.jpg": {
+   "bytes": 419610,
+   "hash": "f8fd6eeb",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-warfleet-spring.jpg": {
+   "bytes": 427384,
+   "hash": "d75c4b32",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-warfleet-winter.jpg": {
+   "bytes": 439509,
+   "hash": "adfe75c5",
+   "width": 1920,
+   "height": 1080
+  },
+  "encounters/scene-warfleet.jpg": {
+   "bytes": 443350,
+   "hash": "bb48dff8",
+   "width": 1920,
+   "height": 1080
+  },
+  "expeditions/homecoming.jpg": {
+   "bytes": 498532,
+   "hash": "1f9346bf",
+   "width": 1920,
+   "height": 1080
+  },
+  "expeditions/lost.jpg": {
+   "bytes": 531262,
+   "hash": "b03e8356",
+   "width": 1920,
+   "height": 1080
+  },
+  "expeditions/planner.jpg": {
+   "bytes": 552501,
+   "hash": "2df40cae",
+   "width": 1920,
+   "height": 1080
+  },
+  "hub/interior-great-hall.jpg": {
+   "bytes": 359928,
+   "hash": "2045f269",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-grove-autumn.jpg": {
+   "bytes": 442354,
+   "hash": "b5a51926",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-grove-spring.jpg": {
+   "bytes": 491772,
+   "hash": "2e5bdce4",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-grove-winter.jpg": {
+   "bytes": 465193,
+   "hash": "382fa0f0",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-grove.jpg": {
+   "bytes": 475931,
+   "hash": "9a0c6ce0",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-longhouse.jpg": {
+   "bytes": 352182,
+   "hash": "23e1e6b4",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-market-autumn.jpg": {
+   "bytes": 418982,
+   "hash": "a401a69a",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-market-spring.jpg": {
+   "bytes": 447953,
+   "hash": "a5d10c26",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-market-winter.jpg": {
+   "bytes": 443207,
+   "hash": "fd59049a",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-market.jpg": {
+   "bytes": 466270,
+   "hash": "eca1923c",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-mead-hall.jpg": {
+   "bytes": 349740,
+   "hash": "da147c69",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-seer.jpg": {
+   "bytes": 298801,
+   "hash": "923b021a",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-shipyard-autumn.jpg": {
+   "bytes": 441655,
+   "hash": "08730704",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-shipyard-spring.jpg": {
+   "bytes": 461839,
+   "hash": "f8d49b8f",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-shipyard-winter.jpg": {
+   "bytes": 469959,
+   "hash": "9431702b",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-shipyard.jpg": {
+   "bytes": 465206,
+   "hash": "6ec86af9",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-smithy-autumn.jpg": {
+   "bytes": 427958,
+   "hash": "04b59114",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-smithy-spring.jpg": {
+   "bytes": 395159,
+   "hash": "309dfaf7",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-smithy-winter.jpg": {
+   "bytes": 423358,
+   "hash": "46c66ad8",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/interior-smithy.jpg": {
+   "bytes": 451945,
+   "hash": "4b45bd66",
+   "width": 1600,
+   "height": 900
+  },
+  "hub/panorama-home-eyjar-autumn.jpg": {
+   "bytes": 420416,
+   "hash": "17348125",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-eyjar-spring.jpg": {
+   "bytes": 432127,
+   "hash": "39b6cfb5",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-eyjar-winter.jpg": {
+   "bytes": 430591,
+   "hash": "6bd81c48",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-eyjar.jpg": {
+   "bytes": 440388,
+   "hash": "fbea82fd",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-hvarn-autumn.jpg": {
+   "bytes": 442051,
+   "hash": "12a7df35",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-hvarn-spring.jpg": {
+   "bytes": 437992,
+   "hash": "009a0596",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-hvarn-winter.jpg": {
+   "bytes": 464411,
+   "hash": "203183e5",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-hvarn.jpg": {
+   "bytes": 452294,
+   "hash": "51e01eb6",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-skarn-autumn.jpg": {
+   "bytes": 413027,
+   "hash": "818e04fc",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-skarn-spring.jpg": {
+   "bytes": 429432,
+   "hash": "a38fb056",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-skarn-winter.jpg": {
+   "bytes": 443891,
+   "hash": "9fd223f1",
+   "width": 1300,
+   "height": 1000
+  },
+  "hub/panorama-home-skarn.jpg": {
+   "bytes": 414401,
+   "hash": "47023ad6",
+   "width": 1300,
+   "height": 1000
+  },
+  "menu/backdrop-main-autumn.jpg": {
+   "bytes": 327897,
+   "hash": "96ac50ab",
+   "width": 1920,
+   "height": 1080
+  },
+  "menu/backdrop-main-spring.jpg": {
+   "bytes": 313991,
+   "hash": "ee157a6e",
+   "width": 1920,
+   "height": 1080
+  },
+  "menu/backdrop-main-winter.jpg": {
+   "bytes": 370965,
+   "hash": "ea3aca1c",
+   "width": 1920,
+   "height": 1080
+  },
+  "menu/backdrop-main.jpg": {
+   "bytes": 328399,
+   "hash": "69dcf32a",
+   "width": 1920,
+   "height": 1080
+  },
+  "menu/homeland-eyjar-autumn.jpg": {
+   "bytes": 77448,
+   "hash": "21828a53",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-eyjar-spring.jpg": {
+   "bytes": 81598,
+   "hash": "02384fda",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-eyjar-winter.jpg": {
+   "bytes": 82695,
+   "hash": "e4b0830b",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-eyjar.jpg": {
+   "bytes": 74928,
+   "hash": "8f89c44a",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-hvarn-autumn.jpg": {
+   "bytes": 84325,
+   "hash": "e1e4badf",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-hvarn-spring.jpg": {
+   "bytes": 86003,
+   "hash": "394f6759",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-hvarn-winter.jpg": {
+   "bytes": 96436,
+   "hash": "8414bbcf",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-hvarn.jpg": {
+   "bytes": 81651,
+   "hash": "c3f75091",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-skarn-autumn.jpg": {
+   "bytes": 78577,
+   "hash": "e20db5ad",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-skarn-spring.jpg": {
+   "bytes": 79859,
+   "hash": "4d3eebc6",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-skarn-winter.jpg": {
+   "bytes": 87405,
+   "hash": "82fed6cc",
+   "width": 640,
+   "height": 360
+  },
+  "menu/homeland-skarn.jpg": {
+   "bytes": 78247,
+   "hash": "5e759575",
+   "width": 640,
+   "height": 360
+  },
+  "military/desertion-autumn.jpg": {
+   "bytes": 82413,
+   "hash": "c64a19cd",
+   "width": 640,
+   "height": 360
+  },
+  "military/desertion-spring.jpg": {
+   "bytes": 80247,
+   "hash": "b03ce915",
+   "width": 640,
+   "height": 360
+  },
+  "military/desertion-winter.jpg": {
+   "bytes": 85377,
+   "hash": "99779124",
+   "width": 640,
+   "height": 360
+  },
+  "military/desertion.jpg": {
+   "bytes": 78033,
+   "hash": "d29b53c6",
+   "width": 640,
+   "height": 360
+  },
+  "military/muster-autumn.jpg": {
+   "bytes": 78951,
+   "hash": "38f5473d",
+   "width": 640,
+   "height": 360
+  },
+  "military/muster-spring.jpg": {
+   "bytes": 79962,
+   "hash": "82db91e4",
+   "width": 640,
+   "height": 360
+  },
+  "military/muster-winter.jpg": {
+   "bytes": 88694,
+   "hash": "1fdbfab7",
+   "width": 640,
+   "height": 360
+  },
+  "military/muster.jpg": {
+   "bytes": 78739,
+   "hash": "271690d5",
+   "width": 640,
+   "height": 360
+  },
+  "military/shipyard-autumn.jpg": {
+   "bytes": 94193,
+   "hash": "7eea849c",
+   "width": 640,
+   "height": 360
+  },
+  "military/shipyard-spring.jpg": {
+   "bytes": 93366,
+   "hash": "7771fdb5",
+   "width": 640,
+   "height": 360
+  },
+  "military/shipyard-winter.jpg": {
+   "bytes": 99599,
+   "hash": "1c0f0833",
+   "width": 640,
+   "height": 360
+  },
+  "military/shipyard.jpg": {
+   "bytes": 87279,
+   "hash": "bf0f87c4",
+   "width": 640,
+   "height": 360
+  },
+  "military/transfer-intercepted-autumn.jpg": {
+   "bytes": 95353,
+   "hash": "abdd338a",
+   "width": 640,
+   "height": 360
+  },
+  "military/transfer-intercepted-spring.jpg": {
+   "bytes": 96298,
+   "hash": "bce248b5",
+   "width": 640,
+   "height": 360
+  },
+  "military/transfer-intercepted.jpg": {
+   "bytes": 87235,
+   "hash": "912e3205",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/storylets/after-the-shield-wall.jpg": {
+   "bytes": 79761,
+   "hash": "4887eed8",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/storylets/boast-reckoning.jpg": {
+   "bytes": 83916,
+   "hash": "a8fbe0a8",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/storylets/boundary-stone.jpg": {
+   "bytes": 89204,
+   "hash": "1afb9ce3",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/storylets/drunken-boast.jpg": {
+   "bytes": 69892,
+   "hash": "33801f11",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/storylets/rats-in-the-stores.jpg": {
+   "bytes": 62736,
+   "hash": "a7727cfd",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/storylets/raven-over-the-wake.jpg": {
+   "bytes": 71066,
+   "hash": "10acdde4",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/storylets/skalds-draft.jpg": {
+   "bytes": 60079,
+   "hash": "be978dfa",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/barrow-autumn.jpg": {
+   "bytes": 79544,
+   "hash": "a117d3df",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/barrow-spring.jpg": {
+   "bytes": 76211,
+   "hash": "60feb32a",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/barrow-winter.jpg": {
+   "bytes": 79770,
+   "hash": "e2743199",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/barrow.jpg": {
+   "bytes": 73968,
+   "hash": "6fc8b18b",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/comet.jpg": {
+   "bytes": 71167,
+   "hash": "0a6ed24d",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/envoy.jpg": {
+   "bytes": 65338,
+   "hash": "85614bbd",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/famine.jpg": {
+   "bytes": 65788,
+   "hash": "64777c2e",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/feast.jpg": {
+   "bytes": 68263,
+   "hash": "cc09eb55",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/fog.jpg": {
+   "bytes": 40360,
+   "hash": "1f30b9f9",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/funeral-autumn.jpg": {
+   "bytes": 81108,
+   "hash": "885139ff",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/funeral-spring.jpg": {
+   "bytes": 79488,
+   "hash": "779929a5",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/funeral-winter.jpg": {
+   "bytes": 92806,
+   "hash": "54fc668d",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/funeral.jpg": {
+   "bytes": 77737,
+   "hash": "623057a1",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/harvest.jpg": {
+   "bytes": 91209,
+   "hash": "440479aa",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/holmgang-autumn.jpg": {
+   "bytes": 86683,
+   "hash": "6977a3e1",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/holmgang-spring.jpg": {
+   "bytes": 89963,
+   "hash": "30f41fc5",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/holmgang-winter.jpg": {
+   "bytes": 95297,
+   "hash": "c3c8b0bb",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/holmgang.jpg": {
+   "bytes": 87494,
+   "hash": "89f2cd6e",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/hunt-autumn.jpg": {
+   "bytes": 101321,
+   "hash": "63866400",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/hunt-spring.jpg": {
+   "bytes": 99265,
+   "hash": "b5ee325c",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/hunt-summer.jpg": {
+   "bytes": 102895,
+   "hash": "4a1b574d",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/hunt.jpg": {
+   "bytes": 94128,
+   "hash": "cd6394a4",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/landing.jpg": {
+   "bytes": 77223,
+   "hash": "bf87e689",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/northern-lights.jpg": {
+   "bytes": 59890,
+   "hash": "82056903",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/raid-autumn.jpg": {
+   "bytes": 90091,
+   "hash": "0a0544d1",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/raid-spring.jpg": {
+   "bytes": 90813,
+   "hash": "c0bada28",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/raid-winter.jpg": {
+   "bytes": 96619,
+   "hash": "159e9e7a",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/raid.jpg": {
+   "bytes": 85764,
+   "hash": "bdb95380",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/ravens.jpg": {
+   "bytes": 79596,
+   "hash": "ba2aba36",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/shield-wall.jpg": {
+   "bytes": 77482,
+   "hash": "9ee155d4",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/storehouse.jpg": {
+   "bytes": 71586,
+   "hash": "c3789b1f",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/storm.jpg": {
+   "bytes": 67538,
+   "hash": "7e7a4952",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/thing-autumn.jpg": {
+   "bytes": 84153,
+   "hash": "fe9aac1f",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/thing-spring.jpg": {
+   "bytes": 88793,
+   "hash": "4645a1ca",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/thing-winter.jpg": {
+   "bytes": 96652,
+   "hash": "73a8a3dc",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/thing.jpg": {
+   "bytes": 83412,
+   "hash": "5511d33e",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/trade-autumn.jpg": {
+   "bytes": 75101,
+   "hash": "61a27142",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/trade-spring.jpg": {
+   "bytes": 78227,
+   "hash": "8a9c2be0",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/trade-winter.jpg": {
+   "bytes": 75524,
+   "hash": "758f5513",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/trade.jpg": {
+   "bytes": 73450,
+   "hash": "0df0b047",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/voyage.jpg": {
+   "bytes": 75176,
+   "hash": "4b12331a",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/winter-shore.jpg": {
+   "bytes": 81522,
+   "hash": "b39e1da4",
+   "width": 640,
+   "height": 360
+  },
+  "narrative/vignettes/wreck.jpg": {
+   "bytes": 76465,
+   "hash": "97d7cc60",
+   "width": 640,
+   "height": 360
+  },
+  "news/messenger.jpg": {
+   "bytes": 80180,
+   "hash": "8b6e548b",
+   "width": 640,
+   "height": 360
+  },
+  "news/tavern-talk.jpg": {
+   "bytes": 62710,
+   "hash": "a80c99d7",
+   "width": 640,
+   "height": 360
+  },
+  "people/birth.jpg": {
+   "bytes": 63095,
+   "hash": "d3fdf8d9",
+   "width": 640,
+   "height": 360
+  },
+  "people/captivity.jpg": {
+   "bytes": 61024,
+   "hash": "2db7e01c",
+   "width": 640,
+   "height": 360
+  },
+  "people/feat-choice.jpg": {
+   "bytes": 63464,
+   "hash": "4a894a55",
+   "width": 640,
+   "height": 360
+  },
+  "people/house-fallen-autumn.jpg": {
+   "bytes": 59575,
+   "hash": "9e008314",
+   "width": 640,
+   "height": 360
+  },
+  "people/house-fallen-spring.jpg": {
+   "bytes": 70496,
+   "hash": "faf374fb",
+   "width": 640,
+   "height": 360
+  },
+  "people/house-fallen-summer.jpg": {
+   "bytes": 59209,
+   "hash": "bf842036",
+   "width": 640,
+   "height": 360
+  },
+  "people/house-fallen.jpg": {
+   "bytes": 64545,
+   "hash": "7dae75cc",
+   "width": 640,
+   "height": 360
+  },
+  "people/sickness.jpg": {
+   "bytes": 61345,
+   "hash": "855f711c",
+   "width": 640,
+   "height": 360
+  },
+  "people/succession.jpg": {
+   "bytes": 64502,
+   "hash": "74bc6b41",
+   "width": 640,
+   "height": 360
+  },
+  "people/wedding-autumn.jpg": {
+   "bytes": 80596,
+   "hash": "3c0a36e9",
+   "width": 640,
+   "height": 360
+  },
+  "people/wedding-spring.jpg": {
+   "bytes": 80806,
+   "hash": "92f69959",
+   "width": 640,
+   "height": 360
+  },
+  "people/wedding-winter.jpg": {
+   "bytes": 85216,
+   "hash": "e7302e57",
+   "width": 640,
+   "height": 360
+  },
+  "people/wedding.jpg": {
+   "bytes": 78534,
+   "hash": "4b610043",
+   "width": 640,
+   "height": 360
+  },
+  "seabattle/before.jpg": {
+   "bytes": 479132,
+   "hash": "d584ef33",
+   "width": 1920,
+   "height": 1080
+  },
+  "seabattle/defeat.jpg": {
+   "bytes": 478977,
+   "hash": "524791bf",
+   "width": 1920,
+   "height": 1080
+  },
+  "seabattle/victory.jpg": {
+   "bytes": 462067,
+   "hash": "62d08f0b",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/aftermath.jpg": {
+   "bytes": 491934,
+   "hash": "e5f85536",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-capital-autumn.jpg": {
+   "bytes": 476780,
+   "hash": "85b629c7",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-capital-spring.jpg": {
+   "bytes": 501833,
+   "hash": "48d9e6c9",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-capital-winter.jpg": {
+   "bytes": 513793,
+   "hash": "62669576",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-capital.jpg": {
+   "bytes": 484205,
+   "hash": "ecefddd1",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-city-autumn.jpg": {
+   "bytes": 460705,
+   "hash": "26a1e80e",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-city-south-autumn.jpg": {
+   "bytes": 493896,
+   "hash": "47d244a6",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-city-south-spring.jpg": {
+   "bytes": 520667,
+   "hash": "aad1729e",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-city-south-winter.jpg": {
+   "bytes": 460331,
+   "hash": "68fb2869",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-city-south.jpg": {
+   "bytes": 520905,
+   "hash": "e6a489e7",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-city-spring.jpg": {
+   "bytes": 468961,
+   "hash": "6ec0c503",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-city-winter.jpg": {
+   "bytes": 525372,
+   "hash": "40f99715",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-city.jpg": {
+   "bytes": 465282,
+   "hash": "5e582ff0",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-cloister-autumn.jpg": {
+   "bytes": 482816,
+   "hash": "2c8aa814",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-cloister-spring.jpg": {
+   "bytes": 499889,
+   "hash": "67eab846",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-cloister-winter.jpg": {
+   "bytes": 527080,
+   "hash": "27e56f7d",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-cloister.jpg": {
+   "bytes": 490122,
+   "hash": "8ee2fb0f",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-emporium-autumn.jpg": {
+   "bytes": 489261,
+   "hash": "eddf0570",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-emporium-spring.jpg": {
+   "bytes": 505393,
+   "hash": "5a3b52cf",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-emporium-winter.jpg": {
+   "bytes": 522250,
+   "hash": "1085c657",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-emporium.jpg": {
+   "bytes": 489224,
+   "hash": "500c81c9",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-fortress-autumn.jpg": {
+   "bytes": 475668,
+   "hash": "4ba2b8e0",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-fortress-east-autumn.jpg": {
+   "bytes": 479436,
+   "hash": "81b36b00",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-fortress-east-spring.jpg": {
+   "bytes": 477345,
+   "hash": "bea9a74c",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-fortress-east-winter.jpg": {
+   "bytes": 548030,
+   "hash": "4e8b8ea1",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-fortress-east.jpg": {
+   "bytes": 479665,
+   "hash": "d452131a",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-fortress-spring.jpg": {
+   "bytes": 475670,
+   "hash": "165e786d",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-fortress-winter.jpg": {
+   "bytes": 492011,
+   "hash": "0d7f900a",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-fortress.jpg": {
+   "bytes": 481411,
+   "hash": "e1cc8d51",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-hamlet-autumn.jpg": {
+   "bytes": 457685,
+   "hash": "36616587",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-hamlet-spring.jpg": {
+   "bytes": 483084,
+   "hash": "77b96940",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-hamlet-winter.jpg": {
+   "bytes": 525076,
+   "hash": "e34551e7",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-hamlet.jpg": {
+   "bytes": 497644,
+   "hash": "3238a32d",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-overland-autumn.jpg": {
+   "bytes": 497496,
+   "hash": "0847bba3",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-overland-spring.jpg": {
+   "bytes": 518567,
+   "hash": "3eda22d2",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-overland-winter.jpg": {
+   "bytes": 617826,
+   "hash": "38fbee72",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-overland.jpg": {
+   "bytes": 547677,
+   "hash": "35a95c32",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-raided-autumn.jpg": {
+   "bytes": 462564,
+   "hash": "67d54876",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-raided-spring.jpg": {
+   "bytes": 486217,
+   "hash": "e07e9395",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-raided-winter.jpg": {
+   "bytes": 510728,
+   "hash": "7dd4ebf2",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-raided.jpg": {
+   "bytes": 475903,
+   "hash": "9412efcc",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-temple-stead-autumn.jpg": {
+   "bytes": 490874,
+   "hash": "281ef072",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-temple-stead-spring.jpg": {
+   "bytes": 515598,
+   "hash": "64c7587a",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-temple-stead-winter.jpg": {
+   "bytes": 519783,
+   "hash": "1c59af1f",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-temple-stead.jpg": {
+   "bytes": 483487,
+   "hash": "196ae7f7",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-autumn.jpg": {
+   "bytes": 484514,
+   "hash": "960c5283",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-spring.jpg": {
+   "bytes": 489108,
+   "hash": "9b58873f",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-sun-autumn.jpg": {
+   "bytes": 470597,
+   "hash": "9326aaba",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-sun-spring.jpg": {
+   "bytes": 507259,
+   "hash": "dcfd3e5f",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-sun-winter.jpg": {
+   "bytes": 485694,
+   "hash": "2350b5ba",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-sun.jpg": {
+   "bytes": 500321,
+   "hash": "7484c798",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-west-autumn.jpg": {
+   "bytes": 509701,
+   "hash": "3b65f439",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-west-spring.jpg": {
+   "bytes": 501891,
+   "hash": "7788cbd4",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-west-winter.jpg": {
+   "bytes": 454162,
+   "hash": "0dc9062d",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-west.jpg": {
+   "bytes": 491049,
+   "hash": "b6cbd5e5",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town-winter.jpg": {
+   "bytes": 518702,
+   "hash": "7806ddb8",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-town.jpg": {
+   "bytes": 492513,
+   "hash": "bd2b7490",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-village-autumn.jpg": {
+   "bytes": 484965,
+   "hash": "91187db0",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-village-spring.jpg": {
+   "bytes": 490826,
+   "hash": "aa28a12b",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-village-steppe-autumn.jpg": {
+   "bytes": 433897,
+   "hash": "4cf4c9a8",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-village-steppe-spring.jpg": {
+   "bytes": 482821,
+   "hash": "5270fa3e",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-village-steppe-winter.jpg": {
+   "bytes": 478550,
+   "hash": "f5ffb2e2",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-village-steppe.jpg": {
+   "bytes": 468754,
+   "hash": "3705d6b3",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-village-winter.jpg": {
+   "bytes": 513398,
+   "hash": "277df8a3",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/arrival-village.jpg": {
+   "bytes": 494460,
+   "hash": "a09ce793",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-capital-autumn.jpg": {
+   "bytes": 543547,
+   "hash": "dbc3da8e",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-capital-spring.jpg": {
+   "bytes": 545042,
+   "hash": "ae229d55",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-capital-winter.jpg": {
+   "bytes": 559769,
+   "hash": "c39798e5",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-capital.jpg": {
+   "bytes": 539107,
+   "hash": "f0c952cc",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-city-autumn.jpg": {
+   "bytes": 557481,
+   "hash": "99625a98",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-city-spring.jpg": {
+   "bytes": 580212,
+   "hash": "b54fc76f",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-city-winter.jpg": {
+   "bytes": 624808,
+   "hash": "48d1a341",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-city.jpg": {
+   "bytes": 569350,
+   "hash": "3a7248c6",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-cloister-autumn.jpg": {
+   "bytes": 584352,
+   "hash": "2e345952",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-cloister-spring.jpg": {
+   "bytes": 613314,
+   "hash": "b6e023be",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-cloister-winter.jpg": {
+   "bytes": 630025,
+   "hash": "5d1dd840",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-cloister.jpg": {
+   "bytes": 608403,
+   "hash": "c7ef1c98",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-emporium.jpg": {
+   "bytes": 588315,
+   "hash": "9031818a",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-fortress-autumn.jpg": {
+   "bytes": 515878,
+   "hash": "f33812dc",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-fortress-spring.jpg": {
+   "bytes": 531702,
+   "hash": "b57e2638",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-fortress-winter.jpg": {
+   "bytes": 547282,
+   "hash": "b209e09c",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-fortress.jpg": {
+   "bytes": 533157,
+   "hash": "d3d16727",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-hamlet-autumn.jpg": {
+   "bytes": 525827,
+   "hash": "072658dd",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-hamlet-spring.jpg": {
+   "bytes": 536388,
+   "hash": "dc7da153",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-hamlet-winter.jpg": {
+   "bytes": 568739,
+   "hash": "62458d90",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-hamlet.jpg": {
+   "bytes": 545713,
+   "hash": "c6fadf7b",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-temple-stead.jpg": {
+   "bytes": 549634,
+   "hash": "1a1f8e05",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-town-autumn.jpg": {
+   "bytes": 589811,
+   "hash": "8771fda3",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-town-spring.jpg": {
+   "bytes": 614939,
+   "hash": "91ac3a16",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-town-winter.jpg": {
+   "bytes": 641164,
+   "hash": "52084de2",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-town.jpg": {
+   "bytes": 574315,
+   "hash": "ab536add",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-village-autumn.jpg": {
+   "bytes": 544513,
+   "hash": "46eed9a4",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-village-spring.jpg": {
+   "bytes": 597056,
+   "hash": "fd9e359f",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-village-winter.jpg": {
+   "bytes": 621091,
+   "hash": "51449ee2",
+   "width": 1920,
+   "height": 1080
+  },
+  "settlements/visit-village.jpg": {
+   "bytes": 555745,
+   "hash": "11d63137",
+   "width": 1920,
+   "height": 1080
+  }
+ }
 }

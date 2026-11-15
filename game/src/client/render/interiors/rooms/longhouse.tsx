@@ -279,4 +279,10 @@ export const longhouseRoom: InteriorRoomDef = {
       wide: true,
     },
   ],
+  // Measured on the final painting (hub/interior-longhouse.jpg, 1600 × 900: a pixel is a viewBox unit).
+  final: {
+    base: {
+      houseElder: { x: 1152, y: 800, w: 345, h: 510 },
+    },
+  },
 };

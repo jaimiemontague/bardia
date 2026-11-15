@@ -330,6 +330,20 @@ describe('ledger and arrears (§11.5, §11.7)', () => {
   });
 });
 
+describe('the ledger pause card', () => {
+  it('with the policy set, the monthly tally stops time on a message card with the storehouse picture', () => {
+    const w = tw('ledger-pause');
+    const s = inDraft(w.state, w.env, (d) => {
+      d.player.policies.ledgerPause = 'always';
+    }).state;
+    const r = advance(s, 40 * HOURS_PER_DAY, w.env);
+    const p = r.state.pending;
+    expect(p?.kind).toBe('message');
+    if (p?.kind !== 'message') throw new Error('no ledger card');
+    expect(p.payload).toMatchObject({ key: 'economy.ledger.pause', illustration: 'narrative.vignette.storehouse' });
+  });
+});
+
 describe('changeEconomy', () => {
   it('validates and applies state steps, famine prices, stock losses and blockades', () => {
     const w = tw('change');

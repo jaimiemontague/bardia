@@ -4,6 +4,7 @@ import { missingKeysSeen, setMissingKeyWarnings, t } from '../../i18n/index';
 import { skirmishSetup } from '../skirmish/presets';
 import { BattleController } from './controller';
 import { MoraleTracker } from './morale';
+import { battleResultAsset } from './ResultScene';
 import { outcomeFor, summarize } from './summary';
 
 setMissingKeyWarnings(false);
@@ -53,5 +54,14 @@ describe('battle strings', () => {
     for (const e of c.engine.state.events) c.eventText(e);
     for (const b of c.snap.buildings) c.structureName(b.id);
     expect(missingKeysSeen().filter((k) => k.startsWith('battleView.') || k.startsWith('menu.skirmish') || k.startsWith('battle.'))).toEqual([]);
+  });
+});
+
+describe('the painting of the outcome', () => {
+  it('the field won, the field lost (also a withdrawal), the lines still facing for no victor', () => {
+    expect(battleResultAsset('victory')).toBe('battle.scene.victory');
+    expect(battleResultAsset('defeat')).toBe('battle.scene.defeat');
+    expect(battleResultAsset('retreat')).toBe('battle.scene.defeat');
+    expect(battleResultAsset('draw')).toBe('battle.scene.before');
   });
 });

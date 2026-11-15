@@ -200,6 +200,7 @@ export function pendCaptivity(draft: GameState, ctx: SimContext, c: Character): 
   const sentWord = rec.sentWord === true;
   const p = decision.payload;
   p.titleKey = 'people.captivity.title';
+  p.illustration = 'people.illus.captivity';
   p.key = 'people.captivity.body';
   p.vars = { name: c.name, captor: draft.factions[rec.byFactionId]?.name ?? '', ransom: rec.ransom, weeks: payload.weeks };
   p.choices = CAPTIVITY_CHOICES.map((choice) => ({

@@ -3,16 +3,20 @@
  * people in it are real buttons (name plate, glow on hover and focus, digit key); clicking one opens their
  * panel over one side of the room while the picture pans so the chosen person stays in view on the other side.
  *
+ * Where the people stand: a final painting (the base file or a season's own painting) places them by the room's
+ * `final` table for that painting; the procedural painting by the people's own x/y/w/h. Buttons, rings, plates,
+ * the pan beside an open panel and the panel's side all follow the table in force.
+ *
  * Keys: 1..n pick a person; Tab/Enter as usual; Esc closes the open panel, and on the next press leaves.
  * The entering transition lasts ENTER_MS (none under reduced motion).
  */
-import { useEffect, useId, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from 'react';
 import { useRouteActive } from '../../app/routeActive';
 import { useT } from '../../i18n/index';
 import { Button, Icon } from '../../ui/index';
-import { Painting } from '../scenes/finalArt';
+import { Painting, useFinalPaintingInfo } from '../scenes/finalArt';
 import { useFreshKeys } from '../scenes/SceneStage';
-import { findPerson, panelSideOf, personBox, roomKey } from './layout';
+import { findPerson, panelSideOf, personBox, placePeople, plateSpot, roomKey } from './layout';
 import { roomLight } from './light';
 import { ROOM_W, type InteriorRoomDef, type RoomAmbience } from './types';
 import './interiors.css';
@@ -94,7 +98,11 @@ export function InteriorRoom({ room, ambience, subtitle, person, initialPerson =
 
   const light = roomLight(ambience);
   const title = t(room.titleKey);
-  const openPerson = open ? findPerson(room, open) : undefined;
+  // The painting on screen (the season's own painting when there is one) and the table that places people on it.
+  const art = useFinalPaintingInfo(room.assetId, ambience.season);
+  const variant = art?.variant ?? null;
+  const people = useMemo(() => placePeople(room, variant), [room, variant]);
+  const openPerson = open ? findPerson({ people }, open) : undefined;
   const side = openPerson ? panelSideOf(openPerson) : 'right';
   const vars = { '--px': openPerson ? openPerson.x / ROOM_W : 0.5 } as CSSProperties;
   const RoomPainting = room.Painting;
@@ -110,22 +118,24 @@ export function InteriorRoom({ room, ambience, subtitle, person, initialPerson =
       data-testid={`interior-${room.id}`}
       data-person={open ?? ''}
       data-tod={light.tod}
+      data-art={variant ?? 'drawn'}
       style={vars}
     >
       <div className="int-stage" data-testid={stageTestId}>
         <div className="int-picture">
-          <Painting assetId={room.assetId}>
+          <Painting assetId={room.assetId} season={ambience.season}>
             <RoomPainting light={light} seed={seed ?? room.id.length * 7919} />
           </Painting>
-          {room.people.map((p, i) => {
+          {people.map((p, i) => {
             const box = personBox(p);
+            const at = plateSpot(p);
             const name = t(p.nameKey);
             const selected = p.id === open;
             return (
               <button
                 key={p.id}
                 type="button"
-                className={`int-person${selected ? ' is-selected' : ''}${open && !selected ? ' is-quiet' : ''}${p.plate === 'below' ? ' plate-below' : ''}`}
+                className={`int-person${selected ? ' is-selected' : ''}${open && !selected ? ' is-quiet' : ''}${at ? ' plate-at' : p.plate === 'below' ? ' plate-below' : ''}`}
                 style={{ left: `${box.left}%`, top: `${box.top}%`, width: `${box.width}%`, height: `${box.height}%` }}
                 onClick={() => setOpen(selected ? null : p.id)}
                 aria-label={t(p.kind === 'place' ? 'hub.interior.goTo' : 'hub.interior.speakTo', { name })}
@@ -137,7 +147,7 @@ export function InteriorRoom({ room, ambience, subtitle, person, initialPerson =
                 {...(i === 0 && !open ? { 'data-autofocus': true } : {})}
               >
                 <span className="int-ring" aria-hidden="true" />
-                <span className="int-plate" aria-hidden="true">
+                <span className="int-plate" aria-hidden="true" style={at ? { left: `${at.left}%`, top: `${at.top}%` } : undefined}>
                   {p.icon && <Icon name={p.icon} />}
                   <span className="int-plate-name">{name}</span>
                   {i < 9 && <kbd className="int-key">{i + 1}</kbd>}

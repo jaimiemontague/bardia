@@ -749,13 +749,15 @@ function drawBuilding(spot: HallSpot, tier: number, building: boolean): ReactEle
   }
 }
 
-/** The village panorama. `onOpen` is called when a building's drawing is clicked. */
+/** The village panorama. `onOpen` is called when a building's drawing is clicked, `onShips` (default: the shipyard) when the ships are. */
 export const VillageScene = memo(function VillageScene({
   model,
   onOpen,
+  onShips,
 }: {
   model: VillageModel;
   onOpen(id: HallBuildingId): void;
+  onShips?(): void;
 }): ReactElement {
   const ships = model.ships.slice(0, SHIP_SLOTS.length);
   const extra = model.ships.length - ships.length;
@@ -934,7 +936,7 @@ export const VillageScene = memo(function VillageScene({
       <g
         data-testid="hub-ships"
         data-count={model.ships.length}
-        onClick={() => onOpen('shipyard')}
+        onClick={() => (onShips ? onShips() : onOpen('shipyard'))}
         className="hv-building"
       >
         {ships.map((ship, i) => {

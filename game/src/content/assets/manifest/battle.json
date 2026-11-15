@@ -1,1 +1,64 @@
-{}
+{
+  "battle.scene.before": {
+    "kind": "image",
+    "path": "battle/before.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "shieldWall",
+        "seed": 49
+      },
+      "label": "Before the battle: a grey morning, our war-band forming its shield line before a palisaded town, the leader pointing, the defenders gathering on the bank ahead. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "battle.scene.victory": {
+    "kind": "image",
+    "path": "battle/victory.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "raid",
+        "palette": "dusk",
+        "seed": 50
+      },
+      "label": "The field is ours: evening, our warriors on a taken earth bank with a broken palisade, spears raised as the banner is planted, the last of the enemy running for the trees. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "battle.scene.defeat": {
+    "kind": "image",
+    "path": "battle/defeat.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "aftermath",
+        "palette": "dusk",
+        "seed": 51
+      },
+      "label": "The day is lost: dusk, our men falling back toward the ships carrying a wounded friend, the enemy line dark on the ridge behind, not following. Subject on the right two thirds; the left third stays calm for text."
+    }
+  }
+}

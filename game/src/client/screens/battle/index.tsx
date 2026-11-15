@@ -4,7 +4,8 @@
  * plays it in real time with pause, and hands the engine's result back with the battle module's own
  * `applyBattleResult` command, which returns the game to the scene it came from. If the module ever
  * refused the result, the summary offers the auto-resolved outcome instead, so no battle can strand
- * the player.
+ * the player. The fight's end is the painted result scene (ResultScene.tsx), which also serves the route
+ * 'battleResult' after an auto-resolved battle.
  */
 import { useCallback, type ReactElement } from 'react';
 import type { Content } from '@content/index';
@@ -19,9 +20,12 @@ import { t as translate, useT } from '../../i18n/index';
 import { Button } from '../../ui/index';
 import { BattleScene } from './BattleScene';
 import { BattleController } from './controller';
+import { battleName } from './ResultScene';
 
 export { BattleScene } from './BattleScene';
 export { BattleController } from './controller';
+/** The outcome of a battle the captains settled (route 'battleResult'). */
+export { battleResultScreen } from './ResultScene';
 
 /**
  * One controller per running battle id, kept outside React so a remount (StrictMode, an error
@@ -38,12 +42,6 @@ export function controllerFor(id: string, setup: BattleSetup, content: Content):
 /** Forgets the controller of a finished battle. */
 export function releaseController(id: string): void {
   if (live?.id === id) live = null;
-}
-
-function battleTitle(state: GameState, setup: BattleSetup, t: ReturnType<typeof useT>): string {
-  const kind = t(`battle.kind.${setup.kind}`);
-  const place = setup.settlementId !== undefined ? state.settlements[setup.settlementId]?.name : undefined;
-  return place !== undefined ? t('battle.setup.titleAt', { kind, place }) : kind;
 }
 
 function CampaignBattle({ state, content }: { state: GameState; content: Content }): ReactElement {
@@ -80,7 +78,7 @@ function CampaignBattle({ state, content }: { state: GameState; content: Content
   return (
     <BattleScene
       controller={c}
-      title={battleTitle(state, setup, t)}
+      title={battleName(state, setup, t)}
       nameOf={nameOf}
       doneLabelKey="battleView.returnSaga"
       onDone={done}

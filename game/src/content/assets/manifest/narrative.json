@@ -40,5 +40,137 @@
     "path": "narrative/storylets/skalds-draft.png",
     "size": [640, 360],
     "placeholder": { "generator": "vignette", "params": { "scene": "skald", "palette": "firelight", "seed": 1107 }, "label": "The Skald’s Draft" }
+  },
+  "narrative.vignette.storm": {
+    "kind": "image",
+    "path": "narrative/vignettes/storm.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "storm", "seed": 1301 }, "label": "Storm at Sea" }
+  },
+  "narrative.vignette.fog": {
+    "kind": "image",
+    "path": "narrative/vignettes/fog.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "fog", "seed": 1302 }, "label": "Fog" }
+  },
+  "narrative.vignette.wreck": {
+    "kind": "image",
+    "path": "narrative/vignettes/wreck.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "wreck", "seed": 1303 }, "label": "Shipwreck" }
+  },
+  "narrative.vignette.voyage": {
+    "kind": "image",
+    "path": "narrative/vignettes/voyage.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "voyage", "seed": 1304 }, "label": "Under Sail" }
+  },
+  "narrative.vignette.landing": {
+    "kind": "image",
+    "path": "narrative/vignettes/landing.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "landing", "seed": 1305 }, "label": "Landfall" }
+  },
+  "narrative.vignette.winterShore": {
+    "kind": "image",
+    "path": "narrative/vignettes/winter-shore.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "shore", "seed": 1306 }, "label": "Winter on the Shore" }
+  },
+  "narrative.vignette.ravens": {
+    "kind": "image",
+    "path": "narrative/vignettes/ravens.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "ravens", "seed": 1307 }, "label": "Ravens" }
+  },
+  "narrative.vignette.comet": {
+    "kind": "image",
+    "path": "narrative/vignettes/comet.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "comet", "seed": 1308 }, "label": "A Star with a Tail" }
+  },
+  "narrative.vignette.northernLights": {
+    "kind": "image",
+    "path": "narrative/vignettes/northern-lights.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "northernLights", "seed": 1309 }, "label": "The Northern Lights" }
+  },
+  "narrative.vignette.barrow": {
+    "kind": "image",
+    "path": "narrative/vignettes/barrow.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "barrow", "seed": 1310 }, "label": "The Old Mound" }
+  },
+  "narrative.vignette.feast": {
+    "kind": "image",
+    "path": "narrative/vignettes/feast.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "feast", "seed": 1311 }, "label": "A Feast" }
+  },
+  "narrative.vignette.thing": {
+    "kind": "image",
+    "path": "narrative/vignettes/thing.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "thing", "seed": 1312 }, "label": "The Assembly" }
+  },
+  "narrative.vignette.holmgang": {
+    "kind": "image",
+    "path": "narrative/vignettes/holmgang.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "holmgang", "seed": 1313 }, "label": "The Duel" }
+  },
+  "narrative.vignette.envoy": {
+    "kind": "image",
+    "path": "narrative/vignettes/envoy.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "envoy", "seed": 1314 }, "label": "An Envoy" }
+  },
+  "narrative.vignette.trade": {
+    "kind": "image",
+    "path": "narrative/vignettes/trade.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "trade", "seed": 1315 }, "label": "A Bargain" }
+  },
+  "narrative.vignette.harvest": {
+    "kind": "image",
+    "path": "narrative/vignettes/harvest.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "harvest", "seed": 1316 }, "label": "Harvest" }
+  },
+  "narrative.vignette.famine": {
+    "kind": "image",
+    "path": "narrative/vignettes/famine.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "famine", "seed": 1317 }, "label": "Hunger" }
+  },
+  "narrative.vignette.storehouse": {
+    "kind": "image",
+    "path": "narrative/vignettes/storehouse.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "storehouse", "seed": 1318 }, "label": "The Storehouse" }
+  },
+  "narrative.vignette.hunt": {
+    "kind": "image",
+    "path": "narrative/vignettes/hunt.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "hunt", "seed": 1319 }, "label": "The Hunt" }
+  },
+  "narrative.vignette.funeral": {
+    "kind": "image",
+    "path": "narrative/vignettes/funeral.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "funeral", "seed": 1320 }, "label": "A Burial" }
+  },
+  "narrative.vignette.raid": {
+    "kind": "image",
+    "path": "narrative/vignettes/raid.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "raid", "seed": 1321 }, "label": "A Raid" }
+  },
+  "narrative.vignette.shieldWall": {
+    "kind": "image",
+    "path": "narrative/vignettes/shield-wall.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "shieldWall", "seed": 1322 }, "label": "The Shield Wall" }
   }
 }

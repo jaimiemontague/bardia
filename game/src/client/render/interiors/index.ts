@@ -12,11 +12,16 @@
  *   useRoutePerson    Keeps the open person in the route's params: `{ person: '<id>' }` deep-links straight to a
  *                     panel, and coming back from a screen opened on top shows the panel again.
  *   ROOM_W, ROOM_H    The 1600 × 900 viewBox every room paints into. Keep people between x 200 and 1400.
- *   InteriorRoomDef   A room: id (the building id), titleKey, assetId (final art), Painting, people.
+ *   InteriorRoomDef   A room: id (the building id), titleKey, assetId (final art), Painting, people, final.
  *   InteriorPerson    One person or spot: id, x/y (feet centre), w/h (click box up from the feet), nameKey,
- *                     greetingKey, icon, plate ('above' | 'below'), panel side ('left' | 'right' | 'auto'),
+ *                     greetingKey, icon, plate ('above' | 'below'), plateAt (the plate's centre, when neither
+ *                     above nor below will do), panel side ('left' | 'right' | 'auto'),
  *                     wide (a wider panel for a grid of cards).
- *   personBox, panelSideOf, roomKey, findPerson   The pure layout and key logic (unit-tested).
+ *   FinalSpots        Where the people stand in the final paintings: `final: { base: { smith: { x, y, w, h } } }`
+ *                     for the base file; a season's own painting adds `winter: { … }` (a person missing there
+ *                     stands where `base` puts them). Optional `plate`, `plateAt` and `panel` per spot. The people's own
+ *                     x/y/w/h stay for the procedural painting ("Ignore final files").
+ *   personBox, plateSpot, panelSideOf, roomKey, findPerson, placePeople, spotOf   The pure layout and key logic (unit-tested).
  *
  * Light
  *   roomLight(ambience)   The light inside: the hour outside (`outdoor`, the scenes' Light), daylight, firelight.
@@ -76,13 +81,14 @@
  * // descriptor: { id: 'shipyard', route: 'building.shipyard', component: ShipyardScreen, layout: 'overlay' }
  * ```
  *
- * The painting never holds hotspots, so a final painting registered under `assetId` (ASSET_DROP_IN.md, 1600 × 900
- * or 1920 × 1080) replaces it without moving anyone. Strings go under `hub.interior.<building>.<person>.*`.
+ * The painting never holds hotspots. A final painting registered under `assetId` (ASSET_DROP_IN.md, 1600 × 900, so
+ * a pixel is a viewBox unit) replaces the drawn one; its people are placed by the room's `final` table, measured on
+ * that painting (cover the whole figure and the prop they stand by; the ring sits at the feet). Strings go under `hub.interior.<building>.<person>.*`.
  */
 export { InteriorRoom, ENTER_MS, prefersStill, type InteriorRoomProps } from './InteriorRoom';
 export { useRoutePerson } from './route';
-export { ROOM_W, ROOM_H, type InteriorPerson, type InteriorRoomDef, type PanelSide, type RoomAmbience, type RoomPaintingProps } from './types';
-export { personBox, panelSideOf, roomKey, findPerson, type PersonBox, type RoomKeyAction } from './layout';
+export { ROOM_W, ROOM_H, type FinalSpots, type InteriorPerson, type InteriorRoomDef, type PanelSide, type PersonSpot, type RoomAmbience, type RoomPaintingProps, type SpotTable } from './types';
+export { personBox, plateSpot, panelSideOf, placePeople, spotOf, roomKey, findPerson, type PersonBox, type RoomKeyAction } from './layout';
 export { roomLight, lit, outside, type RoomLight } from './light';
 export {
   RoomSvg,

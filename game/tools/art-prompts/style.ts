@@ -19,6 +19,8 @@ export interface ArtScene {
   size: readonly [number, number];
   /** 'manifest': the id exists today. 'new': the id is registered when the picture exists. */
   status: 'manifest' | 'new';
+  /** A season's own painting of the asset `id` (its file is the id's path with `-<season>` added). */
+  season?: 'spring' | 'summer' | 'autumn' | 'winter';
   anchor: Anchor;
   /** This picture is itself the anchor for its kind (made first, nothing attached). */
   isAnchor?: boolean;
@@ -128,6 +130,16 @@ For winter, night or a burned version of a picture you already have, stay in tha
 > Same picture, same place, same buildings and people in the same positions. Change only: (what is different).
 
 That keeps the place the same. The few such versions in this file have their own prompt as well, in case the chat is gone.
+
+### Seasons
+
+Any picture can have its own painting for spring, summer, autumn or winter; the game shows it in that season and the original in the others. Make a season's painting by editing the original: attach the finished picture as the image to edit and ask for the season only, keeping the framing, the buildings, the people, what they are doing, the time of day and the style. A painting made that way lines up with the original, so the click labels in the village and the rooms fit it too.
+
+1. Save each one in \`art\\incoming\\seasonal\` as the original's file name with the season added: \`001-panorama-home-skarn-spring.png\`, \`-fall.png\` for autumn, \`-winter.png\`.
+2. List them in \`art\\incoming\\seasonal\\manifest.json\` (each picture's number, asset id and game path, and for each season the file name and the game path \`<path>-<season>.jpg\`).
+3. Tell me they are there. I cut them to the game's size and put each beside its original.
+
+A season painted from its own prompt (#002) is a new painting rather than an edit, so things in it stand a little apart; I place its labels separately.
 
 ### Saving
 

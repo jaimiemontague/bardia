@@ -249,4 +249,11 @@ export const seerRoom: InteriorRoomDef = {
       icon: 'eye',
     },
   ],
+  // Measured on the final painting (hub/interior-seer.jpg, 1600 × 900: a pixel is a viewBox unit).
+  final: {
+    base: {
+      // Above her head is under the room's title: the plate sits in the smoke beside her face.
+      seer: { x: 708, y: 825, w: 555, h: 710, plateAt: [935, 205] },
+    },
+  },
 };

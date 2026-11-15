@@ -142,6 +142,10 @@
   bottom: auto;
   top: calc(100% + 0.6rem);
 }
+.int-person.plate-at .int-plate {
+  bottom: auto;
+  transform: translate(-50%, -50%);
+}
 .int-plate .icon {
   color: var(--gold-0);
 }
@@ -163,6 +167,11 @@
 .int-person.is-selected .int-plate {
   background: rgba(80, 52, 22, 0.96);
   transform: translateX(-50%) scale(1.06);
+}
+.int-person.plate-at:hover .int-plate,
+.int-person.plate-at:focus-visible .int-plate,
+.int-person.plate-at.is-selected .int-plate {
+  transform: translate(-50%, -50%) scale(1.06);
 }
 .int-person.is-quiet .int-plate {
   opacity: 0.6;

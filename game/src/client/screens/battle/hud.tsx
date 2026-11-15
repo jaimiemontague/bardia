@@ -14,7 +14,6 @@ import type { FormationId } from '@sim/core/state';
 import { formatNumber, useT } from '../../i18n/index';
 import { Button, Icon, KeyHint, Tooltip } from '../../ui/index';
 import type { BattleController, SpeedSetting } from './controller';
-import type { BattleSummary } from './summary';
 
 /** Key hint of each ability button: a rebindable action, or a fixed key (Space charges and looses). */
 const ABILITY_KEYS: Readonly<Partial<Record<AbilityId, { action: string } | { combo: string }>>> = {
@@ -536,90 +535,3 @@ export function FastForward(): ReactElement {
   );
 }
 
-export function Summary({
-  c,
-  summary,
-  reasonKey,
-  children,
-  error,
-}: {
-  c: BattleController;
-  summary: BattleSummary;
-  reasonKey: string | null;
-  children: ReactNode;
-  error?: string | null;
-}): ReactElement {
-  const t = useT();
-  const rows: [string, keyof BattleSummary['own']][] = [
-    ['battleView.sum.men', 'men'],
-    ['battleView.sum.killed', 'killed'],
-    ['battleView.sum.wounded', 'wounded'],
-    ['battleView.sum.captured', 'captured'],
-  ];
-  return (
-    <div className="bv-modal bv-summary-wrap" role="dialog" aria-modal="true" aria-labelledby="bv-sum-title" data-testid="battle-summary">
-      <div className={`bv-modal-card bv-summary outcome-${summary.outcome}`}>
-        <h2 id="bv-sum-title" data-testid="battle-outcome" data-outcome={summary.outcome}>
-          {t(`battleView.outcome.${summary.outcome}`)}
-        </h2>
-        {reasonKey && <p className="bv-reason">{t(reasonKey)}</p>}
-        <p className="muted">{t('battleView.sum.duration', { time: clock(summary.durationS) })}</p>
-        <table className="bv-sum-table">
-          <thead>
-            <tr>
-              <th />
-              <th>{t('battleView.sum.yours')}</th>
-              <th>{t('battleView.sum.theirs')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(([label, k]) => (
-              <tr key={k}>
-                <th>{t(label)}</th>
-                <td className="num">{formatNumber(summary.own[k])}</td>
-                <td className="num">{formatNumber(summary.enemy[k])}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <ul className="bv-sum-facts">
-          {(summary.lootValue > 0 || c.side === 'attacker') && <li data-testid="battle-sum-loot">{t('battleView.sum.loot', { value: summary.lootValue, silver: summary.lootSilver })}</li>}
-          {summary.lootGoods.length > 0 && (
-            <li>
-              {t('battleView.sum.goods', {
-                list: [...summary.lootGoods]
-                  .sort((a, b) => b.tons - a.tons)
-                  .slice(0, 6)
-                  .map((g) => t('battleView.sum.good', { tons: formatNumber(g.tons, { maximumFractionDigits: 2 }), good: t(`economy.good.${g.good}`) }))
-                  .join(', '),
-                more: Math.max(0, summary.lootGoods.length - 6),
-              })}
-            </li>
-          )}
-          {summary.buildingsBurned > 0 && <li>{t('battleView.sum.burned', { n: summary.buildingsBurned })}</li>}
-          {(summary.chief.killed || summary.chief.captured) && <li>{t(summary.chief.killed ? 'battleView.sum.chiefKilled' : 'battleView.sum.chiefCaptured')}</li>}
-        </ul>
-        {summary.leaders.length > 0 && (
-          <div className="bv-sum-leaders">
-            <h3>{t('battleView.sum.leaders')}</h3>
-            <ul>
-              {summary.leaders.map((l) => (
-                <li key={l.id} className={`fate-${l.fate}`} data-testid={`battle-leader-${l.id}`}>
-                  <span className={`bv-swatch ${l.side === c.side ? 'is-own' : 'is-foe'}`} />
-                  <span>{l.name}</span>
-                  <span className="muted">{t(`battleView.fate.${l.fate}`)}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {error && (
-          <p className="bv-error" role="alert" data-testid="battle-return-error">
-            {error}
-          </p>
-        )}
-        <div className="bv-modal-actions">{children}</div>
-      </div>
-    </div>
-  );
-}

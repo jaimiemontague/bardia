@@ -3,6 +3,7 @@
  * definition that ties a painting to its table of people. See index.ts for the worked example.
  */
 import type { ComponentType } from 'react';
+import type { SeasonId } from '@content/schemas/ids';
 import type { Ambience } from '../scenes/pictures';
 import type { IconName } from '../../ui/index';
 import type { RoomLight } from './light';
@@ -32,6 +33,11 @@ export interface InteriorPerson {
   icon?: IconName;
   /** Name plate above the head (default) or below the feet. */
   plate?: 'above' | 'below';
+  /**
+   * Centre of the name plate (viewBox units), when neither above nor below will do: beside the head when the space
+   * above it is under the room's title or holds a raised hammer. Overrides `plate`. Keep it clear of faces.
+   */
+  plateAt?: readonly [x: number, y: number];
   /** Where the panel opens (default 'auto'). */
   panel?: PanelSide;
   /** A wider panel (about 56% of the view) for a menu with a grid of cards; the default is about 46%. */
@@ -39,6 +45,23 @@ export interface InteriorPerson {
   /** 'place' for a spot that is not somebody (the ships on the strand): its button reads "Go to …", not "Speak with …". */
   kind?: 'person' | 'place';
 }
+
+/**
+ * Where one person stands in one final painting: the feet, the click box, and optionally the plate (`plate`,
+ * `plateAt`) and the panel side. These fields replace the person's own (the procedural painting's) while that painting is on screen; the
+ * rest of the person (names, icon, wide) stays as the person says.
+ */
+export type PersonSpot = Pick<InteriorPerson, 'x' | 'y' | 'w' | 'h'> & Partial<Pick<InteriorPerson, 'plate' | 'plateAt' | 'panel'>>;
+
+/** One painting's spots, by person id. */
+export type SpotTable = Readonly<Record<string, PersonSpot>>;
+
+/**
+ * Where the people stand in the final paintings, one table per painting: `base` for the base file
+ * (`hub/interior-smithy.jpg`), and a season's own painting (`hub/interior-smithy-winter.jpg`) adds one more table
+ * under the season's name. A person missing from a season's table stands where `base` puts them.
+ */
+export type FinalSpots = { readonly base: SpotTable } & { readonly [S in SeasonId]?: SpotTable };
 
 /** What a room painting receives: the room's light (hour, season, weather, firelight) and a layout seed. */
 export interface RoomPaintingProps {
@@ -56,8 +79,13 @@ export interface InteriorRoomDef {
   assetId: string;
   /** The procedural painting (1600 × 900, no hotspots in it: they come from `people`). */
   Painting: ComponentType<RoomPaintingProps>;
-  /** People and spots, in key order (digit 1 picks the first). The first is the room's main person. */
+  /**
+   * People and spots, in key order (digit 1 picks the first). The first is the room's main person. Their x/y/w/h
+   * place them in the procedural painting.
+   */
   people: readonly InteriorPerson[];
+  /** Where the same people stand in the final paintings (by painting variant); see FinalSpots. */
+  final?: FinalSpots;
 }
 
 /** Time of day, season and weather for a room (the scenes' Ambience). */

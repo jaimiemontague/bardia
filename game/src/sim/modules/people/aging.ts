@@ -131,7 +131,7 @@ export function monthlyNaturalDeath(draft: GameState, ctx: SimContext): void {
     if (c.oldAgeWarnedHour === undefined) {
       c.oldAgeWarnedHour = now;
       ctx.emit({ type: 'OldAgeWarned', charId: c.id, age });
-      notifyHouse(ctx, c, 'people.notify.oldAge', { age }, c.id === draft.player.rulerId ? 'high' : 'normal');
+      notifyHouse(ctx, c, 'people.notify.oldAge', { age }, c.id === draft.player.rulerId ? 'high' : 'normal', 'people.illus.sickness');
       if (storylet !== '' && isPlayerHouse(draft, c)) {
         ctx.applyEffects([{ op: 'scheduleStorylet', storyletId: storylet, inDays: 0, scope: { kind: 'character', id: c.id } }]);
       }

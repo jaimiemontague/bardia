@@ -618,98 +618,6 @@
   font-size: var(--fs-md);
 }
 
-/* Summary */
-.sv-summary-wrap {
-  background: radial-gradient(ellipse at center, rgba(4, 10, 14, 0.55), rgba(4, 10, 14, 0.85));
-}
-.sv-summary {
-  width: min(56rem, calc(100vw - 2rem));
-}
-.sv-summary h2 {
-  font-size: var(--fs-3xl);
-}
-.sv-summary.outcome-victory h2 {
-  color: #a9e08e;
-}
-.sv-summary.outcome-defeat h2 {
-  color: #ff9e88;
-}
-.sv-summary.outcome-escaped h2 {
-  color: #ffd27a;
-}
-.sv-sum-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--sp-3);
-  margin: var(--sp-3) 0;
-}
-.sv-sum-stat {
-  display: grid;
-  justify-items: center;
-  padding: var(--sp-2);
-  border-radius: var(--r-md);
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid var(--c-border);
-}
-.sv-sum-value {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  color: var(--c-accent-hi);
-}
-.sv-sum-label {
-  font-size: var(--fs-md);
-}
-.sv-sum-sub {
-  font-size: var(--fs-sm);
-}
-.sv-sum-plunder {
-  font-size: var(--fs-lg);
-  margin: 0 0 var(--sp-3);
-}
-.sv-sum-fleets {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-4);
-}
-.sv-sum-fleet h3 {
-  margin: 0 0 6px;
-  font-family: var(--font-display);
-  font-size: var(--fs-md);
-  color: var(--c-accent);
-}
-.sv-sum-fleet ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.sv-sum-fleet li {
-  display: grid;
-  justify-items: center;
-  width: 6rem;
-  text-align: center;
-}
-.sv-sum-ship {
-  font-size: var(--fs-sm);
-  line-height: 1.15;
-}
-.sv-sum-fate {
-  font-size: var(--fs-sm);
-  color: var(--c-text-dim);
-}
-.sv-sum-fleet li.fate-sunk .sv-sum-fate,
-.sv-sum-fleet li.fate-taken .sv-sum-fate {
-  color: #ff9e88;
-}
-.sv-sum-fleet.is-foe li.fate-sunk .sv-sum-fate,
-.sv-sum-fleet.is-foe li.fate-taken .sv-sum-fate {
-  color: #a9e08e;
-}
-.sv-error {
-  color: #ff9e88;
-}
 
 @keyframes sv-pulse {
   0%,
@@ -735,4 +643,26 @@
   .sv-title-sub {
     display: none;
   }
+}
+
+/* The end of the fight: the painted result scene over the water (ResultScene.tsx). */
+.sv-result-host {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+}
+.sv-result-fleet .sv-result-ship {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+.sv-result-fleet .sv-result-ship > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sv-result-fleet li.fate-sunk,
+.sv-result-fleet li.fate-taken {
+  color: #f0a58e;
 }

@@ -16,8 +16,12 @@
  * Beside Launch the player chooses how to travel: "Set sail" (the default) or "March overland" (owner play-test
  * 2026-11-14). A march hides the ships, lets every man at the hall go, limits the provisions to what the men can
  * carry (`validateExpedition`'s `rationsCapacity`), and is allowed while the harbour is iced in.
+ *
+ * The painting of the ships loading on the strand (`expeditions.scene.planner`) sits behind the frame and as a
+ * band behind its title (PlannerScreen). This folder also holds the homecoming and lost-expedition scenes
+ * (returnScene.tsx).
  */
-import { useMemo, useState, type ReactElement } from 'react';
+import { useMemo, useState, type CSSProperties, type ReactElement } from 'react';
 import type { Content } from '@content/index';
 import type { CharId, GameState, GoodId, ShipId } from '@sim/core/state';
 import {
@@ -51,6 +55,8 @@ import {
   recipeForCharacter,
 } from '../../ui/index';
 import { quoteTrade, rationsToTons } from '../settlement/knownMarkets';
+import { AssetImage } from '../../assets/index';
+import { Painting, useFinalPainting } from '../../render/scenes/index';
 import { formatTons, goodName, shipTypeName, sumMen, unitName } from './names';
 import { harbourIce, type HarbourIce } from './seaIce';
 import './planner.css';
@@ -72,7 +78,7 @@ function stewardIssue(preview: ExpeditionPreview): { tone: 'bad' | 'warn'; issue
 }
 
 /** The planner for a given state (exported for tests). */
-export function ExpeditionPlanner({ state, onClose }: { state: GameState; onClose(): void }): ReactElement {
+export function ExpeditionPlanner({ state, onClose, art }: { state: GameState; onClose(): void; art?: string | null }): ReactElement {
   const t = useT();
   const loaded = loadContent();
   const content = loaded.ok ? loaded.content : null;
@@ -81,7 +87,7 @@ export function ExpeditionPlanner({ state, onClose }: { state: GameState; onClos
   );
   const preview = useMemo(() => (content ? validateExpedition(state, content, plan) : null), [state, content, plan]);
   if (!content || !preview) return <Frame title={t('expeditions.planner.title')}>{t('expeditions.planner.noContent')}</Frame>;
-  return <Planner state={state} content={content} plan={plan} setPlan={setPlan} preview={preview} onClose={onClose} />;
+  return <Planner state={state} content={content} plan={plan} setPlan={setPlan} preview={preview} onClose={onClose} art={art ?? null} />;
 }
 
 function Planner({
@@ -91,6 +97,7 @@ function Planner({
   setPlan,
   preview,
   onClose,
+  art,
 }: {
   state: GameState;
   content: Content;
@@ -98,6 +105,8 @@ function Planner({
   setPlan(next: ExpeditionPlan | ((p: ExpeditionPlan) => ExpeditionPlan)): void;
   preview: ExpeditionPreview;
   onClose(): void;
+  /** URL of the planner's painting (the band behind the title), when there is one. */
+  art: string | null;
 }): ReactElement {
   const t = useT();
   const dispatch = useGame((s) => s.dispatch);
@@ -129,7 +138,8 @@ function Planner({
       title={t('expeditions.planner.title')}
       subtitle={t('expeditions.planner.from', { place: home?.name ?? '' })}
       ornate
-      className="pl-planner"
+      className={`pl-planner${art ? ' has-art' : ''}`}
+      {...(art ? { style: { '--pl-art': `url("${art}")` } as CSSProperties } : {})}
       actions={<IconButton icon="close" label={t('hub.planner.close')} onClick={onClose} data-testid="planner-close" />}
       footer={
         <div className="pl-footer">
@@ -587,11 +597,32 @@ function Details({
   );
 }
 
+/**
+ * The planner over its painting: the strand at dawn with the ships loading (`expeditions.scene.planner`) fills
+ * the room around the frame, darkened so the frame reads as a table set out on the shore, and shows again as a
+ * band behind the title, so it is seen even when the frame fills a small window.
+ */
 function PlannerScreen({ close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  const art = useFinalPainting(PLANNER_ART);
   if (!state) return <div />;
-  return <ExpeditionPlanner state={state} onClose={close} />;
+  return (
+    <>
+      <div className="pl-backdrop" aria-hidden="true" data-testid="planner-backdrop">
+        <Painting assetId={PLANNER_ART}>
+          <AssetImage id={PLANNER_ART} className="scn-final" />
+        </Painting>
+      </div>
+      <ExpeditionPlanner state={state} onClose={close} art={art} />
+    </>
+  );
 }
+
+/** The planner's painting. */
+export const PLANNER_ART = 'expeditions.scene.planner';
+
+/** The homecoming and the lost expedition (route 'expeditionReturn', opened by the sim-event watcher). */
+export { returnScreen } from './returnScene';
 
 export const screen: ScreenDescriptor = {
   id: 'expeditionPlanner',

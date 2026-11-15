@@ -428,5 +428,110 @@
       },
       "label": "After the assault: the taken settlement behind, smoke rising red in the dusk, our warriors with a banner in the foreground."
     }
+  },
+  "settlements.scene.arrival.town.west": {
+    "kind": "image",
+    "path": "settlements/arrival-town-west.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "town",
+        "culture": "albric",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a town of the western lowlands (Albric and Cael): thatched halls inside an old earth bank at a river mouth, a small stone hall of the Lantern, fish traps and broad river boats at a wharf. Seen from our ship's bow. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.arrival.city.south": {
+    "kind": "image",
+    "path": "settlements/arrival-city-south.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "city",
+        "culture": "corvani",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a city of the warm south (Corvaine): old imperial stone walls patched with brick, red roofs, a stone breakwater, cypress and olive hills, a pillared hall with a gilded lantern. Seen from our ship's bow. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.arrival.fortress.east": {
+    "kind": "image",
+    "path": "settlements/arrival-fortress-east.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "fortress",
+        "culture": "velkar",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a river stronghold of the east (the Velkar Rivers): log walls on an earth rampart with a gate tower, steep-roofed log houses, dugouts on the mud bank, endless birch forest, mist on the water. Seen from our ship's bow. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.arrival.town.sun": {
+    "kind": "image",
+    "path": "settlements/arrival-town-sun.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "town",
+        "culture": "saraleonese",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a port of the far south (Saraleon): pale stone walls and flat-roofed houses up a dry hillside, palms, one low dome, awnings over a market by a stone quay with oared galleys. Seen from our ship's bow. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.arrival.village.steppe": {
+    "kind": "image",
+    "path": "settlements/arrival-village-steppe.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "village",
+        "culture": "kurgai",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a camp of the grass plains (the Kurgai): round felt tents, wagons, horse herds to the horizon, horse-tail standards, riders watching from the bank by a ford. Seen from our ship's bow. Subject on the right two thirds; the left third stays calm for text."
+    }
   }
 }

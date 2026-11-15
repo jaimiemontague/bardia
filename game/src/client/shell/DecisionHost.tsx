@@ -10,9 +10,16 @@
  *     onto `storyletChoice { instanceId, choice }` (plus "Later" when `canDefer`), until a dedicated
  *     storylet card screen registers for the kind;
  *   - otherwise an explanation that the decision's screen is not built yet (dev: the payload).
+ *
+ * Every card shows the payload's `illustration` (an image asset id, e.g. `people.illus.captivity` or
+ * `narrative.vignette.storm`) at the top, 16:9 (`EventPicture`): the final painting when there is one, in
+ * the game's season when that season has its own painting, else the procedural placeholder. The picture
+ * shrinks on short windows so the choices stay in view.
  */
 import type { ReactElement } from 'react';
 import type { Command } from '@sim/core/commands';
+import { AssetImage, manifestEntry } from '../assets/index';
+import { useFinalPaintingInfo } from '../render/scenes/finalArt';
 import { PENDING_OWNERS } from '@sim/core/ownership';
 import type { PendingDecision, TextVars } from '@sim/core/state';
 import { useGame, usePending } from '../app/gameStore';
@@ -61,7 +68,7 @@ export function storyletChoices(p: PendingDecision): PendingChoice[] {
 const rec = (v: unknown): Record<string, unknown> => (v !== null && typeof v === 'object' && !Array.isArray(v) ? (v as Record<string, unknown>) : {});
 
 /** Extracts displayable text and choices from any pending payload. */
-export function describePending(p: PendingDecision): { titleKey: string; textKey: string | null; vars: TextVars; choices: PendingChoice[] } {
+export function describePending(p: PendingDecision): { titleKey: string; textKey: string | null; vars: TextVars; choices: PendingChoice[]; illustration: string | null } {
   const payload = rec(p.payload);
   const vars = rec(payload.vars) as TextVars;
   const textKey = [payload.key, payload.textKey, payload.bodyKey].find((k): k is string => typeof k === 'string' && k.length > 0) ?? null;
@@ -87,14 +94,31 @@ export function describePending(p: PendingDecision): { titleKey: string; textKey
     }
   }
   if (choices.length === 0) choices.push(...storyletChoices(p));
-  return { titleKey, textKey, vars, choices };
+  const illustration = typeof payload.illustration === 'string' && payload.illustration.length > 0 ? payload.illustration : null;
+  return { titleKey, textKey, vars, choices, illustration };
+}
+
+/**
+ * The picture of an event (decision cards, the critical alert box, an opened inbox entry): the final painting
+ * for `assetId` (a season's own painting in that season), else the procedural placeholder, 16:9. Nothing when
+ * the id is not an image in the manifest. `className` adds the place's own layout (`event-picture` is the base).
+ */
+export function EventPicture({ assetId, className, testId = 'decision-picture' }: { assetId: string; className?: string; testId?: string }): ReactElement | null {
+  const info = useFinalPaintingInfo(assetId);
+  const entry = manifestEntry(assetId);
+  if (!entry || entry.kind !== 'image') return null;
+  return (
+    <div className={['event-picture', className ?? 'decision-picture'].join(' ')} data-testid={testId} data-asset-id={assetId} data-final={info ? 'yes' : 'no'} data-variant={info?.variant ?? ''} aria-hidden="true">
+      {info ? <img src={info.url} alt="" draggable={false} decoding="async" /> : <AssetImage id={assetId} alt="" fit="cover" />}
+    </div>
+  );
 }
 
 /** The fallback modal for pending kinds without a registered screen. */
 export function GenericDecision({ pending }: { pending: PendingDecision }): ReactElement {
   const t = useT();
   const dispatch = useGame((s) => s.dispatch);
-  const { titleKey, textKey, vars, choices } = describePending(pending);
+  const { titleKey, textKey, vars, choices, illustration } = describePending(pending);
   const isMessage = pending.kind === 'message';
   const priority = isMessage ? (rec(pending.payload).priority as string | undefined) : undefined;
   const owner = Object.hasOwn(PENDING_OWNERS, pending.kind) ? PENDING_OWNERS[pending.kind] : undefined;
@@ -124,7 +148,18 @@ export function GenericDecision({ pending }: { pending: PendingDecision }): Reac
   );
 
   return (
-    <Modal open layer="decision" title={t(titleKey, vars)} subtitle={formatGameDate(pending.hour)} tone={priority === 'critical' ? 'critical' : priority === 'high' ? 'important' : 'default'} footer={footer} size="md" data-testid="generic-decision">
+    <Modal
+      open
+      layer="decision"
+      title={t(titleKey, vars)}
+      subtitle={formatGameDate(pending.hour)}
+      tone={priority === 'critical' ? 'critical' : priority === 'high' ? 'important' : 'default'}
+      footer={footer}
+      size="md"
+      className={illustration ? 'decision-card has-picture' : 'decision-card'}
+      data-testid="generic-decision"
+    >
+      {illustration && <EventPicture assetId={illustration} />}
       {textKey ? (
         <p className="decision-text">{t(textKey, vars)}</p>
       ) : !isMessage && choices.length === 0 ? (

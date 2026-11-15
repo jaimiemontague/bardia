@@ -12,10 +12,12 @@ import { GameSession } from '@sim/game';
 import { headlessCommand } from '@sim/headless';
 import { suggestPlan } from '@sim/modules/expeditions/plan';
 import { useGame } from '../../app/gameStore';
+import { useNavigation } from '../../app/navigation';
 import { buildRegistry } from '../../app/screenRegistry';
 import { missingKeysSeen } from '../../i18n/index';
 import { DecisionHost } from '../../shell/DecisionHost';
 import { resetClientState } from '../../testing/clientTestKit';
+import { battleResultScreen } from '../battle/ResultScene';
 import * as battleSetup from '../battleSetup/index';
 import { Ledger } from '../ledger/index';
 import * as settlement from '../settlement/index';
@@ -24,7 +26,7 @@ import { ExpeditionHud } from './hud';
 import { ExpeditionPlanner } from './index';
 
 const registry = buildRegistry({ battleSetup, settlement });
-const OWN_PREFIXES = ['expeditions.', 'settlements.', 'battle.setup', 'economy.ui', 'economy.good'];
+const OWN_PREFIXES = ['expeditions.', 'settlements.', 'battle.setup', 'battle.result', 'economy.ui', 'economy.good'];
 
 function state(): GameState {
   return useGame.getState().state as GameState;
@@ -108,6 +110,18 @@ describe('the expedition loop on screen', () => {
     act(() => fireEvent.click(screen.getByTestId('battle-auto')));
     expect(state().settlements[target]?.lastFate?.fate).toBe('raid');
     host.unmount();
+
+    // The captains' outcome as its own painted scene, then on.
+    const top = useNavigation.getState().stack.at(-1);
+    expect(top?.id).toBe('battleResult');
+    const Result = battleResultScreen.component;
+    const result = render(<Result params={top?.params ?? {}} close={() => useNavigation.getState().back()} />);
+    const outcome = screen.getByTestId('battle-outcome').getAttribute('data-outcome') ?? '';
+    expect(outcome).toMatch(/^(victory|defeat|retreat|draw)$/);
+    expect(screen.getByTestId('battle-summary').getAttribute('data-asset')).toMatch(/^battle\.scene\./);
+    act(() => fireEvent.click(screen.getByTestId('decision-choice-continue')));
+    expect(useNavigation.getState().stack.some((r) => r.id === 'battleResult')).toBe(false);
+    result.unmount();
 
     // Answer whatever followed (a storylet), then the Cargo screen.
     while (state().pending) act(() => void useGame.getState().dispatch(headless()));

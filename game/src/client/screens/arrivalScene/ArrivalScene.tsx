@@ -38,7 +38,7 @@ export function ArrivalSceneBody({ view, onChoose }: { view: ArrivalView; onChoo
       className="scn-arrival"
       data={{ tier: s.tier, fort: String(s.fortTier), view: view.picture.view, scarred: view.picture.raided ? 'yes' : 'no' }}
       picture={
-        <Painting assetId={view.assetId}>
+        <Painting assetId={view.assetId} season={view.picture.ambience.season}>
           <SettlementPicture model={view.picture} testId="arrival-picture" />
         </Painting>
       }

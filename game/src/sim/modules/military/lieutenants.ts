@@ -446,6 +446,7 @@ function desert(draft: GameState, ctx: SimContext, charId: CharId, rng: RandomSo
       priority: 'high',
       vars: { name: c.name },
       link: { kind: 'character', id: charId },
+      illustration: 'military.illus.desertion',
     });
     ctx.chronicle({
       kind: 'military.desertion',

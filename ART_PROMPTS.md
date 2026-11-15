@@ -55,6 +55,16 @@ For winter, night or a burned version of a picture you already have, stay in tha
 
 That keeps the place the same. The few such versions in this file have their own prompt as well, in case the chat is gone.
 
+### Seasons
+
+Any picture can have its own painting for spring, summer, autumn or winter; the game shows it in that season and the original in the others. Make a season's painting by editing the original: attach the finished picture as the image to edit and ask for the season only, keeping the framing, the buildings, the people, what they are doing, the time of day and the style. A painting made that way lines up with the original, so the click labels in the village and the rooms fit it too.
+
+1. Save each one in `art\incoming\seasonal` as the original's file name with the season added: `001-panorama-home-skarn-spring.png`, `-fall.png` for autumn, `-winter.png`.
+2. List them in `art\incoming\seasonal\manifest.json` (each picture's number, asset id and game path, and for each season the file name and the game path `<path>-<season>.jpg`).
+3. Tell me they are there. I cut them to the game's size and put each beside its original.
+
+A season painted from its own prompt (#002) is a new painting rather than an edit, so things in it stand a little apart; I place its labels separately.
+
 ### Saving
 
 1. Download each picture at full size.
@@ -103,7 +113,7 @@ The screen the player sees most. Make the summer fjord village first: it is also
 
 - **Attach:** nothing. This picture becomes `anchor-outdoor.png`
 - **Save as:** `art\incoming\001-panorama-home-skarn.png`
-- **In the game:** `hub.panorama.home.skarn`, 1300×1000, `public/assets/hub/panorama-home-skarn.jpg` (new slot)
+- **In the game:** `hub.panorama.home.skarn`, 1300×1000, `public/assets/hub/panorama-home-skarn.jpg` (the slot exists today)
 - **Note:** The game puts a click label on each of the eight buildings. When the picture exists I move the labels to match it, so the layout only has to be roughly as described.
 
 ```text
@@ -128,7 +138,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\002-panorama-home-skarn-winter.png`
-- **In the game:** `hub.panorama.home.skarn.winter`, 1300×1000, `public/assets/hub/panorama-home-skarn-winter.jpg` (new slot)
+- **In the game:** `hub.panorama.home.skarn`, 1300×1000, `public/assets/hub/panorama-home-skarn-winter.jpg` (its own winter painting)
 - **Note:** Best made in the chat of the summer picture: "Same picture, same place, same buildings in the same positions. Change only: deep winter, snow on roofs and slope, the fjord frozen along the shore, ships hauled up and covered, short blue daylight." This box is the fallback.
 
 ```text
@@ -153,7 +163,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\003-panorama-home-hvarn.png`
-- **In the game:** `hub.panorama.home.hvarn`, 1300×1000, `public/assets/hub/panorama-home-hvarn.jpg` (new slot)
+- **In the game:** `hub.panorama.home.hvarn`, 1300×1000, `public/assets/hub/panorama-home-hvarn.jpg` (the slot exists today)
 - **Note:** The game puts a click label on each of the eight buildings. When the picture exists I move the labels to match it, so the layout only has to be roughly as described.
 
 ```text
@@ -178,7 +188,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\004-panorama-home-eyjar.png`
-- **In the game:** `hub.panorama.home.eyjar`, 1300×1000, `public/assets/hub/panorama-home-eyjar.jpg` (new slot)
+- **In the game:** `hub.panorama.home.eyjar`, 1300×1000, `public/assets/hub/panorama-home-eyjar.jpg` (the slot exists today)
 - **Note:** The game puts a click label on each of the eight buildings. When the picture exists I move the labels to match it, so the layout only has to be roughly as described.
 
 ```text
@@ -1287,13 +1297,13 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 ## Battle and voyage cards
 
-These screens have no picture today: the planner, the cards before and after a fight, and the homecoming. I add the picture slots when you have the art.
+The planner, the scenes before and after a fight on land and at sea, the homecoming and the lost expedition. The text sits over the left third.
 
 ### 046 · Loading the ships
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\046-planner.png`
-- **In the game:** `expeditions.scene.planner`, 1920×1080, `public/assets/expeditions/planner.jpg` (new slot)
+- **In the game:** `expeditions.scene.planner`, 1920×1080, `public/assets/expeditions/planner.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -1319,7 +1329,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\047-homecoming.png`
-- **In the game:** `expeditions.scene.homecoming`, 1920×1080, `public/assets/expeditions/homecoming.jpg` (new slot)
+- **In the game:** `expeditions.scene.homecoming`, 1920×1080, `public/assets/expeditions/homecoming.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -1345,7 +1355,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\048-lost.png`
-- **In the game:** `expeditions.scene.lost`, 1920×1080, `public/assets/expeditions/lost.jpg` (new slot)
+- **In the game:** `expeditions.scene.lost`, 1920×1080, `public/assets/expeditions/lost.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -1371,7 +1381,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\049-before.png`
-- **In the game:** `battle.scene.before`, 1920×1080, `public/assets/battle/before.jpg` (new slot)
+- **In the game:** `battle.scene.before`, 1920×1080, `public/assets/battle/before.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -1397,7 +1407,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\050-victory.png`
-- **In the game:** `battle.scene.victory`, 1920×1080, `public/assets/battle/victory.jpg` (new slot)
+- **In the game:** `battle.scene.victory`, 1920×1080, `public/assets/battle/victory.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -1423,7 +1433,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\051-defeat.png`
-- **In the game:** `battle.scene.defeat`, 1920×1080, `public/assets/battle/defeat.jpg` (new slot)
+- **In the game:** `battle.scene.defeat`, 1920×1080, `public/assets/battle/defeat.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -1449,7 +1459,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\052-before.png`
-- **In the game:** `seabattle.scene.before`, 1920×1080, `public/assets/seabattle/before.jpg` (new slot)
+- **In the game:** `seabattle.scene.before`, 1920×1080, `public/assets/seabattle/before.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -1475,7 +1485,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\053-victory.png`
-- **In the game:** `seabattle.scene.victory`, 1920×1080, `public/assets/seabattle/victory.jpg` (new slot)
+- **In the game:** `seabattle.scene.victory`, 1920×1080, `public/assets/seabattle/victory.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -1501,7 +1511,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\054-defeat.png`
-- **In the game:** `seabattle.scene.defeat`, 1920×1080, `public/assets/seabattle/defeat.jpg` (new slot)
+- **In the game:** `seabattle.scene.defeat`, 1920×1080, `public/assets/seabattle/defeat.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2053,13 +2063,13 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 ## Event pictures: sea, weather and omens
 
-More small pictures for the kinds of event the game draws by itself today. I give each its own id when the picture exists.
+More small pictures for events at sea, the weather and omens. Some show on an event card or in the inbox today; the rest wait for their events.
 
 ### 075 · Storm at sea
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\075-storm.png`
-- **In the game:** `narrative.vignette.storm`, 640×360, `public/assets/narrative/vignettes/storm.jpg` (new slot)
+- **In the game:** `narrative.vignette.storm`, 640×360, `public/assets/narrative/vignettes/storm.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2085,7 +2095,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\076-fog.png`
-- **In the game:** `narrative.vignette.fog`, 640×360, `public/assets/narrative/vignettes/fog.jpg` (new slot)
+- **In the game:** `narrative.vignette.fog`, 640×360, `public/assets/narrative/vignettes/fog.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2111,7 +2121,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\077-wreck.png`
-- **In the game:** `narrative.vignette.wreck`, 640×360, `public/assets/narrative/vignettes/wreck.jpg` (new slot)
+- **In the game:** `narrative.vignette.wreck`, 640×360, `public/assets/narrative/vignettes/wreck.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2137,7 +2147,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\078-voyage.png`
-- **In the game:** `narrative.vignette.voyage`, 640×360, `public/assets/narrative/vignettes/voyage.jpg` (new slot)
+- **In the game:** `narrative.vignette.voyage`, 640×360, `public/assets/narrative/vignettes/voyage.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2163,7 +2173,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\079-landing.png`
-- **In the game:** `narrative.vignette.landing`, 640×360, `public/assets/narrative/vignettes/landing.jpg` (new slot)
+- **In the game:** `narrative.vignette.landing`, 640×360, `public/assets/narrative/vignettes/landing.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2189,7 +2199,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\080-winter-shore.png`
-- **In the game:** `narrative.vignette.winterShore`, 640×360, `public/assets/narrative/vignettes/winter-shore.jpg` (new slot)
+- **In the game:** `narrative.vignette.winterShore`, 640×360, `public/assets/narrative/vignettes/winter-shore.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2215,7 +2225,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\081-ravens.png`
-- **In the game:** `narrative.vignette.ravens`, 640×360, `public/assets/narrative/vignettes/ravens.jpg` (new slot)
+- **In the game:** `narrative.vignette.ravens`, 640×360, `public/assets/narrative/vignettes/ravens.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2241,7 +2251,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\082-comet.png`
-- **In the game:** `narrative.vignette.comet`, 640×360, `public/assets/narrative/vignettes/comet.jpg` (new slot)
+- **In the game:** `narrative.vignette.comet`, 640×360, `public/assets/narrative/vignettes/comet.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2267,7 +2277,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\083-northern-lights.png`
-- **In the game:** `narrative.vignette.northernLights`, 640×360, `public/assets/narrative/vignettes/northern-lights.jpg` (new slot)
+- **In the game:** `narrative.vignette.northernLights`, 640×360, `public/assets/narrative/vignettes/northern-lights.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2293,7 +2303,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\084-barrow.png`
-- **In the game:** `narrative.vignette.barrow`, 640×360, `public/assets/narrative/vignettes/barrow.jpg` (new slot)
+- **In the game:** `narrative.vignette.barrow`, 640×360, `public/assets/narrative/vignettes/barrow.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2323,7 +2333,7 @@ The rest of the small pictures the game draws by itself today.
 
 - **Attach:** `anchor-indoor.png`
 - **Save as:** `art\incoming\085-feast.png`
-- **In the game:** `narrative.vignette.feast`, 640×360, `public/assets/narrative/vignettes/feast.jpg` (new slot)
+- **In the game:** `narrative.vignette.feast`, 640×360, `public/assets/narrative/vignettes/feast.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2349,7 +2359,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\086-thing.png`
-- **In the game:** `narrative.vignette.thing`, 640×360, `public/assets/narrative/vignettes/thing.jpg` (new slot)
+- **In the game:** `narrative.vignette.thing`, 640×360, `public/assets/narrative/vignettes/thing.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2375,7 +2385,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\087-holmgang.png`
-- **In the game:** `narrative.vignette.holmgang`, 640×360, `public/assets/narrative/vignettes/holmgang.jpg` (new slot)
+- **In the game:** `narrative.vignette.holmgang`, 640×360, `public/assets/narrative/vignettes/holmgang.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2401,7 +2411,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-indoor.png`
 - **Save as:** `art\incoming\088-envoy.png`
-- **In the game:** `narrative.vignette.envoy`, 640×360, `public/assets/narrative/vignettes/envoy.jpg` (new slot)
+- **In the game:** `narrative.vignette.envoy`, 640×360, `public/assets/narrative/vignettes/envoy.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2427,7 +2437,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\089-trade.png`
-- **In the game:** `narrative.vignette.trade`, 640×360, `public/assets/narrative/vignettes/trade.jpg` (new slot)
+- **In the game:** `narrative.vignette.trade`, 640×360, `public/assets/narrative/vignettes/trade.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2453,7 +2463,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\090-harvest.png`
-- **In the game:** `narrative.vignette.harvest`, 640×360, `public/assets/narrative/vignettes/harvest.jpg` (new slot)
+- **In the game:** `narrative.vignette.harvest`, 640×360, `public/assets/narrative/vignettes/harvest.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2479,7 +2489,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-indoor.png`
 - **Save as:** `art\incoming\091-famine.png`
-- **In the game:** `narrative.vignette.famine`, 640×360, `public/assets/narrative/vignettes/famine.jpg` (new slot)
+- **In the game:** `narrative.vignette.famine`, 640×360, `public/assets/narrative/vignettes/famine.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2505,7 +2515,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-indoor.png`
 - **Save as:** `art\incoming\092-storehouse.png`
-- **In the game:** `narrative.vignette.storehouse`, 640×360, `public/assets/narrative/vignettes/storehouse.jpg` (new slot)
+- **In the game:** `narrative.vignette.storehouse`, 640×360, `public/assets/narrative/vignettes/storehouse.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2531,7 +2541,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\093-hunt.png`
-- **In the game:** `narrative.vignette.hunt`, 640×360, `public/assets/narrative/vignettes/hunt.jpg` (new slot)
+- **In the game:** `narrative.vignette.hunt`, 640×360, `public/assets/narrative/vignettes/hunt.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2557,7 +2567,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\094-funeral.png`
-- **In the game:** `narrative.vignette.funeral`, 640×360, `public/assets/narrative/vignettes/funeral.jpg` (new slot)
+- **In the game:** `narrative.vignette.funeral`, 640×360, `public/assets/narrative/vignettes/funeral.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2583,7 +2593,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\095-raid.png`
-- **In the game:** `narrative.vignette.raid`, 640×360, `public/assets/narrative/vignettes/raid.jpg` (new slot)
+- **In the game:** `narrative.vignette.raid`, 640×360, `public/assets/narrative/vignettes/raid.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2609,7 +2619,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-outdoor.png`
 - **Save as:** `art\incoming\096-shield-wall.png`
-- **In the game:** `narrative.vignette.shieldWall`, 640×360, `public/assets/narrative/vignettes/shield-wall.jpg` (new slot)
+- **In the game:** `narrative.vignette.shieldWall`, 640×360, `public/assets/narrative/vignettes/shield-wall.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2633,13 +2643,13 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 ## Arriving in other lands
 
-The game has one arrival picture for each kind of place today. These are versions for the peoples who do not build like the north. They can wait; I wire them in when the pictures exist.
+Versions of the arrival for the peoples who do not build like the north. Every settlement of such a land arrives to that land picture; raided, cloister and overland arrivals keep their own.
 
 ### 097 · Arriving by sea: a town of the western lowlands
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\097-arrival-town-west.png`
-- **In the game:** `settlements.scene.arrival.town.west`, 1920×1080, `public/assets/settlements/arrival-town-west.jpg` (new slot)
+- **In the game:** `settlements.scene.arrival.town.west`, 1920×1080, `public/assets/settlements/arrival-town-west.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2665,7 +2675,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\098-arrival-city-south.png`
-- **In the game:** `settlements.scene.arrival.city.south`, 1920×1080, `public/assets/settlements/arrival-city-south.jpg` (new slot)
+- **In the game:** `settlements.scene.arrival.city.south`, 1920×1080, `public/assets/settlements/arrival-city-south.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2691,7 +2701,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\099-arrival-fortress-east.png`
-- **In the game:** `settlements.scene.arrival.fortress.east`, 1920×1080, `public/assets/settlements/arrival-fortress-east.jpg` (new slot)
+- **In the game:** `settlements.scene.arrival.fortress.east`, 1920×1080, `public/assets/settlements/arrival-fortress-east.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2717,7 +2727,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\100-arrival-town-sun.png`
-- **In the game:** `settlements.scene.arrival.town.sun`, 1920×1080, `public/assets/settlements/arrival-town-sun.jpg` (new slot)
+- **In the game:** `settlements.scene.arrival.town.sun`, 1920×1080, `public/assets/settlements/arrival-town-sun.jpg` (the slot exists today)
 
 ```text
 Create one image.
@@ -2743,7 +2753,7 @@ FORMAT: One painting that fills the whole image from edge to edge, landscape, as
 
 - **Attach:** `anchor-sea.png`
 - **Save as:** `art\incoming\101-arrival-village-steppe.png`
-- **In the game:** `settlements.scene.arrival.village.steppe`, 1920×1080, `public/assets/settlements/arrival-village-steppe.jpg` (new slot)
+- **In the game:** `settlements.scene.arrival.village.steppe`, 1920×1080, `public/assets/settlements/arrival-village-steppe.jpg` (the slot exists today)
 
 ```text
 Create one image.

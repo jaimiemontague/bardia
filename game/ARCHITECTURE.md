@@ -153,7 +153,8 @@ the next queued decision); raiser/resolver per kind are in `ownership.ts`.
 **Every decision must be answerable on screen.** Either a client screen registers for the pending kind, or the payload
 carries what the shell's generic decision modal renders: `titleKey`, `key` (body) + `vars`, and
 `choices: [{ id, labelKey, vars?, command, tone?, disabled?, previewKey? }]` with ready-made commands (when a command
-needs the decision's id, set `choices` on `ctx.pend(...)`'s returned decision). A decision without either soft-locks the
+needs the decision's id, set `choices` on `ctx.pend(...)`'s returned decision), and optionally `illustration` (an
+image asset id, drawn 16:9 at the top of the card). A decision without either soft-locks the
 game (time stops for good). `src/sim/headless.ts` must also know a default answer for every kind (tools, soak tests).
 Note that a decision can stop time mid-tick: invariants that compare "last updated" hours must allow for
 `state.time.resume` (the rest of the tick runs on the next advance).
@@ -295,7 +296,8 @@ ctx = `{ state, env, scope, rng? }`). Core provides `flag(name)`, `season()`, `o
 
 `ctx` (`SimContext`) gives: `state` (the draft), `balance`, `content`, `tunables`, `hour`, `moduleId`, `events`,
 `emit(event)`, `rng(stream)`, `pend(request)`, `resolvePending(id)`, `applyEffects`, `newId`,
-`notify(key, {priority, vars, link})`, `narrate(key, vars, voice)`, `chronicle(entry)`, `runAs`.
+`notify(key, {priority, vars, link, illustration})` (`illustration`: an image asset id shown on a critical alert and
+in the inbox entry, never on a toast or feed line), `narrate(key, vars, voice)`, `chronicle(entry)`, `runAs`.
 
 **One operation** (dispatch, advance, new game, load, `inDraft`) is one Immer `produce` with one context. At its end,
 still inside the recipe, the kernel drains reactions, flushes `ctx.rng` streams and **snapshots every event**, so an
@@ -500,7 +502,11 @@ bigger, and more immersive. These rules bind every client screen. Reference wind
     `InteriorRoom`, `useRoutePerson`; one file per room in `rooms/`, read the header of `index.ts` first). Each
     menu sits behind the person who would give it; most rooms have one person, none more than three. The painting
     never holds a hotspot: people are placed by the table in the 1600×900 picture, so a final painting (asset id
-    `hub.interior.<building>`) replaces the drawn one without moving anyone. A route param `{ person: '<id>' }`
+    `hub.interior.<building>`) brings its own placements: the room's `final` table, measured on that painting (a
+    pixel of the 1600×900 file is a viewBox unit), one entry per painting (`base`, and a season's own painting
+    only when its people stand elsewhere; anyone missing falls back to `base`). The people's own x/y place them on
+    the drawn painting. The home village works the same way: `screens/hub/paintedLayouts.ts` holds a label table
+    per painted village, keyed by homeland and painting. A route param `{ person: '<id>' }`
     opens a room with that person's menu already open; use it for every link that names a thing to do. A room's
     screen descriptor sets `staysUnder: true`, which keeps it drawn under a panel opened from it.
 12. **Battles are fought with the keys** (owner, 2026-11-15). W A S D or the arrow keys move what the player
@@ -510,3 +516,14 @@ bigger, and more immersive. These rules bind every client screen. Reference wind
     the held keys change, never per frame, and always through the engine's order or input log so replays hold.
     Mouse orders stay as a second way to command. The numbers live in the tunables (`battle.json` `drive`,
     `seabattle.json` `aim`).
+13. **Final paintings** (2026-11-15). A painting is shown through `Painting` / `useFinalPaintingInfo`
+    (`render/scenes/finalArt.tsx`); it falls back to the procedural picture while no file exists. A painting may
+    have its own version per season (`<path>-<season>.jpg`, see `ASSET_DROP_IN.md` §5); anything placed over a
+    painting reads the `variant` shown and keeps a table per painting. The game does not tint final paintings for
+    the hour. Full-screen painted scenes (rule 7) now also cover the planner, Before the Battle and Before the Sea
+    Battle, the result of a land or sea fight (after the real-time fight or "let the captains decide"), the
+    homecoming and the lost expedition (route `expeditionReturn`). Painted cards keep the left third quiet for the
+    text over a scrim. A scene with a single way on uses the test id `decision-choice-continue`. Arrivals: an
+    overland, raided or cloister arrival has its own painting everywhere; otherwise a land that does not build like
+    the north arrives to its own painting whatever the kind of settlement (`arrivalAssetId` in
+    `screens/arrivalScene/model.ts`).

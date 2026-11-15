@@ -118,5 +118,59 @@
       },
       "label": "The Sacred Grove on a misty morning: old trees, seven carved god-posts, a flat altar stone; the grove-keeper standing at the right."
     }
+  },
+  "hub.panorama.home.skarn": {
+    "kind": "image",
+    "path": "hub/panorama-home-skarn.jpg",
+    "size": [
+      1300,
+      1000
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "culture": "skarn",
+        "terrain": "fjord",
+        "tier": "capital",
+        "economy": "fair"
+      },
+      "label": "The home village in fjord country on a clear summer day, seen from the water: the great hall in the centre, longhouse left, mead-hall right, shipyard and ships lower left, market and jetty at the bottom centre, smithy lower right, seer's hut high right, sacred grove far left. Labels sit on each building."
+    }
+  },
+  "hub.panorama.home.hvarn": {
+    "kind": "image",
+    "path": "hub/panorama-home-hvarn.jpg",
+    "size": [
+      1300,
+      1000
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "culture": "hvarn",
+        "terrain": "river",
+        "tier": "capital",
+        "economy": "fair"
+      },
+      "label": "The home village in lake and forest country on a clear summer day, seen from the lake: the eight buildings laid out as in the fjord village, pine and birch forest around, an iron furnace and charcoal mounds by the smithy, a red bog at the right."
+    }
+  },
+  "hub.panorama.home.eyjar": {
+    "kind": "image",
+    "path": "hub/panorama-home-eyjar.jpg",
+    "size": [
+      1300,
+      1000
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "culture": "eyjar",
+        "terrain": "coast",
+        "tier": "capital",
+        "economy": "fair"
+      },
+      "label": "The home village on a low green island by a busy strait on a windy summer day: the eight buildings laid out as in the fjord village, a long trading strand with two jetties, more ships drawn up on the sand at the lower left."
+    }
   }
 }

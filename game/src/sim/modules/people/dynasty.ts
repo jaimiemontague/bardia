@@ -113,7 +113,7 @@ export function marry(draft: GameState, ctx: SimContext, a: Character, b: Charac
   ctx.emit(e);
   const subject = isPlayerHouse(draft, a) ? a : b;
   const partner = subject === a ? b : a;
-  notifyHouse(ctx, subject, 'people.notify.marriage', nameVars(partner, 'spouse'), subject.id === draft.player.rulerId ? 'high' : 'normal');
+  notifyHouse(ctx, subject, 'people.notify.marriage', nameVars(partner, 'spouse'), subject.id === draft.player.rulerId ? 'high' : 'normal', 'people.illus.wedding');
   chronicleHouse(ctx, subject, 'marriage', 'people.chronicle.marriage', subject.id === draft.player.rulerId ? 3 : 2, nameVars(partner, 'spouse'), [partner.id]);
 }
 
@@ -255,7 +255,7 @@ export function createChild(draft: GameState, ctx: SimContext, mother: Character
   if (playerChild) {
     const parentsKind = mother && father ? 'both' : mother ? 'mother' : father ? 'father' : 'none';
     const vars = { ...nameVars(mother, 'mother'), ...nameVars(father, 'father'), parents: parentsKind, twin: opts.twin === true ? 'yes' : 'no' };
-    notifyHouse(ctx, child, 'people.notify.birth', vars, ruler ? 'high' : 'normal');
+    notifyHouse(ctx, child, 'people.notify.birth', vars, ruler ? 'high' : 'normal', 'people.illus.birth');
     chronicleHouse(ctx, child, 'birth', 'people.chronicle.birth', ruler ? 3 : 2, vars, parents.map((p) => p.id));
     if (ruler) ctx.narrate('people.narration.childBorn', { ...nameVars(child), ...nameVars(ruler, 'parent') }, 'skald');
   }

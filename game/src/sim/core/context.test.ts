@@ -25,6 +25,15 @@ describe('events never hold Immer drafts', () => {
     expect(n?.type === 'Notification' && n.vars.renown).toBe(7);
   });
 
+  it('notify carries an optional illustration (an image asset id) and leaves it out when not given', () => {
+    const { events } = inDraft(testState(), env, (_d, ctx) => {
+      ctx.notify('a', { priority: 'critical', illustration: 'people.illus.houseFallen' });
+      ctx.notify('b');
+    });
+    expect(events[0]).toMatchObject({ type: 'Notification', key: 'a', illustration: 'people.illus.houseFallen' });
+    expect(events[1] !== undefined && 'illustration' in events[1]).toBe(false);
+  });
+
   it('a decision raised and resolved in one operation keeps a readable payload', () => {
     const { events, state } = inDraft(testState(), env, (d, ctx) => {
       const p = ctx.pend({ kind: 'message', payload: { key: 'k', vars: d.player.house as never } });

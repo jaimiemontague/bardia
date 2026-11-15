@@ -94,5 +94,19 @@
   "seabattle.hud.holdFire": "Hold fire",
   "seabattle.hud.douse": "Douse fire",
   "seabattle.hud.grapple": "Throw grapnels",
-  "seabattle.hud.cutFree": "Cut the lines"
+  "seabattle.hud.cutFree": "Cut the lines",
+  "seabattle.setup.kicker": "Before the sea fight",
+  "seabattle.setup.choicesLabel": "How will you fight?",
+  "seabattle.result.screen": "After the sea fight",
+  "seabattle.result.title.victory": "The sea is ours",
+  "seabattle.result.title.defeat": "Beaten at sea",
+  "seabattle.result.title.escaped": "We broke away",
+  "seabattle.result.title.draw": "Neither side holds the water",
+  "seabattle.result.details": "Every ship",
+  "seabattle.result.continue": "Go on",
+  "seabattle.result.continueLine": "Back to the voyage.",
+  "seabattle.result.line.victory": "Their ships are taken, sunk or fled.",
+  "seabattle.result.line.defeat": "We pull away hard, and the enemy keeps the water.",
+  "seabattle.result.line.escaped": "We broke off and ran for open water.",
+  "seabattle.result.line.draw": "Both fleets drew apart."
 }

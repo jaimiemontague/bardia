@@ -247,6 +247,7 @@ function launch(draft: GameState, ctx: SimContext, holdingId: SettlementId, orde
     ctx.notify('military.ship.completed', {
       vars: { holding: s.name, shipType: ship.type, ship: ship.name },
       link: { kind: 'settlement', id: s.id },
+      illustration: 'military.illus.shipyard',
     });
     ctx.chronicle({
       kind: 'military.shipLaunched',

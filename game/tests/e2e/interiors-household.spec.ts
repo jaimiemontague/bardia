@@ -71,6 +71,8 @@ test('enter the Longhouse, the Seer’s hut and the Grove, speak with each keepe
       expect(await stats.count()).toBeGreaterThan(0);
       for (const bottom of await stats.evaluateAll((els) => els.map((e) => e.getBoundingClientRect().bottom))) expect(bottom).toBeLessThanOrEqual(rootBox.y + 1);
       expect(rootBox.width).toBeGreaterThanOrEqual(w - 2);
+      // A final painting is on screen (the base file or the season's own), and its table places the people.
+      await expect(root).toHaveAttribute('data-art', /^(base|spring|summer|autumn|winter)$/);
       // The person: a named button inside the room, the plate on screen and clear of the title.
       const title = (await root.locator('.int-title').boundingBox()) as Box;
       for (const id of room.people) {

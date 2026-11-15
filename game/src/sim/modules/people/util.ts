@@ -379,16 +379,17 @@ export function nameVars(c: Character | undefined, prefix = ''): TextVars {
   return { [prefix === '' ? 'name' : `${prefix}Name`]: c?.name ?? '' };
 }
 
-/** Notify the player about someone of their house (no-op for others). */
+/** Notify the player about someone of their house (no-op for others). `illustration`: the picture's asset id. */
 export function notifyHouse(
   ctx: SimContext,
   c: Character,
   key: string,
   vars: TextVars = {},
   priority: NotificationPriority = 'normal',
+  illustration?: string,
 ): void {
   if (!isPlayerHouse(ctx.state, c)) return;
-  ctx.notify(key, { priority, vars: { ...nameVars(c), ...vars }, link: { kind: 'character', id: c.id } });
+  ctx.notify(key, { priority, vars: { ...nameVars(c), ...vars }, link: { kind: 'character', id: c.id }, ...(illustration !== undefined ? { illustration } : {}) });
 }
 
 /** Chronicle a deed of the player's house (no-op for others). */

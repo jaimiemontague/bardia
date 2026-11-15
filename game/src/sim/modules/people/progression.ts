@@ -142,6 +142,7 @@ function offerFeat(draft: GameState, ctx: SimContext, c: Character, level: numbe
     // What the generic decision modal shows: one button per feat offered (they need the id).
     const p = decision.payload;
     p.titleKey = 'people.featChoice.title';
+    p.illustration = 'people.illus.featChoice';
     p.key = 'people.featChoice.body';
     p.vars = { name: c.name };
     p.choices = options.map((featId) => ({

@@ -40,6 +40,9 @@ export const RESERVED_FILES: readonly string[] = ['README.md', 'final-index.json
 export const IMAGE_EXTENSIONS: readonly string[] = ['png', 'webp', 'jpg', 'jpeg', 'avif', 'svg'];
 export const AUDIO_EXTENSIONS: readonly string[] = ['ogg', 'opus', 'mp3', 'm4a', 'wav', 'flac'];
 
+/** The seasons, in calendar order: an image id may have its own painting for each (`<stem>-<season>.<ext>`). */
+export const SEASON_NAMES: readonly string[] = ['spring', 'summer', 'autumn', 'winter'];
+
 // ---------------------------------------------------------------------------------------------
 // Hashing
 
@@ -259,6 +262,23 @@ export function matchFinal(entryPath: string, kind: ManifestEntryLike['kind'], f
   return undefined;
 }
 
+/**
+ * The seasons of an image entry that have their own painting: `<stem>-<season>.<ext>` next to the entry's path
+ * (the same stem as the base file, any accepted image extension), as season → file. A season file whose stem is
+ * itself a manifest path (`otherStems`) belongs to that id, never to this one.
+ */
+export function matchSeasonal(entryPath: string, files: Readonly<Record<string, FinalFileInfo>>, otherStems: ReadonlySet<string> = new Set()): Record<string, string> {
+  const out: Record<string, string> = {};
+  const s = stem(entryPath);
+  for (const season of SEASON_NAMES) {
+    const seasonStem = `${s}-${season}`;
+    if (otherStems.has(seasonStem)) continue;
+    const file = matchFinal(`${seasonStem}.${IMAGE_EXTENSIONS[0] as string}`, 'image', files);
+    if (file) out[season] = file;
+  }
+  return out;
+}
+
 /** Checks a final file against its manifest entry; returns warnings. */
 export function checkFinal(id: string, entry: ManifestEntryLike, file: string, info: FinalFileInfo): string[] {
   const w: string[] = [];
@@ -316,6 +336,8 @@ export interface AssetListResult {
   placeholder: number;
   orphans: string[];
   warnings: string[];
+  /** Season paintings found (`<stem>-<season>.<ext>` files that belong to an image id). */
+  seasonal: number;
 }
 
 /**
@@ -325,6 +347,10 @@ export interface AssetListResult {
 export function buildAssetList(fragments: Readonly<Record<string, Readonly<Record<string, ManifestEntryLike>>>>, index: FinalIndexJson, manifestIssues: readonly string[] = []): AssetListResult {
   const used: Record<string, true> = {};
   const warnings: string[] = [];
+  let seasonal = 0;
+  // Every manifest path's stem: a file named like a season painting of one id may be the base file of another.
+  const manifestStems = new Set<string>();
+  for (const area of Object.keys(fragments)) for (const e of Object.values(fragments[area] as Readonly<Record<string, ManifestEntryLike>>)) manifestStems.add(stem(e.path));
   const sections: string[] = [];
   let total = 0;
   let final = 0;
@@ -346,7 +372,17 @@ export function buildAssetList(fragments: Readonly<Record<string, Readonly<Recor
         areaFinal++;
         warnings.push(...checkFinal(id, e, file, index.files[file] as FinalFileInfo));
       }
-      const status = file ? (file === e.path ? 'final' : `final (${file.slice(file.lastIndexOf('.') + 1)})`) : 'placeholder';
+      const own = e.kind === 'image' ? matchSeasonal(e.path, index.files, manifestStems) : {};
+      const ownSeasons = Object.keys(own);
+      for (const season of ownSeasons) {
+        const f = own[season] as string;
+        used[f] = true;
+        seasonal++;
+        warnings.push(...checkFinal(id, e, f, index.files[f] as FinalFileInfo));
+      }
+      if (!file && ownSeasons.length > 0) warnings.push(`${id}: has ${ownSeasons.map((x) => `'${own[x] as string}'`).join(', ')} but no base file '${e.path}' (the game shows the placeholder)`);
+      let status = file ? (file === e.path ? 'final' : `final (${file.slice(file.lastIndexOf('.') + 1)})`) : 'placeholder';
+      if (ownSeasons.length > 0) status += `; own paintings for ${ownSeasons.join(', ')}`;
       rows.push(`| \`${id}\` | ${e.kind} | \`${e.path}\` | ${cell(sizeText(e))} | ${cell(describeEntry(e))} | ${status} |`);
     }
     sections.push(
@@ -374,5 +410,5 @@ export function buildAssetList(fragments: Readonly<Record<string, Readonly<Recor
     lines.push('');
   }
   lines.push(...sections);
-  return { markdown: `${lines.join('\n').trimEnd()}\n`, total, final, placeholder: total - final, orphans, warnings };
+  return { markdown: `${lines.join('\n').trimEnd()}\n`, total, final, placeholder: total - final, orphans, warnings, seasonal };
 }

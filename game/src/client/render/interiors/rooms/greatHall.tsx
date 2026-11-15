@@ -180,4 +180,12 @@ export const greatHallRoom: InteriorRoomDef = {
     { id: 'steward', x: 470, y: 836, w: 340, h: 446, nameKey: 'hub.interior.greatHall.steward.name', greetingKey: 'hub.interior.greatHall.steward.greeting', icon: 'silver' },
     { id: 'lawspeaker', x: 1200, y: 826, w: 250, h: 530, nameKey: 'hub.interior.greatHall.lawspeaker.name', greetingKey: 'hub.interior.greatHall.lawspeaker.greeting', icon: 'quill' },
   ],
+  // Measured on the final painting (hub/interior-great-hall.jpg, 1600 × 900: a pixel is a viewBox unit).
+  final: {
+    base: {
+      hirdmaster: { x: 805, y: 488, w: 210, h: 200 },
+      steward: { x: 320, y: 830, w: 380, h: 545 },
+      lawspeaker: { x: 1298, y: 825, w: 240, h: 560 },
+    },
+  },
 };

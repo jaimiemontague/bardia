@@ -148,4 +148,11 @@ export const smithyRoom: InteriorRoomDef = {
   assetId: 'hub.interior.smithy',
   Painting: SmithyPainting,
   people: [{ id: 'smith', x: 885, y: 880, w: 380, h: 640, nameKey: 'hub.interior.smithy.smith.name', greetingKey: 'hub.interior.smithy.smith.greeting', icon: 'sword' }],
+  // Measured on the final painting (hub/interior-smithy.jpg, 1600 × 900: a pixel is a viewBox unit).
+  final: {
+    base: {
+      // The raised hammer reaches the roof beams: the plate sits beside his head, over the mountains.
+      smith: { x: 755, y: 860, w: 370, h: 745, plateAt: [965, 215] },
+    },
+  },
 };

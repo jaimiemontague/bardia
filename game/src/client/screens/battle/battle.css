@@ -597,65 +597,6 @@
 .bv-howto dd {
   margin: 0;
 }
-.bv-summary .bv-reason {
-  font-size: 1.05rem;
-  margin: 0 0 4px;
-}
-.bv-summary.outcome-victory h2 {
-  color: #a9e08e;
-}
-.bv-summary.outcome-defeat h2 {
-  color: #ff9e88;
-}
-.bv-summary.outcome-retreat h2 {
-  color: #ffd27a;
-}
-.bv-sum-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: var(--sp-2) 0;
-}
-.bv-sum-table th,
-.bv-sum-table td {
-  padding: 3px 6px;
-  border-bottom: 1px solid var(--c-border);
-  text-align: right;
-}
-.bv-sum-table th:first-child {
-  text-align: left;
-  color: var(--c-text-dim);
-  font-weight: 400;
-}
-.bv-sum-facts {
-  margin: var(--sp-2) 0;
-  padding-left: 1.1rem;
-}
-.bv-sum-leaders h3 {
-  margin: var(--sp-2) 0 4px;
-  font-family: var(--font-display);
-  font-size: 0.9rem;
-  color: var(--c-accent);
-}
-.bv-sum-leaders ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 2px;
-}
-.bv-sum-leaders li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.bv-sum-leaders li.fate-dead,
-.bv-sum-leaders li.fate-captured,
-.bv-sum-leaders li.fate-mortallyWounded {
-  color: #ff9e88;
-}
-.bv-error {
-  color: #ff9e88;
-}
 
 @keyframes bv-pulse {
   0%,
@@ -680,4 +621,11 @@
   .bv-right {
     width: 16rem;
   }
+}
+
+/* The end of the fight: the painted result scene over the field (ResultScene.tsx). */
+.bv-result-host {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
 }

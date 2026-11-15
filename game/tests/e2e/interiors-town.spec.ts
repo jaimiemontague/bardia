@@ -73,12 +73,17 @@ test('enter the Shipyard, the Market and the Mead-hall, speak with everyone, and
       expect(await stats.count()).toBeGreaterThan(0);
       for (const bottom of await stats.evaluateAll((els) => els.map((e) => e.getBoundingClientRect().bottom))) expect(bottom).toBeLessThanOrEqual(rootBox.y + 1);
       expect(rootBox.width).toBeGreaterThanOrEqual(w - 2);
-      // Every person: a named button inside the room, its plate on screen.
+      // A final painting is on screen (the base file or the season's own), and its table places the people.
+      await expect(root).toHaveAttribute('data-art', /^(base|spring|summer|autumn|winter)$/);
+      // Every person: a named button inside the room, its plate on screen and clear of the title.
+      const title = (await root.locator('.int-title').boundingBox()) as Box;
       for (const id of room.people) {
         const b = page.getByTestId(`interior-person-${id}`);
         await expect(b).toBeVisible();
         const plate = (await b.locator('.int-plate').boundingBox()) as Box;
         expect(inside(plate, rootBox), `${id} plate at ${w}×${h}`).toBe(true);
+        const clear = plate.y >= title.y + title.height || plate.x >= title.x + title.width || plate.x + plate.width <= title.x;
+        expect(clear, `${id} plate under the title at ${w}×${h}`).toBe(true);
       }
       await page.screenshot({ path: `${OUT}/interior-${room.id}-${w}x${h}.png` });
 

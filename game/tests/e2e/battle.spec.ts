@@ -221,6 +221,7 @@ test('a skirmish raid is fought with the keyboard to its summary', async ({ page
   await expect(page.getByTestId('battle-summary')).toBeVisible({ timeout: 60_000 });
   await expect(page.getByTestId('battle-outcome')).toHaveAttribute('data-outcome', /victory|defeat|retreat|draw/);
   await page.waitForTimeout(300);
+  await page.waitForTimeout(900);
   await shot(page, '5-summary');
 
   await page.getByTestId('battle-return').click();
@@ -322,6 +323,8 @@ test('a campaign raid fought on the field returns to the saga', async ({ page })
   await page.getByTestId('battle-menu').click();
   await page.getByTestId('battle-captains').click();
   await expect(page.getByTestId('battle-summary')).toBeVisible({ timeout: 60_000 });
+  // The painted outcome opens over the field; let it settle before the picture is taken.
+  await page.waitForTimeout(900);
   await shot(page, 'campaign-summary');
   await page.getByTestId('battle-return').click();
   await expect(page.getByTestId('battle-screen')).toHaveCount(0);

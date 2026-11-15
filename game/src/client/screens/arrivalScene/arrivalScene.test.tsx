@@ -13,6 +13,7 @@ import { GameSession } from '@sim/game';
 import { suggestPlan } from '@sim/modules/expeditions/plan';
 import type { ArrivalChoice, DecisionOption } from '@sim/modules/settlements/types';
 import { useGame } from '../../app/gameStore';
+import { manifestEntry } from '../../assets/index';
 import { buildRegistry } from '../../app/screenRegistry';
 import { DecisionHost } from '../../shell/DecisionHost';
 import { resetClientState } from '../../testing/clientTestKit';
@@ -20,7 +21,7 @@ import { galleryVariant, SCENE_VARIANTS, SceneVariant } from '../encounterScene/
 import * as settlement from '../settlement/index';
 import { SettlementHub } from '../settlement/hub';
 import * as arrivalScene from './index';
-import { arrivalView, isScarred, planArrival, roundPop } from './model';
+import { arrivalAssetId, arrivalView, isScarred, LAND_ARRIVAL, planArrival, roundPop } from './model';
 
 const registry = buildRegistry({ settlement, arrivalScene });
 
@@ -56,6 +57,23 @@ describe('planning the options', () => {
   it('rounds the head-count like a traveller', () => {
     expect(roundPop(37)).toBe(40);
     expect(roundPop(1437)).toBe(1400);
+  });
+
+  it('picks the land’s own painting for the lands that have one, the kind’s painting in the north', () => {
+    const at = (tier: string, culture: string, overland = false, scarred = false) => arrivalAssetId({ tier, culture, overland, scarred });
+    expect(at('town', 'albric')).toBe('settlements.scene.arrival.town.west');
+    expect(at('city', 'cael')).toBe('settlements.scene.arrival.town.west');
+    expect(at('village', 'corvani')).toBe('settlements.scene.arrival.city.south');
+    expect(at('capital', 'velkar')).toBe('settlements.scene.arrival.fortress.east');
+    expect(at('emporium', 'saraleonese')).toBe('settlements.scene.arrival.town.sun');
+    expect(at('hamlet', 'kurgai')).toBe('settlements.scene.arrival.village.steppe');
+    for (const culture of ['skarn', 'hvarn', 'eyjar', 'isafolder', 'rime']) expect(at('town', culture)).toBe('settlements.scene.arrival.town');
+    // Overland, raided and cloister arrivals keep their own paintings in every land.
+    expect(at('city', 'corvani', true)).toBe('settlements.scene.overland');
+    expect(at('city', 'corvani', false, true)).toBe('settlements.scene.arrival.raided');
+    expect(at('cloister', 'albric')).toBe('settlements.scene.arrival.cloister');
+    // Every id it can name is in the manifest.
+    for (const id of Object.values(LAND_ARRIVAL)) expect(manifestEntry(id)?.kind).toBe('image');
   });
 
   it('paints every tier from the gallery with the Arrival Card test ids', () => {

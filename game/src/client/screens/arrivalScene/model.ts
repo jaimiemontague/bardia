@@ -5,7 +5,7 @@
  */
 import type { GameState, PendingDecision, Settlement, SettlementId, TextVars } from '@sim/core/state';
 import type { ArrivalChoice, DecisionOption } from '@sim/modules/settlements/types';
-import { ambienceOf, bannerColour, PLAYER_COLOUR, styleOfCulture, timeOfDay, type SettlementPictureModel } from '../../render/scenes/index';
+import { ambienceOf, bannerColour, PLAYER_COLOUR, styleOfCulture, timeOfDay, type BuildStyle, type SettlementPictureModel } from '../../render/scenes/index';
 import { hashString } from '../../render/scenes/paint';
 
 /** A place raided, sacked or plundered within this many hours still shows the scars. */
@@ -20,6 +20,35 @@ export interface ArrivalView {
   kickerVars: TextVars;
   inView: DecisionOption<ArrivalChoice>[];
   more: DecisionOption<ArrivalChoice>[];
+}
+
+/**
+ * The painting of a land other than the north, by building style (styleOfCulture): one picture per land,
+ * painted for one kind of place. Albric and Cael share the western lowland town; Corvani the walled city of the
+ * warm south; Velkar the river stronghold; the Saraleonese the sun-baked port; the Kurgai the camp on the
+ * grass. The northern cultures (Skarn, Hvarn, Eyjar, Isafolder, the Rime-hunters) keep the pictures by kind.
+ */
+export const LAND_ARRIVAL: Readonly<Record<Exclude<BuildStyle, 'north'>, string>> = {
+  west: 'settlements.scene.arrival.town.west',
+  south: 'settlements.scene.arrival.city.south',
+  east: 'settlements.scene.arrival.fortress.east',
+  sun: 'settlements.scene.arrival.town.sun',
+  steppe: 'settlements.scene.arrival.village.steppe',
+};
+
+/**
+ * Which painting an arrival shows. Coming overland, the view from the rise; a place raided not long ago, the
+ * burned strand (the scars are the news); a cloister, the cloister (its painting is already a house of the
+ * Lantern on a western shore). Otherwise a settlement of a land with its own painting shows that land's
+ * picture whatever its kind (a city of the west arrives to the western town: the land is truer than the
+ * size), and a northern settlement the picture of its kind.
+ */
+export function arrivalAssetId(a: { tier: string; culture: string | undefined; overland: boolean; scarred: boolean }): string {
+  if (a.overland) return 'settlements.scene.overland';
+  if (a.scarred) return 'settlements.scene.arrival.raided';
+  if (a.tier === 'cloister') return 'settlements.scene.arrival.cloister';
+  const style = styleOfCulture(a.culture);
+  return style === 'north' ? `settlements.scene.arrival.${a.tier}` : LAND_ARRIVAL[style];
 }
 
 /** The settlement still shows the marks of a raid or a sack. */
@@ -89,7 +118,7 @@ export function arrivalView(state: GameState, pending: PendingDecision): Arrival
   return {
     settlement: s,
     picture,
-    assetId: overland ? 'settlements.scene.overland' : scarred ? 'settlements.scene.arrival.raided' : `settlements.scene.arrival.${tier}`,
+    assetId: arrivalAssetId({ tier, culture: s.culture, overland, scarred }),
     cue: { mainKey: cueKey, vars: { settlement: s.name } },
     knownVars: { tier, pop: roundPop(s.pop), walls: String(s.fortTier), own: own ? 'yes' : 'no', lord: lord?.name ?? '', scarred: scarred ? 'yes' : 'no' },
     kickerVars: { tod: timeOfDay(ambience.hourOfDay), weather: ambience.weather.storm ? 'storm' : ambience.weather.fog ? 'fog' : 'clear', men: partyMen(state, p.fleetId, p.armyId), overland: overland ? 'yes' : 'no' },

@@ -273,6 +273,47 @@
 .hub-picture > * {
   pointer-events: auto;
 }
+/* The final painting: it fills the village box exactly (it is the viewBox), the click areas over it. */
+.hub-painting-bleed {
+  position: absolute;
+  inset: -24px;
+  width: calc(100% + 48px);
+  height: calc(100% + 48px);
+  object-fit: cover;
+  filter: blur(18px) brightness(0.42) saturate(0.8);
+  pointer-events: none;
+  user-select: none;
+}
+.hub-painting,
+.hv-painted {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.hub-painting {
+  pointer-events: none;
+  user-select: none;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.55);
+}
+.hv-painted .hv-hit {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 3;
+  transition:
+    fill var(--dur-fast),
+    stroke var(--dur-fast);
+}
+.hv-painted .hv-building:hover,
+.hv-painted .hv-building.is-hot {
+  filter: none;
+}
+.hv-painted .hv-building:hover .hv-hit,
+.hv-painted .hv-building.is-hot .hv-hit {
+  fill: rgba(255, 224, 160, 0.12);
+  stroke: rgba(240, 200, 120, 0.55);
+}
 .hv-building {
   cursor: pointer;
 }

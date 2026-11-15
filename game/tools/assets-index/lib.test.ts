@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { PNG } from 'pngjs';
-import { audioDuration, buildAssetList, checkFinal, crc32, imageSize, matchFinal, measureFile, scanFinalFiles, serializeIndex, type ManifestEntryLike } from './lib';
+import { audioDuration, buildAssetList, checkFinal, crc32, imageSize, matchFinal, matchSeasonal, measureFile, scanFinalFiles, serializeIndex, type ManifestEntryLike } from './lib';
 
 function png(w: number, h: number): Uint8Array {
   const p = new PNG({ width: w, height: h });
@@ -105,5 +105,54 @@ describe('scanning public/assets', () => {
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
+  });
+});
+
+describe('season paintings', () => {
+  const pano: ManifestEntryLike = { kind: 'image', path: 'hub/panorama-home-skarn.png', size: [1600, 900], placeholder: { generator: 'panorama', label: 'Home hall panorama' } };
+  const file = (width = 1600, height = 900) => ({ bytes: 5, hash: 'a', width, height });
+
+  it('finds <stem>-<season>.<ext> next to the base path, in any accepted image extension', () => {
+    const files = { 'hub/panorama-home-skarn.jpg': file(), 'hub/panorama-home-skarn-winter.jpg': file(), 'hub/panorama-home-skarn-autumn.webp': file(), 'hub/panorama-home-skarn-winter.ogg': { bytes: 1, hash: 'z' }, 'hub/other-spring.jpg': file() };
+    expect(matchSeasonal(pano.path, files)).toEqual({ autumn: 'hub/panorama-home-skarn-autumn.webp', winter: 'hub/panorama-home-skarn-winter.jpg' });
+    expect(matchSeasonal(pano.path, { 'hub/panorama-home-skarn.jpg': file() })).toEqual({});
+  });
+
+  it('does not take a manifest path of another id for a season painting', () => {
+    const files = { 'hub/panorama-home-skarn-winter.png': file() };
+    expect(matchSeasonal(pano.path, files)).toEqual({ winter: 'hub/panorama-home-skarn-winter.png' });
+    expect(matchSeasonal(pano.path, files, new Set(['hub/panorama-home-skarn-winter']))).toEqual({});
+  });
+
+  it('lists the id with its seasons, counts them as used, and checks their size', () => {
+    const index = { format: 1 as const, files: { 'hub/panorama-home-skarn.jpg': file(), 'hub/panorama-home-skarn-winter.jpg': file(), 'hub/panorama-home-skarn-autumn.png': file(800, 450), 'hub/panorama-home-skarn-summer.txt': { bytes: 1, hash: 'b' } } };
+    const r = buildAssetList({ hub: { 'hub.panorama.home.skarn': pano } }, index);
+    expect(r.markdown).toContain('| final (jpg); own paintings for autumn, winter |');
+    expect(r.orphans).toEqual(['hub/panorama-home-skarn-summer.txt']);
+    expect(r).toMatchObject({ total: 1, final: 1, seasonal: 2 });
+    expect(r.warnings).toHaveLength(1);
+    expect(r.warnings[0]).toContain("'hub/panorama-home-skarn-autumn.png' is 800×450");
+    expect(r.warnings[0]).toContain('same aspect ratio');
+  });
+
+  it('warns when a season painting has no base file, and leaves the id a placeholder', () => {
+    const index = { format: 1 as const, files: { 'hub/panorama-home-skarn-winter.jpg': file() } };
+    const r = buildAssetList({ hub: { 'hub.panorama.home.skarn': pano } }, index);
+    expect(r).toMatchObject({ final: 0, placeholder: 1, seasonal: 1, orphans: [] });
+    expect(r.warnings.some((w) => w.includes("no base file 'hub/panorama-home-skarn.png'"))).toBe(true);
+    expect(r.markdown).toContain('| placeholder; own paintings for winter |');
+  });
+
+  it('leaves a file that is the base file of another id alone', () => {
+    const other: ManifestEntryLike = { ...pano, path: 'hub/panorama-home-skarn-winter.png' };
+    const index = { format: 1 as const, files: { 'hub/panorama-home-skarn.jpg': file(), 'hub/panorama-home-skarn-winter.jpg': file() } };
+    const r = buildAssetList({ hub: { 'hub.a': pano, 'hub.b': other } }, index);
+    expect(r).toMatchObject({ final: 2, seasonal: 0, warnings: [] });
+    expect(r.markdown).not.toContain('own paintings');
+  });
+
+  it('gives audio ids no seasons', () => {
+    const r = buildAssetList({ music: { 'music.theme': theme } }, { format: 1, files: { 'music/main-theme.ogg': { bytes: 1, hash: 'a', durationS: 120 }, 'music/main-theme-winter.ogg': { bytes: 1, hash: 'b' } } });
+    expect(r).toMatchObject({ seasonal: 0, orphans: ['music/main-theme-winter.ogg'] });
   });
 });

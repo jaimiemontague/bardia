@@ -328,6 +328,8 @@
   "ui.inbox.filter.important": "Important",
   "ui.inbox.filter.info": "News",
   "ui.inbox.empty": "Nothing here.",
+  "ui.inbox.showPicture": "Show the picture",
+  "ui.inbox.hidePicture": "Hide the picture",
   "ui.gameMenu.title": "The Saga Rests",
   "ui.gameMenu.subtitle": "{date} · seed {seed}",
   "ui.gameMenu.resume": "Resume",

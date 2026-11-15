@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { seaResultAsset } from './ResultScene';
 import type { SeaBattleResult } from '@sim/core/state';
 import type { SeaShipView } from '@sim/seabattle/index';
 import { makeSeaSetup, testSeaContent } from '@sim/seabattle/testing';
@@ -262,5 +263,14 @@ describe('the summary', () => {
   it('calls a broken-off fight an escape', () => {
     expect(outcomeFor({ winner: 'defender', retreated: true }, 'attacker')).toBe('escaped');
     expect(outcomeFor({ winner: 'none', retreated: false }, 'attacker')).toBe('draw');
+  });
+});
+
+describe('the painting of the outcome at sea', () => {
+  it('the water won, the water lost (also when we broke away), the sails still closing for no victor', () => {
+    expect(seaResultAsset('victory')).toBe('seabattle.scene.victory');
+    expect(seaResultAsset('defeat')).toBe('seabattle.scene.defeat');
+    expect(seaResultAsset('escaped')).toBe('seabattle.scene.defeat');
+    expect(seaResultAsset('draw')).toBe('seabattle.scene.before');
   });
 });

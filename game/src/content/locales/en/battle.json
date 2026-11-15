@@ -133,5 +133,17 @@
   "battle.ui.chance": "Chance of victory",
   "battle.ui.lossIfWin": "Men lost if you win",
   "battle.ui.lossIfLoss": "Men lost if you lose",
-  "battle.ui.penalty": "Cost of letting the captains decide"
+  "battle.ui.penalty": "Cost of letting the captains decide",
+  "battle.setup.kicker": "Before the battle",
+  "battle.setup.attackers": "The attackers",
+  "battle.setup.choicesLabel": "How will you fight?",
+  "battle.result.screen": "After the battle",
+  "battle.result.title.victory": "The field is ours",
+  "battle.result.title.defeat": "The day is lost",
+  "battle.result.title.retreat": "Back to the ships",
+  "battle.result.title.draw": "No one holds the field",
+  "battle.result.fell": "{ours, plural, =0 {Not one of ours fell} one {One of ours fell} other {# of ours fell}}, and {theirs, plural, =0 {none of theirs} one {one of theirs} other {# of theirs}}.",
+  "battle.result.details": "The full count",
+  "battle.result.continue": "Go on",
+  "battle.result.continueLine": "Back to the saga."
 }

@@ -38,7 +38,7 @@ describe('capture and release (§23.5)', () => {
     if (p?.kind !== 'captivity') throw new Error('no captivity');
     expect(p.payload).toMatchObject({ charId: ruler.id, captorFactionId: w.enemy, ransom: ruler.captivity?.ransom, canPay: false });
     // The generic decision modal can show it: text and one button per choice, each a ready command.
-    expect(p.payload).toMatchObject({ titleKey: 'people.captivity.title', key: 'people.captivity.body', vars: { name: ruler.name, ransom: ruler.captivity?.ransom } });
+    expect(p.payload).toMatchObject({ titleKey: 'people.captivity.title', illustration: 'people.illus.captivity', key: 'people.captivity.body', vars: { name: ruler.name, ransom: ruler.captivity?.ransom } });
     expect(p.payload.choices?.map((c) => c.id)).toEqual(['wait', 'escape', 'bargain', 'sendWord', 'swearFealty']);
     expect(p.payload.choices?.[0]?.command).toEqual({ type: 'captivityAction', pendingId: p.id, choice: 'wait' });
     expect(r.events.some((e) => e.type === 'CaptureStarted')).toBe(true);

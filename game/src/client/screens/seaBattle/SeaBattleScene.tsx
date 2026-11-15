@@ -22,7 +22,8 @@ import { useT } from '../../i18n/index';
 import { SeaView } from '../../render/seaBattle/SeaView';
 import { Button } from '../../ui/index';
 import type { SeaController } from './controller';
-import { ConfirmWithdraw, DuelCard, FastForward, FleetBar, HelmStrip, HowTo, PauseMenu, ShipCards, Summary, Ticker, TopBar } from './hud';
+import { ConfirmWithdraw, DuelCard, FastForward, FleetBar, HelmStrip, HowTo, PauseMenu, ShipCards, Ticker, TopBar } from './hud';
+import { SeaResultScene } from './ResultScene';
 import './seaBattle.css';
 
 const CONTEXTS: ReadonlySet<InputContext> = new Set<InputContext>(['global', 'battle']);
@@ -332,25 +333,30 @@ export function SeaBattleScene({ controller: c, title, nameOf, doneLabelKey, onD
       )}
       {!showSummary && <DuelCard c={c} captainName={(id) => nameOf?.(id)} />}
       {summary && (
-        <Summary summary={summary} error={error}>
-          {summaryExtra}
-          {error && fallback}
-          <Button
-            variant="primary"
-            icon="arrowRight"
-            busy={busy}
-            onClick={() => {
-              setBusy(true);
-              const err = onDone();
-              setBusy(false);
-              setError(err);
-            }}
-            data-autofocus
-            data-testid="sea-return"
-          >
-            {t(doneLabelKey)}
-          </Button>
-        </Summary>
+        <div className="sv-result-host">
+          <SeaResultScene summary={summary} title={title} error={error}>
+            <div className="bc-actions">
+              {summaryExtra}
+              {error && fallback}
+              <Button
+                variant="primary"
+                size="lg"
+                icon="arrowRight"
+                busy={busy}
+                onClick={() => {
+                  setBusy(true);
+                  const err = onDone();
+                  setBusy(false);
+                  setError(err);
+                }}
+                data-autofocus
+                data-testid="sea-return"
+              >
+                {t(doneLabelKey)}
+              </Button>
+            </div>
+          </SeaResultScene>
+        </div>
       )}
     </div>
   );

@@ -245,6 +245,7 @@ export function processMusters(draft: GameState, ctx: SimContext): void {
       ctx.notify('military.muster.completed', {
         vars: { count: total, holding: s.name },
         link: { kind: 'settlement', id: s.id },
+        illustration: 'military.illus.muster',
       });
     }
   }

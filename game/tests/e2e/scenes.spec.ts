@@ -177,6 +177,12 @@ test('meeting another party: the cue, then the encounter scene, answered safely'
     }
     // The voyage ended at home: put out again.
     if (await page.locator('[data-testid="game-shell"][data-mode="hub"]').isVisible()) {
+      // The homecoming scene lies over the hall until it is dismissed.
+      const home = page.getByTestId('decision-choice-continue');
+      if (await home.isVisible().catch(() => false)) {
+        await home.click();
+        continue;
+      }
       const plan = page.getByTestId('hub-expedition');
       if (await plan.isEnabled().catch(() => false)) {
         await plan.click();

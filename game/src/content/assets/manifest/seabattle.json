@@ -297,5 +297,67 @@
       },
       "label": "Battle ends"
     }
+  },
+  "seabattle.scene.before": {
+    "kind": "image",
+    "path": "seabattle/before.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "voyage",
+        "seed": 52
+      },
+      "label": "Before the sea fight: on our own deck, the crew taking shields from the rail and stringing bows, four enemy sails spreading out across the water ahead. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "seabattle.scene.victory": {
+    "kind": "image",
+    "path": "seabattle/victory.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "voyage",
+        "palette": "summer",
+        "seed": 53
+      },
+      "label": "The sea is ours: a captured enemy ship lashed alongside ours, its crew disarmed on the benches, our men cheering, another enemy sail fleeing to the horizon. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "seabattle.scene.defeat": {
+    "kind": "image",
+    "path": "seabattle/defeat.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "wreck",
+        "palette": "dusk",
+        "seed": 54
+      },
+      "label": "Beaten at sea: from our stern, our ship labouring away low in the water with a torn, scorched sail, the enemy holding the water behind and one of our ships burning. Subject on the right two thirds; the left third stays calm for text."
+    }
   }
 }

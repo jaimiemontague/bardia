@@ -1,9 +1,30 @@
 /**
- * Pure layout and key logic of a room (unit-tested): where a person's button sits as percentages of the
- * picture box (the box always keeps the 16:9 viewBox aspect, so a button never drifts off its person), which
- * side a panel opens on, and what a key press does.
+ * Pure layout and key logic of a room (unit-tested): which table places the people (the procedural painting's or
+ * a final painting's), where a person's button sits as percentages of the picture box (the box always keeps the
+ * 16:9 viewBox aspect, so a button never drifts off its person), which side a panel opens on, and what a key
+ * press does.
  */
-import { ROOM_H, ROOM_W, type InteriorPerson, type InteriorRoomDef } from './types';
+import type { PaintingVariant } from '../scenes/finalArt';
+import { ROOM_H, ROOM_W, type InteriorPerson, type InteriorRoomDef, type PersonSpot } from './types';
+
+/**
+ * Where a person stands in the painting on screen: `variant` null for the procedural painting (the person's own
+ * x/y/w/h), else the final painting's table for that variant, falling back to the base file's table.
+ */
+export function spotOf(room: Pick<InteriorRoomDef, 'final'>, person: InteriorPerson, variant: PaintingVariant | null): PersonSpot | undefined {
+  if (variant === null || !room.final) return undefined;
+  const own = variant === 'base' ? undefined : room.final[variant];
+  return own && Object.hasOwn(own, person.id) ? own[person.id] : Object.hasOwn(room.final.base, person.id) ? room.final.base[person.id] : undefined;
+}
+
+/** The room's people placed for the painting on screen (see spotOf); same order and ids as `room.people`. */
+export function placePeople(room: Pick<InteriorRoomDef, 'people' | 'final'>, variant: PaintingVariant | null): readonly InteriorPerson[] {
+  if (variant === null || !room.final) return room.people;
+  return room.people.map((p) => {
+    const spot = spotOf(room, p, variant);
+    return spot ? { ...p, ...spot } : p;
+  });
+}
 
 /** A person's click box as CSS percentages of the picture box. */
 export interface PersonBox {
@@ -25,6 +46,19 @@ export function personBox(p: Pick<InteriorPerson, 'x' | 'y' | 'w' | 'h'>): Perso
     width: ((x1 - x0) / ROOM_W) * 100,
     height: ((y1 - y0) / ROOM_H) * 100,
   };
+}
+
+/**
+ * Where a person's name plate is centred when the table gives `plateAt`, as CSS percentages of the person's click
+ * box (it may lie outside the box); null when the plate sits above or below as usual.
+ */
+export function plateSpot(p: Pick<InteriorPerson, 'x' | 'y' | 'w' | 'h' | 'plateAt'>): { left: number; top: number } | null {
+  if (!p.plateAt) return null;
+  const x0 = Math.max(0, p.x - p.w / 2);
+  const x1 = Math.min(ROOM_W, p.x + p.w / 2);
+  const y0 = Math.max(0, p.y - p.h);
+  const y1 = Math.min(ROOM_H, p.y);
+  return { left: ((p.plateAt[0] - x0) / Math.max(1, x1 - x0)) * 100, top: ((p.plateAt[1] - y0) / Math.max(1, y1 - y0)) * 100 };
 }
 
 /** The side a person's panel opens on: as the table says, else away from the person. */

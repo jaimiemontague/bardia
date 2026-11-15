@@ -321,4 +321,11 @@ export const shipyardRoom: InteriorRoomDef = {
     { id: 'shipwright', x: 1300, y: 884, w: 290, h: 520, nameKey: 'hub.interior.shipyard.shipwright.name', greetingKey: 'hub.interior.shipyard.shipwright.greeting', icon: 'gear', wide: true },
     { id: 'strand', x: 270, y: 694, w: 360, h: 150, nameKey: 'hub.interior.shipyard.strand.name', greetingKey: 'hub.interior.shipyard.strand.greeting', icon: 'ship', kind: 'place' },
   ],
+  // Measured on the final painting (hub/interior-shipyard.jpg, 1600 × 900: a pixel is a viewBox unit).
+  final: {
+    base: {
+      shipwright: { x: 1195, y: 795, w: 260, h: 550 },
+      strand: { x: 255, y: 405, w: 390, h: 145 },
+    },
+  },
 };

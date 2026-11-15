@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useNavigation } from '../../app/navigation';
 import { missingKeysSeen, t } from '../../i18n/index';
 import { resetClientState } from '../../testing/clientTestKit';
-import { InteriorRoom, findPerson, panelSideOf, personBox, roomKey, ROOM_H, ROOM_W, useRoutePerson, type InteriorRoomDef } from './index';
+import { InteriorRoom, findPerson, panelSideOf, personBox, placePeople, plateSpot, roomKey, ROOM_H, ROOM_W, spotOf, useRoutePerson, type InteriorRoomDef, type PersonSpot } from './index';
 import { roomById, roomIds } from './registry';
 import { greatHallRoom } from './rooms/greatHall';
 import { smithyRoom } from './rooms/smithy';
@@ -50,6 +50,99 @@ describe('layout', () => {
       t(room.titleKey);
     }
     expect(missingKeysSeen().filter((k) => k.startsWith('hub.'))).toEqual([]);
+  });
+});
+
+/** The share of the smaller of two click boxes that the other covers (0: apart, 1: one inside the other). */
+function overlapShare(a: PersonSpot, b: PersonSpot): number {
+  const w = Math.min(a.x + a.w / 2, b.x + b.w / 2) - Math.max(a.x - a.w / 2, b.x - b.w / 2);
+  const h = Math.min(a.y, b.y) - Math.max(a.y - a.h, b.y - b.h);
+  if (w <= 0 || h <= 0) return 0;
+  return (w * h) / Math.min(a.w * a.h, b.w * b.h);
+}
+
+describe('final paintings', () => {
+  it('every final table holds every person of its room, inside the picture, and the boxes barely overlap', () => {
+    const ALL_ROOMS = ['greatHall', 'smithy', 'shipyard', 'market', 'meadHall', 'longhouse', 'seer', 'grove'];
+    expect(roomIds()).toEqual(expect.arrayContaining(ALL_ROOMS));
+    for (const id of ALL_ROOMS) {
+      const room = roomById(id) as InteriorRoomDef;
+      expect(room.final, `${id} has a table for its final painting`).toBeDefined();
+      const tables = Object.entries(room.final ?? {});
+      for (const [variant, table] of tables) {
+        if (variant === 'base') expect(Object.keys(table).sort(), `${id}: the base table holds every person`).toEqual(room.people.map((p) => p.id).sort());
+        // A season's table may leave people out (they stand where `base` puts them), but names nobody else.
+        for (const pid of Object.keys(table)) expect(findPerson(room, pid), `${id}/${variant}: ${pid} is in the room`).toBeDefined();
+        const spots = Object.entries(table);
+        for (const [pid, s] of spots) {
+          const where = `${id}/${variant}/${pid}`;
+          expect(s.w, where).toBeGreaterThan(0);
+          expect(s.h, where).toBeGreaterThan(0);
+          expect(s.x - s.w / 2, where).toBeGreaterThanOrEqual(0);
+          expect(s.x + s.w / 2, where).toBeLessThanOrEqual(ROOM_W);
+          expect(s.y - s.h, where).toBeGreaterThanOrEqual(0);
+          expect(s.y, where).toBeLessThanOrEqual(ROOM_H);
+          // Feet inside the safe middle, where narrow windows never crop.
+          expect(s.x, where).toBeGreaterThanOrEqual(200);
+          expect(s.x, where).toBeLessThanOrEqual(1400);
+          if (s.plateAt) {
+            expect(s.plateAt[0], where).toBeGreaterThan(0);
+            expect(s.plateAt[0], where).toBeLessThan(ROOM_W);
+            expect(s.plateAt[1], where).toBeGreaterThan(0);
+            expect(s.plateAt[1], where).toBeLessThan(ROOM_H);
+          }
+        }
+        for (let i = 0; i < spots.length; i++)
+          for (let j = i + 1; j < spots.length; j++) {
+            const [a, sa] = spots[i] as [string, PersonSpot];
+            const [b, sb] = spots[j] as [string, PersonSpot];
+            expect(overlapShare(sa, sb), `${id}/${variant}: ${a} and ${b} overlap`).toBeLessThan(0.1);
+          }
+      }
+    }
+  });
+
+  it('places people by the painting on screen: drawn, the base file, or a season falling back to base', () => {
+    const room: Pick<InteriorRoomDef, 'people' | 'final'> = {
+      people: [
+        { id: 'a', x: 400, y: 800, w: 200, h: 400, nameKey: 'a', greetingKey: 'a', plate: 'below', wide: true },
+        { id: 'b', x: 1200, y: 800, w: 200, h: 400, nameKey: 'b', greetingKey: 'b' },
+      ],
+      final: {
+        base: { a: { x: 500, y: 850, w: 220, h: 500 }, b: { x: 1100, y: 840, w: 240, h: 520, plateAt: [1300, 300] } },
+        winter: { a: { x: 520, y: 860, w: 220, h: 500, panel: 'left' } },
+      },
+    };
+    expect(placePeople(room, null)).toBe(room.people);
+    const base = placePeople(room, 'base');
+    expect(base.map((p) => [p.id, p.x, p.y])).toEqual([
+      ['a', 500, 850],
+      ['b', 1100, 840],
+    ]);
+    // Fields the spot does not give stay as the person says (names, wide, plate side).
+    expect(base[0]).toMatchObject({ nameKey: 'a', wide: true, plate: 'below' });
+    const winter = placePeople(room, 'winter');
+    expect(winter.map((p) => [p.id, p.x])).toEqual([
+      ['a', 520],
+      ['b', 1100],
+    ]);
+    expect(panelSideOf(winter[0] as PersonSpot)).toBe('left');
+    // A season with no table of its own uses the base table.
+    expect(placePeople(room, 'autumn').map((p) => p.x)).toEqual([500, 1100]);
+    expect(spotOf(room, room.people[1] as never, 'winter')).toBe(room.final?.base['b']);
+    // A room with no final table keeps the drawn places on any painting.
+    expect(placePeople({ people: room.people }, 'base')).toBe(room.people);
+    // plateAt as percentages of the click box (outside it when the point is).
+    expect(plateSpot(base[1] as PersonSpot)).toEqual({ left: ((1300 - 980) / 240) * 100, top: ((300 - 320) / 520) * 100 });
+    expect(plateSpot(base[0] as PersonSpot)).toBeNull();
+  });
+
+  it('the stage uses the drawn places while only the placeholder exists', () => {
+    render(<InteriorRoom room={smithyRoom} ambience={AMBIENCE} panel={() => <p>work</p>} onLeave={() => {}} />);
+    expect(screen.getByTestId('interior-smithy').getAttribute('data-art')).toBe('drawn');
+    const b = screen.getByTestId('interior-person-smith');
+    const box = personBox(smithyRoom.people[0] as PersonSpot);
+    expect(b.style.left).toBe(`${box.left}%`);
   });
 });
 

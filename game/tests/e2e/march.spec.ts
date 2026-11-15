@@ -27,13 +27,26 @@ async function answerOne(page: Page): Promise<boolean> {
   const cue = page.getByTestId('scene-cue');
   const critical = page.getByTestId('critical-modal').locator('button.btn-primary');
   const ack = page.getByTestId('decision-acknowledge');
-  const choice = page.locator('[data-testid^="decision-choice-"]:not([disabled])').first();
+  // (not the homecoming scene, which the tests wait for)
+  const choice = page.locator('[data-testid^="decision-choice-"]:not([disabled]):not([data-testid="decision-choice-continue"])').first();
   if (await cue.isVisible()) await cue.click({ timeout: 1500 }).catch(() => undefined);
   else if (await critical.isVisible()) await critical.click();
   else if (await ack.isVisible()) await ack.click();
   else if (await choice.isVisible()) await choice.click();
   else return false;
   return true;
+}
+
+/** The war-band's homecoming: the scene of the march home (painted from the rise above the hall), then on. */
+async function homecoming(page: Page): Promise<void> {
+  const scene = page.getByTestId('expedition-home-scene');
+  await expect(scene).toBeVisible({ timeout: 10_000 });
+  await expect(scene).toHaveAttribute('data-way', 'march');
+  await expect(scene).toHaveAttribute('data-asset', 'settlements.scene.overland');
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: `${OUT}/march-homecoming.png` });
+  await page.getByTestId('decision-choice-continue').click();
+  await expect(scene).toHaveCount(0);
 }
 
 /** Runs a dev-console command and returns the text of its last output line. */
@@ -242,6 +255,7 @@ test('march overland from the iced-in hall: steer the war-band, reach a neighbou
     if (await home.isVisible().catch(() => false)) await home.click({ timeout: 1000 }).catch(() => undefined);
   });
   await expect(hub).toBeVisible();
+  await homecoming(page);
   await expect(page.getByTestId('hub')).toBeVisible();
   expect(errors).toEqual([]);
 });
@@ -310,5 +324,6 @@ test('walking back into the hall only halts the war-band; Come home ends the mar
   await page.screenshot({ path: `${OUT}/march-come-home.png` });
   await home.click();
   await expect(page.locator('[data-testid="game-shell"][data-mode="hub"]')).toBeVisible({ timeout: 10_000 });
+  await homecoming(page);
   expect(errors).toEqual([]);
 });

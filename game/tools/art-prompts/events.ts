@@ -8,11 +8,11 @@ function small(id: string, file: string, title: string, anchor: Anchor, scene: s
 }
 
 function vignette(key: string, fileKey: string, title: string, anchor: Anchor, scene: string, composition = SMALL_VIEW): ArtScene {
-  return small(`narrative.vignette.${key}`, `narrative/vignettes/${fileKey}.jpg`, title, anchor, scene, 'new', composition);
+  return small(`narrative.vignette.${key}`, `narrative/vignettes/${fileKey}.jpg`, title, anchor, scene, 'manifest', composition);
 }
 
 function card(id: string, file: string, title: string, anchor: Anchor, scene: string, composition: string): ArtScene {
-  return { title, id, file, size: [1920, 1080], status: 'new', anchor, aspect: '16:9', textLeft: true, scene, composition };
+  return { title, id, file, size: [1920, 1080], status: 'manifest', anchor, aspect: '16:9', textLeft: true, scene, composition };
 }
 
 export const EVENT_GROUPS: readonly ArtGroup[] = [
@@ -173,7 +173,7 @@ export const EVENT_GROUPS: readonly ArtGroup[] = [
   {
     title: 'Event pictures: sea, weather and omens',
     priority: 4,
-    intro: 'More small pictures for the kinds of event the game draws by itself today. I give each its own id when the picture exists.',
+    intro: 'More small pictures for events at sea, the weather and omens. Some show on an event card or in the inbox today; the rest wait for their events.',
     scenes: [
       vignette('storm', 'storm', 'Storm at sea', 'sea', `An open ship in a gale under a black sky. The sail is reefed small, green water breaks over the bow, the crew bail and haul on ropes, and the steersman braces himself against the steering oar.`),
       vignette('fog', 'fog', 'Fog', 'sea', `A ship rowing blind through thick fog. A lookout in the bow listens with a hand cupped to his ear, and the stern is already lost in grey.`),
@@ -210,7 +210,7 @@ export const EVENT_GROUPS: readonly ArtGroup[] = [
     title: 'Battle and voyage cards',
     priority: 3,
     intro:
-      'These screens have no picture today: the planner, the cards before and after a fight, and the homecoming. I add the picture slots when you have the art.',
+      'The planner, the scenes before and after a fight on land and at sea, the homecoming and the lost expedition. The text sits over the left third.',
     scenes: [
       card(
         'expeditions.scene.planner',

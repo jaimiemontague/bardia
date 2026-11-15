@@ -242,4 +242,12 @@ export const meadHallRoom: InteriorRoomDef = {
     { id: 'travellers', x: 380, y: 890, w: 380, h: 340, nameKey: 'hub.interior.meadHall.travellers.name', greetingKey: 'hub.interior.meadHall.travellers.greeting', icon: 'eye' },
     { id: 'sellswords', x: 885, y: 650, w: 240, h: 300, nameKey: 'hub.interior.meadHall.sellswords.name', greetingKey: 'hub.interior.meadHall.sellswords.greeting', icon: 'sword' },
   ],
+  // Measured on the final painting (hub/interior-mead-hall.jpg, 1600 × 900: a pixel is a viewBox unit).
+  final: {
+    base: {
+      keeper: { x: 1278, y: 860, w: 385, h: 590 },
+      travellers: { x: 390, y: 730, w: 340, h: 385, plate: 'below' },
+      sellswords: { x: 808, y: 485, w: 435, h: 230 },
+    },
+  },
 };

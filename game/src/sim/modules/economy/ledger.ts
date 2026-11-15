@@ -483,6 +483,6 @@ export function applyMonthlyLedgers(draft: GameState, ctx: SimContext, extras: L
     }
   }
   if (pauseNet !== undefined) {
-    ctx.pend({ kind: 'message', payload: { key: 'economy.ledger.pause', vars: { net: pauseNet, treasury: pauseTreasury }, priority: 'normal' } });
+    ctx.pend({ kind: 'message', payload: { key: 'economy.ledger.pause', vars: { net: pauseNet, treasury: pauseTreasury }, priority: 'normal', illustration: 'narrative.vignette.storehouse' } });
   }
 }

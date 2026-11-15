@@ -68,12 +68,17 @@ test('enter the Great hall and the Smithy, speak with everyone, and walk back ou
       expect(await stats.count()).toBeGreaterThan(0);
       for (const box of await stats.evaluateAll((els) => els.map((e) => e.getBoundingClientRect().bottom))) expect(box).toBeLessThanOrEqual(rootBox.y + 1);
       expect(rootBox.width).toBeGreaterThanOrEqual(w - 2);
-      // Every person: a named button inside the room, its plate on screen.
+      // A final painting is on screen (the base file or the season's own), and its table places the people.
+      await expect(root).toHaveAttribute('data-art', /^(base|spring|summer|autumn|winter)$/);
+      // Every person: a named button inside the room, its plate on screen and clear of the title.
+      const title = (await root.locator('.int-title').boundingBox()) as Box;
       for (const id of room.people) {
         const b = page.getByTestId(`interior-person-${id}`);
         await expect(b).toBeVisible();
         const plate = (await b.locator('.int-plate').boundingBox()) as Box;
         expect(inside(plate, rootBox), `${id} plate at ${w}×${h}`).toBe(true);
+        const clear = plate.y >= title.y + title.height || plate.x >= title.x + title.width || plate.x + plate.width <= title.x;
+        expect(clear, `${id} plate under the title at ${w}×${h}`).toBe(true);
       }
       await page.screenshot({ path: `${OUT}/interior-${room.id}-${w}x${h}.png` });
 
@@ -174,4 +179,86 @@ test('the ledger opens over the hall, and closing it returns to the Steward', as
   await page.keyboard.press('Escape');
   await expect(page.getByTestId('interior-panel')).toHaveCount(0);
   await expect(page.getByTestId('interior-greatHall')).toBeVisible();
+});
+
+/**
+ * Every room on its final painting (the dev gallery, `/?interiors=<room>&person=<id>`; skipped on a production
+ * build, which has no gallery): each person's button sits on the table measured for the painting, every plate is on
+ * screen, clear of the title and of the other plates, and with each panel open the chosen person stays in view
+ * beside it. Screenshots at 1280×720, 1366×768 and 1920×1080 land in BARDIA_E2E_OUT as
+ * art-<room>-<w>x<h>[-<person>].png.
+ */
+const ART_SIZES: readonly [number, number][] = [
+  [1280, 720],
+  [1366, 768],
+  [1920, 1080],
+];
+const ART_ROOMS: Readonly<Record<string, readonly string[]>> = {
+  greatHall: ['hirdmaster', 'steward', 'lawspeaker'],
+  smithy: ['smith'],
+  shipyard: ['shipwright', 'strand'],
+  market: ['merchant'],
+  meadHall: ['keeper', 'travellers', 'sellswords'],
+  longhouse: ['houseElder'],
+  seer: ['seer'],
+  grove: ['groveKeeper'],
+};
+
+function overlaps(a: Box, b: Box): boolean {
+  return a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+}
+
+test('every room’s people sit on their figures in the final paintings', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors: string[] = [];
+  page.on('pageerror', (err) => errors.push(err.message));
+  await page.goto('/?interiors=smithy');
+  const gallery = await page
+    .getByTestId('interior-gallery')
+    .waitFor({ timeout: 30_000 })
+    .then(() => true)
+    .catch(() => false);
+  test.skip(!gallery, 'the room gallery exists on dev builds only');
+
+  for (const [w, h] of ART_SIZES) {
+    await page.setViewportSize({ width: w, height: h });
+    for (const [roomId, people] of Object.entries(ART_ROOMS)) {
+      await page.goto(`/?interiors=${roomId}`);
+      const root = page.getByTestId(`interior-${roomId}`);
+      await expect(root).toHaveAttribute('data-art', 'base');
+      await expect(root.locator('.scn-final')).toBeVisible();
+      await page.waitForTimeout(500);
+      const rootBox = (await root.boundingBox()) as Box;
+      const title = (await root.locator('.int-title').boundingBox()) as Box;
+      const plates: Box[] = [];
+      for (const id of people) {
+        const plate = (await page.getByTestId(`interior-person-${id}`).locator('.int-plate').boundingBox()) as Box;
+        expect.soft(inside(plate, rootBox), `${roomId}/${id} plate on screen at ${w}×${h}`).toBe(true);
+        expect.soft(overlaps(plate, title), `${roomId}/${id} plate under the title at ${w}×${h}`).toBe(false);
+        for (const other of plates) expect.soft(overlaps(plate, other), `${roomId}/${id} plate over another at ${w}×${h}`).toBe(false);
+        plates.push(plate);
+      }
+      await page.screenshot({ path: `${OUT}/art-${roomId}-${w}x${h}.png` });
+
+      for (const id of people) {
+        await page.goto(`/?interiors=${roomId}&person=${id}`);
+        const panel = page.getByTestId('interior-panel');
+        await expect(panel).toHaveAttribute('data-person', id);
+        await page.waitForTimeout(650);
+        const pb = (await panel.boundingBox()) as Box;
+        const person = (await page.getByTestId(`interior-person-${id}`).boundingBox()) as Box;
+        const cx = person.x + person.width / 2;
+        const cy = person.y + person.height / 2;
+        const covered = cx > pb.x && cx < pb.x + pb.width && cy > pb.y && cy < pb.y + pb.height;
+        expect.soft(covered, `${roomId}/${id} hidden by the panel at ${w}×${h}`).toBe(false);
+        expect(cx).toBeGreaterThan(rootBox.x);
+        expect(cx).toBeLessThan(rootBox.x + rootBox.width);
+        const plate = (await page.getByTestId(`interior-person-${id}`).locator('.int-plate').boundingBox()) as Box;
+        expect.soft(inside(plate, rootBox), `${roomId}/${id} plate on screen beside the panel at ${w}×${h}`).toBe(true);
+        expect.soft(overlaps(plate, pb), `${roomId}/${id} plate under the panel at ${w}×${h}`).toBe(false);
+        await page.screenshot({ path: `${OUT}/art-${roomId}-${w}x${h}-${id}.png` });
+      }
+    }
+  }
+  expect(errors).toEqual([]);
 });

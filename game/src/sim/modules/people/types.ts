@@ -117,6 +117,8 @@ export interface FeatChoicePayload {
   key?: string;
   vars?: Record<string, string | number>;
   choices?: { id: string; labelKey: string; vars: Record<string, string>; command: { type: 'chooseFeat'; pendingId: string; featId: string } }[];
+  /** Asset id of the picture at the top of the decision card (an optional `*.illus.*` manifest id). */
+  illustration?: string;
 }
 
 declare module '@sim/core/state' {
@@ -180,6 +182,8 @@ declare module '@sim/core/state' {
     key?: string;
     vars?: Record<string, string | number>;
     choices?: { id: CaptivityChoice; labelKey: string; command: { type: 'captivityAction'; pendingId: string; choice: CaptivityChoice }; tone?: 'primary' | 'danger' | 'secondary'; disabled?: boolean }[];
+    /** Asset id of the picture at the top of the decision card (an optional `*.illus.*` manifest id). */
+    illustration?: string;
   }
   interface SuccessionPayload {
     factionId?: FactionId;
@@ -192,6 +196,8 @@ declare module '@sim/core/state' {
     key?: string;
     vars?: Record<string, string | number>;
     choices?: { id: RegencyMode; labelKey: string; command: { type: 'designateHeir'; heirId: CharId; pendingId: string; regency: RegencyMode; regentId?: CharId }; tone?: 'primary' | 'secondary' }[];
+    /** Asset id of the picture at the top of the decision card (an optional `*.illus.*` manifest id). */
+    illustration?: string;
   }
   interface PendingPayloads {
     featChoice: FeatChoicePayload;

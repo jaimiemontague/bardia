@@ -312,4 +312,10 @@ export const groveRoom: InteriorRoomDef = {
       wide: true,
     },
   ],
+  // Measured on the final painting (hub/interior-grove.jpg, 1600 × 900: a pixel is a viewBox unit).
+  final: {
+    base: {
+      groveKeeper: { x: 1392, y: 760, w: 185, h: 475 },
+    },
+  },
 };

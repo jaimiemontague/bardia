@@ -1008,6 +1008,8 @@ export interface MessagePayload {
   key: string;
   vars: TextVars;
   priority?: NotificationPriority;
+  /** Image asset id of the picture at the top of the message card. */
+  illustration?: string;
 }
 
 /** Map of pending-decision kind → payload type. Augment to add kinds. */

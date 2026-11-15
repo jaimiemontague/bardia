@@ -49,7 +49,7 @@ function main(): void {
   }
 
   if (!quiet) {
-    console.log(`assets: ${list.total} ids: ${list.final} final, ${list.placeholder} placeholder; ${Object.keys(index.files).length} file(s) in public/assets/`);
+    console.log(`assets: ${list.total} ids: ${list.final} final, ${list.placeholder} placeholder${list.seasonal > 0 ? `, ${list.seasonal} season painting(s)` : ''}; ${Object.keys(index.files).length} file(s) in public/assets/`);
     if (!check) console.log('wrote public/assets/final-index.json and ASSET_LIST.md');
     for (const i of issues) console.warn(`manifest: ${i}`);
     for (const w of list.warnings) console.warn(`warning: ${w}`);

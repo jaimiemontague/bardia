@@ -518,7 +518,7 @@ export function dailyProvisions(draft: GameState, ctx: SimContext): void {
         }
       }
       ctx.emit({ type: 'FleetStarving', fleetId: id, days, deaths });
-      if (s.ownerId === player) ctx.notify('expeditions.notify.starving', { priority: 'critical', vars: { days, deaths }, link: { kind: 'fleet', id } });
+      if (s.ownerId === player) ctx.notify('expeditions.notify.starving', { priority: 'critical', vars: { days, deaths }, link: { kind: 'fleet', id }, illustration: 'narrative.vignette.famine' });
     } else if (slice.starving[id] !== undefined) delete slice.starving[id];
     if (voyageDays > food.voyageFatigue.startDay) morale += food.voyageFatigue.moralePerDay;
     morale = clamp(Math.round(morale), 0, 100) + 0;

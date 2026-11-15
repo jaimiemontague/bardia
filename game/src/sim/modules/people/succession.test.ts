@@ -92,7 +92,7 @@ describe('succession: minor heir and regency', () => {
     expect(p.payload).toMatchObject({ deceasedId: h.rulerId, heirId: h.kid, minor: true, regentId: h.spouseId, mode: 'play' });
     expect(p.payload.regentCandidates?.[0]).toBe(h.spouseId);
     // The generic decision modal can show it: the news and both ways to hold the hall, as ready commands.
-    expect(p.payload).toMatchObject({ titleKey: 'people.succession.title', key: 'people.succession.body' });
+    expect(p.payload).toMatchObject({ titleKey: 'people.succession.title', key: 'people.succession.body', illustration: 'people.illus.succession' });
     expect(p.payload.choices?.map((c) => c.command)).toEqual([
       { type: 'designateHeir', heirId: h.kid, pendingId: p.id, regency: 'play', regentId: h.spouseId },
       { type: 'designateHeir', heirId: h.kid, pendingId: p.id, regency: 'skip', regentId: h.spouseId },
@@ -234,6 +234,8 @@ describe('succession: no heir', () => {
     const state = peopleTestState();
     const r = kill(state, state.player.rulerId);
     expect(r.events.some((e) => e.type === 'HouseFallsSilent')).toBe(true);
+    expect(r.events.some((e) => e.type === 'Notification' && e.key === 'people.notify.houseFallen' && e.illustration === 'people.illus.houseFallen')).toBe(true);
+    expect(r.events.some((e) => e.type === 'Notification' && e.key === 'people.notify.death' && e.illustration === 'narrative.vignette.funeral')).toBe(true);
     expect(r.state.people?.houseFallen).toBe(true);
     expect(checkInvariants(r.state, env)).toEqual([]);
   });

@@ -425,12 +425,12 @@ function announceHit(ctx: SimContext, hit: StormHitEvent, zoneName: string): voi
   };
   const link = { kind: 'fleet' as const, id: hit.fleetId };
   if (hit.lost) {
-    ctx.notify('weather.storm.hit.lost', { priority: 'critical', vars, link });
+    ctx.notify('weather.storm.hit.lost', { priority: 'critical', vars, link, illustration: 'narrative.vignette.wreck' });
     ctx.narrate('weather.narration.fleetLost', { zone: zoneName }, 'skald');
     ctx.chronicle({ kind: 'weather.fleetLost', textKey: 'weather.chronicle.fleetLost', importance: 3, vars, refs: [hit.fleetId, hit.stormId] });
     return;
   }
-  ctx.notify(`weather.storm.hit.${hit.severity}`, { priority: hit.severity === 'minor' ? 'normal' : 'high', vars, link });
+  ctx.notify(`weather.storm.hit.${hit.severity}`, { priority: hit.severity === 'minor' ? 'normal' : 'high', vars, link, illustration: 'narrative.vignette.storm' });
   if (hit.severity === 'severe') {
     ctx.narrate(hit.sheltered ? 'weather.narration.severeSheltered' : 'weather.narration.severe', { zone: zoneName }, 'skald');
     ctx.chronicle({ kind: 'weather.storm', textKey: 'weather.chronicle.storm', importance: 2, vars, refs: [hit.fleetId, hit.stormId] });

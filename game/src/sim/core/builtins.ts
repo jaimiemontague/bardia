@@ -56,7 +56,8 @@ declare module './events' {
     WeekStarted: { hour: Hour };
     MonthStarted: { hour: Hour; year: number; monthIndex: number };
     YearStarted: { hour: Hour; year: number };
-    Notification: { priority: NotificationPriority; key: string; vars: TextVars; link?: EntityLink };
+    /** `illustration`: image asset id of a picture for the alert box and the inbox entry (never toasts or the feed). */
+    Notification: { priority: NotificationPriority; key: string; vars: TextVars; link?: EntityLink; illustration?: string };
     NarrationLine: { key: string; vars: TextVars; voice: VoiceId };
     ChronicleAdded: { entry: ChronicleEntry };
     PendingRaised: { decision: PendingDecision };

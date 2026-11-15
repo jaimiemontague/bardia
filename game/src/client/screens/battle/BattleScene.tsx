@@ -19,7 +19,8 @@ import { useT } from '../../i18n/index';
 import { BattleView, type BattleHover } from '../../render/battle/BattleView';
 import { Button } from '../../ui/index';
 import type { BattleController } from './controller';
-import { BattleLog, ConfirmRetreat, DuelCard, FastForward, HowTo, MoraleExplain, Objectives, PauseMenu, Roster, SquadPanel, Summary, TopBar } from './hud';
+import { BattleLog, ConfirmRetreat, DuelCard, FastForward, HowTo, MoraleExplain, Objectives, PauseMenu, Roster, SquadPanel, TopBar } from './hud';
+import { BattleResultScene } from './ResultScene';
 import { BattleKeys } from './keys';
 import { summarize } from './summary';
 import './battle.css';
@@ -313,25 +314,30 @@ export function BattleScene({ controller: c, title, nameOf, doneLabelKey, onDone
       )}
       {!showSummary && !c.fastForward && <DuelCard c={c} />}
       {summary && (
-        <Summary c={c} summary={summary} reasonKey={c.endReasonKey()} error={error}>
-          {summaryExtra}
-          {error && fallback}
-          <Button
-            variant="primary"
-            icon="arrowRight"
-            busy={busy}
-            onClick={() => {
-              setBusy(true);
-              const err = onDone();
-              setBusy(false);
-              setError(err);
-            }}
-            data-autofocus
-            data-testid="battle-return"
-          >
-            {t(doneLabelKey)}
-          </Button>
-        </Summary>
+        <div className="bv-result-host">
+          <BattleResultScene summary={summary} side={c.side} title={title} reasonKey={c.endReasonKey()} error={error}>
+            <div className="bc-actions">
+              {summaryExtra}
+              {error && fallback}
+              <Button
+                variant="primary"
+                size="lg"
+                icon="arrowRight"
+                busy={busy}
+                onClick={() => {
+                  setBusy(true);
+                  const err = onDone();
+                  setBusy(false);
+                  setError(err);
+                }}
+                data-autofocus
+                data-testid="battle-return"
+              >
+                {t(doneLabelKey)}
+              </Button>
+            </div>
+          </BattleResultScene>
+        </div>
       )}
     </div>
   );

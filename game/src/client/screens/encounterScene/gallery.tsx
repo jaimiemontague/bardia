@@ -18,7 +18,7 @@ import { useT } from '../../i18n/index';
 import { FACTION_COLOURS, PLAYER_COLOUR, SceneStage, styleOfCulture, type Ambience, type SceneWeather, type SettlementPictureModel } from '../../render/scenes/index';
 import { hashString } from '../../render/scenes/paint';
 import { ArrivalScene } from '../arrivalScene/ArrivalScene';
-import { planArrival, type ArrivalView } from '../arrivalScene/model';
+import { arrivalAssetId, planArrival, type ArrivalView } from '../arrivalScene/model';
 import { VisitScene, type VisitPlace } from '../settlement/hub';
 import { AftermathSceneBody } from '../settlement/index';
 import { EncounterScene } from './EncounterScene';
@@ -102,7 +102,7 @@ function sampleArrival(s: Settlement, ambience: Ambience, opts: { raided?: boole
   return {
     settlement: s,
     picture,
-    assetId: `settlements.scene.arrival.${s.tier}`,
+    assetId: arrivalAssetId({ tier: s.tier, culture: s.culture, overland: opts.view === 'land', scarred: opts.raided === true }),
     cue: { mainKey: opts.own ? 'settlements.cue.own' : opts.raided ? 'settlements.cue.raided' : opts.view === 'land' ? 'settlements.cue.overland' : `settlements.cue.${s.tier}`, vars: { settlement: s.name } },
     knownVars: { tier: s.tier, pop: s.pop, walls: String(s.fortTier), own: opts.own ? 'yes' : 'no', lord: 'House Vargholm', scarred: opts.raided ? 'yes' : 'no' },
     kickerVars: { tod, weather: ambience.weather.fog ? 'fog' : 'clear', men: 84, overland: opts.view === 'land' ? 'yes' : 'no' },

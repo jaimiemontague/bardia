@@ -1,6 +1,6 @@
 # Bardia: how to play-test this build
 
-**Build date:** 15 November 2026 (rooms inside the buildings; battles fought with the keys)
+**Build date:** 15 November 2026, afternoon (the final paintings are in)
 
 ## Start the game
 
@@ -14,7 +14,11 @@ Start a **New Saga**. Saves from before this build may not load cleanly.
 - **Land battles are fought with the keys.** Hold **W A S D** to move your squads, **Space** to attack.
 - **Sea battles are fought from the helm.** **W A S D** steers your own ship. Hold **Space** to draw, let go to loose your arrows. You have to aim.
 - **Pause is now P** in both kinds of battle, because Space attacks.
-- **The pictures are still stand-ins** drawn by the program. `ART_PROMPTS.md` in this folder has a prompt for every picture, ready for an image generator.
+- **The paintings are in.** The village, the eight rooms, every meeting, arrival and visit, the title picture and the homeland cards now show the paintings made from `ART_PROMPTS.md`. Each person's name in a room sits on the painted person.
+- **New painted scenes:** the voyage planner, Before the Battle and Before the Sea Battle (now full-screen), the result of a fight on land or at sea (also after "let the captains decide"), the homecoming and a lost expedition.
+- **Event cards and the inbox show pictures:** captivity, succession, a feat, births, weddings, deaths, the muster, a ship launched, a storm, desertion and news.
+- **Seasons:** where a seasonal painting exists, the game shows it in that season (spring, autumn, winter), so the village changes through the year.
+- **Other lands look like themselves** when you arrive: the western lowlands, the warm south, the eastern rivers, the far south and the grass plains.
 
 ## Test 1: walk into the buildings (5 minutes)
 

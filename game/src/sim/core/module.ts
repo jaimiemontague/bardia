@@ -161,8 +161,8 @@ export interface SimContext {
   applyEffects(effects: readonly (Effect | EffectData)[]): void;
   /** Mint a deterministic id. */
   newId<P extends IdPrefix>(prefix: P): IdPrefixMap[P];
-  /** Emit a Notification event. */
-  notify(key: string, opts?: { priority?: NotificationPriority; vars?: TextVars; link?: EntityLink }): void;
+  /** Emit a Notification event. `illustration`: image asset id shown on the alert box and the inbox entry. */
+  notify(key: string, opts?: { priority?: NotificationPriority; vars?: TextVars; link?: EntityLink; illustration?: string }): void;
   /** Emit a NarrationLine event. */
   narrate(key: string, vars?: TextVars, voice?: VoiceId): void;
   /** Append to the Chronicle (and emit ChronicleAdded). `hour` defaults to now. */

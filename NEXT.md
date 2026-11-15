@@ -11,7 +11,21 @@ Things seen during the builds of 14 and 15 November 2026 and left as they are. N
 - **Top bar:** the room covers the top bar's decorative bottom edge by about 5 px (`.route-host.layout-overlay` starts at 4.6rem).
 - **Poses:** the room kit has standing, seated and working figures, no leaning one. The Seer stands upright behind her table and her ring glows on the table's front edge.
 - **Mead-hall:** the drinking horns on the wall read a little like crescents.
-- **Final art.** `ART_PROMPTS.md` holds a prompt for every painted scene (rebuild it with `npm run tool -- art-prompts` in `game`). Raw downloads go in `art\incoming\`; they still have to be cropped to the game's sizes and placed, and the click tables of the village and the rooms moved to match each painting. The village has no picture slot in code yet (`hub.panorama.home.*`), and neither have the battle and voyage cards or the extra event pictures.
+
+## Art (15 November)
+
+The 101 paintings from `ART_PROMPTS.md` are in the game (`game/public/assets/`), and so are the seasonal versions placed so far. Raw downloads stay in `art\incoming\` (not in the repository).
+
+- **Placing pictures.** `python game/tools/art-place/place.py [numbers]` cuts the raw files to the game's sizes and saves them; `--seasonal` does the same for `art\incoming\seasonal\` from its `manifest.json` (only new or changed files). Then `npm run tool -- assets-index` in `game`.
+- **Seasons.** A season's own painting is `<path>-<season>.jpg` beside the original; the game shows it in that season (`ASSET_DROP_IN.md` §5). Versions made by editing the original line up with it, so the village and room tables carry over; one painted from its own prompt (the skarn winter village) has its own table. The seasonal set is still being painted; run `--seasonal` again when more arrive.
+- **Fixes wanted** (from the review, list with paste-ready lines in `art\incoming\FIXES.md`): should fix #044 (stirrups) and #098 (a small cross on the lantern); could fix #051, #093, #097, #030, #088, #072, #073, #074, #064, #004, #063. After a fix, redo that picture's seasonal versions.
+- **No tint by the hour.** Final paintings are shown as painted: a night arrival shows a day painting. Either grade them by hour in CSS or ask for night versions of the scenes seen most.
+- **Event pictures waiting for their events** (17): fog, under sail, landfall, winter on the shore, ravens, comet, northern lights, the old mound, feast, the assembly, the duel, envoy, a bargain, harvest, the hunt, a raid, the shield wall. They have ids (`narrative.vignette.*`); give them to storylets or modules as those are written.
+- **Other lands.** Visits (on the quay) have no versions for other lands; the Rime-hunters arrive to Norse pictures.
+- **Scenes at 1280×720:** the text panel and scrim cover the left 40 to 45% of a scene, hiding the left quay or ships in some arrivals and the left stall in the town visit. Paintings with something in the left third: #046, #051, #054, #097, #100.
+- **Village:** the painting always shows its ships and all eight buildings (unbuilt ones carry a "Not built" label); clicking the ships opens the shipyard at the strand. The New Saga homeland step scrolls a little more at 1280×720 than before (it already scrolled).
+- **Rooms:** opening a panel for someone left of centre (smith, seer) slides the picture far enough to show a dark strip at the right; the "Choose someone" hint covers the foot of the smith's ring.
+- **Event cards:** a toast can cover the card's right-hand button at 1280×720.
 
 ## Battles (15 November)
 

@@ -1,8 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * The Home Hall hub (SCR-05): the village labels sit on their own buildings at every window size from 1280×720
- * to 1920×1080 (the label's centre lies on or just above its building, no two labels overlap, none is clipped),
+ * The Home Hall hub (SCR-05): each homeland's village painting is shown, and its labels sit on their own painted
+ * buildings at every window size from 1280×720 to 1920×1080 (the label's centre lies on or just above its
+ * building, no two labels overlap, none is clipped),
  * the buildings open their screens (the Great hall and the Smithy as rooms with people in them), the Counsel (one piece of advice at a time) and the First Voyage tell a new
  * player what to do next, and the Expedition Planner moves men and food with its two-sided handles (keyboard and
  * pointer) and launches.
@@ -11,9 +12,11 @@ import { expect, test, type Page } from '@playwright/test';
 const OUT = process.env.BARDIA_E2E_OUT ?? 'test-results';
 const SIZES: readonly [number, number][] = [
   [1280, 720],
+  [1366, 768],
   [1600, 1000],
   [1920, 1080],
 ];
+const HOMELANDS = ['skarn', 'hvarn', 'eyjar'] as const;
 const IDS = ['greatHall', 'longhouse', 'meadHall', 'smithy', 'shipyard', 'market', 'seer', 'grove'] as const;
 
 async function quickStart(page: Page): Promise<void> {
@@ -22,7 +25,11 @@ async function quickStart(page: Page): Promise<void> {
   await page.getByTestId('quick-start').click();
   await expect(page.locator('[data-testid="game-shell"][data-mode="hub"]')).toBeVisible({ timeout: 20_000 });
   await expect(page.getByTestId('hub')).toBeVisible();
-  // Answer any opening message so nothing covers the hall.
+  await clearOpening(page);
+}
+
+/** Answers any opening message so nothing covers the hall. */
+async function clearOpening(page: Page): Promise<void> {
   for (let i = 0; i < 5; i++) {
     const ack = page.getByTestId('decision-acknowledge');
     const critical = page.getByTestId('critical-modal').locator('button.btn-primary');
@@ -31,6 +38,25 @@ async function quickStart(page: Page): Promise<void> {
     else break;
     await page.waitForTimeout(200);
   }
+}
+
+/** A new saga from this homeland, everything else recommended, into the hub. */
+async function startIn(page: Page, homeland: string): Promise<void> {
+  await page.goto('/');
+  await page.getByTestId('menu-newSaga').click();
+  await page.getByTestId('step-homeland').click();
+  await page.getByTestId(`homeland-${homeland}`).click();
+  const shell = page.locator('[data-testid="game-shell"][data-mode="hub"]');
+  for (let i = 0; i < 14 && !(await shell.isVisible()); i++) {
+    const next = page.getByTestId('wizard-next');
+    if (await next.isVisible()) {
+      if (await next.isDisabled()) await page.getByTestId('wizard-recommended').click();
+      await next.click();
+    }
+    await page.waitForTimeout(250);
+  }
+  await expect(shell).toBeVisible({ timeout: 20_000 });
+  await clearOpening(page);
 }
 
 interface Box {
@@ -50,19 +76,15 @@ function distanceToBox(px: number, py: number, b: Box): number {
   return Math.hypot(dx, dy);
 }
 
-test('every village label sits on its own building at 1280×720, 1600×1000 and 1920×1080', async ({
-  page,
-}) => {
-  test.setTimeout(90_000);
-  const errors: string[] = [];
-  page.on('pageerror', (err) => errors.push(err.message));
-  await page.setViewportSize({ width: 1600, height: 1000 });
-  await quickStart(page);
+/** Every label on its own building, none clipped, none on another building or label, at every size. */
+async function checkLabels(page: Page, tag: string): Promise<void> {
   for (const [w, h] of SIZES) {
     await page.setViewportSize({ width: w, height: h });
     await page.waitForTimeout(400);
     const picture = (await page.locator('.hub-picture').boundingBox()) as Box;
     expect(picture.width).toBeGreaterThan(300);
+    // The picture keeps the village's aspect (1300 × 1000), so the labels cannot drift.
+    expect(Math.abs(picture.width / picture.height - 1.3), `${tag} aspect at ${w}×${h}`).toBeLessThan(0.01);
     const labels: Record<string, Box> = {};
     const buildings: Record<string, Box> = {};
     for (const id of IDS) {
@@ -75,28 +97,56 @@ test('every village label sits on its own building at 1280×720, 1600×1000 and 
       const cx = l.x + l.width / 2;
       const cy = l.y + l.height / 2;
       // On or right above its own building (within 5% of the picture's height).
-      expect(distanceToBox(cx, cy, b), `${id} label at ${w}×${h}`).toBeLessThanOrEqual(picture.height * 0.05);
+      expect(distanceToBox(cx, cy, b), `${tag} ${id} label at ${w}×${h}`).toBeLessThanOrEqual(picture.height * 0.05);
       // Not clipped by the picture.
-      expect(l.x, `${id} left edge at ${w}×${h}`).toBeGreaterThanOrEqual(picture.x - 1);
-      expect(l.x + l.width, `${id} right edge at ${w}×${h}`).toBeLessThanOrEqual(
-        picture.x + picture.width + 1,
-      );
-      expect(l.y, `${id} top edge at ${w}×${h}`).toBeGreaterThanOrEqual(picture.y - 1);
+      expect(l.x, `${tag} ${id} left edge at ${w}×${h}`).toBeGreaterThanOrEqual(picture.x - 1);
+      expect(l.x + l.width, `${tag} ${id} right edge at ${w}×${h}`).toBeLessThanOrEqual(picture.x + picture.width + 1);
+      expect(l.y, `${tag} ${id} top edge at ${w}×${h}`).toBeGreaterThanOrEqual(picture.y - 1);
+      expect(l.y + l.height, `${tag} ${id} bottom edge at ${w}×${h}`).toBeLessThanOrEqual(picture.y + picture.height + 1);
       for (const other of IDS) {
         if (other === id) continue;
-        expect(overlap(l, labels[other] as Box), `${id} and ${other} labels overlap at ${w}×${h}`).toBe(
-          false,
-        );
+        expect(overlap(l, labels[other] as Box), `${tag} ${id} and ${other} labels overlap at ${w}×${h}`).toBe(false);
         // A label never sits on another building.
-        expect(
-          distanceToBox(cx, cy, buildings[other] as Box) > 0,
-          `${id} label lies on the ${other} at ${w}×${h}`,
-        ).toBe(true);
+        expect(distanceToBox(cx, cy, buildings[other] as Box) > 0, `${tag} ${id} label lies on the ${other} at ${w}×${h}`).toBe(true);
       }
     }
-    await page.screenshot({ path: `${OUT}/hub-${w}x${h}.png` });
+    await page.screenshot({ path: `${OUT}/hub-${tag}-${w}x${h}.png` });
   }
-  expect(errors).toEqual([]);
+}
+
+for (const homeland of HOMELANDS) {
+  test(`the ${homeland} village painting: every label on its own building at 1280×720 to 1920×1080`, async ({ page }) => {
+    test.setTimeout(120_000);
+    const errors: string[] = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+    await page.setViewportSize({ width: 1600, height: 1000 });
+    await startIn(page, homeland);
+    const village = page.getByTestId('hub-village');
+    await expect(village).toHaveAttribute('data-final', 'yes');
+    await expect(village).toHaveAttribute('data-culture', homeland);
+    // The ships on the strand keep their click area and count.
+    await expect(page.getByTestId('hub-ships')).toHaveAttribute('data-count', /^\d+$/);
+    await checkLabels(page, homeland);
+    expect(errors).toEqual([]);
+  });
+}
+
+test('the homeland cards show their pictures, and the step does not scroll at 1920×1080', async ({ page }) => {
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.goto('/');
+  await page.getByTestId('menu-newSaga').click();
+  await page.getByTestId('step-homeland').click();
+  for (const homeland of HOMELANDS) {
+    const img = page.getByTestId(`homeland-${homeland}`).locator('.choice-card-picture img');
+    await expect(img).toHaveAttribute('data-asset-id', `menu.homeland.${homeland}`);
+    await expect.poll(() => img.evaluate((el) => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  const scroll = page.locator('.wizard-scroll');
+  expect(await scroll.evaluate((el) => el.scrollHeight <= el.clientHeight + 1)).toBe(true);
+  await page.screenshot({ path: `${OUT}/new-saga-homeland-1920x1080.png` });
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: `${OUT}/new-saga-homeland-1280x720.png` });
 });
 
 test('the hall buildings open their screens', async ({ page }) => {

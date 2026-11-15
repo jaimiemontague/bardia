@@ -31,6 +31,8 @@ export interface GameNotification {
   key: string;
   vars: TextVars;
   link?: EntityLink;
+  /** Image asset id of the entry's picture (the alert box and the opened inbox entry; never toasts or the feed). */
+  illustration?: string;
   hour: Hour;
   read: boolean;
 }
@@ -90,6 +92,7 @@ export const useNotifications = create<NotificationStore>()((set, get) => ({
         hour,
         read: false,
         ...(e.link ? { link: e.link } : {}),
+        ...(typeof e.illustration === 'string' && e.illustration.length > 0 ? { illustration: e.illustration } : {}),
       };
       fresh.push(n);
     }

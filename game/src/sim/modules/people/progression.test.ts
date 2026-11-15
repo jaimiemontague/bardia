@@ -59,6 +59,7 @@ describe('XP and levels (§22.1)', () => {
     expect(p?.kind).toBe('featChoice');
     if (p?.kind !== 'featChoice') throw new Error('no feat choice');
     expect(p.payload.options).toHaveLength(b.xp.featChoices);
+    expect(p.payload.illustration).toBe('people.illus.featChoice');
     expect(new Set(p.payload.options).size).toBe(b.xp.featChoices);
     // The generic decision modal can show it: one button per feat, each a ready command.
     expect(p.payload.choices?.map((c) => c.command)).toEqual(p.payload.options.map((featId) => ({ type: 'chooseFeat', pendingId: p.id, featId })));

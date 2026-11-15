@@ -65,7 +65,7 @@ describe('transfer', () => {
     expect(s.markets[w.village]?.stock.iron).toBeCloseTo(ironBefore + 2, 6);
     expect(s.ships[ship]?.hullHp).toBeCloseTo(80 * 0.8, 6);
     expect(r.events.find((e) => e.type === 'TransferArrived')).toMatchObject({ intercepted: true, menLost: 5 });
-    expect(r.events.some((e) => e.type === 'Notification' && e.key === 'military.transfer.intercepted')).toBe(true);
+    expect(r.events.some((e) => e.type === 'Notification' && e.key === 'military.transfer.intercepted' && e.illustration === 'military.illus.transferIntercepted')).toBe(true);
     expect(missingEventKeys(r.events)).toEqual([]);
   });
 

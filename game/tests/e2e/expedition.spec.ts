@@ -3,7 +3,8 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 /**
  * The playable slice through the real UI (production build): quick start, wait out the spring ice at home,
  * muster an expedition in the planner, sail for the nearest known harbour, raid it through the Arrival Card
- * and the battle setup (auto-resolve), close the Cargo screen, sail home and stand down in the hall.
+ * and the battle setup (auto-resolve, then the painted outcome), close the Cargo screen, sail home (the painted
+ * homecoming) and stand down in the hall.
  * Quick start picks a random house, so the raid can also fail (leaders wounded, slain or taken): the run then
  * answers the alerts and the captivity decision and still sails home.
  * Back home, the loot the fleet brought is in the house storehouse: the Merchant sells it all and the treasury rises.
@@ -25,7 +26,8 @@ async function marketTreasury(page: Page): Promise<number> {
 async function answerOne(page: Page): Promise<boolean> {
   const critical = page.getByTestId('critical-modal').locator('button.btn-primary');
   const ack = page.getByTestId('decision-acknowledge');
-  const choice = page.locator('[data-testid^="decision-choice-"]:not([disabled])').first();
+  // (not the one-choice scenes this test waits for: the battle's outcome, the homecoming)
+  const choice = page.locator('[data-testid^="decision-choice-"]:not([disabled]):not([data-testid="decision-choice-continue"])').first();
   if (await critical.isVisible()) await critical.click();
   else if (await ack.isVisible()) await ack.click();
   else if (await choice.isVisible()) await choice.click();
@@ -97,6 +99,13 @@ test('launch an expedition, raid a neighbour and bring the loot home', async ({ 
   await page.screenshot({ path: 'test-results/slice-battle.png' });
   await page.getByTestId('battle-auto').click();
   await expect(page.getByTestId('battle-setup')).toHaveCount(0);
+  // The captains' outcome as a painted scene (the field won or lost), then on.
+  await expect(page.getByTestId('battle-summary')).toBeVisible();
+  await expect(page.getByTestId('battle-outcome')).toHaveAttribute('data-outcome', /victory|defeat|retreat|draw/);
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: `${OUT}/slice-battle-result.png` });
+  await page.getByTestId('decision-choice-continue').click();
+  await expect(page.getByTestId('battle-summary')).toHaveCount(0);
 
   // A won raid opens the Cargo screen; a lost one sends the men back to the ships.
   const cargo = page.getByTestId('cargo-panel');
@@ -118,7 +127,14 @@ test('launch an expedition, raid a neighbour and bring the loot home', async ({ 
   // Sail home and stand down.
   await playUntil(page, homeReady, 20_000, { realtime: false });
   await homeReady.click();
-  await playUntil(page, hub, 90_000, { realtime: true });
+  // The homecoming: the ships rowing up the fjord, the village on the strand.
+  const homecoming = page.getByTestId('expedition-home-scene');
+  await playUntil(page, homecoming, 90_000, { realtime: true });
+  await expect(homecoming).toHaveAttribute('data-asset', 'expeditions.scene.homecoming');
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: `${OUT}/slice-homecoming.png` });
+  await page.getByTestId('decision-choice-continue').click();
+  await expect(hub).toBeVisible();
   while (await answerOne(page)) await page.waitForTimeout(200);
   await page.screenshot({ path: 'test-results/slice-home.png' });
   await expect(page.getByTestId('hub-expedition')).toBeEnabled();

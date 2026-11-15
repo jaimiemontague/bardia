@@ -1,163 +1,29 @@
-/* Before the Sea Battle (pending 'seaBattle'): two fleets on the water, the wind, the odds, two choices. */
-.sbs-scene {
-  display: grid;
-  grid-template-columns: 1fr minmax(12rem, 16rem) 1fr;
-  align-items: stretch;
-  gap: var(--sp-3);
-  padding: var(--sp-4) var(--sp-3) var(--sp-3);
-  border-radius: var(--r-lg);
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(210, 190, 140, 0.18), transparent 60%),
-    linear-gradient(180deg, #23404c 0%, #1b4656 45%, #163a48 100%);
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.45);
+/* Before the Sea Battle: the card scene (screens/battle/cardScene.css) plus the fleets, the wind and Details. */
+.sbs-side .bc-side-banner.sbs-banner {
+  width: 4.4rem;
 }
-.sbs-fleet {
-  display: grid;
-  align-content: start;
-  justify-items: center;
-  gap: var(--sp-2);
-}
-.sbs-fleet h3 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--fs-lg);
-  letter-spacing: 0.04em;
-}
-.sbs-fleet.is-own h3 {
-  color: #b9d8ff;
-}
-.sbs-fleet.is-foe h3 {
-  color: #ffb3a6;
-}
-.sbs-ships {
+.sbs-line {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 2px 6px;
-  min-height: 6rem;
-}
-.sbs-more {
-  align-self: center;
-  font-size: var(--fs-lg);
-  color: #e8f0f2;
-}
-.sbs-count {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  line-height: 1.15;
-  font-size: var(--fs-md);
-  color: #dbe7ea;
-}
-.sbs-men {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  color: #fff6dc;
-}
-.sbs-middle {
-  display: grid;
-  justify-items: center;
-  align-content: center;
-  gap: var(--sp-2);
-  text-align: center;
+  gap: var(--sp-1) var(--sp-4);
 }
 .sbs-wind {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: var(--sp-1) 0 0;
   font-size: var(--fs-md);
-  color: #dbe7ea;
+  color: var(--bone-1);
 }
 .sbs-wind strong {
-  color: #fff;
+  color: var(--bone-0);
 }
-.sbs-vs {
-  font-family: var(--font-display);
-  font-size: var(--fs-sm);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #9fc4cc;
-}
-.sbs-odds {
-  font-family: var(--font-display);
-  font-size: var(--fs-xl);
-  line-height: 1.15;
-  padding: 6px 12px;
-  border-radius: var(--r-md);
-  background: rgba(0, 0, 0, 0.35);
-}
-.sbs-odds.band-decisive,
-.sbs-odds.band-likely {
-  color: #a9e08e;
-}
-.sbs-odds.band-even {
-  color: #ffe08a;
-}
-.sbs-odds.band-risky,
-.sbs-odds.band-hopeless {
-  color: #ff9e88;
-}
-.sbs-choices {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-4);
-  margin-top: var(--sp-4);
-}
-.sbs-choice {
-  display: grid;
-  gap: 6px;
-  justify-items: center;
-  text-align: center;
-  font-size: var(--fs-md);
-}
-.sbs-choice .btn {
-  min-width: 15rem;
-}
-.sbs-details {
-  margin-top: var(--sp-4);
-  font-size: var(--fs-md);
-}
-.sbs-details summary {
-  cursor: pointer;
-  color: var(--c-text-dim);
-}
-.sbs-details-body {
+.sbs-detail-side + .sbs-detail-side {
   margin-top: var(--sp-2);
 }
-.sbs-details-body p {
-  margin: 0 0 6px;
-}
-.sbs-detail-sides {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-4);
-}
-.sbs-detail-side h4 {
-  margin: 0 0 4px;
-}
-.sbs-detail-side ul {
-  list-style: none;
-  margin: 0 0 6px;
-  padding: 0;
-  display: grid;
-  gap: 2px;
-}
-.sbs-detail-side li {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 8px;
-}
-.sbs-detail-side .num {
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-}
-@media (max-width: 760px) {
-  .sbs-scene,
-  .sbs-choices,
-  .sbs-detail-sides {
-    grid-template-columns: 1fr;
-  }
+.sbs-detail-side li > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

@@ -1,1 +1,64 @@
-{}
+{
+  "expeditions.scene.planner": {
+    "kind": "image",
+    "path": "expeditions/planner.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "landing",
+        "seed": 46
+      },
+      "label": "Mustering an expedition: early morning on the strand below the home village, three ships with gangplanks down, men carrying barrels, sacks, spears and shields aboard. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "expeditions.scene.homecoming": {
+    "kind": "image",
+    "path": "expeditions/homecoming.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "landing",
+        "palette": "dusk",
+        "seed": 47
+      },
+      "label": "The expedition comes home: from the leading ship's deck, the ships rowing up the fjord low in the water, the whole village running down to the strand. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "expeditions.scene.lost": {
+    "kind": "image",
+    "path": "expeditions/lost.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "wreck",
+        "palette": "overcast",
+        "seed": 48
+      },
+      "label": "The expedition is lost: a handful of soaked survivors walking home along a grey shore road in the rain, without their ships, the home village small ahead. Subject on the right two thirds; the left third stays calm for text."
+    }
+  }
+}

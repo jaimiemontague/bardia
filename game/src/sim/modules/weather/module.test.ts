@@ -212,6 +212,8 @@ describe('storm hits (§31.3)', () => {
       const menBefore = Object.values(before.fleets[fleetId]?.men ?? {}).reduce((a, b) => a + b, 0);
       const menAfter = Object.values(after.fleets[fleetId]?.men ?? {}).reduce((a, b) => a + b, 0);
       expect(menBefore - menAfter).toBe(hit.menLost);
+      const note = events.find((e) => e.type === 'Notification' && e.key.startsWith('weather.storm.hit.'));
+      if (note?.type === 'Notification') expect(note.illustration).toBe(hit.lost ? 'narrative.vignette.wreck' : 'narrative.vignette.storm');
     }
     expect(checked).toBeGreaterThan(0);
   });

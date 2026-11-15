@@ -83,11 +83,18 @@ export function validate(list: readonly Numbered[]): string[] {
   const ids: Record<string, number> = {};
   const files: Record<string, number> = {};
   for (const { n, scene } of list) {
-    if (ids[scene.id] !== undefined) issues.push(`#${pad(n)} repeats the id of #${pad(ids[scene.id] ?? 0)}: ${scene.id}`);
     if (files[scene.file] !== undefined) issues.push(`#${pad(n)} repeats the file of #${pad(files[scene.file] ?? 0)}: ${scene.file}`);
-    ids[scene.id] = n;
     files[scene.file] = n;
     const entry = manifestEntry(scene.id);
+    if (scene.season) {
+      // A season's own painting of an id: the id must exist and the file is its path with the season added.
+      const want = entry?.path?.replace(/(\.[a-z]+)?$/, (ext) => `-${scene.season}${ext}`);
+      if (!entry) issues.push(`#${pad(n)} ${scene.id}: a ${scene.season} painting of an id that is not in the asset manifest`);
+      else if (want !== scene.file) issues.push(`#${pad(n)} ${scene.id}: ${scene.season} painting should be ${String(want)}, not ${scene.file}`);
+      continue;
+    }
+    if (ids[scene.id] !== undefined) issues.push(`#${pad(n)} repeats the id of #${pad(ids[scene.id] ?? 0)}: ${scene.id}`);
+    ids[scene.id] = n;
     if (scene.status === 'manifest') {
       if (!entry) issues.push(`#${pad(n)} ${scene.id}: marked 'manifest' but not in the asset manifest`);
       else {
@@ -121,7 +128,7 @@ function sceneBlock({ n, scene }: Numbered): string {
     '',
     `- **Attach:** ${attachLine(scene)}`,
     `- **Save as:** \`art\\incoming\\${saveName(n, scene)}\``,
-    `- **In the game:** \`${scene.id}\`, ${scene.size[0]}×${scene.size[1]}, \`public/assets/${scene.file}\` (${scene.status === 'manifest' ? 'the slot exists today' : 'new slot'})`,
+    `- **In the game:** \`${scene.id}\`, ${scene.size[0]}×${scene.size[1]}, \`public/assets/${scene.file}\` (${scene.season ? `its own ${scene.season} painting` : scene.status === 'manifest' ? 'the slot exists today' : 'new slot'})`,
   ];
   if (scene.note) lines.push(`- **Note:** ${scene.note}`);
   lines.push('', '```text', promptFor(scene), '```', '');

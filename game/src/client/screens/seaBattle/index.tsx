@@ -15,14 +15,17 @@ import { loadContent } from '../../app/content';
 import { useGame } from '../../app/gameStore';
 import { navigation } from '../../app/navigation';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
-import { hasKey, t as translate, useT } from '../../i18n/index';
+import { t as translate, useT } from '../../i18n/index';
 import { Button } from '../../ui/index';
 import { SeaController } from './controller';
 import { SeaBattleScene } from './SeaBattleScene';
+import { seaTitle } from './ResultScene';
 import './seaBattle.css';
 
 export { SeaBattleScene } from './SeaBattleScene';
 export { SeaController } from './controller';
+/** The outcome of a sea fight the captains settled (route 'seaBattleResult'), and the waters' name. */
+export { seaBattleResultScreen, seaTitle } from './ResultScene';
 
 /**
  * One controller per running sea battle id, kept outside React so a remount (StrictMode, an error
@@ -37,12 +40,6 @@ export function seaControllerFor(id: string, setup: SeaBattleSetup, content: Con
 
 export function releaseSeaController(id: string): void {
   if (live?.id === id) live = null;
-}
-
-/** The scene's title: the waters it is fought in. */
-export function seaTitle(setup: SeaBattleSetup, t: (key: string, vars?: Record<string, string | number>) => string): string {
-  const key = `seabattle.arena.${setup.arena}`;
-  return hasKey(key) ? t('seaView.titleAt', { arena: t(key) }) : t('seaView.title');
 }
 
 /** The auto-resolved result of a setup (the module's own §15.5 resolution, same seed). */

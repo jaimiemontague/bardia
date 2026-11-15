@@ -247,6 +247,8 @@ export function hearCopy(draft: GameState, ctx: SimContext, item: NewsItem, copy
       priority: dispatchPriority(ctx, item.importance),
       vars: { ...vars, holding, rumour },
       link: { kind: 'settlement', id: item.originId },
+      // A rider brings confirmed word; a rumour is talk carried in from the mead-hall.
+      illustration: rumour ? 'news.illus.tavernTalk' : 'news.illus.messenger',
     });
     if (item.importance >= t.dispatch.narrateMinImportance) ctx.narrate(DISPATCH_NARRATION_KEY, { holding }, 'hirdmaster');
   }

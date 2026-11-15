@@ -93,7 +93,7 @@ export function killCharacter(draft: GameState, ctx: SimContext, c: Character, c
   if (rulerOf !== undefined) event.rulerOf = rulerOf;
   ctx.emit(event);
   const vars = { cause, age: event.age };
-  notifyHouse(ctx, c, 'people.notify.death', vars, wasPlayerRuler ? 'critical' : 'high');
+  notifyHouse(ctx, c, 'people.notify.death', vars, wasPlayerRuler ? 'critical' : 'high', 'narrative.vignette.funeral');
   chronicleHouse(ctx, c, 'death', 'people.chronicle.death', wasPlayerRuler ? 5 : 3, vars);
   if (wasPlayerRuler) ctx.narrate('people.narration.rulerDied', nameVars(c), 'skald');
 
@@ -244,7 +244,7 @@ function houseFalls(draft: GameState, ctx: SimContext, deceased: Character): voi
   if (ps.houseFallen) return;
   ps.houseFallen = true;
   ctx.emit({ type: 'HouseFallsSilent', factionId: draft.player.factionId, deceasedId: deceased.id });
-  ctx.notify('people.notify.houseFallen', { priority: 'critical', vars: nameVars(deceased) });
+  ctx.notify('people.notify.houseFallen', { priority: 'critical', vars: nameVars(deceased), illustration: 'people.illus.houseFallen' });
   ctx.chronicle({ kind: 'houseFallen', textKey: 'people.chronicle.houseFallen', importance: 5, vars: nameVars(deceased), refs: [deceased.id] });
   ctx.narrate('people.narration.houseFallen', nameVars(deceased), 'skald');
 }
@@ -335,6 +335,7 @@ function playerSuccession(
   // What the generic decision modal shows: the news and the two ways to hold the hall (they need the id).
   const p = decision.payload;
   p.titleKey = 'people.succession.title';
+  p.illustration = 'people.illus.succession';
   p.key = 'people.succession.body';
   p.vars = { name: heir.name, deceasedName: reference.name };
   p.choices = (['play', 'skip'] as const).map((mode) => ({

@@ -2,6 +2,10 @@
  * The inbox (§25.9: "keeps everything with links"): every notification, newest first, in large type (ARCHITECTURE
  * §20), with read state and "Go to" links. One filter: everything, or only what is unread. Opened from the top
  * bar (I) or by clicking a feed chip or toast (which focuses that entry).
+ *
+ * An entry with a picture (the notification's `illustration`) shows a small thumbnail in place of its tier icon;
+ * clicking it opens the entry with the whole picture under its text (and marks it read). The entry a feed chip
+ * or toast focuses opens with its picture shown.
  */
 import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
 import { followLink, linkLabelKey } from '../../app/links';
@@ -9,6 +13,7 @@ import { unreadCount, useNotifications, type GameNotification } from '../../app/
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatGameDate } from '../../i18n/calendar';
 import { useT } from '../../i18n/index';
+import { EventPicture } from '../../shell/DecisionHost';
 import { TIER_ICON } from '../../shell/NotificationFeed';
 import { Button, Frame, Icon, IconButton, ScrollArea, Segmented } from '../../ui/index';
 import './inbox.css';
@@ -24,6 +29,12 @@ function InboxScreen({ params, close }: ScreenProps): ReactElement {
   const focusId = typeof params?.focus === 'number' ? params.focus : null;
   const focusRef = useRef<HTMLLIElement>(null);
   const items = useMemo(() => inbox.filter((n) => filter === 'all' || !n.read), [inbox, filter]);
+  const [openId, setOpenId] = useState<number | null>(focusId);
+  useEffect(() => setOpenId(focusId), [focusId]);
+  const toggle = (n: GameNotification) => {
+    markRead(n.id);
+    setOpenId((id) => (id === n.id ? null : n.id));
+  };
 
   useEffect(() => {
     focusRef.current?.scrollIntoView({ block: 'center' });
@@ -92,16 +103,30 @@ function InboxScreen({ params, close }: ScreenProps): ReactElement {
                     `tier-${n.tier}`,
                     n.read && 'is-read',
                     n.id === focusId && 'is-focus',
+                    n.illustration && n.id === openId && 'is-open',
                   ]
                     .filter(Boolean)
                     .join(' ')}
                   onMouseEnter={() => !n.read && markRead(n.id)}
                 >
-                  <Icon
-                    name={TIER_ICON[n.tier]}
-                    label={t(`ui.notify.tier.${n.tier}`)}
-                    className="inbox-icon"
-                  />
+                  {n.illustration ? (
+                    <button
+                      type="button"
+                      className="inbox-thumb"
+                      aria-expanded={n.id === openId}
+                      aria-label={t(n.id === openId ? 'ui.inbox.hidePicture' : 'ui.inbox.showPicture')}
+                      onClick={() => toggle(n)}
+                      data-testid={`inbox-thumb-${n.id}`}
+                    >
+                      <EventPicture assetId={n.illustration} className="inbox-thumb-picture" testId="inbox-thumb-picture" />
+                    </button>
+                  ) : (
+                    <Icon
+                      name={TIER_ICON[n.tier]}
+                      label={t(`ui.notify.tier.${n.tier}`)}
+                      className="inbox-icon"
+                    />
+                  )}
                   <div className="inbox-text">
                     <span className="inbox-body">{t(n.key, n.vars)}</span>
                     <span className="inbox-meta">
@@ -113,6 +138,7 @@ function InboxScreen({ params, close }: ScreenProps): ReactElement {
                       {t(linkLabelKey(n.link))}
                     </Button>
                   )}
+                  {n.illustration && n.id === openId && <EventPicture assetId={n.illustration} className="inbox-picture" testId="inbox-picture" />}
                 </li>
               ))}
             </ol>

@@ -30,6 +30,7 @@ import {
 import type { JarldomOption } from '../../app/newSaga/provinces';
 import { wizardDice } from '../../app/newSaga/store';
 import type { ScreenRegistry } from '../../app/screenRegistry';
+import { AssetImage } from '../../assets/index';
 import { formatNumber, tOr, useT } from '../../i18n/index';
 import { Button, Field, FormulaBreakdown, Icon, IconButton, Portrait, Segmented, TextInput, Toggle, Tooltip, type PortraitRecipe } from '../../ui/index';
 
@@ -73,9 +74,14 @@ export function wizardPortrait(c: NewSagaChoices, rank: PortraitRecipe['rank'] =
   };
 }
 
-function ChoiceCard({ selected, onSelect, title, children, disabled, testId, badge }: { selected: boolean; onSelect(): void; title: ReactNode; children?: ReactNode; disabled?: boolean; testId?: string; badge?: ReactNode }): ReactElement {
+function ChoiceCard({ selected, onSelect, title, children, disabled, testId, badge, picture }: { selected: boolean; onSelect(): void; title: ReactNode; children?: ReactNode; disabled?: boolean; testId?: string; badge?: ReactNode; picture?: ReactNode }): ReactElement {
   return (
-    <button type="button" role="radio" aria-checked={selected} disabled={disabled} className={['choice-card', selected && 'is-selected'].filter(Boolean).join(' ')} onClick={onSelect} data-testid={testId}>
+    <button type="button" role="radio" aria-checked={selected} disabled={disabled} className={['choice-card', selected && 'is-selected', picture !== undefined && 'has-picture'].filter(Boolean).join(' ')} onClick={onSelect} data-testid={testId}>
+      {picture !== undefined && (
+        <span className="choice-card-picture" aria-hidden="true">
+          {picture}
+        </span>
+      )}
       <span className="choice-card-head">
         <span className="choice-card-title">{title}</span>
         {badge}
@@ -152,11 +158,18 @@ export function IdentityStep({ choices: c, content, update }: StepProps): ReactE
 export function HomelandStep({ choices: c, content, update }: StepProps): ReactElement {
   const t = useT();
   return (
-    <div className="card-grid card-grid-3" role="radiogroup" aria-label={t('menu.newSaga.step.homeland')}>
+    <div className="card-grid card-grid-3 card-grid-homeland" role="radiogroup" aria-label={t('menu.newSaga.step.homeland')}>
       {HOMELAND_CULTURE_IDS.map((id) => {
         const def = content.cultures[id];
         return (
-          <ChoiceCard key={id} selected={c.culture === id} onSelect={() => update({ culture: id, startProvinceId: c.culture === id ? c.startProvinceId : null })} title={cultureName(id, content)} testId={`homeland-${id}`}>
+          <ChoiceCard
+            key={id}
+            selected={c.culture === id}
+            onSelect={() => update({ culture: id, startProvinceId: c.culture === id ? c.startProvinceId : null })}
+            title={cultureName(id, content)}
+            testId={`homeland-${id}`}
+            picture={<AssetImage id={`menu.homeland.${id}`} alt="" fit="cover" width="100%" height="100%" />}
+          >
             <span className="card-meta">
               {t('menu.newSaga.homeland.region', { region: def.region })} · {t(`ui.faith.${def.faith}`)}
             </span>

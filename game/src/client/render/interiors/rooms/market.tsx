@@ -295,4 +295,11 @@ export const marketRoom: InteriorRoomDef = {
   assetId: 'hub.interior.market',
   Painting: MarketPainting,
   people: [{ id: 'merchant', x: 565, y: 870, w: 300, h: 520, nameKey: 'hub.interior.market.merchant.name', greetingKey: 'hub.interior.market.merchant.greeting', icon: 'silver', wide: true }],
+  // Measured on the final painting (hub/interior-market.jpg, 1600 × 900: a pixel is a viewBox unit).
+  final: {
+    base: {
+      // Above his head is under the room's title, and his wide panel covers the right: the plate sits left of his head.
+      merchant: { x: 552, y: 865, w: 345, h: 720, plateAt: [350, 200] },
+    },
+  },
 };

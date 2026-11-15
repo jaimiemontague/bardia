@@ -29,8 +29,8 @@ brief and its status, **final** or **placeholder**.
    ```
 
    It rewrites `public/assets/final-index.json` (the list the game reads at runtime) and
-   `ASSET_LIST.md`, and prints warnings: wrong size, wrong length, or a file no id uses (usually a
-   typo in the name).
+   `ASSET_LIST.md`, and prints warnings: wrong size, wrong length, a season painting with no base
+   file, or a file no id uses (usually a typo in the name).
 4. Check the result in the gallery (section 6). The **Manifest** tab shows the id as **final**.
 
 Delivering a batch is the same: drop all the files in, then run the tool once.
@@ -57,7 +57,7 @@ Delivering a batch is the same: drop all the files in, then run the tool once.
 
 | Kind | Format | Size | Notes |
 |---|---|---|---|
-| Panoramas, interiors, vignettes, menu backdrops | PNG, or WebP/JPEG (opaque art) | As listed (e.g. 1600×900, 1920×1080, 640×360) | Painted for **summer daylight**; the game grades season and time of day (section 5). |
+| Panoramas, interiors, vignettes, menu backdrops | PNG, or WebP/JPEG (opaque art) | As listed (e.g. 1600×900, 1920×1080, 640×360) | A painting may have its own version for a season (`-winter` and so on, section 5). Nothing else is graded: what you paint is what the player sees. |
 | Portrait layer pieces | PNG with transparency | **512×640** each | See section 4. |
 | Icons | PNG with transparency (or SVG) | As listed (usually 64×64) | Larger art at the same aspect ratio is scaled down. |
 | Relic emblems | PNG with transparency | 256×256 | Round emblem on a transparent background. |
@@ -129,10 +129,41 @@ characters can get their own ids with a fixed portrait.
 
 ## 5. Season and time of day
 
-Panoramas are listed once per view but shown in every season and at every hour. Paint the **summer
-daylight** version; the game grades a final panorama for winter, autumn, dawn, dusk and night with
-colour filters, as it does for the placeholders. If a view needs a genuinely different painting (a
-snowed-in winter version, for instance), ask for a separate asset id.
+Every painting is listed once per view, as one asset id, and is shown in every season and at every hour.
+Paint it as you want it to be seen in general; the base file is what the game shows unless a season has its
+own painting.
+
+**A painting for one season.** Save it next to the base file, with the season added to the file name:
+
+| Base file | Winter painting |
+|---|---|
+| `hub/panorama-home-skarn.jpg` | `hub/panorama-home-skarn-winter.jpg` |
+
+- The seasons are `spring`, `summer`, `autumn` and `winter`. Any accepted image format works, and it need
+  not match the base file's (`panorama-home-skarn-winter.webp` next to a `.jpg` is fine).
+- Make as many or as few as you like. No manifest entry and no code is needed: the file name is the whole
+  rule. Run the index tool afterwards.
+- **In that season** the game shows that season's painting. **In any other season**, or when the season has
+  no painting of its own, it shows the base file. The base file is always required: a season file alone is
+  ignored (the placeholder shows) and the tool warns.
+- A season's painting has the same size as the base file. The tool checks it like the base file and
+  lists it in `ASSET_LIST.md` with the id (for example "final; own paintings for autumn, winter").
+- Do not give a base file a name that ends in a season (`...-winter.png`): the game would read it as a
+  winter painting of another id. No manifest path does.
+
+**It is a new painting, not a recolour.** Things in a winter painting may sit a little apart from where
+they are in the summer one: a longhouse a few pixels over, a different hearth. Anything the game places
+over a painting (the village's building labels, the people you click in a room) therefore keeps its own
+table of positions **per painting**, and falls back to the base file's table for a season without one. If
+you move things in a season's painting, tell the developer, so that the table gets an entry.
+
+**What the game does about time of day and season grading.** Nothing, for a final painting. A final file
+is drawn exactly as delivered, scaled to fill the screen (`object-fit: cover`), in every season and at
+every hour; no colour filter is applied to it. (The procedural placeholders are drawn for the season and the
+hour; the `panorama` generator can also hand a grading filter to a final file, but no screen in the game
+passes it a season or an hour, so it never takes effect.) If a view should look different in winter, at
+night or at dusk, that needs its own painting: for seasons, the file name rule above. For an hour of the
+day, ask for a separate asset id.
 
 ---
 
@@ -178,6 +209,7 @@ npm run tool -- assets-index --strict  # also fail on size/length warnings and u
 |---|---|
 | The gallery still shows the placeholder | Check the path and spelling against `ASSET_LIST.md` (lower case, hyphens). Run the tool. Reload without cache (Ctrl+F5). Make sure **Ignore final files** is off. |
 | The tool says *Files no manifest entry uses* | The file name or folder does not match any id's path. Rename it. |
+| A season painting does not show | The base file must exist too. The name is the base name plus `-spring`, `-summer`, `-autumn` or `-winter` (lower case), in the same folder. Run the tool and reload without cache. The game only shows it in that season (the saga's date decides). |
 | The tool warns about size | Re-export at the listed size, or at a larger size with the same aspect ratio. For sprite strips, the width is frame width × frames. |
 | A portrait piece is misaligned | Paint on the full 512×640 canvas at the guide positions above; do not crop to the drawn area. |
 | Hair or skin pieces come out too dark | Paint them lighter: tinting multiplies, so white stays the pure tint and black stays black. |

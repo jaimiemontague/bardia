@@ -3,7 +3,8 @@
  * The Home Hall and its war-side buildings against the full module registry: the layout table, the Counsel
  * and the First Voyage (ice and thaw from the weather module), the hub screen and its hotspots, the Great
  * hall as a room (its three people, the Muster, deep links), the Shipyard, the Smithy's smith, and the planner's
- * "why Launch is disabled".
+ * "why Launch is disabled". The painted villages: every placement table keeps its labels inside the picture and
+ * its click areas apart, a season's painting finds its table, and the hub shows the home's painting.
  */
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -27,6 +28,10 @@ import { computeCounsel, firstVoyage, nextVoyageStep } from './counsel';
 import * as hub from './index';
 import { VillageScene } from './VillageScene';
 import { VIEW_H, VIEW_W, VILLAGE, spotTier } from './village';
+import { PAINTED_HOMES, PAINTED_VILLAGES, boxesOverlap, homePaintingId, paintedLayout, paintingGrade, type Box, type PaintedLayout } from './paintedLayouts';
+import { getAssetSettings, manifestEntry, setAssetSettings, setFinalIndex } from '../../assets/index';
+import { resetFinalIndex } from '../../assets/resolver/finalIndex';
+import { capitalOf } from './counsel';
 import { ExpeditionHud, hudNextStep } from '../expedition/hud';
 import { suggestPlan } from '@sim/modules/expeditions/plan';
 
@@ -100,6 +105,117 @@ describe('the village picture', () => {
     expect(container.querySelector('[data-building-id="market"]')?.getAttribute('data-tier')).toBe('0');
     expect(screen.getByTestId('hub-ice')).toBeTruthy();
     expect(screen.getByTestId('hub-ships').getAttribute('data-count')).toBe('1');
+  });
+});
+
+/** Every painted table, named for messages: each homeland's base and every season table it has. */
+function paintedTables(): [string, PaintedLayout][] {
+  const out: [string, PaintedLayout][] = [];
+  for (const home of PAINTED_HOMES) for (const [variant, layout] of Object.entries(PAINTED_VILLAGES[home])) if (layout) out.push([`${home}/${variant}`, layout]);
+  return out;
+}
+
+/** A label's footprint in viewBox units at the smallest window (1280×720: about 240 × 44 units for the longest name). */
+function labelBox([x, y]: readonly [number, number]): Box {
+  return [x - 125, y - 22, x + 125, y + 22];
+}
+
+function inside([px, py]: readonly [number, number], b: Box): boolean {
+  return px >= b[0] && px <= b[2] && py >= b[1] && py <= b[3];
+}
+
+function distance([px, py]: readonly [number, number], b: Box): number {
+  return Math.hypot(Math.max(b[0] - px, 0, px - b[2]), Math.max(b[1] - py, 0, py - b[3]));
+}
+
+describe('the painted villages', () => {
+  it('has a manifest slot at the village size for every painted homeland', () => {
+    for (const home of PAINTED_HOMES) {
+      const entry = manifestEntry(homePaintingId(home));
+      expect(entry?.path, home).toBe(`hub/panorama-home-${home}.jpg`);
+      expect(entry && 'size' in entry ? entry.size : undefined, home).toEqual([VIEW_W, VIEW_H]);
+    }
+  });
+
+  it('in every table: each label inside the picture, on or just above its own building and on no other, labels and click areas apart', () => {
+    const tables = paintedTables();
+    expect(tables.map(([name]) => name)).toContain('skarn/winter');
+    for (const [name, layout] of tables) {
+      const ids = VILLAGE.map((s) => s.id);
+      expect(Object.keys(layout.buildings).sort(), name).toEqual([...ids].sort());
+      const areas: [string, Box][] = [...ids.map((id): [string, Box] => [id, layout.buildings[id].box]), ['ships', layout.ships]];
+      for (const [id, b] of areas) {
+        expect(b[0] >= 0 && b[1] >= 0 && b[2] <= VIEW_W && b[3] <= VIEW_H && b[0] < b[2] && b[1] < b[3], `${name} ${id} box inside the picture`).toBe(true);
+        for (const [other, o] of areas) if (other !== id) expect(boxesOverlap(b, o), `${name}: ${id} and ${other} click areas overlap`).toBe(false);
+      }
+      for (const id of ids) {
+        const spot = layout.buildings[id];
+        const lb = labelBox(spot.label);
+        expect(lb[0] >= 0 && lb[1] >= 0 && lb[2] <= VIEW_W && lb[3] <= VIEW_H, `${name} ${id} label inside the picture`).toBe(true);
+        expect(distance(spot.label, spot.box), `${name} ${id} label on its building`).toBeLessThanOrEqual(50);
+        for (const other of ids) {
+          if (other === id) continue;
+          expect(inside(spot.label, layout.buildings[other].box), `${name}: ${id} label lies on the ${other}`).toBe(false);
+          expect(boxesOverlap(lb, labelBox(layout.buildings[other].label)), `${name}: ${id} and ${other} labels overlap`).toBe(false);
+        }
+      }
+      expect(layout.water).toBeGreaterThan(layout.ships[1]);
+      expect(layout.water).toBeLessThan(VIEW_H);
+    }
+  });
+
+  it("a season painting uses its own table, else its homeland's base table; only a base painting out of its season is graded", () => {
+    expect(paintedLayout('skarn', 'winter')).toBe(PAINTED_VILLAGES.skarn.winter);
+    expect(paintedLayout('skarn', 'spring')).toBe(PAINTED_VILLAGES.skarn.base);
+    expect(paintedLayout('hvarn', 'winter')).toBe(PAINTED_VILLAGES.hvarn.base);
+    expect(paintedLayout('eyjar', 'base')).toBe(PAINTED_VILLAGES.eyjar.base);
+    expect(paintedLayout('albric', 'base')).toBeNull();
+    expect(paintingGrade('winter', 'winter')).toBeUndefined();
+    expect(paintingGrade('autumn', 'autumn')).toBeUndefined();
+    expect(paintingGrade('base', 'summer')).toBeUndefined();
+    expect(paintingGrade('base', null)).toBeUndefined();
+    expect(paintingGrade('base', 'winter')).toMatch(/saturate/);
+  });
+
+  it('the hub shows the home painting with the labels on its table, the ships on the strand, and the procedural village when finals are ignored', () => {
+    const settings = { ...getAssetSettings() };
+    try {
+      setAssetSettings({ devProbe: false, forcePlaceholders: false });
+      const files: Record<string, { bytes: number; hash: string }> = {};
+      for (const home of PAINTED_HOMES) files[`hub/panorama-home-${home}.jpg`] = { bytes: 9, hash: home };
+      act(() => setFinalIndex({ format: 1, files }));
+      start(OPEN_SEED);
+      const culture = capitalOf(state())?.culture ?? '';
+      const layout = paintedLayout(culture, 'base');
+      if (!layout) throw new Error(`no painted table for ${culture}`);
+      render(<App registry={buildRegistry({ hub })} />);
+      const village = screen.getByTestId('hub-village');
+      expect(village.getAttribute('data-final')).toBe('yes');
+      expect(village.getAttribute('data-variant')).toBe('base');
+      expect(village.getAttribute('data-culture')).toBe(culture);
+      for (const s of VILLAGE) {
+        const [x, y] = layout.buildings[s.id].label;
+        const style = (screen.getByTestId(`hotspot-${s.id}`) as HTMLElement).style;
+        expect(parseFloat(style.left)).toBeCloseTo((x / VIEW_W) * 100, 5);
+        expect(parseFloat(style.top)).toBeCloseTo((y / VIEW_H) * 100, 5);
+        expect(village.querySelector(`[data-building-id="${s.id}"] .hv-hit`)?.getAttribute('x')).toBe(String(layout.buildings[s.id].box[0]));
+      }
+      expect(screen.getByTestId('hub-ships').getAttribute('data-count')).toBe('2');
+      fireEvent.click(village.querySelector('[data-building-id="market"]') as Element);
+      expect(useNavigation.getState().stack.at(-1)?.id).toBe('building.market');
+      fireEvent.click(screen.getByTestId('hub-ships'));
+      expect(useNavigation.getState().stack.at(-1)).toMatchObject({ id: 'building.shipyard', params: { person: 'strand' } });
+      // "Ignore final files": the procedural village and its own table again.
+      act(() => setAssetSettings({ forcePlaceholders: true }));
+      expect(screen.getByTestId('hub-village').classList.contains('hv-scene')).toBe(true);
+      const market = VILLAGE.find((s) => s.id === 'market') ?? VILLAGE[0]!;
+      expect(parseFloat((screen.getByTestId('hotspot-market') as HTMLElement).style.left)).toBeCloseTo((market.labelX / VIEW_W) * 100, 5);
+    } finally {
+      act(() => {
+        setAssetSettings(settings);
+        resetFinalIndex();
+      });
+    }
   });
 });
 

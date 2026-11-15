@@ -213,5 +213,20 @@
   "expeditions.hud.tip.comeHome": "End the voyage here: the men stand down, silver goes to the treasury and plunder to your storehouse.",
   "expeditions.hud.march.tip.comeHome": "End the march here: the men stand down, silver goes to the treasury and plunder to your storehouse.",
   "expeditions.hud.next.atHome": "You lie at home. Press Come home to end the voyage, or steer out again.",
-  "expeditions.hud.march.next.atHome": "You stand at your own gates. Press Come home to end the march, or march out again."
+  "expeditions.hud.march.next.atHome": "You stand at your own gates. Press Come home to end the march, or march out again.",
+  "expeditions.scene.screen": "The voyage ends",
+  "expeditions.scene.home.kicker": "Home at {place}",
+  "expeditions.scene.home.title.sea": "The ships are home",
+  "expeditions.scene.home.title.march": "The war-band is home",
+  "expeditions.scene.home.text.sea": "{men, plural, =0 {The ships come in} one {One man comes ashore} other {# men come ashore}}, and the whole village runs down to meet them.",
+  "expeditions.scene.home.text.march": "{men, plural, =0 {The leaders walk in} one {One man marches in} other {# men march in}} by the home road, and the whole village comes out to meet them.",
+  "expeditions.scene.home.facts": "{silverN, plural, =0 {No silver in the chests} other {{silver} silver for the treasury}}{tonsN, plural, =0 {} other {, {tons} t of goods for the storehouse}}.",
+  "expeditions.scene.home.continue": "Up to the hall",
+  "expeditions.scene.home.continueLine": "The men go back to their own halls.",
+  "expeditions.scene.lost.kicker": "Word reaches {place}",
+  "expeditions.scene.lost.title.sea": "The expedition is lost",
+  "expeditions.scene.lost.title.march": "The war-band is lost",
+  "expeditions.scene.lost.facts": "{men, plural, =0 {No one comes home} one {One man comes home} other {# men come home}}{lost, plural, =0 {} one {; one more was lost on the way} other {; # more were lost on the way}}. {silverN, plural, =0 {The cargo is gone.} other {The cargo and {silver} silver are gone.}}",
+  "expeditions.scene.lost.continue": "Back to the hall",
+  "expeditions.scene.lost.continueLine": "Mourn the lost, and plan again."
 }

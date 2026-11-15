@@ -135,9 +135,10 @@ class Context implements KernelContext {
     return mintId(this.state, prefix);
   }
 
-  notify(key: string, opts: { priority?: NotificationPriority; vars?: TextVars; link?: EntityLink } = {}): void {
+  notify(key: string, opts: { priority?: NotificationPriority; vars?: TextVars; link?: EntityLink; illustration?: string } = {}): void {
     const event: SimEvent = { type: 'Notification', priority: opts.priority ?? 'normal', key, vars: opts.vars ?? {} };
     if (opts.link !== undefined) event.link = opts.link;
+    if (opts.illustration !== undefined) event.illustration = opts.illustration;
     this.emit(event);
   }
 

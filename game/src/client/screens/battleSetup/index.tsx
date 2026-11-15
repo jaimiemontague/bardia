@@ -1,30 +1,26 @@
 /**
- * Before the Battle (pending 'battleSetup', design §13.4), laid out by ARCHITECTURE §20: the two sides face each
- * other (who leads them, how many men, a banner), the odds from the battle module's own `predictBattle` (the
- * numbers auto-resolve uses) as one word, and two big choices: take the field (the battlefield screen registered
- * for mode 'battle', src/client/screens/battle) or let the captains decide (auto-resolve now). The squads, gear,
- * the exact chance, the expected losses and the auto-resolve penalty are behind Details. While the fight runs,
- * this card hides (the decision stays pending until the battlefield hands the result back).
+ * Before the Battle (pending 'battleSetup', design §13.4), a full-screen scene by ARCHITECTURE §20.7: the
+ * painting of our war-band forming its line (`battle.scene.before`), and on the left the battle's name, the two
+ * sides facing each other (who leads them, how many men), the odds from the battle module's own
+ * `predictBattle` (the numbers auto-resolve uses) as one word, and two big choices: take the field (the
+ * battlefield screen registered for mode 'battle', src/client/screens/battle) or let the captains decide
+ * (auto-resolve now, then the painted outcome: route 'battleResult'). The squads, gear, the exact chance, the
+ * expected losses and the auto-resolve penalty are behind Details. While the fight runs, this scene hides (the
+ * decision stays pending until the battlefield hands the result back).
  */
 import { useMemo, type ReactElement } from 'react';
 import type { BattleSetup, CharId, GameState, PendingDecision, SideSetup } from '@sim/core/state';
 import { predictBattle } from '@sim/battle/autoresolve';
 import { loadContent } from '../../app/content';
 import { useGame, usePending } from '../../app/gameStore';
+import { navigation } from '../../app/navigation';
 import { useScreenRegistry } from '../../app/registryContext';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
-import { formatGameDate } from '../../i18n/calendar';
 import { formatNumber, useT } from '../../i18n/index';
-import {
-  Button,
-  Disclosure,
-  Icon,
-  Modal,
-  Portrait,
-  recipeForCharacter,
-  StatLine,
-  Tooltip,
-} from '../../ui/index';
+import { SceneChoices, type SceneChoiceItem } from '../../render/scenes/index';
+import { Disclosure, Icon, Portrait, recipeForCharacter, StatLine } from '../../ui/index';
+import { CardScene } from '../battle/cardScene';
+import { battleName } from '../battle/ResultScene';
 import { unitName } from '../expedition/names';
 import './battleSetup.css';
 
@@ -42,55 +38,34 @@ function leaderOf(side: SideSetup): CharId | undefined {
   return best?.id;
 }
 
-/** One side: a banner (the leader's portrait, else a shield), who, and how many men. */
+/** One side: a banner (the leader's portrait, else a shield), who leads it, and how many men. */
 function Side({ state, side, title }: { state: GameState; side: SideSetup; title: string }): ReactElement {
   const t = useT();
   const leader = leaderOf(side);
-  const c =
-    leader !== undefined && Object.hasOwn(state.characters, leader) ? state.characters[leader] : undefined;
+  const c = leader !== undefined && Object.hasOwn(state.characters, leader) ? state.characters[leader] : undefined;
   const faction = state.factions[side.factionId]?.name ?? side.factionId;
+  const who = side.isPlayer ? 'player' : 'enemy';
   return (
-    <section
-      className={`bs-side ${side.isPlayer ? 'is-own' : 'is-foe'}`}
-      data-testid={`bs-side-${side.isPlayer ? 'player' : 'enemy'}`}
-    >
-      <span className="bs-side-title">{title}</span>
-      <span className="bs-banner">
-        {c ? (
-          <Portrait
-            recipe={recipeForCharacter(c, state)}
-            alt={t('battle.ui.leaderAlt', { name: c.name })}
-            size="lg"
-            initial={c.name.slice(0, 1)}
-          />
-        ) : (
-          <Icon name="shieldRound" />
-        )}
+    <section className={`bc-side ${side.isPlayer ? 'is-own' : 'is-foe'}`} data-testid={`bs-side-${who}`} title={faction}>
+      <span className="bc-side-banner">
+        {c ? <Portrait recipe={recipeForCharacter(c, state)} alt={t('battle.ui.leaderAlt', { name: c.name })} size="sm" initial={c.name.slice(0, 1)} /> : <Icon name="shieldRound" />}
       </span>
-      <span className="bs-who">{c ? t('battle.ui.ledBy', { name: c.name }) : faction}</span>
-      {c && <span className="bs-faction">{faction}</span>}
-      <span className="bs-men" data-testid={`bs-men-${side.isPlayer ? 'player' : 'enemy'}`}>
+      <span className="bc-side-title">{title}</span>
+      <span className="bc-side-who">{c ? t('battle.ui.ledBy', { name: c.name }) : faction}</span>
+      <span className="bc-side-num" data-testid={`bs-men-${who}`}>
         {t('battle.ui.men', { men: menOf(side) })}
       </span>
     </section>
   );
 }
 
-function SquadList({
-  state,
-  side,
-  title,
-}: {
-  state: GameState;
-  side: SideSetup;
-  title: string;
-}): ReactElement {
+function SquadList({ state, side, title }: { state: GameState; side: SideSetup; title: string }): ReactElement {
   const t = useT();
   const loaded = loadContent();
   const content = loaded.ok ? loaded.content : null;
   return (
     <div className="bs-detail-side">
-      <span className="bs-detail-title">{title}</span>
+      <h4>{title}</h4>
       <ul className="bs-squads">
         {side.squads.map((sq, i) => (
           <li key={`${sq.leaderId}-${sq.unit}-${i}`}>
@@ -105,136 +80,85 @@ function SquadList({
   );
 }
 
-function BattleSetupCard({ pending, state }: { pending: PendingDecision; state: GameState }): ReactElement {
+function Missing(): ReactElement {
+  const t = useT();
+  return (
+    <CardScene assetId="battle.scene.before" testId="battle-setup" title={t('ui.decision.kind.battleSetup')} text={t('battle.setup.missing')} />
+  );
+}
+
+function BattleSetupScene({ pending, state }: { pending: PendingDecision; state: GameState }): ReactElement {
   const t = useT();
   const dispatch = useGame((s) => s.dispatch);
   const registry = useScreenRegistry();
   const loaded = loadContent();
   const battleId = (pending.payload as { battleId?: string }).battleId;
   const slot = state.subsims.battle;
-  const setup: BattleSetup | undefined =
-    slot && slot.id === battleId ? (slot.setup as BattleSetup) : undefined;
-  const prediction = useMemo(
-    () => (setup && loaded.ok ? predictBattle(setup, loaded.content) : null),
-    [setup, loaded],
-  );
+  const setup: BattleSetup | undefined = slot && slot.id === battleId ? (slot.setup as BattleSetup) : undefined;
+  const prediction = useMemo(() => (setup && loaded.ok ? predictBattle(setup, loaded.content) : null), [setup, loaded]);
   const canFight = registry.forMode('battle') !== undefined;
-  if (!setup || battleId === undefined) {
-    return (
-      <Modal open layer="decision" title={t('ui.decision.kind.battleSetup')} data-testid="battle-setup">
-        <p>{t('battle.setup.missing')}</p>
-      </Modal>
-    );
-  }
-  const place = setup.settlementId !== undefined ? state.settlements[setup.settlementId]?.name : undefined;
+  if (!setup || battleId === undefined) return <Missing />;
   const player = setup.attacker.isPlayer ? setup.attacker : setup.defender;
   const enemy = setup.attacker.isPlayer ? setup.defender : setup.attacker;
   const pct = (x: number) => Math.round(x * 100);
-  const fight = (
-    <Button
-      variant={canFight ? 'primary' : 'secondary'}
-      size="lg"
-      icon="sword"
-      disabled={!canFight}
-      onClick={() => dispatch({ type: 'startBattle', battleId, mode: 'fight' } as never)}
-      data-autofocus={canFight ? true : undefined}
-      data-testid="battle-fight"
-    >
-      {t('battle.setup.fight')}
-    </Button>
-  );
+  const auto = () => {
+    const r = dispatch({ type: 'startBattle', battleId, mode: 'auto' } as never);
+    // The outcome as its own painted scene (the slot keeps the setup and the result).
+    if (r && !r.error) navigation.open('battleResult', { battleId });
+  };
+  const choices: SceneChoiceItem[] = [
+    {
+      id: 'fight',
+      label: t('battle.setup.fight'),
+      line: canFight ? t('battle.ui.fightHint') : t('battle.setup.fieldNotReady'),
+      tone: canFight ? 'primary' : 'quiet',
+      ...(canFight ? {} : { disabled: true }),
+      testId: 'battle-fight',
+      onPick: () => dispatch({ type: 'startBattle', battleId, mode: 'fight' } as never),
+    },
+    {
+      id: 'auto',
+      label: t('battle.ui.auto'),
+      line: prediction && prediction.playerPenalty > 0 ? t('battle.ui.autoHintPenalty') : t('battle.ui.autoHint'),
+      tone: canFight ? 'safe' : 'primary',
+      testId: 'battle-auto',
+      onPick: auto,
+    },
+  ];
   return (
-    <Modal
-      open
-      layer="decision"
-      size="xl"
-      className="bs-modal"
-      title={
-        place !== undefined
-          ? t('battle.setup.titleAt', { kind: t(`battle.kind.${setup.kind}`), place })
-          : t(`battle.kind.${setup.kind}`)
-      }
-      subtitle={formatGameDate(pending.hour)}
-      tone="important"
-      data-testid="battle-setup"
+    <CardScene
+      assetId="battle.scene.before"
+      testId="battle-setup"
+      className="bs-card"
+      data={{ kind: setup.kind }}
+      kicker={t('battle.setup.kicker')}
+      title={battleName(state, setup, t)}
     >
-      <div className="bs-scene">
+      <div className="bc-face">
         <Side state={state} side={player} title={t('battle.setup.yours')} />
-        <div className="bs-middle">
-          <span className="bs-vs">{t('battle.ui.vs')}</span>
-          {prediction && (
-            <div
-              className={`bs-odds band-${prediction.band}`}
-              data-testid="battle-odds"
-              data-band={prediction.band}
-            >
-              <span className="bs-odds-label">{t('battle.ui.oddsLabel')}</span>
-              <span className="bs-odds-word">{t(`battle.band.${prediction.band}`)}</span>
-            </div>
-          )}
-        </div>
-        <Side state={state} side={enemy} title={t('battle.setup.theirs')} />
+        <span className="bc-vs">{t('battle.ui.vs')}</span>
+        <Side state={state} side={enemy} title={t(setup.attacker.isPlayer ? 'battle.setup.theirs' : 'battle.setup.attackers')} />
       </div>
-      <div className="bs-choices">
-        <div className="bs-choice">
-          {canFight ? fight : <Tooltip content={t('battle.setup.fieldNotReady')}>{fight}</Tooltip>}
-          <span className="bs-hint">
-            {canFight ? t('battle.ui.fightHint') : t('battle.setup.fieldNotReady')}
-          </span>
-        </div>
-        <div className="bs-choice">
-          <Button
-            variant={canFight ? 'secondary' : 'primary'}
-            size="lg"
-            icon="dice"
-            onClick={() => dispatch({ type: 'startBattle', battleId, mode: 'auto' } as never)}
-            data-autofocus={canFight ? undefined : true}
-            data-testid="battle-auto"
-          >
-            {t('battle.ui.auto')}
-          </Button>
-          <span className="bs-hint">
-            {prediction && prediction.playerPenalty > 0
-              ? t('battle.ui.autoHintPenalty')
-              : t('battle.ui.autoHint')}
-          </span>
-        </div>
-      </div>
-      <Disclosure className="bs-details" data-testid="battle-details">
+      {prediction && (
+        <p className={`bc-odds band-${prediction.band}`} data-testid="battle-odds" data-band={prediction.band}>
+          <span>{t('battle.ui.oddsLabel')}</span>
+          <span className="bc-odds-word">{t(`battle.band.${prediction.band}`)}</span>
+        </p>
+      )}
+      <SceneChoices inView={choices} more={[]} moreLabel="" backLabel="" label={t('battle.setup.choicesLabel')} />
+      <Disclosure className="bc-details bs-details" data-testid="battle-details">
         {prediction && (
           <div className="bs-numbers">
-            <StatLine
-              icon="dice"
-              label={t('battle.ui.chance')}
-              value={`${pct(prediction.winProbability)}%`}
-              data-testid="battle-chance"
-            />
-            <StatLine
-              icon="men"
-              label={t('battle.ui.lossIfWin')}
-              value={`${pct(prediction.ownLossShare.ifWin)}%`}
-            />
-            <StatLine
-              icon="warning"
-              label={t('battle.ui.lossIfLoss')}
-              value={`${pct(prediction.ownLossShare.ifLoss)}%`}
-            />
-            {prediction.playerPenalty > 0 && (
-              <StatLine
-                icon="hourglass"
-                label={t('battle.ui.penalty')}
-                value={`${pct(prediction.playerPenalty)}%`}
-                tone="warn"
-              />
-            )}
+            <StatLine icon="dice" label={t('battle.ui.chance')} value={`${pct(prediction.winProbability)}%`} data-testid="battle-chance" />
+            <StatLine icon="men" label={t('battle.ui.lossIfWin')} value={`${pct(prediction.ownLossShare.ifWin)}%`} />
+            <StatLine icon="warning" label={t('battle.ui.lossIfLoss')} value={`${pct(prediction.ownLossShare.ifLoss)}%`} />
+            {prediction.playerPenalty > 0 && <StatLine icon="hourglass" label={t('battle.ui.penalty')} value={`${pct(prediction.playerPenalty)}%`} tone="warn" />}
           </div>
         )}
-        <div className="bs-detail-sides">
-          <SquadList state={state} side={player} title={t('battle.setup.yours')} />
-          <SquadList state={state} side={enemy} title={t('battle.setup.theirs')} />
-        </div>
+        <SquadList state={state} side={player} title={t('battle.setup.yours')} />
+        <SquadList state={state} side={enemy} title={t(setup.attacker.isPlayer ? 'battle.setup.theirs' : 'battle.setup.attackers')} />
       </Disclosure>
-    </Modal>
+    </CardScene>
   );
 }
 
@@ -245,13 +169,13 @@ function BattleSetupScreen(_props: ScreenProps): ReactElement | null {
   // While the battle is fought on the field the decision stays pending (time stays stopped) but the
   // battlefield screen (mode 'battle') is in charge: nothing to show here.
   if (state.subsims.battle?.status === 'running' || state.meta.mode === 'battle') return null;
-  return <BattleSetupCard pending={pending} state={state} />;
+  return <BattleSetupScene key={pending.id} pending={pending} state={state} />;
 }
 
 export const screen: ScreenDescriptor = {
   id: 'battleSetup',
   pending: 'battleSetup',
   component: BattleSetupScreen,
-  layout: 'modal',
+  layout: 'fullscreen',
   titleKey: 'ui.decision.kind.battleSetup',
 };
