@@ -1,0 +1,458 @@
+/*
+ * Bardia theme: carved oak, black iron, bone and old gold.
+ *
+ * Everything visual is a CSS custom property on :root so settings (apply.ts) and the Pixi renderers
+ * (getComputedStyle) follow the player's choices without props:
+ *   --ui-scale / --text-scale      numbers set from Options (1 = 100 %)
+ *   [data-theme="oak|parchment"]   dark carved-oak surfaces (light text on dark) or light vellum
+ *   [data-contrast="high"]         high-contrast UI
+ *   [data-font="hyperlegible"]     Atkinson Hyperlegible everywhere
+ *   [data-cb="…"]                  colour-blind palettes: --cb-* (states) and --faction-1…8
+ *   [data-motion="reduced"]        no animations/transitions
+ *
+ * Sizes are in rem; the root font size carries the UI scale, the --fs-* tokens add the text scale.
+ */
+
+:root {
+  --ui-scale: 1;
+  --text-scale: 1;
+
+  --font-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --font-body: 'EB Garamond', Garamond, Georgia, serif;
+  --font-legible: 'Atkinson Hyperlegible', Verdana, 'Segoe UI', sans-serif;
+  --font-mono: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+
+  /* Type scale (raised 2026-11-14, ARCHITECTURE §20 rule 2): text the player reads is --fs-md or larger,
+     numbers the player acts on --fs-lg or larger; --fs-xs / --fs-2xs are for chips and key hints only. */
+  --fs-2xs: calc(0.72rem * var(--text-scale));
+  --fs-xs: calc(0.82rem * var(--text-scale));
+  --fs-sm: calc(0.95rem * var(--text-scale));
+  --fs-md: calc(1.125rem * var(--text-scale));
+  --fs-lg: calc(1.3rem * var(--text-scale));
+  --fs-xl: calc(1.6rem * var(--text-scale));
+  --fs-2xl: calc(2.1rem * var(--text-scale));
+  --fs-3xl: calc(2.8rem * var(--text-scale));
+  --fs-hero: calc(5rem * var(--text-scale));
+
+  /* Control sizes: buttons, transfer handles, choice cards (§20 rule 2: comfortable at 1366x768). */
+  --ctl-h-sm: calc(2.15rem * var(--text-scale));
+  --ctl-h: calc(2.6rem * var(--text-scale));
+  --ctl-h-lg: calc(3.2rem * var(--text-scale));
+
+  /* A menu is a large framed screen (§20 rule 4): Frame size="screen" uses these. */
+  --screen-w: 88rem;
+  --screen-h: 52rem;
+
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 2.5rem;
+  --sp-8: 3rem;
+
+  --r-sm: 3px;
+  --r-md: 6px;
+  --r-lg: 10px;
+
+  --dur-fast: 120ms;
+  --dur-med: 220ms;
+  --dur-slow: 420ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Raw materials (oak theme). */
+  --oak-0: #0f0b08;
+  --oak-1: #19120c;
+  --oak-2: #241912;
+  --oak-3: #312217;
+  --oak-4: #43301f;
+  --oak-5: #5c4329;
+  --oak-hi: #7d5c39;
+  --iron-0: #1d1c1b;
+  --iron-1: #2c2b29;
+  --iron-2: #46443f;
+  --iron-3: #6f6a62;
+  --iron-hi: #a7a197;
+  --bone-0: #f1e8d4;
+  --bone-1: #e3d6b9;
+  --bone-2: #c2b293;
+  --bone-3: #978a70;
+  --gold-0: #f3d58a;
+  --gold-1: #d4a74f;
+  --gold-2: #a67b2f;
+  --gold-3: #6d4f1c;
+  --blood-1: #b33d2e;
+  --blood-2: #7d241b;
+  --moss-1: #86a352;
+  --sea-1: #5a9b95;
+  --amber-1: #df9136;
+
+  /* Colour-blind-aware state colours (overridden per [data-cb]). */
+  --cb-good: #86a352;
+  --cb-bad: #c2493a;
+  --cb-warn: #df9136;
+  --cb-info: #5a9b95;
+  --cb-neutral: #978a70;
+  --faction-1: #b8402f;
+  --faction-2: #3f70aa;
+  --faction-3: #d4a74f;
+  --faction-4: #4f8a3c;
+  --faction-5: #7c51a3;
+  --faction-6: #c96d2a;
+  --faction-7: #3d8f89;
+  --faction-8: #8d8d8d;
+
+  /* Semantic tokens (what components use). */
+  --c-bg: var(--oak-0);
+  --c-bg-2: var(--oak-1);
+  --c-surface: var(--oak-2);
+  --c-surface-2: var(--oak-3);
+  --c-surface-3: var(--oak-4);
+  --c-surface-sunk: #120d09;
+  --c-text: var(--bone-0);
+  --c-text-2: var(--bone-1);
+  --c-text-dim: var(--bone-2);
+  --c-text-faint: var(--bone-3);
+  --c-border: #4a3624;
+  --c-border-strong: var(--iron-3);
+  --c-iron: var(--iron-2);
+  --c-iron-hi: var(--iron-hi);
+  --c-accent: var(--gold-1);
+  --c-accent-hi: var(--gold-0);
+  --c-accent-lo: var(--gold-2);
+  --c-accent-ink: #1a1108;
+  --c-focus: #f6d77e;
+  --c-success: var(--cb-good);
+  --c-danger: var(--cb-bad);
+  --c-warning: var(--cb-warn);
+  --c-info: var(--cb-info);
+  --c-critical: var(--cb-bad);
+  --c-overlay: rgba(8, 5, 3, 0.72);
+
+  --shadow-1: 0 1px 0 rgba(255, 236, 200, 0.06) inset, 0 2px 6px rgba(0, 0, 0, 0.45);
+  --shadow-2: 0 10px 30px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-carve: inset 0 2px 3px rgba(0, 0, 0, 0.55), inset 0 -1px 0 rgba(255, 228, 180, 0.07);
+  --text-shadow-carve: 0 1px 0 rgba(0, 0, 0, 0.8), 0 -1px 0 rgba(255, 220, 160, 0.05);
+
+  /* Wood grain (elongated turbulence), gently tinted by the surface colour beneath it. */
+  --tex-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.09' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.12 0 0 0 0 0.07 0 0 0 0 0.03 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --tex-noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --tex-surface: var(--tex-grain), linear-gradient(180deg, var(--oak-3) 0%, var(--oak-2) 55%, #1f160f 100%);
+  --tex-plank: var(--tex-grain), linear-gradient(180deg, var(--oak-4), var(--oak-3) 60%, var(--oak-2));
+  --tex-iron: linear-gradient(180deg, #55524c 0%, #3a3834 45%, #2a2926 100%);
+  --tex-panel-sunk: var(--tex-noise), linear-gradient(180deg, #140e0a, #1b140e);
+
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Vellum (light) theme: dark ink on parchment, oak frames kept.                             */
+:root[data-theme='parchment'] {
+  --c-bg: #2a1e14;
+  --c-bg-2: #34261a;
+  --c-surface: #e9dcbd;
+  --c-surface-2: #e0d0aa;
+  --c-surface-3: #d3c096;
+  --c-surface-sunk: #f2e8d0;
+  --c-text: #241911;
+  --c-text-2: #33251a;
+  --c-text-dim: #5a4630;
+  --c-text-faint: #7f6a4f;
+  --c-border: #a68a5d;
+  --c-border-strong: #6b5236;
+  --c-accent: #8f2f22;
+  --c-accent-hi: #b0412f;
+  --c-accent-lo: #6d2018;
+  --c-accent-ink: #fff4e0;
+  --c-focus: #1d5fa8;
+  --c-overlay: rgba(30, 20, 10, 0.6);
+  --shadow-carve: inset 0 1px 2px rgba(80, 50, 20, 0.35), inset 0 -1px 0 rgba(255, 255, 255, 0.4);
+  --text-shadow-carve: none;
+  --tex-surface: var(--tex-noise), linear-gradient(180deg, #efe3c6 0%, #e6d6b1 70%, #dcc89c 100%);
+  --tex-plank: var(--tex-noise), linear-gradient(180deg, #e3d3ad, #d6c294);
+  --tex-panel-sunk: var(--tex-noise), linear-gradient(180deg, #f5ecd6, #ede0c2);
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* High contrast: flat black, white text, thick borders, saturated accents.                  */
+:root[data-contrast='high'] {
+  --c-bg: #000;
+  --c-bg-2: #000;
+  --c-surface: #0a0a0a;
+  --c-surface-2: #141414;
+  --c-surface-3: #1f1f1f;
+  --c-surface-sunk: #000;
+  --c-text: #fff;
+  --c-text-2: #fff;
+  --c-text-dim: #e6e6e6;
+  --c-text-faint: #cfcfcf;
+  --c-border: #ffffff;
+  --c-border-strong: #ffffff;
+  --c-accent: #ffd400;
+  --c-accent-hi: #ffe666;
+  --c-accent-lo: #ffd400;
+  --c-accent-ink: #000;
+  --c-focus: #00e5ff;
+  --c-overlay: rgba(0, 0, 0, 0.88);
+  --shadow-1: none;
+  --shadow-2: 0 0 0 2px #fff;
+  --shadow-carve: none;
+  --text-shadow-carve: none;
+  --tex-surface: linear-gradient(#0a0a0a, #0a0a0a);
+  --tex-plank: linear-gradient(#141414, #141414);
+  --tex-iron: linear-gradient(#000, #000);
+  --tex-panel-sunk: linear-gradient(#000, #000);
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Colour-blind palettes (states and faction colours; icons accompany every coded state).    */
+:root[data-cb='deuteranopia'],
+:root[data-cb='protanopia'] {
+  --cb-good: #0072b2;
+  --cb-bad: #d55e00;
+  --cb-warn: #e69f00;
+  --cb-info: #56b4e9;
+  --cb-neutral: #999999;
+  --faction-1: #d55e00;
+  --faction-2: #0072b2;
+  --faction-3: #e69f00;
+  --faction-4: #009e73;
+  --faction-5: #cc79a7;
+  --faction-6: #f0e442;
+  --faction-7: #56b4e9;
+  --faction-8: #999999;
+}
+:root[data-cb='protanopia'] {
+  --cb-bad: #e07b00;
+  --faction-1: #e07b00;
+}
+:root[data-cb='tritanopia'] {
+  --cb-good: #00a3b4;
+  --cb-bad: #e5302c;
+  --cb-warn: #d6337f;
+  --cb-info: #7fb8bf;
+  --cb-neutral: #9e9e9e;
+  --faction-1: #e5302c;
+  --faction-2: #00a3b4;
+  --faction-3: #d6337f;
+  --faction-4: #7a7a7a;
+  --faction-5: #9c4f96;
+  --faction-6: #f08a8a;
+  --faction-7: #006d77;
+  --faction-8: #c7c7c7;
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Fonts.                                                                                    */
+:root[data-font='hyperlegible'] {
+  --font-display: var(--font-legible);
+  --font-body: var(--font-legible);
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Reduced motion: no animation or transition anywhere.                                      */
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Base.                                                                                     */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: calc(16px * var(--ui-scale));
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  height: 100%;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: 1.45;
+  font-variant-ligatures: common-ligatures;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin: 0;
+  line-height: 1.15;
+}
+
+p {
+  margin: 0 0 var(--sp-3);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--c-accent-hi);
+}
+
+::selection {
+  background: var(--c-accent);
+  color: var(--c-accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+:root[data-contrast='high'] :focus-visible {
+  outline-width: 3px;
+}
+
+/* Scrollbars in iron and oak. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-iron) transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--c-iron);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------------------------------------------------------------------------------------- */
+/* Utilities.                                                                                */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.display {
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+}
+.caps {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.num {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.muted {
+  color: var(--c-text-dim);
+}
+.faint {
+  color: var(--c-text-faint);
+}
+.italic {
+  font-style: italic;
+}
+.tone-good {
+  color: var(--c-success);
+}
+.tone-bad {
+  color: var(--c-danger);
+}
+.tone-warn {
+  color: var(--c-warning);
+}
+.tone-info {
+  color: var(--c-info);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.row.wrap {
+  flex-wrap: wrap;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.grow {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+
+@keyframes bardia-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes bardia-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes bardia-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 167, 79, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(212, 167, 79, 0.35);
+  }
+}
+@keyframes bardia-shimmer {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}

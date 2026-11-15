@@ -1,0 +1,110 @@
+{
+  "$notes": [
+    "Design §5.1 steps 4 and 7: each upbringing gives +balance.character.upbringingSkillBonus to one skill, unlocks one optional starting trait and offers 6 positive traits for step 7.",
+    "The design names only the skill per upbringing; startingTrait and traitOptions are INVENTED first picks (see ARCHITECTURE.md §9)."
+  ],
+  "shieldBorn": {
+    "name": "Shield-born",
+    "skill": "melee",
+    "startingTrait": "scarred",
+    "traitOptions": [
+      "brave",
+      "strong",
+      "towering",
+      "berserkBlooded",
+      "ambitious",
+      "quick"
+    ]
+  },
+  "bowyersChild": {
+    "name": "Bowyer's Child",
+    "skill": "archery",
+    "startingTrait": "quick",
+    "traitOptions": [
+      "quick",
+      "patient",
+      "nightEyed",
+      "lucky",
+      "temperate",
+      "brave"
+    ]
+  },
+  "hirdRaised": {
+    "name": "Hird-raised",
+    "skill": "command",
+    "startingTrait": "hirdTrained",
+    "traitOptions": [
+      "brave",
+      "just",
+      "ambitious",
+      "strong",
+      "beloved",
+      "honest"
+    ]
+  },
+  "fisherFolk": {
+    "name": "Fisher-folk",
+    "skill": "seafaring",
+    "startingTrait": "seaBorn",
+    "traitOptions": [
+      "seaBorn",
+      "patient",
+      "lucky",
+      "temperate",
+      "gregarious",
+      "strong"
+    ]
+  },
+  "woodsRunner": {
+    "name": "Woods-runner",
+    "skill": "wildcraft",
+    "startingTrait": "nightEyed",
+    "traitOptions": [
+      "nightEyed",
+      "quick",
+      "patient",
+      "lucky",
+      "temperate",
+      "strong"
+    ]
+  },
+  "thingSpeakersChild": {
+    "name": "Thing-speaker's Child",
+    "skill": "speechcraft",
+    "startingTrait": "lawspeakerTaught",
+    "traitOptions": [
+      "silverTongued",
+      "just",
+      "honest",
+      "gregarious",
+      "patient",
+      "beloved"
+    ]
+  },
+  "stewardsWard": {
+    "name": "Steward's Ward",
+    "skill": "stewardship",
+    "startingTrait": "merchantRaised",
+    "traitOptions": [
+      "honest",
+      "generous",
+      "patient",
+      "just",
+      "temperate",
+      "silverTongued"
+    ]
+  },
+  "seerTouched": {
+    "name": "Seer-touched",
+    "skill": "runecraft",
+    "startingTrait": "seerTaught",
+    "traitOptions": [
+      "pious",
+      "lucky",
+      "patient",
+      "nightEyed",
+      "honest",
+      "temperate"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$notes": "Mead-hall keeper greetings (design §20.1, §26.3). The caller binds `settlement` and optionally `character` (the keeper).",
+  "pools": [
+    {
+      "id": "keeper.greeting",
+      "role": "keeper",
+      "context": "greeting",
+      "scope": ["settlement", "character"],
+      "voice": "narrator",
+      "lines": [
+        { "id": "wetBench", "textKey": "narrative.line.keeper.greeting.wetBench" },
+        { "id": "seaChapped", "textKey": "narrative.line.keeper.greeting.seaChapped" },
+        { "id": "outside", "textKey": "narrative.line.keeper.greeting.outside" },
+        { "id": "fatPurses", "textKey": "narrative.line.keeper.greeting.fatPurses", "when": "settlement.economy == 'thriving'", "weight": 14 },
+        {
+          "id": "thinAle",
+          "textKey": "narrative.line.keeper.greeting.thinAle",
+          "when": "settlement.economy == 'poor' || settlement.economy == 'destitute'",
+          "weight": 14
+        },
+        { "id": "snow", "textKey": "narrative.line.keeper.greeting.snow", "when": "time.season == 'winter'", "weight": 12 },
+        { "id": "sungBadly", "textKey": "narrative.line.keeper.greeting.sungBadly", "when": "house.renown >= 50", "weight": 12 },
+        { "id": "farFromHome", "textKey": "narrative.line.keeper.greeting.farFromHome", "when": "settlement.culture != ruler.culture", "weight": 12 },
+        { "id": "payFirst", "textKey": "narrative.line.keeper.greeting.payFirst", "when": "house.honor <= -20", "weight": 16 }
+      ]
+    }
+  ]
+}

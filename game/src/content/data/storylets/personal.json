@@ -1,0 +1,87 @@
+{
+  "$notes": "Family and personal (design §19.2: 'a drunken boast to make good on'). drunkenBoast schedules boastReckoning with the core scheduleStorylet op; the reckoning has no default choice, so it always asks the player.",
+  "storylets": [
+    {
+      "id": "drunkenBoast",
+      "scope": "player",
+      "trigger": "monthly",
+      "when": "season() == 'winter' && ruler.alive && ruler.age >= 16",
+      "weight": 6,
+      "cooldownDays": 360,
+      "titleKey": "narrative.storylet.drunkenBoast.title",
+      "textKey": "narrative.storylet.drunkenBoast.text",
+      "illustration": "narrative.illus.drunkenBoast",
+      "vars": {
+        "bribe": "30 + floor(max(0, house.renown) / 4)"
+      },
+      "choices": [
+        {
+          "labelKey": "narrative.storylet.drunkenBoast.swear",
+          "previewKey": "narrative.storylet.drunkenBoast.swear.preview",
+          "effects": [
+            { "op": "changeRenown", "amount": 3 },
+            { "op": "scheduleStorylet", "storyletId": "boastReckoning", "inDays": 30 }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.drunkenBoast.laugh",
+          "previewKey": "narrative.storylet.drunkenBoast.laugh.preview",
+          "effects": [
+            { "op": "changeRenown", "amount": -2 },
+            { "op": "changeHonor", "amount": -1 }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.drunkenBoast.bribe",
+          "previewKey": "narrative.storylet.drunkenBoast.bribe.preview",
+          "when": "player.treasury >= vars.bribe",
+          "effects": [
+            { "op": "addSilver", "amount": { "$expr": "-vars.bribe" } },
+            { "op": "changeHonor", "amount": -2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "boastReckoning",
+      "scope": "player",
+      "trigger": "scheduled",
+      "when": "ruler.alive",
+      "titleKey": "narrative.storylet.boastReckoning.title",
+      "textKey": "narrative.storylet.boastReckoning.text",
+      "illustration": "narrative.illus.boastReckoning",
+      "importance": 2,
+      "choices": [
+        {
+          "labelKey": "narrative.storylet.boastReckoning.swim",
+          "previewKey": "narrative.storylet.boastReckoning.swim.preview",
+          "when": "ruler.attributes.vigor >= 5",
+          "chronicleKey": "narrative.storylet.boastReckoning.swim.chronicle",
+          "effects": [
+            { "op": "changeRenown", "amount": 10 },
+            { "op": "changeHonor", "amount": 2 }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.boastReckoning.rope",
+          "previewKey": "narrative.storylet.boastReckoning.rope.preview",
+          "when": "ruler.attributes.vigor < 5",
+          "chronicleKey": "narrative.storylet.boastReckoning.rope.chronicle",
+          "effects": [
+            { "op": "changeRenown", "amount": 5 },
+            { "op": "changeHonor", "amount": 2 }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.boastReckoning.void",
+          "previewKey": "narrative.storylet.boastReckoning.void.preview",
+          "chronicleKey": "narrative.storylet.boastReckoning.void.chronicle",
+          "effects": [
+            { "op": "changeHonor", "amount": -4 },
+            { "op": "changeRenown", "amount": -5 }
+          ]
+        }
+      ]
+    }
+  ]
+}

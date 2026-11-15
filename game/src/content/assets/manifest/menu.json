@@ -1,0 +1,31 @@
+{
+  "menu.backdrop.main": {
+    "kind": "image",
+    "path": "menu/backdrop-main.jpg",
+    "size": [1920, 1080],
+    "anchor": [0.5, 0.5],
+    "placeholder": {
+      "generator": "menuBackdrop",
+      "params": { "scene": "nightFjord", "seed": 812 },
+      "label": "Main menu painting: a longship under a square sail on a moonlit fjord, northern lights"
+    }
+  },
+  "menu.homeland.skarn": {
+    "kind": "image",
+    "path": "menu/homeland-skarn.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "panorama", "params": { "culture": "skarn" }, "label": "Homeland card: Skarnheim fjords and shipyards" }
+  },
+  "menu.homeland.hvarn": {
+    "kind": "image",
+    "path": "menu/homeland-hvarn.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "panorama", "params": { "culture": "hvarn" }, "label": "Homeland card: Hvarnland lakes, forests and iron bogs" }
+  },
+  "menu.homeland.eyjar": {
+    "kind": "image",
+    "path": "menu/homeland-eyjar.jpg",
+    "size": [640, 360],
+    "placeholder": { "generator": "panorama", "params": { "culture": "eyjar" }, "label": "Homeland card: Eyjamark islands, straits and market strands" }
+  }
+}

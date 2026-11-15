@@ -1,0 +1,121 @@
+{
+  "$notes": "The skald's word banks and verse templates (design §19.4 year-end verse, §23.6 saga epitaph, §26.2 skaldic register, §26.3 kenning generator). Kennings are figures of speech: nothing in them happens on screen. 'stave' is the English initial sound used to alliterate a kenning with the line's stave word (usually the place); other locales may re-stave their banks. Algorithm: src/sim/modules/narrative/verse.ts.",
+  "kennings": {
+    "sea": [
+      { "key": "narrative.kenning.sea.whaleRoad", "stave": "w" },
+      { "key": "narrative.kenning.sea.swanPath", "stave": "s" },
+      { "key": "narrative.kenning.sea.gullsBath", "stave": "g" },
+      { "key": "narrative.kenning.sea.keelField", "stave": "k" },
+      { "key": "narrative.kenning.sea.herringHall", "stave": "h" }
+    ],
+    "ship": [
+      { "key": "narrative.kenning.ship.waveSteed", "stave": "w" },
+      { "key": "narrative.kenning.ship.seaStallion", "stave": "s" },
+      { "key": "narrative.kenning.ship.tideElk", "stave": "t" },
+      { "key": "narrative.kenning.ship.oarHorse", "stave": "o" },
+      { "key": "narrative.kenning.ship.brineBoar", "stave": "b" }
+    ],
+    "battle": [
+      { "key": "narrative.kenning.battle.spearStorm", "stave": "s" },
+      { "key": "narrative.kenning.battle.shieldThunder", "stave": "t" },
+      { "key": "narrative.kenning.battle.steelGame", "stave": "g" },
+      { "key": "narrative.kenning.battle.valgrimsWeather", "stave": "v" },
+      { "key": "narrative.kenning.battle.bladeMeeting", "stave": "b" }
+    ],
+    "warrior": [
+      { "key": "narrative.kenning.warrior.shieldTree", "stave": "s" },
+      { "key": "narrative.kenning.warrior.ravenFeeder", "stave": "r" },
+      { "key": "narrative.kenning.warrior.helmOak", "stave": "h" },
+      { "key": "narrative.kenning.warrior.spearAsh", "stave": "a" }
+    ],
+    "ruler": [
+      { "key": "narrative.kenning.ruler.ringGiver", "stave": "r" },
+      { "key": "narrative.kenning.ruler.goldBreaker", "stave": "g" },
+      { "key": "narrative.kenning.ruler.hallWarden", "stave": "h" },
+      { "key": "narrative.kenning.ruler.landShield", "stave": "l" }
+    ],
+    "carrion": [
+      { "key": "narrative.kenning.carrion.raven", "stave": "r" },
+      { "key": "narrative.kenning.carrion.eagle", "stave": "e" },
+      { "key": "narrative.kenning.carrion.greyWolf", "stave": "g" },
+      { "key": "narrative.kenning.carrion.woundGull", "stave": "w" }
+    ],
+    "blood": [
+      { "key": "narrative.kenning.blood.woundSea", "stave": "w" },
+      { "key": "narrative.kenning.blood.swordDew", "stave": "s" },
+      { "key": "narrative.kenning.blood.ravensWine", "stave": "r" }
+    ],
+    "gold": [
+      { "key": "narrative.kenning.gold.armFire", "stave": "a" },
+      { "key": "narrative.kenning.gold.fjornasTears", "stave": "f" },
+      { "key": "narrative.kenning.gold.floodFlame", "stave": "f" },
+      { "key": "narrative.kenning.gold.ringHoard", "stave": "r" }
+    ],
+    "fire": [
+      { "key": "narrative.kenning.fire.hallsBane", "stave": "h" },
+      { "key": "narrative.kenning.fire.woodWolf", "stave": "w" },
+      { "key": "narrative.kenning.fire.redRooster", "stave": "r" }
+    ],
+    "sword": [
+      { "key": "narrative.kenning.sword.woundWand", "stave": "w" },
+      { "key": "narrative.kenning.sword.battleFlame", "stave": "b" },
+      { "key": "narrative.kenning.sword.shieldsBane", "stave": "s" }
+    ],
+    "winter": [
+      { "key": "narrative.kenning.winter.longDark", "stave": "l" },
+      { "key": "narrative.kenning.winter.iceTime", "stave": "i" },
+      { "key": "narrative.kenning.winter.whiteSilence", "stave": "w" }
+    ],
+    "death": [
+      { "key": "narrative.kenning.death.longSleep", "stave": "l" },
+      { "key": "narrative.kenning.death.grayQueensHall", "stave": "g" },
+      { "key": "narrative.kenning.death.lastVoyage", "stave": "l" },
+      { "key": "narrative.kenning.death.coldBench", "stave": "c" }
+    ]
+  },
+  "templates": {
+    "yearEnd.open": [
+      { "key": "narrative.verse.yearEnd.open.turned", "slots": { "seaKenning": "sea" }, "needs": ["year"] },
+      { "key": "narrative.verse.yearEnd.open.spent", "slots": { "rulerKenning": "ruler" }, "needs": ["year"] }
+    ],
+    "yearEnd.close": [
+      { "key": "narrative.verse.yearEnd.close.benches", "slots": { "winterKenning": "winter" } },
+      { "key": "narrative.verse.yearEnd.close.horns" }
+    ],
+    "epitaph.open": [
+      { "key": "narrative.verse.epitaph.open.gulls", "slots": { "rulerKenning": "ruler", "seaKenning": "sea" }, "needs": ["name"] },
+      { "key": "narrative.verse.epitaph.open.stone", "needs": ["name"] }
+    ],
+    "epitaph.close": [
+      { "key": "narrative.verse.epitaph.close.quieter", "slots": { "deathKenning": "death" }, "needs": ["name"] },
+      { "key": "narrative.verse.epitaph.close.ashes", "needs": ["name"] }
+    ],
+    "epitaph.close.tier0": [{ "key": "narrative.verse.epitaph.close.tier0", "slots": { "seaKenning": "sea" }, "needs": ["name"] }],
+    "epitaph.close.tier4": [{ "key": "narrative.verse.epitaph.close.tier4", "slots": { "carrion": "carrion" }, "needs": ["name"] }],
+    "deed.battle": [
+      { "key": "narrative.verse.deed.battle.fed", "slots": { "battleKenning": "battle", "bird": "carrion" }, "needs": ["place", "foe"], "stave": "place" },
+      { "key": "narrative.verse.deed.battle.stood", "slots": { "bloodKenning": "blood", "warriorKenning": "warrior" }, "needs": ["place"], "stave": "place" },
+      { "key": "narrative.verse.deed.battle.plain", "slots": { "battleKenning": "battle" } }
+    ],
+    "deed.raid": [
+      { "key": "narrative.verse.deed.raid.heavier", "slots": { "seaKenning": "sea", "fireKenning": "fire" }, "needs": ["place"], "stave": "place" },
+      { "key": "narrative.verse.deed.raid.lowInWater", "slots": { "shipKenning": "ship" }, "needs": ["place"], "stave": "place" }
+    ],
+    "deed.duel": [
+      { "key": "narrative.verse.deed.duel.spoke", "slots": { "swordKenning": "sword" }, "needs": ["foe"], "stave": "foe" },
+      { "key": "narrative.verse.deed.duel.plain", "slots": { "swordKenning": "sword" } }
+    ],
+    "deed.voyage": [
+      { "key": "narrative.verse.deed.voyage.farAs", "slots": { "shipKenning": "ship", "seaKenning": "sea" }, "needs": ["place"], "stave": "place" },
+      { "key": "narrative.verse.deed.voyage.plain", "slots": { "seaKenning": "sea" } }
+    ],
+    "deed.marriage": [{ "key": "narrative.verse.deed.marriage.handTaken", "slots": { "goldKenning": "gold" }, "needs": ["spouse", "name"] }],
+    "deed.birth": [{ "key": "narrative.verse.deed.birth.named", "slots": { "rulerKenning": "ruler" }, "needs": ["child"] }],
+    "deed.death": [{ "key": "narrative.verse.deed.death.room", "slots": { "deathKenning": "death" }, "needs": ["deceased"] }],
+    "deed.relic": [{ "key": "narrative.verse.deed.relic.looked", "needs": ["relic"] }],
+    "deed.crown": [{ "key": "narrative.verse.deed.crown.circlet", "slots": { "goldKenning": "gold" }, "needs": ["crown", "name"] }],
+    "deed.thing": [{ "key": "narrative.verse.deed.thing.nodded", "needs": ["name"] }],
+    "deed.feud": [{ "key": "narrative.verse.deed.feud.answered", "slots": { "bloodKenning": "blood" }, "needs": ["foe"], "stave": "foe" }],
+    "deed.default": [{ "key": "narrative.verse.deed.default.meter" }]
+  }
+}

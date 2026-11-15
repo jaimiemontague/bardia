@@ -1,0 +1,1550 @@
+{
+  "music.track.mainTheme": {
+    "kind": "music",
+    "path": "music/main-theme.ogg",
+    "durationS": 146.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "mainTheme",
+        "mode": "dorian",
+        "tonic": "D",
+        "bpm": 72,
+        "meter": "4x2",
+        "brief": "Main theme: a proud, weathered horn melody over lyre and frame drum; D dorian; the motif returns in the coronation cue."
+      },
+      "label": "Placeholder: main theme (generative score)"
+    }
+  },
+  "music.track.homeSkarn": {
+    "kind": "music",
+    "path": "music/home-skarn.ogg",
+    "durationS": 156,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "homeSkarn",
+        "mode": "aeolian",
+        "tonic": "E",
+        "bpm": 80,
+        "meter": "4x2",
+        "brief": "Skarn home hall: hearth-warm aeolian lyre and bone flute, steady frame drum; fjord-cold but familiar."
+      },
+      "label": "Placeholder: home skarn (generative score)"
+    }
+  },
+  "music.track.homeHvarn": {
+    "kind": "music",
+    "path": "music/home-hvarn.ogg",
+    "durationS": 152.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "homeHvarn",
+        "mode": "dorian",
+        "tonic": "A",
+        "bpm": 66,
+        "meter": "3x2",
+        "brief": "Hvarn home hall: slow triple-time dorian with bowed strings and harp, forest-dark and stubborn."
+      },
+      "label": "Placeholder: home hvarn (generative score)"
+    }
+  },
+  "music.track.homeEyjar": {
+    "kind": "music",
+    "path": "music/home-eyjar.ogg",
+    "durationS": 153.3,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "homeEyjar",
+        "mode": "mixolydian",
+        "tonic": "G",
+        "bpm": 72,
+        "meter": "2x3",
+        "brief": "Eyjar home hall: lilting compound-time mixolydian with flute and lyre, salt wind and island pride."
+      },
+      "label": "Placeholder: home eyjar (generative score)"
+    }
+  },
+  "music.track.sailingCalm": {
+    "kind": "music",
+    "path": "music/sailing-calm.ogg",
+    "durationS": 142.2,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "sailingCalm",
+        "mode": "mixolydian",
+        "tonic": "D",
+        "bpm": 54,
+        "meter": "2x3",
+        "brief": "Sailing, calm seas: wide open drones, gently rocking 6/8, flute phrases far apart; the long whale-road."
+      },
+      "label": "Placeholder: sailing calm (generative score)"
+    }
+  },
+  "music.track.sailingStorm": {
+    "kind": "music",
+    "path": "music/sailing-storm.ogg",
+    "durationS": 152.4,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "sailingStorm",
+        "mode": "aeolian",
+        "tonic": "C",
+        "bpm": 126,
+        "meter": "4x4",
+        "brief": "Sailing, storm: driving string ostinato, war drums and horn calls; spray and danger, not despair."
+      },
+      "label": "Placeholder: sailing storm (generative score)"
+    }
+  },
+  "music.track.albrennCael": {
+    "kind": "music",
+    "path": "music/albrenn-cael.ogg",
+    "durationS": 145.5,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "albrennCael",
+        "mode": "dorian",
+        "tonic": "G",
+        "bpm": 66,
+        "meter": "2x3",
+        "brief": "Albrenn and Cael lands: harp and chant over drones, dorian, monastery stillness and green hills."
+      },
+      "label": "Placeholder: albrenn cael (generative score)"
+    }
+  },
+  "music.track.corvaine": {
+    "kind": "music",
+    "path": "music/corvaine.ogg",
+    "durationS": 150,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "corvaine",
+        "mode": "mixolydian",
+        "tonic": "A",
+        "bpm": 96,
+        "meter": "3x2",
+        "brief": "Corvaine: courtly mixolydian dance in three, fiddle and lyre, the confidence of horsemen."
+      },
+      "label": "Placeholder: corvaine (generative score)"
+    }
+  },
+  "music.track.velkarSaraleon": {
+    "kind": "music",
+    "path": "music/velkar-saraleon.ogg",
+    "durationS": 146.1,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "velkarSaraleon",
+        "mode": "phrygian",
+        "tonic": "D",
+        "bpm": 92,
+        "meter": "4x2",
+        "brief": "Velkar river markets and Saraleon: phrygian oud and flute over a busy drum, wealth and old empire."
+      },
+      "label": "Placeholder: velkar saraleon (generative score)"
+    }
+  },
+  "music.track.meadHallRowdy": {
+    "kind": "music",
+    "path": "music/mead-hall-rowdy.ogg",
+    "durationS": 150,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "meadHallRowdy",
+        "mode": "mixolydian",
+        "tonic": "G",
+        "bpm": 112,
+        "meter": "2x3",
+        "brief": "Mead-hall, rowdy (diegetic): fast jig-like fiddle and lyre with clapping; a hall band in full cry."
+      },
+      "label": "Placeholder: mead hall rowdy (generative score)"
+    }
+  },
+  "music.track.meadHallLament": {
+    "kind": "music",
+    "path": "music/mead-hall-lament.ogg",
+    "durationS": 149,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "meadHallLament",
+        "mode": "dorian",
+        "tonic": "E",
+        "bpm": 58,
+        "meter": "3x2",
+        "brief": "Mead-hall, lament (diegetic): a single hummed voice and lyre, late-night memory of the fallen."
+      },
+      "label": "Placeholder: mead hall lament (generative score)"
+    }
+  },
+  "music.track.battleShieldwall": {
+    "kind": "music",
+    "path": "music/battle-shieldwall.ogg",
+    "durationS": 153.6,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "battleShieldwall",
+        "mode": "aeolian",
+        "tonic": "D",
+        "bpm": 100,
+        "meter": "4x4",
+        "brief": "Battle, shield wall: aeolian war drums and drone (low stem), string ostinato and choir (mid), horn calls and fiddle (high). Stems loop in sync."
+      },
+      "label": "Placeholder: battle shieldwall (generative score)"
+    }
+  },
+  "music.stem.battleShieldwall.low": {
+    "kind": "music",
+    "path": "music/stems/battle-shieldwall-low.ogg",
+    "durationS": 153.6,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.stem",
+      "params": {
+        "state": "battleShieldwall",
+        "level": "low",
+        "layers": "drone,war",
+        "brief": "low intensity stem of battle shieldwall; same length and tempo as the other stems."
+      },
+      "label": "Placeholder: battle shieldwall low stem"
+    }
+  },
+  "music.stem.battleShieldwall.mid": {
+    "kind": "music",
+    "path": "music/stems/battle-shieldwall-mid.ogg",
+    "durationS": 153.6,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.stem",
+      "params": {
+        "state": "battleShieldwall",
+        "level": "mid",
+        "layers": "ostinato,slaps,choir",
+        "brief": "mid intensity stem of battle shieldwall; same length and tempo as the other stems."
+      },
+      "label": "Placeholder: battle shieldwall mid stem"
+    }
+  },
+  "music.stem.battleShieldwall.high": {
+    "kind": "music",
+    "path": "music/stems/battle-shieldwall-high.ogg",
+    "durationS": 153.6,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.stem",
+      "params": {
+        "state": "battleShieldwall",
+        "level": "high",
+        "layers": "horn,drive,lead",
+        "brief": "high intensity stem of battle shieldwall; same length and tempo as the other stems."
+      },
+      "label": "Placeholder: battle shieldwall high stem"
+    }
+  },
+  "music.track.battleRaid": {
+    "kind": "music",
+    "path": "music/battle-raid.ogg",
+    "durationS": 152.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "battleRaid",
+        "mode": "phrygian",
+        "tonic": "E",
+        "bpm": 132,
+        "meter": "4x4",
+        "brief": "Battle, raid: fast phrygian assault; drums and drone (low), ostinato and choir (mid), horn, flute and driving slaps (high). Stems loop in sync."
+      },
+      "label": "Placeholder: battle raid (generative score)"
+    }
+  },
+  "music.stem.battleRaid.low": {
+    "kind": "music",
+    "path": "music/stems/battle-raid-low.ogg",
+    "durationS": 152.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.stem",
+      "params": {
+        "state": "battleRaid",
+        "level": "low",
+        "layers": "drone,war",
+        "brief": "low intensity stem of battle raid; same length and tempo as the other stems."
+      },
+      "label": "Placeholder: battle raid low stem"
+    }
+  },
+  "music.stem.battleRaid.mid": {
+    "kind": "music",
+    "path": "music/stems/battle-raid-mid.ogg",
+    "durationS": 152.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.stem",
+      "params": {
+        "state": "battleRaid",
+        "level": "mid",
+        "layers": "ostinato,pad",
+        "brief": "mid intensity stem of battle raid; same length and tempo as the other stems."
+      },
+      "label": "Placeholder: battle raid mid stem"
+    }
+  },
+  "music.stem.battleRaid.high": {
+    "kind": "music",
+    "path": "music/stems/battle-raid-high.ogg",
+    "durationS": 152.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.stem",
+      "params": {
+        "state": "battleRaid",
+        "level": "high",
+        "layers": "horn,flute,drive",
+        "brief": "high intensity stem of battle raid; same length and tempo as the other stems."
+      },
+      "label": "Placeholder: battle raid high stem"
+    }
+  },
+  "music.track.duel": {
+    "kind": "music",
+    "path": "music/duel.ogg",
+    "durationS": 154.3,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "duel",
+        "mode": "phrygian",
+        "tonic": "E",
+        "bpm": 112,
+        "meter": "4x2",
+        "brief": "Duel: heartbeat drums and a tense phrygian pedal; the fiddle enters as the fight intensifies."
+      },
+      "label": "Placeholder: duel (generative score)"
+    }
+  },
+  "music.track.delve": {
+    "kind": "music",
+    "path": "music/delve.ogg",
+    "durationS": 147.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "delve",
+        "mode": "aeolian",
+        "tonic": "B",
+        "bpm": 52,
+        "meter": "4x2",
+        "brief": "Delve / mystery: cave reverb, sparse flute and harp over a low drone; wonder and unease without anything supernatural."
+      },
+      "label": "Placeholder: delve (generative score)"
+    }
+  },
+  "music.track.allthing": {
+    "kind": "music",
+    "path": "music/allthing.ogg",
+    "durationS": 151.6,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "allthing",
+        "mode": "dorian",
+        "tonic": "C",
+        "bpm": 76,
+        "meter": "4x2",
+        "brief": "Allthing: dignified dorian procession with horn calls and steady drum; law spoken on the rock."
+      },
+      "label": "Placeholder: allthing (generative score)"
+    }
+  },
+  "music.track.funeral": {
+    "kind": "music",
+    "path": "music/funeral.ogg",
+    "durationS": 150,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "funeral",
+        "mode": "aeolian",
+        "tonic": "D",
+        "bpm": 48,
+        "meter": "3x2",
+        "brief": "Funeral / epitaph: slow aeolian dirge, choir and horn, a single toll per bar."
+      },
+      "label": "Placeholder: funeral (generative score)"
+    }
+  },
+  "music.track.coronation": {
+    "kind": "music",
+    "path": "music/coronation.ogg",
+    "durationS": 152.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "coronation",
+        "mode": "mixolydian",
+        "tonic": "D",
+        "bpm": 88,
+        "meter": "4x2",
+        "brief": "Coronation / victory: the main-theme motif reborn in mixolydian with fanfare, choir and full drums."
+      },
+      "label": "Placeholder: coronation (generative score)"
+    }
+  },
+  "music.stinger.omen": {
+    "kind": "music",
+    "path": "music/stingers/omen.ogg",
+    "durationS": 7.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.stinger",
+      "params": {
+        "stinger": "omen",
+        "brief": "Omen read: phrygian choir cluster and high flute over a deep drum; an uneasy sign."
+      },
+      "label": "Placeholder: omen stinger"
+    }
+  },
+  "music.stinger.birth": {
+    "kind": "music",
+    "path": "music/stingers/birth.ogg",
+    "durationS": 6.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.stinger",
+      "params": {
+        "stinger": "birth",
+        "brief": "Birth in the family: rising harp arpeggio, flute and warm strings."
+      },
+      "label": "Placeholder: birth stinger"
+    }
+  },
+  "music.stinger.death": {
+    "kind": "music",
+    "path": "music/stingers/death.ogg",
+    "durationS": 10.7,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.stinger",
+      "params": {
+        "stinger": "death",
+        "brief": "Death: falling horn line over choir and three slow drum strokes."
+      },
+      "label": "Placeholder: death stinger"
+    }
+  },
+  "music.stinger.victory": {
+    "kind": "music",
+    "path": "music/stingers/victory.ogg",
+    "durationS": 6.1,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.stinger",
+      "params": {
+        "stinger": "victory",
+        "brief": "Victory: horn fanfare to the octave with drums and strings."
+      },
+      "label": "Placeholder: victory stinger"
+    }
+  },
+  "music.stinger.defeat": {
+    "kind": "music",
+    "path": "music/stingers/defeat.ogg",
+    "durationS": 10.1,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.stinger",
+      "params": {
+        "stinger": "defeat",
+        "brief": "Defeat: falling strings and a low horn over a war-drum hit."
+      },
+      "label": "Placeholder: defeat stinger"
+    }
+  },
+  "music.stinger.relicFound": {
+    "kind": "music",
+    "path": "music/stingers/relic-found.ogg",
+    "durationS": 7.1,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.stinger",
+      "params": {
+        "stinger": "relicFound",
+        "brief": "Relic found: shimmering harp ascent with choir; awe and weight of history."
+      },
+      "label": "Placeholder: relic found stinger"
+    }
+  },
+  "music.sfx.ui.click": {
+    "kind": "sfx",
+    "path": "sfx/ui/click.ogg",
+    "durationS": 0.08,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "ui.click",
+        "bus": "sfx",
+        "brief": "Dry wooden click, a peg seated in a carved board."
+      },
+      "label": "Placeholder: ui click"
+    }
+  },
+  "music.sfx.ui.coin": {
+    "kind": "sfx",
+    "path": "sfx/ui/coin.ogg",
+    "durationS": 0.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "ui.coin",
+        "bus": "sfx",
+        "brief": "Two or three hacksilver pieces dropped into a palm."
+      },
+      "label": "Placeholder: ui coin"
+    }
+  },
+  "music.sfx.ui.parchment": {
+    "kind": "sfx",
+    "path": "sfx/ui/parchment.ogg",
+    "durationS": 0.45,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "ui.parchment",
+        "bus": "sfx",
+        "brief": "Vellum unrolled or a page turned."
+      },
+      "label": "Placeholder: ui parchment"
+    }
+  },
+  "music.sfx.ui.confirm": {
+    "kind": "sfx",
+    "path": "sfx/ui/confirm.ogg",
+    "durationS": 0.25,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "ui.confirm",
+        "bus": "sfx",
+        "brief": "Two rising wood knocks: accepted."
+      },
+      "label": "Placeholder: ui confirm"
+    }
+  },
+  "music.sfx.ui.deny": {
+    "kind": "sfx",
+    "path": "sfx/ui/deny.ogg",
+    "durationS": 0.3,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "ui.deny",
+        "bus": "sfx",
+        "brief": "A dull low thud: not possible."
+      },
+      "label": "Placeholder: ui deny"
+    }
+  },
+  "music.sfx.sea.waves.calm": {
+    "kind": "sfx",
+    "path": "sfx/sea/waves-calm.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.waves",
+        "bus": "ambience",
+        "brief": "Open-water bed heard from a low hull; one loop per wind class, from glassy swell to breaking gale seas.",
+        "wind": "calm"
+      },
+      "label": "Placeholder: sea waves (calm)"
+    }
+  },
+  "music.sfx.sea.waves.light": {
+    "kind": "sfx",
+    "path": "sfx/sea/waves-light.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.waves",
+        "bus": "ambience",
+        "brief": "Open-water bed heard from a low hull; one loop per wind class, from glassy swell to breaking gale seas.",
+        "wind": "light"
+      },
+      "label": "Placeholder: sea waves (light)"
+    }
+  },
+  "music.sfx.sea.waves.fresh": {
+    "kind": "sfx",
+    "path": "sfx/sea/waves-fresh.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.waves",
+        "bus": "ambience",
+        "brief": "Open-water bed heard from a low hull; one loop per wind class, from glassy swell to breaking gale seas.",
+        "wind": "fresh"
+      },
+      "label": "Placeholder: sea waves (fresh)"
+    }
+  },
+  "music.sfx.sea.waves.strong": {
+    "kind": "sfx",
+    "path": "sfx/sea/waves-strong.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.waves",
+        "bus": "ambience",
+        "brief": "Open-water bed heard from a low hull; one loop per wind class, from glassy swell to breaking gale seas.",
+        "wind": "strong"
+      },
+      "label": "Placeholder: sea waves (strong)"
+    }
+  },
+  "music.sfx.sea.waves.gale": {
+    "kind": "sfx",
+    "path": "sfx/sea/waves-gale.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.waves",
+        "bus": "ambience",
+        "brief": "Open-water bed heard from a low hull; one loop per wind class, from glassy swell to breaking gale seas.",
+        "wind": "gale"
+      },
+      "label": "Placeholder: sea waves (gale)"
+    }
+  },
+  "music.sfx.sea.oars": {
+    "kind": "sfx",
+    "path": "sfx/sea/oars.ogg",
+    "durationS": 20,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.oars",
+        "bus": "ambience",
+        "brief": "Thirty oars in time: catch splash, oar-port knock, wash. Tempo follows the stroke rate."
+      },
+      "label": "Placeholder: sea oars"
+    }
+  },
+  "music.sfx.sea.sailFlap": {
+    "kind": "sfx",
+    "path": "sfx/sea/sail-flap.ogg",
+    "durationS": 1.2,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.sailFlap",
+        "bus": "sfx",
+        "brief": "Woollen square sail luffing and filling."
+      },
+      "label": "Placeholder: sea sail flap"
+    }
+  },
+  "music.sfx.sea.hullCreak": {
+    "kind": "sfx",
+    "path": "sfx/sea/hull-creak.ogg",
+    "durationS": 1.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.hullCreak",
+        "bus": "ambience",
+        "brief": "Clinker planks and rivets working in a swell."
+      },
+      "label": "Placeholder: sea hull creak"
+    }
+  },
+  "music.sfx.sea.splash": {
+    "kind": "sfx",
+    "path": "sfx/sea/splash.ogg",
+    "durationS": 1,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.splash",
+        "bus": "sfx",
+        "brief": "Anchor stone, a man overboard, a keel run onto shingle."
+      },
+      "label": "Placeholder: sea splash"
+    }
+  },
+  "music.sfx.weather.rain": {
+    "kind": "sfx",
+    "path": "sfx/weather/rain.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "weather.rain",
+        "bus": "ambience",
+        "brief": "Rain on water and wool; drizzle to downpour."
+      },
+      "label": "Placeholder: weather rain"
+    }
+  },
+  "music.sfx.weather.wind": {
+    "kind": "sfx",
+    "path": "sfx/weather/wind.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "weather.wind",
+        "bus": "ambience",
+        "brief": "Gusting wind in rigging, rising to a howl."
+      },
+      "label": "Placeholder: weather wind"
+    }
+  },
+  "music.sfx.weather.thunder": {
+    "kind": "sfx",
+    "path": "sfx/weather/thunder.ogg",
+    "durationS": 6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "weather.thunder",
+        "bus": "ambience",
+        "brief": "Thunder from a sharp overhead crack to a far roll."
+      },
+      "label": "Placeholder: weather thunder"
+    }
+  },
+  "music.sfx.battle.clash": {
+    "kind": "sfx",
+    "path": "sfx/battle/clash.ogg",
+    "durationS": 1,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.clash",
+        "bus": "sfx",
+        "brief": "Iron on iron, axe on rim: a flurry of blows."
+      },
+      "label": "Placeholder: battle clash"
+    }
+  },
+  "music.sfx.battle.shieldBash": {
+    "kind": "sfx",
+    "path": "sfx/battle/shield-bash.ogg",
+    "durationS": 0.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.shieldBash",
+        "bus": "sfx",
+        "brief": "Linden-board shield driven into another; boss clank."
+      },
+      "label": "Placeholder: battle shield bash"
+    }
+  },
+  "music.sfx.battle.arrowVolley": {
+    "kind": "sfx",
+    "path": "sfx/battle/arrow-volley.ogg",
+    "durationS": 2.4,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.arrowVolley",
+        "bus": "sfx",
+        "brief": "A volley of self-bow arrows: release, whistle, thuds."
+      },
+      "label": "Placeholder: battle arrow volley"
+    }
+  },
+  "music.sfx.battle.fire": {
+    "kind": "sfx",
+    "path": "sfx/battle/fire.ogg",
+    "durationS": 20,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.fire",
+        "bus": "sfx",
+        "brief": "Burning thatch and timber: roar and crackle."
+      },
+      "label": "Placeholder: battle fire"
+    }
+  },
+  "music.sfx.battle.seaFire": {
+    "kind": "sfx",
+    "path": "sfx/battle/sea-fire.ogg",
+    "durationS": 3,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.seaFire",
+        "bus": "sfx",
+        "brief": "Saraleonese sea-fire siphon: pressurised whoosh, then clinging flame."
+      },
+      "label": "Placeholder: battle sea fire"
+    }
+  },
+  "music.sfx.battle.warHorn.muster": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-horn-muster.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "bus": "sfx",
+        "brief": "Cow-horn or bronze lur signals: one long muster, three rising charge blasts, two falling retreat calls.",
+        "call": "muster"
+      },
+      "label": "Placeholder: battle war horn (muster)"
+    }
+  },
+  "music.sfx.battle.warHorn.charge": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-horn-charge.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "bus": "sfx",
+        "brief": "Cow-horn or bronze lur signals: one long muster, three rising charge blasts, two falling retreat calls.",
+        "call": "charge"
+      },
+      "label": "Placeholder: battle war horn (charge)"
+    }
+  },
+  "music.sfx.battle.warHorn.retreat": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-horn-retreat.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "bus": "sfx",
+        "brief": "Cow-horn or bronze lur signals: one long muster, three rising charge blasts, two falling retreat calls.",
+        "call": "retreat"
+      },
+      "label": "Placeholder: battle war horn (retreat)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.skarn": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-skarn.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "skarn"
+      },
+      "label": "Placeholder: battle crowd roar (skarn)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.hvarn": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-hvarn.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "hvarn"
+      },
+      "label": "Placeholder: battle crowd roar (hvarn)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.eyjar": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-eyjar.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "eyjar"
+      },
+      "label": "Placeholder: battle crowd roar (eyjar)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.albric": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-albric.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "albric"
+      },
+      "label": "Placeholder: battle crowd roar (albric)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.cael": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-cael.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "cael"
+      },
+      "label": "Placeholder: battle crowd roar (cael)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.corvani": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-corvani.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "corvani"
+      },
+      "label": "Placeholder: battle crowd roar (corvani)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.velkar": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-velkar.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "velkar"
+      },
+      "label": "Placeholder: battle crowd roar (velkar)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.kurgai": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-kurgai.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "kurgai"
+      },
+      "label": "Placeholder: battle crowd roar (kurgai)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.saraleonese": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-saraleonese.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "saraleonese"
+      },
+      "label": "Placeholder: battle crowd roar (saraleonese)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.isafolder": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-isafolder.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "isafolder"
+      },
+      "label": "Placeholder: battle crowd roar (isafolder)"
+    }
+  },
+  "music.sfx.battle.crowdRoar.rime": {
+    "kind": "sfx",
+    "path": "sfx/battle/crowd-roar-rime.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.crowdRoar",
+        "bus": "sfx",
+        "brief": "A host roaring or chanting; each culture has its own cadence and vowel.",
+        "culture": "rime"
+      },
+      "label": "Placeholder: battle crowd roar (rime)"
+    }
+  },
+  "music.sfx.battle.warCry.skarn": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-skarn.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "skarn"
+      },
+      "label": "Placeholder: battle war cry (skarn)"
+    }
+  },
+  "music.sfx.battle.warCry.hvarn": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-hvarn.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "hvarn"
+      },
+      "label": "Placeholder: battle war cry (hvarn)"
+    }
+  },
+  "music.sfx.battle.warCry.eyjar": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-eyjar.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "eyjar"
+      },
+      "label": "Placeholder: battle war cry (eyjar)"
+    }
+  },
+  "music.sfx.battle.warCry.albric": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-albric.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "albric"
+      },
+      "label": "Placeholder: battle war cry (albric)"
+    }
+  },
+  "music.sfx.battle.warCry.cael": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-cael.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "cael"
+      },
+      "label": "Placeholder: battle war cry (cael)"
+    }
+  },
+  "music.sfx.battle.warCry.corvani": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-corvani.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "corvani"
+      },
+      "label": "Placeholder: battle war cry (corvani)"
+    }
+  },
+  "music.sfx.battle.warCry.velkar": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-velkar.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "velkar"
+      },
+      "label": "Placeholder: battle war cry (velkar)"
+    }
+  },
+  "music.sfx.battle.warCry.kurgai": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-kurgai.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "kurgai"
+      },
+      "label": "Placeholder: battle war cry (kurgai)"
+    }
+  },
+  "music.sfx.battle.warCry.saraleonese": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-saraleonese.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "saraleonese"
+      },
+      "label": "Placeholder: battle war cry (saraleonese)"
+    }
+  },
+  "music.sfx.battle.warCry.isafolder": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-isafolder.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "isafolder"
+      },
+      "label": "Placeholder: battle war cry (isafolder)"
+    }
+  },
+  "music.sfx.battle.warCry.rime": {
+    "kind": "sfx",
+    "path": "sfx/battle/war-cry-rime.ogg",
+    "durationS": 1.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warCry",
+        "bus": "sfx",
+        "brief": "A short culture-specific war cry from a handful of throats.",
+        "culture": "rime"
+      },
+      "label": "Placeholder: battle war cry (rime)"
+    }
+  },
+  "music.sfx.duel.impact.wood": {
+    "kind": "sfx",
+    "path": "sfx/duel/impact-wood.ogg",
+    "durationS": 0.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "duel.impact",
+        "bus": "sfx",
+        "brief": "A single blow landing on shield-wood, mail or iron, or a body (no gore).",
+        "material": "wood"
+      },
+      "label": "Placeholder: duel impact (wood)"
+    }
+  },
+  "music.sfx.duel.impact.metal": {
+    "kind": "sfx",
+    "path": "sfx/duel/impact-metal.ogg",
+    "durationS": 0.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "duel.impact",
+        "bus": "sfx",
+        "brief": "A single blow landing on shield-wood, mail or iron, or a body (no gore).",
+        "material": "metal"
+      },
+      "label": "Placeholder: duel impact (metal)"
+    }
+  },
+  "music.sfx.duel.impact.flesh": {
+    "kind": "sfx",
+    "path": "sfx/duel/impact-flesh.ogg",
+    "durationS": 0.6,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "duel.impact",
+        "bus": "sfx",
+        "brief": "A single blow landing on shield-wood, mail or iron, or a body (no gore).",
+        "material": "flesh"
+      },
+      "label": "Placeholder: duel impact (flesh)"
+    }
+  },
+  "music.sfx.duel.grunt": {
+    "kind": "sfx",
+    "path": "sfx/duel/grunt.ogg",
+    "durationS": 0.4,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "duel.grunt",
+        "bus": "sfx",
+        "brief": "Effort grunt of a fighter (placeholder is a tone-coded formant burst)."
+      },
+      "label": "Placeholder: duel grunt"
+    }
+  },
+  "music.sfx.town.market": {
+    "kind": "sfx",
+    "path": "sfx/town/market.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "town.market",
+        "bus": "ambience",
+        "brief": "Harbour market murmur: haggling, calls, carts."
+      },
+      "label": "Placeholder: town market"
+    }
+  },
+  "music.sfx.town.smithy": {
+    "kind": "sfx",
+    "path": "sfx/town/smithy.ogg",
+    "durationS": 20,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "town.smithy",
+        "bus": "ambience",
+        "brief": "Hammer on anvil in threes, bellows, forge roar."
+      },
+      "label": "Placeholder: town smithy"
+    }
+  },
+  "music.sfx.town.hallChatter": {
+    "kind": "sfx",
+    "path": "sfx/town/hall-chatter.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "town.hallChatter",
+        "bus": "ambience",
+        "brief": "Mead-hall talk and laughter, cups, the hearth."
+      },
+      "label": "Placeholder: town hall chatter"
+    }
+  },
+  "music.sfx.town.gulls": {
+    "kind": "sfx",
+    "path": "sfx/town/gulls.ogg",
+    "durationS": 30,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "town.gulls",
+        "bus": "ambience",
+        "brief": "Herring gulls over a harbour."
+      },
+      "label": "Placeholder: town gulls"
+    }
+  },
+  "music.sfx.town.churchBell": {
+    "kind": "sfx",
+    "path": "sfx/town/church-bell.ogg",
+    "durationS": 8,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "town.churchBell",
+        "bus": "ambience",
+        "brief": "A hand-cast bronze bell of a Lantern house tolling (Lantern lands only)."
+      },
+      "label": "Placeholder: town church bell"
+    }
+  },
+  "music.sfx.animal.wolfHowl": {
+    "kind": "sfx",
+    "path": "sfx/animal/wolf-howl.ogg",
+    "durationS": 3.5,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "animal.wolfHowl",
+        "bus": "ambience",
+        "brief": "A distant wolf howl across a valley."
+      },
+      "label": "Placeholder: animal wolf howl"
+    }
+  },
+  "music.sfx.animal.raven": {
+    "kind": "sfx",
+    "path": "sfx/animal/raven.ogg",
+    "durationS": 1.2,
+    "loop": false,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "animal.raven",
+        "bus": "ambience",
+        "brief": "Raven calls from a tree line."
+      },
+      "label": "Placeholder: animal raven"
+    }
+  },
+  "music.sfx.animal.hoofbeats": {
+    "kind": "sfx",
+    "path": "sfx/animal/hoofbeats.ogg",
+    "durationS": 10,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "animal.hoofbeats",
+        "bus": "sfx",
+        "brief": "Horses on turf; Corvani horsemen or steppe riders. Tempo follows the pace."
+      },
+      "label": "Placeholder: animal hoofbeats"
+    }
+  },
+  "music.voice.narrator": {
+    "kind": "voice",
+    "path": "voice/narrator/music-voice-narrator-sample.ogg",
+    "lineKey": "music.voice.narrator.sample",
+    "voice": "narrator",
+    "placeholder": {
+      "generator": "audio.voice",
+      "params": {
+        "role": "narrator",
+        "ttsRate": 0.95,
+        "ttsPitch": 1,
+        "toneHz": 128,
+        "brief": "Narrator: warm, wry, a little ironic; an old storyteller by the fire.",
+        "linePathPattern": "voice/narrator/<locale-key-in-kebab-case>.ogg"
+      },
+      "label": "Placeholder voice: narrator"
+    }
+  },
+  "music.voice.skald": {
+    "kind": "voice",
+    "path": "voice/skald/music-voice-skald-sample.ogg",
+    "lineKey": "music.voice.skald.sample",
+    "voice": "skald",
+    "placeholder": {
+      "generator": "audio.voice",
+      "params": {
+        "role": "skald",
+        "ttsRate": 0.85,
+        "ttsPitch": 0.9,
+        "toneHz": 140,
+        "brief": "Skald: declaimed alliterative verse with kennings; measured, ringing, proud.",
+        "linePathPattern": "voice/skald/<locale-key-in-kebab-case>.ogg"
+      },
+      "label": "Placeholder voice: skald"
+    }
+  },
+  "music.voice.hirdmaster": {
+    "kind": "voice",
+    "path": "voice/hirdmaster/music-voice-hirdmaster-sample.ogg",
+    "lineKey": "music.voice.hirdmaster.sample",
+    "voice": "hirdmaster",
+    "placeholder": {
+      "generator": "audio.voice",
+      "params": {
+        "role": "hirdmaster",
+        "ttsRate": 1.05,
+        "ttsPitch": 0.72,
+        "toneHz": 98,
+        "brief": "Hirdmaster: blunt, loyal, dry and practical; few words, low voice.",
+        "linePathPattern": "voice/hirdmaster/<locale-key-in-kebab-case>.ogg"
+      },
+      "label": "Placeholder voice: hirdmaster"
+    }
+  },
+  "music.voice.steward": {
+    "kind": "voice",
+    "path": "voice/steward/music-voice-steward-sample.ogg",
+    "lineKey": "music.voice.steward.sample",
+    "voice": "steward",
+    "placeholder": {
+      "generator": "audio.voice",
+      "params": {
+        "role": "steward",
+        "ttsRate": 1,
+        "ttsPitch": 1,
+        "toneHz": 118,
+        "brief": "Steward: careful, precise, slightly anxious about the stores.",
+        "linePathPattern": "voice/steward/<locale-key-in-kebab-case>.ogg"
+      },
+      "label": "Placeholder voice: steward"
+    }
+  },
+  "music.voice.seer": {
+    "kind": "voice",
+    "path": "voice/seer/music-voice-seer-sample.ogg",
+    "lineKey": "music.voice.seer.sample",
+    "voice": "seer",
+    "placeholder": {
+      "generator": "audio.voice",
+      "params": {
+        "role": "seer",
+        "ttsRate": 0.8,
+        "ttsPitch": 1.25,
+        "toneHz": 196,
+        "brief": "Seer: quiet, breathy, unhurried; speaks of omens as signs to be weighed.",
+        "linePathPattern": "voice/seer/<locale-key-in-kebab-case>.ogg"
+      },
+      "label": "Placeholder voice: seer"
+    }
+  },
+  "music.voice.rival": {
+    "kind": "voice",
+    "path": "voice/rival/music-voice-rival-sample.ogg",
+    "lineKey": "music.voice.rival.sample",
+    "voice": "rival",
+    "placeholder": {
+      "generator": "audio.voice",
+      "params": {
+        "role": "rival",
+        "ttsRate": 1.08,
+        "ttsPitch": 1.1,
+        "toneHz": 145,
+        "brief": "The Rival: venomous wit, amused contempt.",
+        "linePathPattern": "voice/rival/<locale-key-in-kebab-case>.ogg"
+      },
+      "label": "Placeholder voice: rival"
+    }
+  },
+  "music.voice.npc": {
+    "kind": "voice",
+    "path": "voice/npc/music-voice-npc-sample.ogg",
+    "lineKey": "music.voice.npc.sample",
+    "voice": "npc",
+    "placeholder": {
+      "generator": "audio.voice",
+      "params": {
+        "role": "npc",
+        "ttsRate": 1,
+        "ttsPitch": 1.05,
+        "toneHz": 160,
+        "brief": "Townsfolk and leaders: culture-specific; Albric formal-pious, Corvani courtly, Velkar mercantile-proud, Saraleonese imperial-bored.",
+        "linePathPattern": "voice/npc/<locale-key-in-kebab-case>.ogg"
+      },
+      "label": "Placeholder voice: npc"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "news.icon.dispatch": {
+    "kind": "image",
+    "path": "news/icon-dispatch.png",
+    "size": [64, 64],
+    "placeholder": { "generator": "icon", "params": { "glyph": "uiInbox", "style": "carved" }, "label": "Dispatch" }
+  },
+  "news.icon.rumour": {
+    "kind": "image",
+    "path": "news/icon-rumour.png",
+    "size": [64, 64],
+    "placeholder": { "generator": "icon", "params": { "glyph": "uiTalk", "style": "carved" }, "label": "Rumour" }
+  },
+  "news.icon.confirmed": {
+    "kind": "image",
+    "path": "news/icon-confirmed.png",
+    "size": [64, 64],
+    "placeholder": { "generator": "icon", "params": { "glyph": "uiConfirm", "style": "carved" }, "label": "Confirmed" }
+  },
+  "news.illus.messenger": {
+    "kind": "image",
+    "path": "news/messenger.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "envoy", "seed": 5001 }, "label": "A Rider Brings Word" }
+  },
+  "news.illus.tavernTalk": {
+    "kind": "image",
+    "path": "news/tavern-talk.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "feast", "palette": "firelight", "seed": 5002 }, "label": "Talk in the Mead-Hall" }
+  }
+}

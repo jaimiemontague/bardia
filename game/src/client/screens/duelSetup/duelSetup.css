@@ -1,0 +1,152 @@
+/* Before the Duel (pending 'duel'): the stakes, two fighters face to face, the odds as a word, big choices. */
+.dls-stakes {
+  margin: 0 0 var(--sp-3);
+  font-size: var(--fs-lg);
+  font-style: italic;
+  text-align: center;
+  color: var(--c-text-2);
+}
+.dls-stakes.is-lethal {
+  color: var(--c-danger);
+}
+.dls-scene {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-5);
+  padding: var(--sp-4) var(--sp-3);
+  border-radius: var(--r-md);
+  background:
+    radial-gradient(ellipse 45% 70% at 0% 50%, rgba(166, 123, 47, 0.16), transparent 70%),
+    radial-gradient(ellipse 45% 70% at 100% 50%, rgba(160, 50, 40, 0.18), transparent 70%), rgba(0, 0, 0, 0.2);
+}
+.dls-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  min-width: 0;
+}
+.dls-side-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+}
+.dls-banner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 10rem;
+  margin: var(--sp-1) 0;
+  font-size: 4.5rem;
+  color: var(--c-text-dim);
+}
+.dls-side.is-own .dls-banner .portrait {
+  box-shadow: 0 0 0 2px var(--gold-2);
+}
+.dls-side.is-foe .dls-banner .portrait {
+  box-shadow: 0 0 0 2px rgba(194, 73, 58, 0.8);
+}
+.dls-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  color: var(--gold-0);
+  overflow-wrap: anywhere;
+}
+.dls-side.is-foe .dls-name {
+  color: #e7b3a6;
+}
+.dls-weapon {
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.dls-middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.dls-vs {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  color: var(--c-text-dim);
+  letter-spacing: 0.1em;
+}
+.dls-odds {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-border);
+  background: rgba(0, 0, 0, 0.3);
+}
+.dls-odds-label {
+  font-size: var(--fs-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+}
+.dls-odds-word {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+}
+.dls-odds.band-decisive .dls-odds-word,
+.dls-odds.band-likely .dls-odds-word {
+  color: var(--c-success);
+}
+.dls-odds.band-even .dls-odds-word {
+  color: var(--gold-0);
+}
+.dls-odds.band-risky .dls-odds-word {
+  color: var(--c-warning);
+}
+.dls-odds.band-hopeless .dls-odds-word {
+  color: var(--c-danger);
+}
+.dls-choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+}
+.dls-choices.has-three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.dls-choice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  text-align: center;
+}
+.dls-choice > .tip-anchor {
+  display: flex;
+}
+.dls-choice .btn {
+  width: 100%;
+}
+.dls-hint {
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.dls-details {
+  margin-top: var(--sp-3);
+}
+.dls-numbers {
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 40rem;
+}
+@media (max-width: 760px) {
+  .dls-scene,
+  .dls-choices,
+  .dls-choices.has-three {
+    grid-template-columns: 1fr;
+  }
+}

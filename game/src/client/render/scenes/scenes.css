@@ -1,0 +1,611 @@
+/* Full-screen scenes (encounters, arrivals, visits, aftermaths): the cue, the painting, the panel and the
+   big choices. The shell's top bar (z 260) stays above the scene, so content starts below it. */
+
+/* The decision host is transparent while the cue plays over the map. */
+.pending-host.layout-fullscreen:has(.scn-cue-phase) {
+  background: transparent;
+}
+
+.scn-stage {
+  position: absolute;
+  inset: 0;
+}
+.scn-enter {
+  animation: scn-open 640ms var(--ease) both;
+}
+.scn-enter .scn-panel {
+  animation: scn-panel-in 520ms var(--ease) 260ms both;
+}
+
+.scn-root {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--oak-0);
+  color: var(--c-text);
+  outline: none;
+}
+.scn-picture,
+.scn-picture > .scn-svg,
+.scn-final {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.scn-final {
+  object-fit: cover;
+}
+.scn-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(10, 7, 5, 0.9) 0%, rgba(10, 7, 5, 0.8) 28%, rgba(10, 7, 5, 0.42) 44%, rgba(10, 7, 5, 0) 58%),
+    linear-gradient(0deg, rgba(10, 7, 5, 0.45) 0%, rgba(10, 7, 5, 0) 26%);
+}
+
+.scn-panel {
+  position: absolute;
+  left: clamp(16px, 3.2vw, 56px);
+  top: calc(4.6rem + clamp(10px, 3vh, 36px));
+  bottom: clamp(14px, 3.5vh, 40px);
+  width: min(38rem, 40vw);
+  min-width: min(26rem, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.75);
+}
+.scn-kicker {
+  margin: 0;
+  font-family: var(--font-legible);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-1);
+}
+.scn-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(var(--fs-2xl), 3.2vw, var(--fs-3xl));
+  font-weight: 600;
+  line-height: 1.08;
+  color: var(--bone-0);
+}
+.scn-text {
+  margin: var(--sp-1) 0 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-lg);
+  line-height: 1.45;
+  color: var(--bone-1);
+}
+.scn-facts {
+  margin: var(--sp-1) 0 0;
+  padding-top: var(--sp-2);
+  border-top: 1px solid rgba(212, 167, 79, 0.35);
+  font-family: var(--font-body);
+  font-size: var(--fs-lg);
+  font-style: italic;
+  color: var(--gold-0);
+}
+
+/* Choices. */
+.scn-choices {
+  margin-top: auto;
+}
+.scn-choice-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(6px, 1.1vh, 12px);
+}
+.scn-choice-list[hidden] {
+  display: none;
+}
+.scn-choice-item > span {
+  display: block;
+}
+.scn-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: clamp(8px, 1.3vh, 14px) var(--sp-4);
+  text-align: left;
+  font: inherit;
+  color: var(--bone-0);
+  background: linear-gradient(180deg, rgba(52, 37, 25, 0.94), rgba(24, 17, 11, 0.95));
+  border: 1px solid #5c4329;
+  border-left: 5px solid var(--iron-3);
+  border-radius: var(--r-md);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.scn-choice:hover:not(:disabled) {
+  transform: translateX(5px);
+  border-color: var(--gold-1);
+  background: linear-gradient(180deg, rgba(72, 52, 34, 0.96), rgba(34, 24, 15, 0.96));
+}
+.scn-choice:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 2px;
+}
+.scn-choice.tone-safe {
+  border-left-color: var(--gold-1);
+}
+.scn-choice.tone-safe .scn-choice-label {
+  color: var(--gold-0);
+}
+.scn-choice.tone-primary {
+  border-left-color: var(--sea-1);
+}
+.scn-choice.tone-danger {
+  border-left-color: var(--blood-1);
+}
+.scn-choice.tone-danger:hover:not(:disabled) {
+  border-color: var(--blood-1);
+  box-shadow: 0 6px 22px rgba(179, 61, 46, 0.35);
+}
+.scn-choice.tone-quiet {
+  border-left-color: var(--iron-2);
+}
+.scn-choice:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+.scn-choice:disabled .scn-choice-line {
+  color: #e08a78;
+}
+.scn-choice-key {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 1px solid rgba(194, 178, 147, 0.5);
+  border-radius: var(--r-sm);
+  font-family: var(--font-legible);
+  font-size: var(--fs-xs);
+  color: var(--bone-2);
+  text-shadow: none;
+}
+.scn-choice-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.scn-choice-label {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-3);
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.scn-choice-line {
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: 1.3;
+  color: var(--bone-2);
+}
+.scn-odds {
+  font-family: var(--font-legible);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  text-shadow: none;
+  color: var(--amber-1);
+}
+.scn-odds[data-band='certain'],
+.scn-odds[data-band='likely'] {
+  color: var(--moss-1);
+}
+.scn-odds[data-band='unlikely'],
+.scn-odds[data-band='slim'] {
+  color: #e0705e;
+}
+.scn-more {
+  font: inherit;
+  font-family: var(--font-legible);
+  font-size: var(--fs-md);
+  color: var(--bone-1);
+  background: rgba(15, 11, 8, 0.6);
+  border: 1px dashed rgba(194, 178, 147, 0.45);
+  border-radius: var(--r-md);
+  padding: 6px var(--sp-4);
+  cursor: pointer;
+}
+.scn-more:hover {
+  border-color: var(--gold-1);
+  color: var(--gold-0);
+}
+.scn-more:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+/* The attention cue over the map. */
+.scn-cue {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: radial-gradient(ellipse at center, rgba(8, 5, 3, 0.15) 0%, rgba(8, 5, 3, 0.7) 100%);
+  animation: scn-dim 1600ms var(--ease) both;
+}
+.scn-cue-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2vw, 28px);
+  width: 100%;
+  padding: clamp(18px, 3.5vh, 36px) 6vw;
+  background: linear-gradient(90deg, rgba(15, 11, 8, 0) 0%, rgba(15, 11, 8, 0.94) 16%, rgba(15, 11, 8, 0.94) 84%, rgba(15, 11, 8, 0) 100%);
+  border-top: 2px solid rgba(212, 167, 79, 0.75);
+  border-bottom: 2px solid rgba(212, 167, 79, 0.75);
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
+  animation: scn-band 1600ms var(--ease) both;
+}
+.scn-cue.is-danger .scn-cue-band {
+  border-color: rgba(194, 73, 58, 0.85);
+}
+.scn-cue-glyph {
+  width: clamp(56px, 6vw, 84px);
+  height: auto;
+  color: var(--gold-1);
+  animation: scn-rock 1.6s ease-in-out infinite alternate;
+}
+.scn-cue.is-danger .scn-cue-glyph {
+  color: #d9604c;
+}
+.scn-cue-words {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.scn-cue-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4.4vw, 4rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--bone-0);
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.8);
+  animation: scn-words 1600ms var(--ease) both;
+}
+.scn-cue-sub {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-xl);
+  font-style: italic;
+  color: var(--gold-0);
+  animation: scn-words 1600ms var(--ease) 120ms both;
+}
+
+/* Painted motion: slow and restrained. */
+.scn-swell {
+  animation: scn-swell 16s linear infinite;
+}
+.scn-swell-1 {
+  animation-duration: 22s;
+  animation-direction: reverse;
+}
+.scn-swell-2 {
+  animation-duration: 28s;
+}
+.scn-bob {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: scn-bob 5.5s ease-in-out infinite alternate;
+}
+.scn-sail {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  animation: scn-flutter 3.4s ease-in-out infinite alternate;
+}
+.scn-hem {
+  animation: scn-hem 6s ease-in-out infinite alternate;
+}
+.scn-smoke {
+  animation: scn-drift 10s ease-in-out infinite alternate;
+}
+.scn-smoke-dark {
+  animation-duration: 7s;
+}
+.scn-flicker {
+  animation: scn-flicker 1.5s ease-in-out infinite alternate;
+}
+.scn-cloud {
+  animation: scn-cloud 70s ease-in-out infinite alternate;
+}
+.scn-cloud-b {
+  animation-duration: 95s;
+  animation-direction: alternate-reverse;
+}
+.scn-glint {
+  animation: scn-glint 3.2s ease-in-out infinite alternate;
+}
+.scn-flag {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  animation: scn-flag 2.6s ease-in-out infinite alternate;
+}
+.scn-fog {
+  animation: scn-fog 40s ease-in-out infinite alternate;
+}
+.scn-rain {
+  animation: scn-rain 0.6s linear infinite;
+}
+
+@keyframes scn-open {
+  from {
+    clip-path: inset(48% 0 48% 0);
+    filter: brightness(1.6);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    filter: brightness(1);
+  }
+}
+@keyframes scn-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes scn-dim {
+  from {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+}
+@keyframes scn-band {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  14% {
+    transform: scaleY(1.06);
+    opacity: 1;
+  }
+  20% {
+    transform: scaleY(1);
+  }
+  86% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(3.2);
+    opacity: 0;
+  }
+}
+@keyframes scn-words {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+    letter-spacing: 0.12em;
+  }
+  22% {
+    opacity: 1;
+    transform: none;
+    letter-spacing: 0.02em;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes scn-rock {
+  from {
+    transform: rotate(-4deg) translateY(2px);
+  }
+  to {
+    transform: rotate(4deg) translateY(-2px);
+  }
+}
+@keyframes scn-swell {
+  to {
+    transform: translateX(var(--swell, 100px));
+  }
+}
+@keyframes scn-bob {
+  from {
+    transform: translateY(-1.5px) rotate(-0.6deg);
+  }
+  to {
+    transform: translateY(1.5px) rotate(0.6deg);
+  }
+}
+@keyframes scn-flutter {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0.975) skewX(-1deg);
+  }
+}
+@keyframes scn-hem {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(7px);
+  }
+}
+@keyframes scn-drift {
+  from {
+    transform: translate(0, 0);
+    opacity: 0.85;
+  }
+  to {
+    transform: translate(14px, -10px);
+    opacity: 1;
+  }
+}
+@keyframes scn-flicker {
+  0% {
+    opacity: 0.75;
+  }
+  45% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.82;
+  }
+  100% {
+    opacity: 0.95;
+  }
+}
+@keyframes scn-cloud {
+  from {
+    transform: translateX(-30px);
+  }
+  to {
+    transform: translateX(40px);
+  }
+}
+@keyframes scn-glint {
+  from {
+    opacity: 0.15;
+  }
+  to {
+    opacity: 0.6;
+  }
+}
+@keyframes scn-flag {
+  from {
+    transform: skewY(-3deg) scaleX(1);
+  }
+  to {
+    transform: skewY(3deg) scaleX(0.94);
+  }
+}
+@keyframes scn-fog {
+  from {
+    transform: translateX(-60px);
+  }
+  to {
+    transform: translateX(60px);
+  }
+}
+@keyframes scn-rain {
+  from {
+    transform: translate(0, -40px);
+  }
+  to {
+    transform: translate(-14px, 40px);
+  }
+}
+
+/* Reduced motion: still pictures, a still banner, no wipe. */
+:root[data-motion='reduced'] .scn-root *,
+:root[data-motion='reduced'] .scn-cue,
+:root[data-motion='reduced'] .scn-cue *,
+:root[data-motion='reduced'] .scn-enter,
+.scn-cue.is-still,
+.scn-cue.is-still * {
+  animation: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='full']) .scn-root *,
+  :root:not([data-motion='full']) .scn-cue,
+  :root:not([data-motion='full']) .scn-cue *,
+  :root:not([data-motion='full']) .scn-enter {
+    animation: none !important;
+  }
+}
+
+/* Narrow or short windows: the panel takes more of the width; the title shrinks. */
+@media (max-width: 1100px) {
+  .scn-panel {
+    width: min(36rem, 56vw);
+  }
+  .scn-scrim {
+    background:
+      linear-gradient(90deg, rgba(10, 7, 5, 0.92) 0%, rgba(10, 7, 5, 0.82) 45%, rgba(10, 7, 5, 0.3) 68%, rgba(10, 7, 5, 0) 80%),
+      linear-gradient(0deg, rgba(10, 7, 5, 0.45) 0%, rgba(10, 7, 5, 0) 26%);
+  }
+}
+@media (max-height: 700px) {
+  .scn-text {
+    font-size: var(--fs-md);
+  }
+  .scn-choice-label {
+    font-size: var(--fs-lg);
+  }
+}
+
+/* Developer scene gallery. */
+.scn-gallery {
+  position: absolute;
+  inset: 0;
+}
+.scn-gallery-bar {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 10px;
+  font-family: var(--font-legible);
+  font-size: var(--fs-sm);
+  color: var(--bone-1);
+  background: rgba(15, 11, 8, 0.8);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+}
+.scn-roll {
+  transform-box: view-box;
+  transform-origin: 50% 100%;
+  animation: scn-roll 7s ease-in-out infinite alternate;
+}
+@keyframes scn-roll {
+  from {
+    transform: rotate(-0.45deg) translateY(2px);
+  }
+  to {
+    transform: rotate(0.45deg) translateY(-2px);
+  }
+}
+/* Soft edges for smoke, fog and fire (the shapes are drawn hard and blurred here). */
+.scn-smoke {
+  filter: blur(2.5px);
+}
+.scn-smoke-dark {
+  filter: blur(5px);
+}
+.scn-fog ellipse {
+  filter: blur(28px);
+}
+.scn-fire {
+  filter: blur(7px);
+  animation: scn-flicker 1.2s ease-in-out infinite alternate;
+}

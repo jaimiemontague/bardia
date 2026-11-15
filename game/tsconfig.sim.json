@@ -1,0 +1,11 @@
+{
+  "//": "Stricter pass: the simulation and content layers compiled WITHOUT the DOM or Node type libraries, so any accidental use of browser/Node globals in src/sim or src/content is a type error. Test files are excluded (they may use node:fs).",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": [],
+    "jsx": "react-jsx"
+  },
+  "include": ["src/sim", "src/content"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+}

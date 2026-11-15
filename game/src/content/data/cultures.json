@@ -1,0 +1,268 @@
+{
+  "skarn": {
+    "name": "Skarn",
+    "adjective": "Skarn",
+    "playable": true,
+    "settler": false,
+    "faith": "oldways",
+    "region": "Skarnheim",
+    "portraitGroup": "north",
+    "uniqueUnits": ["fjordWallHuscarls"],
+    "defaultWeapon": "axe",
+    "bonuses": [
+      { "id": "shipwrightsKin", "name": "Shipwrights' Kin", "description": "Ships cost 15% less and are built 20% faster.", "modifiers": { "ship.costPct": -15, "ship.buildTimePct": -20 } },
+      { "id": "fjordBorn", "name": "Fjord-born", "description": "+1 Seafaring.", "modifiers": { "skill.seafaring": 1 } },
+      { "id": "hardCountry", "name": "Hard Country", "description": "Home food output -15%.", "modifiers": { "food.homeOutputPct": -15 } }
+    ],
+    "naming": {
+      "starts": ["Hall", "Ey", "Sig", "Ulf", "Arn", "Grim", "Hrafn", "Stein", "Vig", "Brand", "Kol", "Ask"],
+      "maleEndings": ["vard", "vind", "mund", "ulf", "geir", "bjorn"],
+      "femaleEndings": ["run", "hild", "dis", "frid", "veig", "gerd"],
+      "placeRoots": ["Kol", "Stein", "Brim", "Jarn", "Is", "Ulfs", "Myrk", "Kald", "Salt", "Fjall", "Lang", "Hrafn", "Grim", "Ask"],
+      "placeSuffixes": ["vik", "holt", "stad", "nes", "haug", "dal", "heim"],
+      "placePrefixes": [],
+      "examples": { "male": ["Hallvard", "Eyvind", "Torvald", "Sigmund"], "female": ["Sigrun", "Torvi", "Asgerd", "Ragnhild"] }
+    }
+  },
+  "hvarn": {
+    "name": "Hvarn",
+    "adjective": "Hvarn",
+    "playable": true,
+    "settler": false,
+    "faith": "oldways",
+    "region": "Hvarnland",
+    "portraitGroup": "north",
+    "uniqueUnits": ["elkBowArchers"],
+    "defaultWeapon": "spear",
+    "bonuses": [
+      { "id": "forestBows", "name": "Forest Bows", "description": "Archer bounty -20%.", "modifiers": { "unit.archers.bountyPct": -20, "unit.elkBowArchers.bountyPct": -20 } },
+      { "id": "ironAndFur", "name": "Iron and Fur", "description": "Iron and fur output +30%.", "modifiers": { "goods.iron.outputPct": 30, "goods.furs.outputPct": 30 } },
+      { "id": "riverContacts", "name": "River Contacts", "description": "Start with the Velkar Rivers charted.", "modifiers": { "start.chartVelkar": 1 } },
+      { "id": "lakeBound", "name": "Lake-bound", "description": "Ships cost 10% more.", "modifiers": { "ship.costPct": 10 } }
+    ],
+    "naming": {
+      "starts": ["Rag", "Yl", "Arn", "Ste", "Gun", "Ing", "Ott", "Fin", "Ger", "Ylv"],
+      "maleEndings": ["nvald", "ar", "mar", "ulf"],
+      "femaleEndings": ["va", "borg", "laug", "ny"],
+      "placeRoots": ["Elg", "Vass", "Myr", "Bjorn", "Aust", "Ald", "Vid", "Sjo", "Gyllen", "Hvarn", "Ott", "Ing"],
+      "placeSuffixes": ["by", "holm", "sted", "havn", "skog"],
+      "placePrefixes": [],
+      "examples": { "male": ["Ragnvald", "Steinar", "Ottar", "Gunnar"], "female": ["Ylva", "Arnbjorg", "Ingeborg", "Gerlaug"] }
+    }
+  },
+  "eyjar": {
+    "name": "Eyjar",
+    "adjective": "Eyjar",
+    "playable": true,
+    "settler": false,
+    "faith": "oldways",
+    "region": "Eyjamark",
+    "portraitGroup": "north",
+    "uniqueUnits": ["strandRiders"],
+    "defaultWeapon": "spear",
+    "bonuses": [
+      { "id": "straitsTolls", "name": "Straits Tolls", "description": "+25 silver per month per Straits province (full rate; other cultures collect 60%).", "modifiers": {} },
+      { "id": "marketFolk", "name": "Market Folk", "description": "Prices 5% in your favour.", "modifiers": { "prices.favorPct": 5 } },
+      { "id": "openShores", "name": "Open Shores", "description": "Start one fortification tier lower; raided more often.", "modifiers": { "fort.startTierDelta": -1, "ai.raidTargetPct": 20 } }
+    ],
+    "naming": {
+      "starts": ["Gorm", "Thy", "As", "Gunn", "Tov", "Sven", "Ebb"],
+      "maleEndings": ["", "e", "lak", "mod"],
+      "femaleEndings": ["ra", "hild", "bjorg"],
+      "placeRoots": ["Sund", "Lyng", "Horn", "Mos", "Sand", "Kaup", "Ebb", "Tov", "Gorm", "Hed"],
+      "placeSuffixes": ["by", "ey", "strand", "vik"],
+      "placePrefixes": [],
+      "examples": { "male": ["Gorm", "Aslak", "Tove", "Svenmod"], "female": ["Thyra", "Gunnhild", "Asbjorg", "Ebbra"] }
+    }
+  },
+  "albric": {
+    "name": "Albric",
+    "adjective": "Albric",
+    "playable": false,
+    "settler": false,
+    "faith": "lantern",
+    "region": "Albrenn",
+    "portraitGroup": "west",
+    "uniqueUnits": ["fyrdSpearmen", "thegns", "albricBowmen"],
+    "defaultWeapon": "spear",
+    "bonuses": [
+      { "id": "burhWalls", "name": "Burh Walls", "description": "Towns stand one fortification tier higher (earth-and-timber burh walls).", "modifiers": { "fort.townTierDelta": 1 } }
+    ],
+    "naming": {
+      "starts": ["Wulf", "Aelf", "Ead", "Os", "Ceol", "Leof", "God"],
+      "maleEndings": ["ric", "gar", "mund", "wine"],
+      "femaleEndings": ["wyn", "thryth", "flaed", "burh"],
+      "placeRoots": ["Weald", "Salt", "Thel", "Marsh", "Sedge", "Alder", "Chalk", "Combe", "Gyr", "Gull", "Wulf", "Ead"],
+      "placeSuffixes": ["burh", "wick", "ford", "ham", "hythe", "cester"],
+      "placePrefixes": [],
+      "examples": { "male": ["Wulfric", "Eadric", "Oswine", "Leofgar"], "female": ["Aelfwyn", "Godflaed", "Eadburh", "Ceolthryth"] }
+    }
+  },
+  "cael": {
+    "name": "Cael",
+    "adjective": "Cael",
+    "playable": false,
+    "settler": false,
+    "faith": "lantern",
+    "region": "The Cael Isles",
+    "portraitGroup": "west",
+    "uniqueUnits": ["caelRaiders"],
+    "defaultWeapon": "spear",
+    "bonuses": [
+      { "id": "bogAmbush", "name": "Bog and Forest Ambush", "description": "Ambush bonus in bog and forest.", "modifiers": { "battle.ambushBogForest": 1 } }
+    ],
+    "naming": {
+      "starts": ["Fer", "Sao", "Bran", "Mael", "Ciar", "Eith", "Rua"],
+      "maleEndings": ["gal", "noc", "an", "ach"],
+      "femaleEndings": ["irse", "a", "ait", "enn"],
+      "placeRoots": ["Brac", "morra", "var", "cree", "dara", "aoda", "more", "fenn", "orla", "corr"],
+      "placeSuffixes": [],
+      "placePrefixes": ["Dun ", "Kil", "Inis", "Glen", "Bally", "Lis"],
+      "examples": { "male": ["Fergal", "Brannoc", "Maelan", "Ciarach"], "female": ["Saoirse", "Eitha", "Ruait", "Maelenn"] }
+    }
+  },
+  "corvani": {
+    "name": "Corvani",
+    "adjective": "Corvani",
+    "playable": false,
+    "settler": false,
+    "faith": "lantern",
+    "region": "Corvaine",
+    "portraitGroup": "south",
+    "uniqueUnits": ["horsemen", "javelinmen", "menAtArms"],
+    "defaultWeapon": "spear",
+    "bonuses": [
+      { "id": "imperialWalls", "name": "Old Imperial Walls", "description": "Some old cities keep the stone walls of a vanished empire.", "modifiers": { "fort.oldStoneWalls": 1 } },
+      { "id": "richLands", "name": "Rich Lands", "description": "Very rich: larger silver stocks.", "modifiers": { "wealth.silverPct": 25 } }
+    ],
+    "naming": {
+      "starts": ["Aub", "Clem", "Thib", "Ger", "Lud", "Hug", "Ber", "Ad"],
+      "maleEndings": ["ert", "aut", "ard", "ouin"],
+      "femaleEndings": ["ence", "ine", "elle", "aude"],
+      "placeRoots": ["Aur", "Brec", "Mor", "Lorv", "Sabl", "Var", "Strel", "Vaux", "Wend", "Erf", "Reg", "Ebb"],
+      "placeSuffixes": ["ac", "y", "elle", "aux", "onne"],
+      "placePrefixes": [],
+      "examples": { "male": ["Aubert", "Thibaut", "Gerard", "Hugouin"], "female": ["Clemence", "Ludine", "Berelle", "Adaude"] }
+    }
+  },
+  "velkar": {
+    "name": "Velkar",
+    "adjective": "Velkar",
+    "playable": false,
+    "settler": false,
+    "faith": "riverSpirits",
+    "region": "The Velkar Rivers",
+    "portraitGroup": "east",
+    "uniqueUnits": ["horseArchers", "druzhina"],
+    "defaultWeapon": "axe",
+    "bonuses": [
+      { "id": "riverForts", "name": "River Forts", "description": "River settlements stand one fortification tier higher.", "modifiers": { "fort.riverTierDelta": 1 } },
+      { "id": "portageMastery", "name": "Portage Mastery", "description": "Portages take half as long.", "modifiers": { "portage.daysPct": -50 } }
+    ],
+    "naming": {
+      "starts": ["Rad", "Zla", "Bog", "Mir", "Yaro", "Lub", "Sve", "Dobr"],
+      "maleEndings": ["omir", "dan", "slav", "ko"],
+      "femaleEndings": ["ta", "slava", "na", "mila"],
+      "placeRoots": ["Velk", "Ozer", "Lebed", "Svaroz", "Smol", "Volok", "Sar", "Bor", "Rad", "Mir"],
+      "placeSuffixes": ["gorod", "grad", "in", "sk", "ny"],
+      "placePrefixes": [],
+      "examples": { "male": ["Radomir", "Bogdan", "Yaroslav", "Dobrko"], "female": ["Zlata", "Lubomila", "Svetna", "Mirslava"] }
+    }
+  },
+  "kurgai": {
+    "name": "Kurgai",
+    "adjective": "Kurgai",
+    "playable": false,
+    "settler": false,
+    "faith": "highSky",
+    "region": "The steppe beyond the Velkar Rivers",
+    "portraitGroup": "steppe",
+    "uniqueUnits": ["steppeHorseArchers"],
+    "defaultWeapon": "spear",
+    "bonuses": [
+      { "id": "horseLords", "name": "Horse Lords", "description": "Mounted squads keep their nerve: cavalry morale +10%.", "modifiers": { "battle.cavalryMoralePct": 10 } },
+      { "id": "steppeTribute", "name": "Tribute of the Steppe", "description": "Tribute demands are more often met.", "modifiers": { "diplomacy.tributeDemand": 10 } }
+    ],
+    "naming": {
+      "starts": ["Bat", "Kel", "Tar", "Ilt", "Bor", "Ak", "Kut", "Sar", "Ozn", "Tok"],
+      "maleEndings": ["ar", "rak", "bek", "ug", "an"],
+      "femaleEndings": ["ai", "gul", "ana", "ys"],
+      "placeRoots": ["Kaga", "Ak", "Kara", "Tok", "Sar", "Ozn", "Bor", "Ilt", "Kum", "Tesh"],
+      "placeSuffixes": ["kent", "tash", "kala", "yurt", "sai"],
+      "placePrefixes": [],
+      "examples": { "male": ["Kelrak", "Tarbek", "Iltug", "Batar"], "female": ["Akgul", "Sarai", "Toktana", "Ozngul"] }
+    }
+  },
+  "saraleonese": {
+    "name": "Saraleonese",
+    "adjective": "Saraleonese",
+    "playable": false,
+    "settler": false,
+    "faith": "goldenLantern",
+    "region": "Saraleon",
+    "portraitGroup": "south",
+    "uniqueUnits": ["emberGuard"],
+    "defaultWeapon": "spear",
+    "bonuses": [
+      { "id": "seaFire", "name": "Sea-fire", "description": "Galleys carry siphons of sea-fire, a naphtha weapon that burns on water.", "modifiers": { "navy.seaFire": 1 } },
+      { "id": "greatWalls", "name": "Great Walls", "description": "Immense old imperial stone walls.", "modifiers": { "fort.oldStoneWalls": 1 } },
+      { "id": "mercenaryService", "name": "Mercenary Service", "description": "Hires northern warriors for gold.", "modifiers": { "service.mercenaryPay": 1 } }
+    ],
+    "naming": {
+      "starts": ["Leon", "Theo", "Kyr", "Anast", "Eud", "Ir"],
+      "maleEndings": ["tios", "illos", "ikos"],
+      "femaleEndings": ["dora", "ene", "ia", "issa"],
+      "placeRoots": ["Chrys", "Hier", "Myrrh", "Leon", "Theo", "Kyr", "Aur", "Thal"],
+      "placeSuffixes": ["opol", "on", "ia"],
+      "placePrefixes": [],
+      "examples": { "male": ["Leontios", "Theodikos", "Kyrillos", "Eudtios"], "female": ["Theodora", "Irene", "Anastia", "Kyrissa"] }
+    }
+  },
+  "isafolder": {
+    "name": "Isafolder",
+    "adjective": "Isafolder",
+    "playable": false,
+    "settler": true,
+    "faith": "oldways",
+    "region": "Isafold",
+    "portraitGroup": "north",
+    "uniqueUnits": [],
+    "defaultWeapon": "axe",
+    "bonuses": [
+      { "id": "lawspeakers", "name": "Lawspeakers", "description": "Bonus at the Thing.", "modifiers": { "thing.voteBonus": 5 } }
+    ],
+    "naming": {
+      "starts": ["Ing", "Ljot", "Orm", "Tor", "Hal", "Bard", "Eld", "Hrol"],
+      "maleEndings": ["geir", "ulf", "ketil", "mund"],
+      "femaleEndings": ["dis", "rid", "unn", "gerd"],
+      "placeRoots": ["Eld", "Ask", "Reyk", "Hver", "Lava", "Smoke", "Orm", "Hal"],
+      "placeSuffixes": ["vik", "fell", "vellir", "hver", "nes"],
+      "placePrefixes": [],
+      "examples": { "male": ["Ingulf", "Ormketil", "Halgeir", "Bardmund"], "female": ["Ljotunn", "Torgerd", "Eldis", "Hrolrid"] }
+    }
+  },
+  "rime": {
+    "name": "Rime-hunters",
+    "adjective": "Rime",
+    "playable": false,
+    "settler": false,
+    "faith": "oldways",
+    "region": "The Rimewild",
+    "portraitGroup": "far",
+    "uniqueUnits": [],
+    "defaultWeapon": "spear",
+    "bonuses": [
+      { "id": "iceHunters", "name": "Ice Hunters", "description": "Ivory and fur output +30%/+20%.", "modifiers": { "goods.ivory.outputPct": 30, "goods.furs.outputPct": 20 } },
+      { "id": "coldHardy", "name": "Cold-hardy", "description": "Cold and exposure harm them less.", "modifiers": { "hazard.coldPct": -20 } }
+    ],
+    "naming": {
+      "starts": ["Aik", "Nil", "Ura", "Vuo", "Kai", "Sar", "Tuo", "Ilm"],
+      "maleEndings": ["ko", "ras", "ne", "mo"],
+      "femaleEndings": ["ja", "ri", "na", "ke"],
+      "placeRoots": ["Frost", "Snaer", "Vuo", "Aik", "Ilm", "Tuo", "White", "Kai"],
+      "placeSuffixes": ["vaara", "joki", "lak", "suo", "gard"],
+      "placePrefixes": [],
+      "examples": { "male": ["Aikko", "Nilras", "Tuomo", "Kaine"], "female": ["Uraja", "Vuori", "Ilmna", "Sarke"] }
+    }
+  }
+}

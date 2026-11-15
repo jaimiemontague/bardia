@@ -1,0 +1,162 @@
+{
+  "encounters.scene.merchant": {
+    "kind": "image",
+    "path": "encounters/scene-merchant.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "trade",
+        "seed": 31
+      },
+      "label": "Encounter at sea, a merchant: from our own deck, over the bow, one or more broad knarrs low in the water near the horizon. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "encounters.scene.patrol": {
+    "kind": "image",
+    "path": "encounters/scene-patrol.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "voyage",
+        "seed": 31
+      },
+      "label": "Encounter at sea, a lord's patrol: from our own deck, longships with shields along the rail crossing our course. Subject on the right two thirds."
+    }
+  },
+  "encounters.scene.raiders": {
+    "kind": "image",
+    "path": "encounters/scene-raiders.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "raid",
+        "seed": 31
+      },
+      "label": "Encounter at sea, raiders: from our own deck, lean bannerless hulls with oars out closing on us. Subject on the right two thirds."
+    }
+  },
+  "encounters.scene.warfleet": {
+    "kind": "image",
+    "path": "encounters/scene-warfleet.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "shieldWall",
+        "seed": 31
+      },
+      "label": "Encounter at sea, a war-fleet: from our own deck, a line of warships under a lord's banner on the horizon. Subject on the right two thirds."
+    }
+  },
+  "encounters.scene.outlaws": {
+    "kind": "image",
+    "path": "encounters/scene-outlaws.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "fog",
+        "seed": 31
+      },
+      "label": "Encounter on the march, outlaws: from among our own spears, ragged bowmen at a wood's edge across the heath, cook-smoke rising. Subject on the right two thirds."
+    }
+  },
+  "encounters.scene.landPatrol": {
+    "kind": "image",
+    "path": "encounters/scene-land-patrol.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "envoy",
+        "seed": 31
+      },
+      "label": "Encounter on the march, a lord's patrol: spearmen with a banner barring the road across a heath. Subject on the right two thirds."
+    }
+  },
+  "encounters.scene.caught.sea": {
+    "kind": "image",
+    "path": "encounters/scene-caught-sea.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "raid",
+        "seed": 37
+      },
+      "label": "Caught at sea: an enemy hull grinding alongside our bow, spears over its rail, its great sail filling the sky. Subject on the right two thirds."
+    }
+  },
+  "encounters.scene.caught.land": {
+    "kind": "image",
+    "path": "encounters/scene-caught-land.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "shieldWall",
+        "seed": 41
+      },
+      "label": "Ambush on land: men springing from rocks and trees close in front of our shields, arrows in the air. Subject on the right two thirds."
+    }
+  }
+}

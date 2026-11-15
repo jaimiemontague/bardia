@@ -1,0 +1,44 @@
+{
+  "narrative.illus.ratsInTheStores": {
+    "kind": "image",
+    "path": "narrative/storylets/rats-in-the-stores.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "granary", "palette": "winter", "seed": 1101 }, "label": "Rats in the Stores" }
+  },
+  "narrative.illus.boundaryStone": {
+    "kind": "image",
+    "path": "narrative/storylets/boundary-stone.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "fields", "palette": "summer", "seed": 1102 }, "label": "The Wandering Stone" }
+  },
+  "narrative.illus.drunkenBoast": {
+    "kind": "image",
+    "path": "narrative/storylets/drunken-boast.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "hallFeast", "palette": "firelight", "seed": 1103 }, "label": "A Boast in the Cups" }
+  },
+  "narrative.illus.boastReckoning": {
+    "kind": "image",
+    "path": "narrative/storylets/boast-reckoning.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "winterShore", "palette": "winter", "seed": 1104 }, "label": "The Firth Remembers" }
+  },
+  "narrative.illus.ravenOverTheWake": {
+    "kind": "image",
+    "path": "narrative/storylets/raven-over-the-wake.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "shipAtSea", "palette": "overcast", "seed": 1105 }, "label": "A Raven Over the Wake" }
+  },
+  "narrative.illus.afterTheShieldWall": {
+    "kind": "image",
+    "path": "narrative/storylets/after-the-shield-wall.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "battlefield", "palette": "dusk", "seed": 1106 }, "label": "When the Shields Come Down" }
+  },
+  "narrative.illus.skaldsDraft": {
+    "kind": "image",
+    "path": "narrative/storylets/skalds-draft.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "skald", "palette": "firelight", "seed": 1107 }, "label": "The Skald’s Draft" }
+  }
+}

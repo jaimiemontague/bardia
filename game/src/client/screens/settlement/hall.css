@@ -1,0 +1,217 @@
+/* The mead-hall (home and abroad) on the §20 layout: a warm scene with big choices, a result area, what has
+   been heard lately beside it, and sellswords as cards. Class prefix hall-. */
+
+.hall-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+.hall-main,
+.hall-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+.hall-mood {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-style: italic;
+  color: var(--c-text-2);
+}
+.hall-scene {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.hall-choices .choice {
+  min-height: 5.4rem;
+  align-items: flex-start;
+}
+.hall-choices .choice-picture {
+  margin-top: 0.15rem;
+}
+.hall-choices .choice-title {
+  font-size: var(--fs-lg);
+  color: var(--gold-0);
+}
+.hall-choices .choice-check {
+  display: none;
+}
+.hall-result {
+  min-height: 7rem;
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--c-border);
+  border-left: 3px solid var(--gold-2);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, rgba(255, 170, 80, 0.07), rgba(0, 0, 0, 0.22));
+  font-size: var(--fs-md);
+}
+.hall-result-hint {
+  margin: 0;
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.hall-result-line {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-lg);
+  color: var(--c-text);
+}
+.hall-quiet {
+  margin: 0;
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+
+/* ------------------------------------------------------------- news */
+.hall-side-title {
+  margin: 0 0 var(--sp-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  letter-spacing: 0.06em;
+  color: var(--gold-0);
+}
+.hall-news-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.hall-news {
+  padding-left: var(--sp-3);
+  border-left: 2px solid var(--c-border-strong);
+}
+.hall-news-rumour {
+  border-left-style: dashed;
+}
+.hall-headline {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.35;
+  color: var(--c-text);
+}
+.hall-news-meta {
+  margin: 2px 0 0;
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.hall-log .disclosure {
+  margin-top: var(--sp-2);
+}
+
+/* ------------------------------------------------------------- other places */
+.hall-intel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding-top: var(--sp-2);
+}
+.hall-intel-list,
+.hall-maps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  font-size: var(--fs-md);
+}
+.hall-place {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hall-place-name {
+  font-family: var(--font-display);
+  color: var(--gold-0);
+}
+.hall-place-facts {
+  color: var(--c-text-2);
+}
+.hall-place-age {
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+
+/* ------------------------------------------------------------- sellswords */
+.hall-mercs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.hall-merc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.hall-merc {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.2);
+}
+.hall-merc.is-hired {
+  opacity: 0.6;
+}
+.hall-merc-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs-md);
+}
+.hall-merc-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--gold-0);
+}
+.hall-merc-who,
+.hall-merc-best {
+  color: var(--c-text-2);
+}
+.hall-merc-why {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-style: italic;
+  color: var(--c-warning);
+}
+.hall-merc-deal {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-2);
+}
+.hall-merc-price {
+  font-size: var(--fs-lg);
+  color: var(--c-text);
+  font-variant-numeric: tabular-nums;
+}
+.hall-merc-hired {
+  font-style: italic;
+  color: var(--c-success);
+}
+
+/* ------------------------------------------------------------- narrow hosts (the visit panel abroad) */
+.st-visit-panel .hall-choices {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (max-width: 1000px) {
+  .hall-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

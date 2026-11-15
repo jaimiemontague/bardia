@@ -1,0 +1,32 @@
+{
+  "sources": {
+    "server": 0.75,
+    "keeper": 0.6,
+    "drunk": 0.4,
+    "merchant": 0.8,
+    "envoy": 0.85,
+    "scout": 1,
+    "ravenQuill": 1,
+    "sighting": 1,
+    "rumour": 0.3,
+    "spy": 0.9,
+    "mapHolder": 0.7
+  },
+  "defaultReliability": 0.5,
+  "maxReportsPerFact": 4,
+  "pruneDays": 360,
+  "conflictMinConfidence": 0.2,
+  "noise": { "scale": 0.5, "economySlipBelow": 0.7 },
+  "sourceKeys": {
+    "sighting": ["fortTier", "fleets", "economy"],
+    "merchant": ["economy", "silver", "fleets", "wars"],
+    "keeper": ["garrison", "leader", "wars", "economy", "fleets"],
+    "drunk": ["garrison", "leader", "relicRumor", "wars"],
+    "server": ["garrison", "fortTier", "armour", "weapons", "silver", "economy", "leader", "wars", "fleets"],
+    "envoy": ["garrison", "fortTier", "leader", "wars", "silver", "economy"]
+  },
+  "arrivalKeys": ["fortTier", "fleets", "economy"],
+  "mapPrice": [20, 80],
+  "mapNeedsPresence": true,
+  "presenceRadius": 3
+}

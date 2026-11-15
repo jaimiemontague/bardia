@@ -1,0 +1,90 @@
+{
+  "$notes": "Holding petitions (design §10.3 Affairs of State, §19.2 'Holdings and petitions'). Monthly, holding-scoped and therefore delegable: with the petitions policy set to 'delegate' the steward applies defaultChoice (always the cheap, conservative ruling). While the ruler is abroad they wait in the inbox for expiresInDays, then the steward settles them. Effect params may use $holding / $settlement / $ruler / $player and { \"$var\" } / { \"$expr\" } (see src/content/storylets.ts).",
+  "storylets": [
+    {
+      "id": "ratsInTheStores",
+      "scope": "holding",
+      "trigger": "monthly",
+      "when": "season() == 'winter' || season() == 'spring'",
+      "weight": 10,
+      "cooldownDays": 240,
+      "titleKey": "narrative.storylet.ratsInTheStores.title",
+      "textKey": "narrative.storylet.ratsInTheStores.text",
+      "illustration": "narrative.illus.ratsInTheStores",
+      "expiresInDays": 20,
+      "defaultChoice": 2,
+      "vars": {
+        "catCost": "max(20, floor(holding.pop / 50))",
+        "feastCost": "max(40, floor(holding.pop / 25))"
+      },
+      "choices": [
+        {
+          "labelKey": "narrative.storylet.ratsInTheStores.cats",
+          "previewKey": "narrative.storylet.ratsInTheStores.cats.preview",
+          "when": "player.treasury >= vars.catCost",
+          "effects": [
+            { "op": "addSilver", "amount": { "$expr": "-vars.catCost" } },
+            { "op": "changeLoyalty", "amount": 3, "settlementId": "$holding" }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.ratsInTheStores.hunt",
+          "previewKey": "narrative.storylet.ratsInTheStores.hunt.preview",
+          "when": "player.treasury >= vars.feastCost",
+          "chronicleKey": "narrative.storylet.ratsInTheStores.hunt.chronicle",
+          "effects": [
+            { "op": "addSilver", "amount": { "$expr": "-vars.feastCost" } },
+            { "op": "changeLoyalty", "amount": 6, "settlementId": "$holding" },
+            { "op": "changeRenown", "amount": 1 }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.ratsInTheStores.seal",
+          "previewKey": "narrative.storylet.ratsInTheStores.seal.preview",
+          "effects": [{ "op": "changeLoyalty", "amount": 1, "settlementId": "$holding" }]
+        }
+      ]
+    },
+    {
+      "id": "boundaryStone",
+      "scope": "holding",
+      "trigger": "monthly",
+      "when": "season() != 'winter'",
+      "weight": 10,
+      "cooldownDays": 180,
+      "titleKey": "narrative.storylet.boundaryStone.title",
+      "textKey": "narrative.storylet.boundaryStone.text",
+      "illustration": "narrative.illus.boundaryStone",
+      "expiresInDays": 20,
+      "defaultChoice": 1,
+      "vars": {
+        "fine": "max(10, floor(holding.pop / 100))"
+      },
+      "choices": [
+        {
+          "labelKey": "narrative.storylet.boundaryStone.elder",
+          "previewKey": "narrative.storylet.boundaryStone.elder.preview",
+          "effects": [
+            { "op": "addSilver", "amount": { "$var": "fine" } },
+            { "op": "changeHonor", "amount": 2 },
+            { "op": "changeLoyalty", "amount": -1, "settlementId": "$holding" }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.boundaryStone.split",
+          "previewKey": "narrative.storylet.boundaryStone.split.preview",
+          "effects": [{ "op": "changeLoyalty", "amount": 2, "settlementId": "$holding" }]
+        },
+        {
+          "labelKey": "narrative.storylet.boundaryStone.lift",
+          "previewKey": "narrative.storylet.boundaryStone.lift.preview",
+          "chronicleKey": "narrative.storylet.boundaryStone.lift.chronicle",
+          "effects": [
+            { "op": "changeRenown", "amount": 2 },
+            { "op": "changeLoyalty", "amount": 1, "settlementId": "$holding" }
+          ]
+        }
+      ]
+    }
+  ]
+}

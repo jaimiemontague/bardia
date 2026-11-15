@@ -1,0 +1,192 @@
+{
+  "network": {
+    "seaKmPerDay": 120,
+    "seaDetour": 1.3,
+    "landDetour": 1.25,
+    "neighbours": 5,
+    "maxEdgeDays": 12,
+    "minEdgeDays": 0.25,
+    "bridgeMaxDays": 30
+  },
+  "confirmHops": 1,
+  "reliableVia": [
+    "envoy"
+  ],
+  "dispatch": {
+    "minImportance": 2,
+    "normalImportance": 3,
+    "highImportance": 5,
+    "narrateMinImportance": 4,
+    "chronicleMinImportance": 4
+  },
+  "keeper": {
+    "maxItems": 8,
+    "memoryDays": 120
+  },
+  "prune": {
+    "maxAgeDays": [
+      60,
+      90,
+      150,
+      240,
+      360
+    ],
+    "maxItems": 600
+  },
+  "exactFactKeys": [
+    "year",
+    "tier",
+    "fortTier"
+  ],
+  "minImportance": 1,
+  "kinds": {
+    "settlementSacked": {
+      "importance": 3
+    },
+    "settlementPlundered": {
+      "importance": 2
+    },
+    "settlementSpared": {
+      "importance": 1
+    },
+    "captivesTaken": {
+      "importance": 2
+    },
+    "settlementTributary": {
+      "importance": 2
+    },
+    "settlementAnnexed": {
+      "importance": 3
+    },
+    "settlementLiberated": {
+      "importance": 2
+    },
+    "rulerDied": {
+      "importance": 3
+    },
+    "succession": {
+      "importance": 3,
+      "confirmed": true
+    },
+    "crowned": {
+      "importance": 4,
+      "confirmed": true
+    },
+    "acclamation": {
+      "importance": 5,
+      "confirmed": true
+    },
+    "battle": {
+      "importance": 2
+    },
+    "seaBattle": {
+      "importance": 2
+    },
+    "duelFought": {
+      "importance": 1
+    },
+    "pactSigned": {
+      "importance": 2,
+      "confirmed": true
+    },
+    "pactBroken": {
+      "importance": 3
+    },
+    "marriage": {
+      "importance": 2,
+      "confirmed": true
+    },
+    "heirBorn": {
+      "importance": 1
+    },
+    "rulerCaptured": {
+      "importance": 3
+    },
+    "holdingCaptured": {
+      "importance": 3
+    },
+    "revolt": {
+      "importance": 2
+    },
+    "relicFound": {
+      "importance": 3
+    },
+    "houseFallen": {
+      "importance": 3
+    },
+    "stormWreck": {
+      "importance": 1
+    },
+    "generic": {
+      "importance": 2
+    }
+  },
+  "fates": {
+    "sackAndBurn": "settlementSacked",
+    "sack": "settlementSacked",
+    "burn": "settlementSacked",
+    "plunderAndLeave": "settlementPlundered",
+    "plunder": "settlementPlundered",
+    "spare": "settlementSpared",
+    "takeCaptives": "captivesTaken",
+    "captives": "captivesTaken",
+    "makeTributary": "settlementTributary",
+    "tributary": "settlementTributary",
+    "annex": "settlementAnnexed",
+    "liberate": "settlementLiberated",
+    "restore": "settlementLiberated",
+    "raid": "settlementPlundered"
+  },
+  "tierImportance": {
+    "hamlet": -1,
+    "village": 0,
+    "town": 0,
+    "city": 1,
+    "capital": 1,
+    "cloister": 1,
+    "fortress": 0,
+    "emporium": 1,
+    "templeStead": 1
+  },
+  "factionKindImportance": {
+    "empire": 5,
+    "kingdom": 4,
+    "realm": 4,
+    "confederacy": 3,
+    "church": 3,
+    "jarldom": 3,
+    "nemesis": 3,
+    "player": 3,
+    "city": 2,
+    "petty": 2
+  },
+  "battleKilled": [
+    60,
+    250,
+    800,
+    2000
+  ],
+  "seaBattleShips": [
+    2,
+    5,
+    10,
+    20
+  ],
+  "pactImportance": {
+    "truce": 2,
+    "treaty": 2,
+    "trade": 1,
+    "alliance": 3,
+    "marriage": 2,
+    "tributary": 2,
+    "vassal": 3
+  },
+  "pactBrokenBonus": 1,
+  "crownTitleWords": [
+    "king",
+    "King",
+    "queen",
+    "Queen"
+  ],
+  "stormMinShipsLost": 1
+}

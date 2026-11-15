@@ -1,0 +1,74 @@
+{
+  "wind": {
+    "strengthKn": { "calm": 2, "light": 7, "fresh": 15, "strong": 25, "gale": 36 },
+    "classMinKn": { "light": 4, "fresh": 11, "strong": 21, "gale": 33 },
+    "speedCv": 0.35,
+    "maxKn": 60,
+    "persistence": 0.7,
+    "seasonBlendDays": 10,
+    "stormBoostKn": 12,
+    "stormGaleIntensity": 0.6,
+    "stormVeerDeg": 45
+  },
+  "fog": {
+    "season": { "spring": 0.08, "summer": 0.05, "autumn": 0.22, "winter": 0.1 },
+    "strengthMult": { "calm": 2, "light": 1.3, "fresh": 0.6, "strong": 0.15, "gale": 0 },
+    "persistence": 0.6
+  },
+  "rain": {
+    "season": { "spring": 0.2, "summer": 0.12, "autumn": 0.3, "winter": 0.28 },
+    "persistence": 0.5
+  },
+  "storms": {
+    "radiusCells": [16, 36],
+    "speedCellsPerHour": [3, 7],
+    "ttlHours": [30, 72],
+    "intensity": [0.4, 1],
+    "dirSpreadDeg": 30,
+    "spawnJitterCells": 40,
+    "upwindStartFrac": 0.5,
+    "growFrac": 0.25,
+    "decayFrac": 0.3,
+    "minRadiusFactor": 0.5,
+    "minHitIntensity": 0.1,
+    "coverageCalibration": 1,
+    "maxCells": 32,
+    "mapMarginCells": 60,
+    "intensitySevereShift": 0.1,
+    "severityClass": { "moderate": 0.45, "severe": 0.75 },
+    "checkHours": 3,
+    "maxFleetCellsPerHour": 4,
+    "nightStartHour": 21,
+    "nightEndHour": 5,
+    "modes": { "sailing": "exposed", "beached": "sheltered", "docked": "sheltered", "landed": "sheltered" },
+    "noWarningModes": ["docked"],
+    "drownedBellFlag": "relic.drownedBell",
+    "stormSeasonMin": 0.04,
+    "forecastMaxHours": 96
+  },
+  "consequences": {
+    "minor": { "sailDamagePct": [0.15, 0.35] },
+    "moderate": { "sailDamagePct": [0.25, 0.5], "hullDamagePct": [0.1, 0.25], "rationsLossPct": 0.1, "delayDays": 2 },
+    "severe": {
+      "sailDamagePct": [0.4, 0.8],
+      "hullDamagePct": [0.2, 0.4],
+      "menLostPct": [0.04, 0.1],
+      "cargoLossPct": 0.25,
+      "rationsLossPct": 0.2,
+      "delayDays": 3,
+      "founderRescueShare": 0.4
+    }
+  },
+  "zones": {
+    "whaleRoad": { "areaCells": 44056, "spawnMult": 1.33 },
+    "straits": { "areaCells": 9983, "spawnMult": 2.35 },
+    "grayFirth": { "areaCells": 30328, "spawnMult": 1.5 },
+    "albrennSea": { "areaCells": 9181, "spawnMult": 2.18 },
+    "caelSound": { "areaCells": 12908, "spawnMult": 0.88 },
+    "westernOcean": { "areaCells": 110154, "spawnMult": 1.41 },
+    "southernNarrows": { "areaCells": 13530, "spawnMult": 1.48 },
+    "emberSea": { "areaCells": 6196, "spawnMult": 4.14 },
+    "rimesea": { "areaCells": 21113, "spawnMult": 3.4 }
+  },
+  "defaultZoneAreaCells": 20000
+}

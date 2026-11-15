@@ -1,0 +1,301 @@
+{
+  "seabattle.sfx.volley": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/volley.ogg",
+    "durationS": 2.4,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.arrowVolley",
+        "bus": "sfx",
+        "brief": "A ship's archers loose together from the shield rail: release, whistle, thuds into planking."
+      },
+      "label": "Arrow volley"
+    }
+  },
+  "seabattle.sfx.fireVolley": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/fire-volley.ogg",
+    "durationS": 2.6,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.arrowVolley",
+        "bus": "sfx",
+        "brief": "Pitch-soaked arrows loosed in a ragged volley: crackle, whoosh, hiss as some fall into the sea."
+      },
+      "label": "Fire-arrow volley"
+    }
+  },
+  "seabattle.sfx.ignite": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/ignite.ogg",
+    "durationS": 3,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.fire",
+        "bus": "sfx",
+        "brief": "A woollen sail or tarred planking catching: a whump, then a rising roar."
+      },
+      "label": "Fire takes hold"
+    }
+  },
+  "seabattle.sfx.douse": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/douse.ogg",
+    "durationS": 1.5,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.splash",
+        "bus": "sfx",
+        "brief": "Leather buckets of seawater dashed on burning wood; steam and shouting."
+      },
+      "label": "Dousing"
+    }
+  },
+  "seabattle.sfx.extinguished": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/extinguished.ogg",
+    "durationS": 1.2,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.splash",
+        "bus": "sfx",
+        "brief": "Last hiss of steam as a fire dies; a ragged cheer."
+      },
+      "label": "Fire out"
+    }
+  },
+  "seabattle.sfx.sailTorn": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/sail-torn.ogg",
+    "durationS": 1.4,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.sailFlap",
+        "bus": "sfx",
+        "brief": "A burned sail tearing from the yard and flapping loose."
+      },
+      "label": "Sail destroyed"
+    }
+  },
+  "seabattle.sfx.ram": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/ram.ogg",
+    "durationS": 1.6,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.hullCreak",
+        "bus": "sfx",
+        "brief": "A bronze-sheathed galley ram smashing into clinker planks: crack, splinter, rush of water."
+      },
+      "label": "Ram strike"
+    }
+  },
+  "seabattle.sfx.seaFire": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/sea-fire.ogg",
+    "durationS": 3,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.seaFire",
+        "bus": "sfx",
+        "brief": "Saraleonese sea-fire siphon: pressurised whoosh, then clinging flame on the water."
+      },
+      "label": "Sea-fire"
+    }
+  },
+  "seabattle.sfx.collision": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/collision.ogg",
+    "durationS": 1.2,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.hullCreak",
+        "bus": "sfx",
+        "brief": "Two hulls grinding together; oars snapping."
+      },
+      "label": "Hulls collide"
+    }
+  },
+  "seabattle.sfx.grounded": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/grounded.ogg",
+    "durationS": 1.6,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.splash",
+        "bus": "sfx",
+        "brief": "A keel running onto shingle and sand with a long grinding scrape."
+      },
+      "label": "Run aground"
+    }
+  },
+  "seabattle.sfx.grapple": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/grapple.ogg",
+    "durationS": 1,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.hullCreak",
+        "bus": "sfx",
+        "brief": "Iron grapnels thudding into a gunwale; ropes snapping taut."
+      },
+      "label": "Grapnels"
+    }
+  },
+  "seabattle.sfx.cutFree": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/cut-free.ogg",
+    "durationS": 0.8,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.shieldBash",
+        "bus": "sfx",
+        "brief": "Axes chopping through tarred rope; lines parting with a crack."
+      },
+      "label": "Cut free"
+    }
+  },
+  "seabattle.sfx.deckClash": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/deck-clash.ogg",
+    "durationS": 1.4,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.clash",
+        "bus": "sfx",
+        "brief": "Close fighting on a pitching deck: iron, shields, men going over the side."
+      },
+      "label": "Deck fight"
+    }
+  },
+  "seabattle.sfx.deckWon": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/deck-won.ogg",
+    "durationS": 1.4,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.clash",
+        "bus": "sfx",
+        "brief": "The last blows of a deck fight, then arms thrown down and a victory shout."
+      },
+      "label": "Deck taken"
+    }
+  },
+  "seabattle.sfx.struck": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/struck.ogg",
+    "durationS": 2,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "bus": "sfx",
+        "brief": "A short horn call: the crew gives up the fight.",
+        "call": "retreat"
+      },
+      "label": "Colours struck"
+    }
+  },
+  "seabattle.sfx.sink": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/sink.ogg",
+    "durationS": 2.4,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.splash",
+        "bus": "sfx",
+        "brief": "A hull going under: groaning timber, a great rush of water, then quiet."
+      },
+      "label": "Ship sinks"
+    }
+  },
+  "seabattle.sfx.routed": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/routed.ogg",
+    "durationS": 2,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "bus": "sfx",
+        "brief": "A wavering horn as a crew turns to run.",
+        "call": "retreat"
+      },
+      "label": "Crew routs"
+    }
+  },
+  "seabattle.sfx.flagshipLost": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/flagship-lost.ogg",
+    "durationS": 2.2,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "bus": "sfx",
+        "brief": "A broken horn call; dismay along the line.",
+        "call": "retreat"
+      },
+      "label": "Flagship lost"
+    }
+  },
+  "seabattle.sfx.retreatHorn": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/retreat-horn.ogg",
+    "durationS": 2.4,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "bus": "sfx",
+        "brief": "The retreat sounded on a long horn.",
+        "call": "retreat"
+      },
+      "label": "Retreat horn"
+    }
+  },
+  "seabattle.sfx.challenge": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/challenge.ogg",
+    "durationS": 1.2,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.clash",
+        "bus": "sfx",
+        "brief": "Two captains facing each other on a cleared deck; the crews fall silent."
+      },
+      "label": "Captain's challenge"
+    }
+  },
+  "seabattle.sfx.ended": {
+    "kind": "sfx",
+    "path": "sfx/seabattle/ended.ogg",
+    "durationS": 2.4,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "bus": "sfx",
+        "brief": "A horn call over the water as the fighting ends.",
+        "call": "muster"
+      },
+      "label": "Battle ends"
+    }
+  }
+}

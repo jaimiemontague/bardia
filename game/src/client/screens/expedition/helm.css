@@ -1,0 +1,170 @@
+/*
+ * The helm strip (ARCHITECTURE §20): a compact strip at the foot of the sea chart. Where the fleet is, food,
+ * men, the wind, three orders at most; the course picker opens above it.
+ */
+.xp-helm {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  z-index: 4;
+  width: min(900px, calc(100vw - 340px));
+  min-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+  color: var(--c-text, #efe4cc);
+}
+
+.xp-helm > * {
+  pointer-events: auto;
+}
+
+.xp-helm-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--c-border-strong, #6a5638);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(38, 28, 18, 0.94), rgba(22, 16, 10, 0.94));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.xp-helm-where {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 190px;
+}
+
+.xp-helm-wind {
+  flex: 0 0 auto;
+  color: var(--c-accent, #d9b25a);
+  line-height: 0;
+}
+
+.xp-helm-words {
+  min-width: 0;
+}
+
+.xp-helm-place {
+  font-size: var(--fs-md, 1.125rem);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.xp-helm-status {
+  font-size: var(--fs-sm, 0.95rem);
+  color: var(--c-text-dim, #c9b994);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.xp-helm-stats {
+  display: flex;
+  gap: 14px;
+  flex: 0 0 auto;
+}
+
+.xp-helm-stats > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+}
+
+.xp-helm-stats span {
+  font-size: var(--fs-xs, 0.82rem);
+  color: var(--c-text-dim, #c9b994);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.xp-helm-stats strong {
+  font-size: var(--fs-lg, 1.3rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.xp-helm-stats .tone-bad strong {
+  color: #ff8a7a;
+}
+
+.xp-helm-stats .tone-warn strong {
+  color: #f3c46b;
+}
+
+.xp-helm-actions {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.xp-helm-next,
+.xp-helm-hint {
+  margin: 0;
+  align-self: center;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: rgba(22, 16, 10, 0.82);
+  font-size: var(--fs-md, 1.125rem);
+  text-align: center;
+}
+
+.xp-helm-hint {
+  order: -1;
+  background: rgba(120, 86, 30, 0.9);
+  color: #fff4dc;
+}
+
+.xp-helm-hint kbd {
+  display: inline-block;
+  min-width: 1.5em;
+  padding: 0 4px;
+  border: 1px solid rgba(255, 244, 220, 0.6);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: var(--fs-sm, 0.95rem);
+  text-align: center;
+}
+
+.xp-helm-chart {
+  order: -2;
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--c-border-strong, #6a5638);
+  border-radius: 8px;
+  background: rgba(22, 16, 10, 0.95);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  max-width: 420px;
+}
+
+.xp-helm-dest {
+  display: flex;
+  gap: 6px;
+}
+
+.xp-helm-dest select {
+  min-width: 200px;
+  font-size: var(--fs-md, 1.125rem);
+}
+
+.xp-helm-none {
+  margin: 0;
+  font-size: var(--fs-md, 1.125rem);
+}
+
+@media (max-width: 1100px) {
+  .xp-helm {
+    width: calc(100vw - 24px);
+    min-width: 0;
+  }
+}

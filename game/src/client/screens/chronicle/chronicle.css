@@ -1,0 +1,87 @@
+/* The Chronicle (route 'chronicle'): a reading column in large type, newest first. */
+.cr-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+.cr-count {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  letter-spacing: 0.06em;
+  color: var(--c-text-dim);
+}
+.cr-year {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.cr-year-title {
+  margin: 0;
+  font-family: var(--font-display, inherit);
+  font-size: var(--fs-xl);
+  color: var(--c-accent-hi);
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+.cr-entries {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.cr-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: var(--sp-4);
+  border-left: 3px solid rgba(127, 104, 70, 0.45);
+}
+.cr-entry.imp-3,
+.cr-entry.imp-4,
+.cr-entry.imp-5 {
+  border-left-color: var(--c-accent);
+}
+.cr-entry.imp-4 .cr-text,
+.cr-entry.imp-5 .cr-text {
+  font-weight: 600;
+  color: var(--gold-0);
+}
+.cr-date {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.08em;
+  color: var(--c-text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.cr-text {
+  font-size: var(--fs-lg);
+  line-height: 1.45;
+  color: var(--c-text);
+}
+.cr-people {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+}
+.cr-person {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-accent-hi);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(240, 200, 120, 0.35);
+  text-underline-offset: 3px;
+}
+.cr-person:hover,
+.cr-person:focus-visible {
+  color: var(--gold-0);
+  text-decoration-color: currentColor;
+}

@@ -1,0 +1,91 @@
+{
+  "shipQueueMax": 6,
+  "dockRadius": 3,
+  "battlesRemembered": 32,
+  "pool": {
+    "startShare": 1
+  },
+  "transfer": {
+    "cellsPerDay": 30,
+    "minDays": 1,
+    "interceptPerDay": 0.015,
+    "interceptCap": 0.3,
+    "interceptPeaceMult": 0.2,
+    "menLossShare": 0.25,
+    "goodsLossShare": 0.5,
+    "shipDamageShare": 0.2
+  },
+  "armoury": {
+    "ironBuyMarkup": 1.25,
+    "buyIronByDefault": true
+  },
+  "fieldRepair": {
+    "timberPerShip": 2,
+    "maxShare": 0.75
+  },
+  "wounded": {
+    "homeFleetModes": ["docked"]
+  },
+  "lieutenants": {
+    "roles": ["lieutenant", "governor", "envoy", "captain", "regent", "steward"],
+    "countKinInCapacity": true,
+    "crownFlagPrefix": "crown:",
+    "drift": 1,
+    "driftTarget": 50,
+    "victory": 2,
+    "victoryMax": 6,
+    "defeat": -2,
+    "defeatMax": -6,
+    "governor": 1,
+    "honestHighHonorAt": 40,
+    "honestHighHonor": 1,
+    "honestLowHonorAt": -20,
+    "honestLowHonor": -2,
+    "ambitiousIdle": -1,
+    "desertBase": 0.15,
+    "desertPerPoint": 0.03,
+    "kinDesertMult": 0.25,
+    "defectChance": 0.35,
+    "defectorLoyalty": 45
+  },
+  "sellswords": {
+    "settlementTiers": ["town", "city", "capital", "emporium"],
+    "offers": [1, 3],
+    "level": [1, 5],
+    "skillPointsBase": 4,
+    "skillPointsPerLevel": 2,
+    "skills": ["melee", "command", "archery", "seafaring", "wildcraft", "speechcraft"],
+    "traitPool": ["brave", "craven", "greedy", "generous", "honest", "deceitful", "wrathful", "patient", "ambitious", "content", "drunkard", "temperate", "strong", "quick", "seaBorn", "nightEyed", "scarred", "lostFingers"],
+    "traitCount": [1, 2],
+    "foreignChance": 0.3,
+    "foreignCultures": ["skarn", "hvarn", "eyjar", "cael", "albric", "velkar", "kurgai"],
+    "femaleChance": 0.2,
+    "attributeSpread": [-1, 2],
+    "backstories": [
+      "oathbreakerJarl",
+      "feudOutlaw",
+      "shipwreckSurvivor",
+      "harbourGuard",
+      "riverRower",
+      "landlessYounger",
+      "fallenHouse",
+      "whalerCrew",
+      "caravanGuard",
+      "cloisterRunaway",
+      "oldHuscarl",
+      "returnedHostage"
+    ],
+    "priceNoise": 0.1,
+    "priceRound": 10,
+    "historyMonths": 2
+  },
+  "veterans": {
+    "skillPointsBase": 3,
+    "skillPointsPerLevel": 2,
+    "skills": ["melee", "command", "archery", "wildcraft"],
+    "traitChance": 0.5,
+    "traitPool": ["brave", "hirdTrained", "scarred", "strong", "patient"],
+    "levelBonusBattles": 6
+  },
+  "lieutenantAge": [20, 40]
+}

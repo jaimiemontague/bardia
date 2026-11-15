@@ -1,0 +1,36 @@
+{
+  "defaultWeight": 10,
+  "defaultCooldownDays": 90,
+  "monthly": {
+    "player": { "chance": 0.35, "max": 1 },
+    "holding": { "chance": 0.85, "max": 2 },
+    "settlement": { "chance": 0.25, "max": 1 },
+    "faction": { "chance": 0.2, "max": 1 },
+    "character": { "chance": 0.3, "max": 1 },
+    "fleet": { "chance": 0.25, "max": 1 }
+  },
+  "triggerChance": {
+    "onArrival": 0.35,
+    "onSeasonStart": 0.5,
+    "onVoyageDay": 0.12,
+    "onNewsHeard": 0.5,
+    "onRelationThreshold": 0.75
+  },
+  "triggerChanceDefault": 1,
+  "maxFollowUpChain": 8,
+  "maxInbox": 12,
+  "inboxWhenAbroad": true,
+  "chronicleImportance": 1,
+  "neverDays": 99999,
+  "eventSnapshotDepth": 2,
+  "lines": {
+    "useWeightDecay": 0.5
+  },
+  "verse": {
+    "maxDeeds": { "yearEnd": 4, "epitaph": 5 },
+    "maxPerKind": { "battle": 2, "marriage": 1, "crown": 1, "birth": 2, "death": 2 },
+    "defaultMaxPerKind": 2,
+    "staveBonus": 3,
+    "maxStored": 200
+  }
+}

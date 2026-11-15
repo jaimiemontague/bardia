@@ -1,0 +1,51 @@
+/* Family and Dynasty (route 'family'): people as portrait cards on the left, the chosen one on the right. */
+.fam-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(19rem, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .fam-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.fam-people {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+.fam-heir {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin: 0;
+  font-size: var(--fs-lg);
+  line-height: 1.35;
+}
+.fam-heir > .icon {
+  flex: none;
+  margin-top: 0.2em;
+  color: var(--gold-1);
+}
+.fam-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+  gap: var(--sp-3);
+}
+.fam-focus {
+  position: sticky;
+  top: 0;
+}
+.fam-flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.fam-named {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--gold-0);
+}

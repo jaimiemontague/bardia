@@ -1,0 +1,534 @@
+{
+  "consumptionPer1000": {
+    "rations": 5,
+    "salt": 0.12,
+    "timber": 0.5,
+    "iron": 0.06,
+    "pitch": 0.03,
+    "furs": 0.03,
+    "ivory": 0.002,
+    "amber": 0.004,
+    "cloth": 0.15,
+    "wine": 0.03,
+    "mead": 0.25,
+    "honey": 0.04,
+    "jewelry": 0.003,
+    "silk": 0.002,
+    "weapons": 0.02
+  },
+  "productionPer1000": {
+    "rations": 5.2
+  },
+  "cultureProduction": {
+    "skarn": {
+      "timber": 0.9,
+      "pitch": 0.1,
+      "mead": 0.3,
+      "salt": 0.03,
+      "weapons": 0.01
+    },
+    "hvarn": {
+      "timber": 0.9,
+      "iron": 0.2,
+      "furs": 0.1,
+      "pitch": 0.08,
+      "mead": 0.25,
+      "weapons": 0.03
+    },
+    "eyjar": {
+      "salt": 0.3,
+      "amber": 0.04,
+      "mead": 0.3,
+      "cloth": 0.05
+    },
+    "albric": {
+      "cloth": 0.3,
+      "honey": 0.1,
+      "mead": 0.2,
+      "salt": 0.04,
+      "timber": 0.3
+    },
+    "cael": {
+      "cloth": 0.1,
+      "honey": 0.05,
+      "mead": 0.15,
+      "salt": 0.03
+    },
+    "corvani": {
+      "wine": 0.3,
+      "iron": 0.12,
+      "salt": 0.12,
+      "cloth": 0.2,
+      "jewelry": 0.008,
+      "weapons": 0.04,
+      "honey": 0.03
+    },
+    "velkar": {
+      "furs": 0.12,
+      "honey": 0.12,
+      "amber": 0.02,
+      "timber": 0.5,
+      "mead": 0.15,
+      "pitch": 0.03
+    },
+    "kurgai": {
+      "furs": 0.04,
+      "cloth": 0.03
+    },
+    "saraleonese": {
+      "silk": 0.015,
+      "jewelry": 0.012,
+      "wine": 0.15,
+      "cloth": 0.12,
+      "salt": 0.05
+    },
+    "isafolder": {
+      "ivory": 0.006,
+      "salt": 0.04,
+      "mead": 0.08
+    },
+    "rime": {
+      "furs": 0.15,
+      "ivory": 0.02
+    }
+  },
+  "cultureConsumption": {
+    "skarn": {
+      "wine": 2,
+      "jewelry": 1.5,
+      "cloth": 1.3,
+      "silk": 1.2,
+      "mead": 1.3,
+      "weapons": 1.3
+    },
+    "hvarn": {
+      "wine": 2,
+      "jewelry": 1.5,
+      "cloth": 1.3,
+      "silk": 1.2,
+      "mead": 1.3,
+      "salt": 1.2
+    },
+    "eyjar": {
+      "wine": 2,
+      "jewelry": 1.5,
+      "cloth": 1.2,
+      "silk": 1.2,
+      "mead": 1.3,
+      "timber": 1.5
+    },
+    "albric": {
+      "furs": 2,
+      "wine": 1.5,
+      "amber": 1.3
+    },
+    "cael": {
+      "furs": 1.5,
+      "wine": 1.3
+    },
+    "corvani": {
+      "furs": 2.5,
+      "ivory": 2,
+      "amber": 1.5,
+      "silk": 1.5
+    },
+    "velkar": {
+      "silk": 1.5,
+      "wine": 1.5,
+      "jewelry": 1.3,
+      "weapons": 1.3,
+      "salt": 1.5
+    },
+    "kurgai": {
+      "silk": 2,
+      "jewelry": 1.5,
+      "weapons": 1.5,
+      "cloth": 1.5,
+      "rations": 0.9
+    },
+    "saraleonese": {
+      "furs": 2.5,
+      "ivory": 3,
+      "amber": 3,
+      "timber": 1.5,
+      "iron": 1.3
+    },
+    "isafolder": {
+      "cloth": 2,
+      "timber": 3,
+      "iron": 1.5,
+      "wine": 1.5,
+      "rations": 1.1
+    },
+    "rime": {
+      "cloth": 1.5,
+      "iron": 1.5,
+      "weapons": 1.3,
+      "mead": 1.2
+    }
+  },
+  "faithConsumption": {
+    "lantern": {
+      "honey": 1.8,
+      "wine": 1.3
+    },
+    "goldenLantern": {
+      "honey": 1.5,
+      "wine": 1.2
+    },
+    "oldways": {
+      "mead": 1.2
+    }
+  },
+  "regionProduction": {
+    "thingey": {
+      "rations": 0.9
+    },
+    "skarnheim": {
+      "rations": 0.9
+    },
+    "hvarnland": {
+      "rations": 0.95
+    },
+    "eyjamark": {
+      "rations": 1.05
+    },
+    "rimewild": {
+      "rations": 0.7
+    },
+    "isafold": {
+      "rations": 0.8
+    },
+    "greenshore": {
+      "rations": 0.85
+    },
+    "cael": {
+      "rations": 1.0
+    },
+    "albrenn": {
+      "rations": 1.15
+    },
+    "saraleon": {
+      "rations": 1.1
+    },
+    "velkar": {
+      "rations": 1.1
+    },
+    "corvaine": {
+      "rations": 1.15
+    }
+  },
+  "regionPrice": {
+    "saraleon": {
+      "furs": 1.2,
+      "ivory": 1.2,
+      "amber": 1.2,
+      "timber": 1.1
+    },
+    "corvaine": {
+      "furs": 1.1,
+      "ivory": 1.1,
+      "amber": 1.1
+    },
+    "rimewild": {
+      "silk": 1.2,
+      "wine": 1.2,
+      "jewelry": 1.15,
+      "cloth": 1.1,
+      "iron": 1.1
+    },
+    "isafold": {
+      "timber": 1.2,
+      "cloth": 1.1,
+      "wine": 1.2,
+      "iron": 1.1
+    },
+    "greenshore": {
+      "cloth": 1.1,
+      "iron": 1.1
+    }
+  },
+  "tagProduction": {
+    "iron": {
+      "iron": 0.4
+    },
+    "ironBogs": {
+      "iron": 0.25
+    },
+    "furs": {
+      "furs": 0.3
+    },
+    "huntersCamp": {
+      "furs": 0.3,
+      "ivory": 0.03
+    },
+    "tradingPost": {
+      "furs": 0.1,
+      "ivory": 0.02
+    },
+    "lakes": {
+      "rations": 0.3
+    },
+    "straits": {
+      "salt": 0.05
+    }
+  },
+  "craftGoods": ["cloth", "jewelry", "weapons"],
+  "luxuryTags": ["luxury", "prestige", "feast"],
+  "foodGoods": ["rations"],
+  "tiers": {
+    "hamlet": {
+      "prod": 1,
+      "craft": 0.5,
+      "cons": 0.9,
+      "luxury": 0.4,
+      "stock": 0.6,
+      "targetFloor": 0.5
+    },
+    "village": {
+      "prod": 1,
+      "craft": 0.8,
+      "cons": 1,
+      "luxury": 0.7,
+      "stock": 0.8,
+      "targetFloor": 1.5
+    },
+    "town": {
+      "prod": 1,
+      "craft": 1.2,
+      "cons": 1,
+      "luxury": 1,
+      "stock": 1,
+      "targetFloor": 2.5
+    },
+    "city": {
+      "prod": 1,
+      "craft": 1.6,
+      "cons": 1.05,
+      "luxury": 1.4,
+      "stock": 1.3,
+      "targetFloor": 4
+    },
+    "capital": {
+      "prod": 1,
+      "craft": 1.5,
+      "cons": 1.05,
+      "luxury": 1.6,
+      "stock": 1.3,
+      "targetFloor": 5
+    },
+    "cloister": {
+      "prod": 1,
+      "craft": 0.6,
+      "cons": 1,
+      "luxury": 0.6,
+      "stock": 0.8,
+      "targetFloor": 1,
+      "goods": {
+        "honey": 4,
+        "wine": 3,
+        "cloth": 1.5
+      }
+    },
+    "fortress": {
+      "prod": 0,
+      "craft": 0,
+      "cons": 1,
+      "luxury": 0.5,
+      "stock": 1,
+      "targetFloor": 0.5,
+      "fixed": {
+        "rations": 25,
+        "weapons": 3,
+        "iron": 2,
+        "timber": 6,
+        "pitch": 1
+      }
+    },
+    "emporium": {
+      "prod": 1,
+      "craft": 1.3,
+      "cons": 1,
+      "luxury": 1.5,
+      "stock": 2,
+      "targetFloor": 6
+    },
+    "templeStead": {
+      "prod": 1,
+      "craft": 0.6,
+      "cons": 1,
+      "luxury": 0.6,
+      "stock": 0.8,
+      "targetFloor": 1,
+      "goods": {
+        "mead": 2.5,
+        "honey": 1.5
+      }
+    }
+  },
+  "buildingGoods": {
+    "smithy": {
+      "prod": {
+        "weapons": [0.03, 0.06, 0.12]
+      },
+      "cons": {
+        "iron": [0.08, 0.15, 0.3]
+      }
+    },
+    "shipyard": {
+      "cons": {
+        "timber": [1, 2, 3],
+        "pitch": [0.06, 0.12, 0.2]
+      }
+    },
+    "meadhall": {
+      "cons": {
+        "mead": [0.15, 0.35]
+      }
+    },
+    "grove": {
+      "cons": {
+        "mead": [0.1, 0.2],
+        "honey": [0.02, 0.04]
+      }
+    }
+  },
+  "marketStockMult": [1.2, 1.5],
+  "market": {
+    "targetMonths": 3,
+    "prodTargetMonths": 1,
+    "overstockMult": 4,
+    "overstockDecay": 0.3,
+    "warmupMonths": 6,
+    "initialStock": [0.8, 1.2],
+    "foreignTariff": 0.1,
+    "minMerchantEdge": 0.01,
+    "stockDecimals": 3,
+    "volumeAlpha": 0.5
+  },
+  "flows": {
+    "laneTonsPerMonth": 8,
+    "sizeFactor": {
+      "hamlet": 0.2,
+      "village": 0.5,
+      "town": 1,
+      "city": 2,
+      "capital": 2,
+      "cloister": 0.2,
+      "fortress": 0.1,
+      "emporium": 3,
+      "templeStead": 0.3
+    },
+    "transportCostBase": 0.06,
+    "transportCostPerDay": 0.015,
+    "landCostMult": 2.5,
+    "flowRate": 0.5,
+    "maxSourceShare": 0.4,
+    "pactTrafficMult": 1.5,
+    "foreignTariff": 0.05,
+    "fallback": {
+      "neighbours": 4,
+      "maxCells": 140,
+      "landNeighbours": 2,
+      "landMaxCells": 50,
+      "seaDetour": 1.3,
+      "landDetour": 1.2,
+      "cellKm": 5,
+      "seaKmPerDay": 120,
+      "landKmPerDay": 30
+    }
+  },
+  "drift": {
+    "cultureBase": {
+      "saraleonese": 0.4,
+      "corvani": 0.3,
+      "rime": -0.3,
+      "kurgai": -0.2
+    },
+    "foodWeight": 1,
+    "foodMin": -1,
+    "foodMax": 0.5,
+    "tradeWeight": 0.6,
+    "volumeShareRef": 0.25,
+    "devastation": -3,
+    "war": -0.5,
+    "siege": -1.5,
+    "blockade": -1,
+    "eventDecay": 0.25,
+    "stepChance": 0.5,
+    "hysteresis": 0.15
+  },
+  "events": {
+    "famineDays": 90,
+    "goodHarvestDays": 120,
+    "maxMult": 5,
+    "minMult": 0.2
+  },
+  "ledger": {
+    "lieutenantRoles": ["lieutenant", "governor", "envoy", "captain", "regent", "steward"],
+    "aiGarrisonWageMult": 0.35,
+    "fallbackUnitWage": 1,
+    "crownFlagPrefix": "crown:",
+    "straitsTag": "straits",
+    "straitsFullRateCulture": "eyjar"
+  },
+  "arrears": {
+    "capMonths": 3,
+    "moraleMin": 0,
+    "moraleMax": 100
+  },
+  "trade": {
+    "dockRadius": 3,
+    "proceedsToFleetAbroad": true,
+    "rapportPerThousand": 1,
+    "rapportGainCap": 2,
+    "maxTonsPerGood": 1000
+  },
+  "haggle": {
+    "maxAskPct": 15,
+    "base": 0.55,
+    "speechcraftPer": 0.04,
+    "rapportPer": 0.01,
+    "greedWeight": 0.4,
+    "askWeight": 0.025,
+    "roundPenalty": 0.08,
+    "minChance": 0.05,
+    "maxChance": 0.95,
+    "counterBand": 0.3,
+    "counterShare": 0.5,
+    "rapportLossOnRefuse": 3,
+    "rapportLossPerRound": 1,
+    "rapportGainOnAccept": 1,
+    "rapportRange": [-50, 50],
+    "greedRange": [0.2, 0.8]
+  },
+  "routes": {
+    "shipTypes": ["knarr"],
+    "factorSpeechcraft": 3,
+    "maxTripsPerMonth": 4,
+    "minRoundTripDays": 6,
+    "portDays": 2,
+    "maxStockShare": 0.5,
+    "minMarginPct": 0.05,
+    "harbourToll": 8,
+    "piracyPerLeg": 0.03,
+    "piracyWarMult": 2.5,
+    "safeHarbourMult": 0.6,
+    "stormPerLeg": {
+      "spring": 0.02,
+      "summer": 0.01,
+      "autumn": 0.04,
+      "winter": 0.08
+    },
+    "stormLossShare": 0.4,
+    "stormHullDamage": 20,
+    "stormSinkChance": 0.1
+  },
+  "loot": {
+    "priceMode": "local"
+  },
+  "storehouse": {
+    "startRationDays": 45,
+    "startGoods": {}
+  }
+}

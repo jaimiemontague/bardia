@@ -1,0 +1,44 @@
+{
+  "people.illus.featChoice": {
+    "kind": "image",
+    "path": "people/feat-choice.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "feast", "seed": 1201 }, "label": "A Saga Feat" }
+  },
+  "people.illus.captivity": {
+    "kind": "image",
+    "path": "people/captivity.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "captivity", "seed": 1202 }, "label": "In Chains" }
+  },
+  "people.illus.succession": {
+    "kind": "image",
+    "path": "people/succession.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "funeral", "seed": 1203 }, "label": "The High Seat Stands Empty" }
+  },
+  "people.illus.birth": {
+    "kind": "image",
+    "path": "people/birth.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "birth", "seed": 1204 }, "label": "A Child Is Born" }
+  },
+  "people.illus.wedding": {
+    "kind": "image",
+    "path": "people/wedding.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "wedding", "seed": 1205 }, "label": "A Wedding" }
+  },
+  "people.illus.sickness": {
+    "kind": "image",
+    "path": "people/sickness.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "sickness", "seed": 1206 }, "label": "Old Age Weighs Heavy" }
+  },
+  "people.illus.houseFallen": {
+    "kind": "image",
+    "path": "people/house-fallen.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "barrow", "season": "winter", "time": "dusk", "seed": 1207 }, "label": "The House Falls Silent" }
+  }
+}

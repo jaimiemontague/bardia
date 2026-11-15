@@ -1,0 +1,29 @@
+{
+  "$notes": "Smith greetings (design §26.3 line pools: role × context, conditions on economy, standing and the visitor). The caller binds `settlement` (where the smithy is) and optionally `character` (the smith). No line repeats within a session while unused eligible lines remain; weights decay with use.",
+  "pools": [
+    {
+      "id": "smith.greeting",
+      "role": "smith",
+      "context": "greeting",
+      "scope": ["settlement", "character"],
+      "voice": "narrator",
+      "lines": [
+        { "id": "sparks", "textKey": "narrative.line.smith.greeting.sparks" },
+        { "id": "axeHeads", "textKey": "narrative.line.smith.greeting.axeHeads" },
+        { "id": "hands", "textKey": "narrative.line.smith.greeting.hands" },
+        { "id": "cheapIron", "textKey": "narrative.line.smith.greeting.cheapIron", "when": "settlement.economy == 'thriving'", "weight": 14 },
+        {
+          "id": "pots",
+          "textKey": "narrative.line.smith.greeting.pots",
+          "when": "settlement.economy == 'poor' || settlement.economy == 'destitute' || settlement.economy == 'ruined'",
+          "weight": 14
+        },
+        { "id": "famous", "textKey": "narrative.line.smith.greeting.famous", "when": "house.renown >= 100", "weight": 12 },
+        { "id": "youngJarl", "textKey": "narrative.line.smith.greeting.youngJarl", "when": "ruler.age < 20", "weight": 12 },
+        { "id": "warmth", "textKey": "narrative.line.smith.greeting.warmth", "when": "time.season == 'winter'", "weight": 12 },
+        { "id": "dread", "textKey": "narrative.line.smith.greeting.dread", "when": "house.dread >= 30", "weight": 16 },
+        { "id": "yourForge", "textKey": "narrative.line.smith.greeting.yourForge", "when": "settlement.isPlayerHolding", "weight": 12 }
+      ]
+    }
+  ]
+}

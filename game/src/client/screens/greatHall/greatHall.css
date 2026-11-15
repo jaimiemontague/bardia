@@ -1,0 +1,124 @@
+/* The Great hall and its Muster on the §20 layout: words and big doors; one decision per tab. */
+.gh-realm {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+.gh-words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.gh-line {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  margin: 0;
+  font-size: var(--fs-lg);
+  line-height: 1.35;
+  color: var(--c-text);
+}
+.gh-line > .icon {
+  flex: none;
+  margin-top: 0.2em;
+  color: var(--gold-1);
+}
+.gh-line.tone-bad,
+.gh-line.tone-bad > .icon {
+  color: var(--c-danger);
+}
+.gh-details {
+  margin-top: var(--sp-2);
+}
+.gh-doors {
+  gap: var(--sp-4);
+}
+.gh-doors .choice {
+  min-height: 9.5rem;
+  justify-content: flex-start;
+}
+
+.gh-muster {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.gh-intro {
+  margin: 0;
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-2);
+}
+.gh-kinds {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+  gap: var(--sp-2);
+}
+.gh-kinds .choice {
+  padding-right: var(--sp-6);
+}
+.gh-muster-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-5);
+  padding-top: var(--sp-3);
+  border-top: 1px solid rgba(240, 200, 120, 0.14);
+}
+.gh-cost {
+  flex: 1 1 20rem;
+  margin: 0;
+  font-size: var(--fs-lg);
+}
+.gh-go {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.gh-go .bld-why {
+  font-size: var(--fs-md);
+  margin: 0;
+}
+.gh-gathering {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-md);
+  color: var(--c-text-2);
+}
+.gh-details-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-5);
+}
+.gh-note {
+  margin: var(--sp-1) 0;
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.gh-sub {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-dim);
+}
+.gh-promote {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+@media (max-width: 1000px) {
+  .gh-realm,
+  .gh-details-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

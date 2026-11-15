@@ -1,0 +1,143 @@
+/* The Seer's Hut (route 'building.seer'): a quiet, firelit scene with two big choices and what the seer says. */
+.sr-frame > .frame-body {
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 100%, rgba(214, 120, 40, 0.13), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(60, 80, 110, 0.12), transparent 70%);
+  border-radius: var(--r-md);
+}
+.sr-choices .choice {
+  min-height: 9rem;
+  justify-content: flex-start;
+}
+.sr-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.sr-say {
+  margin: 0;
+  font-size: var(--fs-lg);
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--c-text-2);
+  text-align: center;
+}
+.sr-omens {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+@media (max-width: 900px) {
+  .sr-omens {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.sr-omen {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  height: 100%;
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-border);
+  background: rgba(0, 0, 0, 0.25);
+  text-align: center;
+  cursor: help;
+}
+.sr-omen:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+.sr-omen-what {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+}
+.sr-omen-word {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  color: var(--c-text-2);
+}
+.sr-omen-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: var(--fs-md);
+  line-height: 1.35;
+  color: var(--c-text-dim);
+}
+.sr-omen.tone-good {
+  border-color: rgba(120, 170, 90, 0.6);
+}
+.sr-omen.tone-good .sr-omen-word {
+  color: var(--c-success);
+}
+.sr-omen.tone-bad {
+  border-color: rgba(194, 73, 58, 0.6);
+}
+.sr-omen.tone-bad .sr-omen-word {
+  color: var(--c-danger);
+}
+.sr-omen.tone-unread {
+  border-style: dashed;
+  opacity: 0.8;
+}
+.sr-wounded {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.sr-patient {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.22);
+}
+.sr-patient-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.sr-patient-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--gold-0);
+}
+.sr-patient-acts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  align-items: flex-end;
+}
+.sr-heal-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+}
+@media (max-width: 760px) {
+  .sr-patient {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .sr-patient-acts {
+    grid-column: 1 / -1;
+    align-items: stretch;
+  }
+}

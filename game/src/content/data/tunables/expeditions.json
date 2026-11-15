@@ -1,0 +1,18 @@
+{
+  "homeRadius": 3,
+  "reboardRadius": 2,
+  "spawnRationDays": 30,
+  "forageModes": ["beached", "landed"],
+  "lost": {
+    "survivorShare": 0.5,
+    "overlandSurvivorShare": 0.9,
+    "leaderWoundChance": 0.5,
+    "leaderWound": "minor",
+    "fallbackHarbours": 4
+  },
+  "march": {
+    "foodDaysPerMan": 21,
+    "carryTonsPerMan": 0.05,
+    "fallbackHoldings": 4
+  }
+}

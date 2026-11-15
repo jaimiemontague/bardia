@@ -1,0 +1,18 @@
+{
+  "seaWise": { "name": "Sea-Wise", "description": "Storms -20%.", "modifiers": { "storm.chancePct": -20 }, "flags": [] },
+  "ringGiversFame": { "name": "Ring-Giver's Fame", "description": "Feast and ring-giving Renown +50%.", "modifiers": { "feast.renownPct": 50 }, "flags": [] },
+  "oathSwornHird": { "name": "Oath-Sworn Hird", "description": "Lieutenant loyalty +10.", "modifiers": { "loyalty.lieutenants": 10 }, "flags": [] },
+  "shieldBrother": { "name": "Shield-Brother", "description": "Your squad Def +10%.", "modifiers": { "squad.ownDefPct": 10 }, "flags": [] },
+  "wolfLeader": { "name": "Wolf-Leader", "description": "+1 berserker/Wolf-coat squad.", "modifiers": { "battle.extraBerserkerSquads": 1 }, "flags": [] },
+  "ironLung": { "name": "Iron-Lung", "description": "Rowing stamina drain -30%.", "modifiers": { "rowing.staminaDrainPct": -30 }, "flags": [] },
+  "silverWeigher": { "name": "Silver-Weigher", "description": "Prices +5% in your favour.", "modifiers": { "prices.favorPct": 5 }, "flags": [] },
+  "thingVoice": { "name": "Thing-Voice", "description": "Allthing speech checks +15%.", "modifiers": { "thing.speechPct": 15 }, "flags": [] },
+  "farSeer": { "name": "Far-Seer", "description": "Sight radius +1 league; storms seen 24 h earlier.", "modifiers": { "sight.leagues": 1, "storm.warningHours": 24 }, "flags": [] },
+  "hallBurner": { "name": "Hall-Burner", "description": "Fire spread +30%; sack Dread +3.", "modifiers": { "fire.spreadPct": 30, "sack.dread": 3 }, "flags": [] },
+  "kinKeeper": { "name": "Kin-Keeper", "description": "Family opinion +20; marriage acceptance +10.", "modifiers": { "family.opinion": 20, "marriage.acceptance": 10 }, "flags": [] },
+  "duelist": { "name": "Duelist", "description": "Parry window +40 ms; duel damage +10%.", "modifiers": { "duel.parryMs": 40, "duel.damagePct": 10 }, "flags": [] },
+  "quartermaster": { "name": "Quartermaster", "description": "Ration use -15%; no spoilage.", "modifiers": { "rations.usePct": -15 }, "flags": ["noSpoilage"] },
+  "stonewall": { "name": "Stonewall", "description": "Holdings +1 effective fortification tier against raids.", "modifiers": { "holdings.fortTierVsRaids": 1 }, "flags": [] },
+  "sagaSmith": { "name": "Saga-Smith", "description": "Renown +10%; epitaph +1 tier if already at tier 2 or higher.", "modifiers": { "renown.gainPct": 10 }, "flags": ["epitaphBoost"] },
+  "runeReader": { "name": "Rune-Reader", "description": "Omens one step better 25% of the time; an extra legend clue.", "modifiers": { "omen.shiftChance": 0.25, "legend.extraClue": 1 }, "flags": [] }
+}

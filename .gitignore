@@ -1,0 +1,23 @@
+# The old disc image kept locally as a genre reference. It is another publisher's
+# product and is never part of this repository.
+Vikings Ultimate Conquest ISO/
+
+# The design document is held back until the owner decides whether to publish it
+# (its research chapter describes the contents of that disc).
+Bardia_Design_and_Build_Plan.md
+
+# Local tooling state
+.claude/
+
+# Build output, dependencies and test output
+game/node_modules/
+game/dist/
+game/coverage/
+game/test-results*/
+game/playwright-report/
+game/tools/out/
+game/tools/_tmp_shell/
+
+*.log
+.DS_Store
+Thumbs.db

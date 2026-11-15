@@ -1,0 +1,432 @@
+{
+  "settlements.scene.arrival.hamlet": {
+    "kind": "image",
+    "path": "settlements/arrival-hamlet.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "hamlet",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a hamlet: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.hamlet": {
+    "kind": "image",
+    "path": "settlements/visit-hamlet.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "hamlet",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a hamlet: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.village": {
+    "kind": "image",
+    "path": "settlements/arrival-village.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "village",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a village: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.village": {
+    "kind": "image",
+    "path": "settlements/visit-village.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "village",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a village: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.town": {
+    "kind": "image",
+    "path": "settlements/arrival-town.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "town",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a town: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.town": {
+    "kind": "image",
+    "path": "settlements/visit-town.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "town",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a town: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.city": {
+    "kind": "image",
+    "path": "settlements/arrival-city.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "city",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a city: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.city": {
+    "kind": "image",
+    "path": "settlements/visit-city.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "city",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a city: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.capital": {
+    "kind": "image",
+    "path": "settlements/arrival-capital.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "capital",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a capital: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.capital": {
+    "kind": "image",
+    "path": "settlements/visit-capital.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "capital",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a capital: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.cloister": {
+    "kind": "image",
+    "path": "settlements/arrival-cloister.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "cloister",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a cloister: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.cloister": {
+    "kind": "image",
+    "path": "settlements/visit-cloister.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "cloister",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a cloister: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.fortress": {
+    "kind": "image",
+    "path": "settlements/arrival-fortress.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "fortress",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a fortress: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.fortress": {
+    "kind": "image",
+    "path": "settlements/visit-fortress.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "fortress",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a fortress: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.emporium": {
+    "kind": "image",
+    "path": "settlements/arrival-emporium.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "emporium",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a emporium: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.emporium": {
+    "kind": "image",
+    "path": "settlements/visit-emporium.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "emporium",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a emporium: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.templeStead": {
+    "kind": "image",
+    "path": "settlements/arrival-temple-stead.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "templeStead",
+        "focus": 0.66
+      },
+      "label": "Arrival by sea at a temple stead: seen from our ship's bow, the shore, jetty and houses ahead, walls as the place has them. Subject on the right two thirds; the left third stays calm for text."
+    }
+  },
+  "settlements.scene.visit.templeStead": {
+    "kind": "image",
+    "path": "settlements/visit-temple-stead.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "templeStead",
+        "focus": 0.62,
+        "time": "day"
+      },
+      "label": "Visiting a temple stead: standing on its quay among barrels and mooring posts, the houses and hall close above the strand. Subject on the right two thirds."
+    }
+  },
+  "settlements.scene.arrival.raided": {
+    "kind": "image",
+    "path": "settlements/arrival-raided.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "village",
+        "economy": "ruined",
+        "focus": 0.66
+      },
+      "label": "Arrival at a place raided not long ago: charred roofs, black smoke, an empty strand, seen from our ship's bow."
+    }
+  },
+  "settlements.scene.overland": {
+    "kind": "image",
+    "path": "settlements/arrival-overland.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "panorama",
+      "params": {
+        "tier": "town",
+        "focus": 0.66
+      },
+      "label": "Arrival overland: a settlement seen from a rise across the heath, our own spears in the foreground."
+    }
+  },
+  "settlements.scene.aftermath": {
+    "kind": "image",
+    "path": "settlements/aftermath.jpg",
+    "size": [
+      1920,
+      1080
+    ],
+    "anchor": [
+      0.5,
+      0.5
+    ],
+    "placeholder": {
+      "generator": "vignette",
+      "params": {
+        "scene": "aftermath",
+        "seed": 43
+      },
+      "label": "After the assault: the taken settlement behind, smoke rising red in the dusk, our warriors with a banner in the foreground."
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "$notes": "After battle (design §19.4: the skald counts what can be sung). afterTheShieldWall reacts to the battle module's BattleEnded event when the player took part; two of its choices chain straight into skaldsDraft (followUp). skaldsDraft uses the 'scheduled' trigger so it only ever runs when chained or scheduled.",
+  "storylets": [
+    {
+      "id": "afterTheShieldWall",
+      "scope": "player",
+      "trigger": "onBattleEnd",
+      "triggerParams": { "player": true },
+      "when": "ruler.alive",
+      "cooldownDays": 30,
+      "titleKey": "narrative.storylet.afterTheShieldWall.title",
+      "textKey": "narrative.storylet.afterTheShieldWall.text",
+      "illustration": "narrative.illus.afterTheShieldWall",
+      "choices": [
+        {
+          "labelKey": "narrative.storylet.afterTheShieldWall.wounded",
+          "previewKey": "narrative.storylet.afterTheShieldWall.wounded.preview",
+          "followUp": "skaldsDraft",
+          "effects": [{ "op": "changeHonor", "amount": 2 }]
+        },
+        {
+          "labelKey": "narrative.storylet.afterTheShieldWall.skald",
+          "previewKey": "narrative.storylet.afterTheShieldWall.skald.preview",
+          "followUp": "skaldsDraft",
+          "effects": []
+        },
+        {
+          "labelKey": "narrative.storylet.afterTheShieldWall.plunder",
+          "previewKey": "narrative.storylet.afterTheShieldWall.plunder.preview",
+          "effects": [
+            { "op": "changeDread", "amount": 1 },
+            { "op": "changeHonor", "amount": -1 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skaldsDraft",
+      "scope": "player",
+      "trigger": "scheduled",
+      "titleKey": "narrative.storylet.skaldsDraft.title",
+      "textKey": "narrative.storylet.skaldsDraft.text",
+      "illustration": "narrative.illus.skaldsDraft",
+      "importance": 2,
+      "choices": [
+        {
+          "labelKey": "narrative.storylet.skaldsDraft.slaughter",
+          "previewKey": "narrative.storylet.skaldsDraft.slaughter.preview",
+          "chronicleKey": "narrative.storylet.skaldsDraft.slaughter.chronicle",
+          "effects": [
+            { "op": "changeDread", "amount": 2 },
+            { "op": "changeRenown", "amount": 3 }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.skaldsDraft.fallen",
+          "previewKey": "narrative.storylet.skaldsDraft.fallen.preview",
+          "chronicleKey": "narrative.storylet.skaldsDraft.fallen.chronicle",
+          "effects": [
+            { "op": "changeHonor", "amount": 2 },
+            { "op": "changeRenown", "amount": 2 }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.skaldsDraft.self",
+          "previewKey": "narrative.storylet.skaldsDraft.self.preview",
+          "chronicleKey": "narrative.storylet.skaldsDraft.self.chronicle",
+          "effects": [
+            { "op": "changeRenown", "amount": 5 },
+            { "op": "changeHonor", "amount": -1 }
+          ]
+        }
+      ]
+    }
+  ]
+}

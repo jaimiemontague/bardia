@@ -1,0 +1,5 @@
+{
+  "//": "Test/tooling program: sim, content, tools, e2e tests and configs WITH their *.test.ts files. Excludes src/client so test-only augmentations (CommandMap, PendingPayloads, …) never widen the client's unions; the client is checked by tsconfig.app.json.",
+  "extends": "./tsconfig.base.json",
+  "include": ["src/sim", "src/content", "tools", "tests", "vite.config.ts", "vitest.config.ts", "playwright.config.ts"]
+}

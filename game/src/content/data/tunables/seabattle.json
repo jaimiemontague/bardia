@@ -1,0 +1,296 @@
+{
+  "ships": {
+    "karvi": {
+      "lengthM": 18,
+      "beamM": 4.5,
+      "turnDegS": 14,
+      "deepDraft": false
+    },
+    "snekkja": {
+      "lengthM": 20,
+      "beamM": 3.6,
+      "turnDegS": 12,
+      "deepDraft": false
+    },
+    "drakkar": {
+      "lengthM": 30,
+      "beamM": 4.6,
+      "turnDegS": 8,
+      "deepDraft": true
+    },
+    "knarr": {
+      "lengthM": 16,
+      "beamM": 4.8,
+      "turnDegS": 7,
+      "deepDraft": true
+    },
+    "galley": {
+      "lengthM": 32,
+      "beamM": 5,
+      "turnDegS": 9,
+      "deepDraft": true
+    },
+    "riverboat": {
+      "lengthM": 11,
+      "beamM": 2.6,
+      "turnDegS": 16,
+      "deepDraft": false
+    }
+  },
+  "physics": {
+    "knotMs": 0.514444,
+    "accelS": 8,
+    "decelS": 12,
+    "oarsTurnMult": 1.4,
+    "sailTurnMinFactor": 0.35,
+    "sailTurnFullSpeedMs": 2.5,
+    "reverseRowMult": 0.4,
+    "oarsShareOfCrewMax": 0.5,
+    "rowStaminaDrainPerS": 0.25,
+    "staminaRecoverPerS": 0.5,
+    "sailHpSpeedFloor": 0.35,
+    "pushDecayPerS": 1.5,
+    "restitution": 0.3,
+    "collisionDamagePerMs": 4,
+    "collisionMinSpeedMs": 0.8,
+    "rockDamagePerMs": 8,
+    "groundDamagePerMs": 3,
+    "groundedS": 12,
+    "shallowSpeedMult": 0.6,
+    "exitMarginM": 40,
+    "rowPowerExp": 0.5,
+    "edgeAvoidM": 120,
+    "staminaThrottleExp": 2,
+    "groundedBackOffS": 6,
+    "groundMinSpeedMs": 0.6,
+    "bumpBackOffS": 3
+  },
+  "archery": {
+    "deckCover": 0.6,
+    "levyRangedAtk": 2,
+    "fireArrowHitMult": 0.75,
+    "pitchPerVolleyT": 0.02,
+    "defaultPitchT": 1,
+    "losSamples": 6,
+    "fireArrowsDefault": true
+  },
+  "fire": {
+    "burningMoralePerS": -1,
+    "sailBurnoutHullChance": 0.35,
+    "sailBurnoutHullDps": 2,
+    "sailBurnoutHullS": 12,
+    "seaFireDouseMult": 0.5,
+    "seaFireHalfAngleDeg": 20,
+    "seaFireCooldownS": 15,
+    "seaFireCharges": 3,
+    "seaFireCrewLossPct": 0.05,
+    "seaFireCultures": ["saraleonese"],
+    "furledIgniteMult": 0.4
+  },
+  "ram": {
+    "minSpeedMs": 1.5,
+    "fullSpeedMs": 3,
+    "cooldownS": 25,
+    "backOffS": 6,
+    "selfDamage": 4,
+    "crewLossPct": 0.06,
+    "morale": -10,
+    "reachM": 2
+  },
+  "boarding": {
+    "grappleSetupS": 5,
+    "cutFreeIntervalS": 2.5,
+    "cutFreeBase": 0.6,
+    "cutFreeMin": 0.05,
+    "cutFreeMax": 0.5,
+    "regrappleCooldownS": 12,
+    "deckRoundS": 5,
+    "attackerShare": {
+      "boarders": 1,
+      "archers": 0.5,
+      "rowers": 0
+    },
+    "defenderShare": {
+      "boarders": 1,
+      "archers": 1,
+      "rowers": 1
+    },
+    "surrenderCrewPct": 0.15,
+    "captainDeckKillChance": 0.3,
+    "caughtRangeM": 25,
+    "duelStakes": "yield",
+    "merchantStrikesWhenGrappled": true
+  },
+  "morale": {
+    "flagshipLost": -25,
+    "safeRadiusM": 120
+  },
+  "sinking": {
+    "swimSurvival": 0.4,
+    "rescueRadiusM": 150,
+    "captainSurvival": 0.75,
+    "flagshipTransferRadiusM": 250,
+    "playerWoundOnTransfer": 0.3
+  },
+  "ai": {
+    "replanS": 0.5,
+    "boardAdvantage": 1.2,
+    "keepRangeShare": 0.7,
+    "lookaheadS": 8,
+    "upwindBiasDeg": 30,
+    "ramRangeM": 350,
+    "closeQuartersM": 150,
+    "restStamina": 35,
+    "sailIfStaminaRatio": 0.6,
+    "cutFreeBelowRatio": 1,
+    "fleeRays": 16,
+    "targetStickiness": 0.7,
+    "boardTargetBias": 0.6,
+    "alongsideGapM": 4,
+    "cruiseThrottle": 0.8,
+    "cruiseBeyondM": 400,
+    "ramCatchRatio": 0.8,
+    "boardWaveringAdvantage": 1
+  },
+  "orders": {
+    "followSpacingM": 45,
+    "screenDistM": 70,
+    "arriveRadiusM": 20
+  },
+  "battle": {
+    "maxBattleS": 1800,
+    "retreatTimeoutS": 90,
+    "spawnSeparationM": 800,
+    "lineSpacingM": 55,
+    "rowSpacingM": 70,
+    "shipsPerRow": 5,
+    "spawnClearM": 200,
+    "slipAwayClearM": 250,
+    "chaseSpawnSeparationM": 160
+  },
+  "deck": {
+    "default": {
+      "archers": 0.25,
+      "boarders": 0.3
+    },
+    "merchant": {
+      "archers": 0.3,
+      "boarders": 0
+    }
+  },
+  "setup": {
+    "defaultUnit": "bondi",
+    "explicitCrewShare": 0.8,
+    "windWeights": {
+      "calm": 0.5,
+      "light": 3,
+      "fresh": 4,
+      "strong": 2,
+      "gale": 0.5
+    }
+  },
+  "autoresolve": {
+    "dreadCap": 15,
+    "galleyRamMult": 1.2,
+    "seaFireMult": 2,
+    "captureShare": 0.6,
+    "shipLossPerCasualty": 1,
+    "winnerShipLossAt": 0.3,
+    "hullDamagePerCasualty": 0.8,
+    "gaugeSpeedEdge": 0.12,
+    "prizeHullShare": [0.3, 0.6],
+    "durationS": [240, 900],
+    "fireArrowsMult": 1.3,
+    "ratioSharpness": 3,
+    "drakkarMult": 1.4
+  },
+  "xp": {
+    "base": 15,
+    "win": 25,
+    "perShip": 10
+  },
+  "arenaGen": {
+    "cellM": 10,
+    "fallback": "openSea"
+  },
+  "arenas": {
+    "openSea": {
+      "coasts": 0,
+      "coastDepthM": [0, 0],
+      "coastRoughnessM": 0,
+      "islands": [0, 2],
+      "islandRadiusM": [40, 110],
+      "rocks": [2, 6],
+      "rockRadiusM": [4, 10],
+      "shoals": [1, 3],
+      "shoalRadiusM": [30, 80],
+      "shallowsM": 40,
+      "rockShallowsM": 14
+    },
+    "coastal": {
+      "coasts": 1,
+      "coastDepthM": [220, 380],
+      "coastRoughnessM": 90,
+      "islands": [1, 3],
+      "islandRadiusM": [40, 120],
+      "rocks": [4, 10],
+      "rockRadiusM": [4, 10],
+      "shoals": [2, 4],
+      "shoalRadiusM": [30, 80],
+      "shallowsM": 60,
+      "rockShallowsM": 14
+    },
+    "skerries": {
+      "coasts": 0,
+      "coastDepthM": [0, 0],
+      "coastRoughnessM": 0,
+      "islands": [6, 10],
+      "islandRadiusM": [30, 90],
+      "rocks": [10, 18],
+      "rockRadiusM": [4, 12],
+      "shoals": [3, 6],
+      "shoalRadiusM": [25, 70],
+      "shallowsM": 35,
+      "rockShallowsM": 14
+    },
+    "strait": {
+      "coasts": 2,
+      "coastDepthM": [380, 520],
+      "coastRoughnessM": 80,
+      "islands": [0, 2],
+      "islandRadiusM": [40, 90],
+      "rocks": [3, 8],
+      "rockRadiusM": [4, 10],
+      "shoals": [1, 3],
+      "shoalRadiusM": [30, 70],
+      "shallowsM": 50,
+      "rockShallowsM": 14
+    },
+    "fjord": {
+      "coasts": 2,
+      "coastDepthM": [480, 600],
+      "coastRoughnessM": 120,
+      "islands": [0, 1],
+      "islandRadiusM": [30, 70],
+      "rocks": [2, 5],
+      "rockRadiusM": [4, 10],
+      "shoals": [0, 2],
+      "shoalRadiusM": [25, 60],
+      "shallowsM": 30,
+      "rockShallowsM": 12
+    },
+    "river": {
+      "coasts": 2,
+      "coastDepthM": [650, 760],
+      "coastRoughnessM": 60,
+      "islands": [0, 2],
+      "islandRadiusM": [25, 60],
+      "rocks": [2, 6],
+      "rockRadiusM": [3, 8],
+      "shoals": [2, 5],
+      "shoalRadiusM": [25, 60],
+      "shallowsM": 70,
+      "rockShallowsM": 12
+    }
+  }
+}

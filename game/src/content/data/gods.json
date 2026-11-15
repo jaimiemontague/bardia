@@ -1,0 +1,65 @@
+{
+  "valgrim": {
+    "name": "Valgrim",
+    "epithet": "the Hooded Wanderer",
+    "domains": ["wisdom", "runes", "the war-dead", "ravens"],
+    "favorRises": ["battleWon", "legendLearned", "groveSacrifice"],
+    "favorEffects": ["xpGain", "omenAccuracy"],
+    "omenActivities": ["voyage", "battle"],
+    "description": "The wanderer the seers invoke. Men who believe he watches fight and learn with more confidence; his favour is the house's reputation for wisdom and nerve."
+  },
+  "dunnar": {
+    "name": "Dunnar",
+    "epithet": "Stormfist",
+    "domains": ["thunder", "strength", "protection of the folk"],
+    "favorRises": ["holdingDefended", "feastHeld"],
+    "favorEffects": ["battleMorale", "holdingDefence"],
+    "omenActivities": ["battle", "duel"],
+    "description": "Protector of the common folk. A house in his favour has warriors who believe they cannot lose at home."
+  },
+  "saltha": {
+    "name": "Saltha",
+    "epithet": "Mother of the Sea",
+    "domains": ["the sea's bounty", "drownings"],
+    "favorRises": ["voyageOffering", "stormSurvived"],
+    "favorEffects": ["stormLuck", "fishing"],
+    "omenActivities": ["voyage"],
+    "description": "The sea that feeds and drowns. Crews who trust her keep their heads in foul weather and read the water better."
+  },
+  "fjorna": {
+    "name": "Fjorna",
+    "epithet": "Goldtear",
+    "domains": ["harvest", "love", "wealth", "fertility"],
+    "favorRises": ["marriage", "harvestFeast", "giftGiven"],
+    "favorEffects": ["harvest", "births", "tradeLuck"],
+    "omenActivities": ["harvest"],
+    "description": "Giver of plenty. Her favour stands for good fortune in fields, cradles and markets, and a reputation for open-handedness."
+  },
+  "eidr": {
+    "name": "Eidr",
+    "epithet": "the Oath-Bound",
+    "domains": ["law", "oaths", "single combat"],
+    "favorRises": ["oathKept", "holmgangWon", "weregildPaid"],
+    "favorEffects": ["duelNerve", "thingVotes", "diplomacy"],
+    "omenActivities": ["duel"],
+    "description": "Keeper of oaths and the holmgang square. A house known to honour him is trusted at the Thing and feared in single combat."
+  },
+  "skell": {
+    "name": "Skell",
+    "epithet": "the Laughing Flame",
+    "domains": ["fire", "cunning", "change"],
+    "favorRises": ["hallBurned", "foeTricked"],
+    "favorEffects": ["fireAttacks", "stealth", "riskyLuck"],
+    "omenActivities": [],
+    "description": "The outcast god of fire and tricks. Raiders who swear by him are bolder with torch and ruse, and luckier in wild gambles."
+  },
+  "grayQueen": {
+    "name": "The Gray Queen",
+    "epithet": "Lady of the Quiet Dead",
+    "domains": ["the quiet dead", "winter", "disease"],
+    "favorRises": ["properFuneral", "famineEndured"],
+    "favorEffects": ["plagueResistance", "famineResistance", "longevity"],
+    "omenActivities": [],
+    "description": "She who keeps the dead. Households that honour her keep the old customs of care, and weather plague and hunger with steadier hearts."
+  }
+}

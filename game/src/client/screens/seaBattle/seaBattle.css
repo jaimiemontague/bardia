@@ -1,0 +1,642 @@
+/* The sea battle (mode 'seaBattle' and the Skirmish route). Covers the viewport above the shell's
+   pending-decision host (the Before-the-Sea-Battle decision stays pending while the fight is on). */
+.sv-root {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  overflow: hidden;
+  background: #112f3d;
+  color: var(--c-text);
+  font-family: var(--font-body);
+  user-select: none;
+}
+.sv-field {
+  position: absolute;
+  inset: 0;
+}
+.sv-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-lg);
+}
+
+/* Top bar */
+.sv-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-4);
+  background: linear-gradient(180deg, rgba(8, 18, 24, 0.92), rgba(8, 18, 24, 0.6));
+}
+.sv-title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.sv-title-main {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--c-accent-hi);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sv-title-sub {
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+}
+.sv-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sv-play,
+.sv-speed {
+  min-width: 2.8rem;
+  height: 2.5rem;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+  color: var(--c-text);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-family: var(--font-legible);
+  font-size: var(--fs-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sv-play.is-paused {
+  background: var(--c-accent-lo);
+  border-color: var(--c-accent);
+  animation: sv-pulse 1.4s ease-in-out infinite;
+}
+.sv-speed.is-on {
+  background: var(--c-accent);
+  color: var(--c-accent-ink);
+  border-color: var(--c-accent-hi);
+}
+.sv-clock {
+  margin-left: var(--sp-2);
+  font-family: var(--font-legible);
+  font-size: var(--fs-lg);
+  min-width: 3.2rem;
+}
+.sv-top-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.sv-wind {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 10px 2px 4px;
+  border-radius: 999px;
+  background: rgba(8, 24, 32, 0.6);
+}
+.sv-wind-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  font-size: var(--fs-sm);
+  color: #cfe3ea;
+}
+.sv-wind-text strong {
+  font-size: var(--fs-md);
+  color: #f0f7f8;
+}
+
+/* Fleets and the balance of the fight */
+.sv-fleets {
+  position: absolute;
+  top: 4.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: 1fr minmax(14rem, 20rem) 1fr;
+  align-items: center;
+  gap: var(--sp-3);
+  width: min(60rem, calc(100vw - 2rem));
+  pointer-events: none;
+}
+.sv-fleet {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 12px;
+  border-radius: var(--r-md);
+  background: rgba(8, 18, 24, 0.72);
+  text-shadow: 0 1px 2px #000;
+}
+.sv-fleet.is-own {
+  align-items: flex-end;
+  border-right: 4px solid #3d7fe0;
+}
+.sv-fleet.is-foe {
+  align-items: flex-start;
+  border-left: 4px solid #d2412f;
+}
+.sv-fleet-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+}
+.sv-fleet-line {
+  font-size: var(--fs-lg);
+}
+.sv-balance {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+.sv-balance-bar {
+  display: flex;
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+.sv-balance-bar .is-own {
+  background: linear-gradient(180deg, #5b97ee, #2f63b8);
+  transition: width 0.6s ease;
+}
+.sv-balance-bar .is-foe {
+  background: linear-gradient(180deg, #e15a48, #a8321f);
+  transition: width 0.6s ease;
+}
+.sv-balance-word {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  text-shadow: 0 1px 3px #000;
+}
+.sv-balance-word.word-winning,
+.sv-balance-word.word-ahead {
+  color: #b9d8ff;
+}
+.sv-balance-word.word-behind,
+.sv-balance-word.word-losing {
+  color: #ffb3a6;
+}
+
+/* Selected ships */
+.sv-cards {
+  position: absolute;
+  left: var(--sp-4);
+  bottom: var(--sp-4);
+  display: grid;
+  gap: 8px;
+  max-width: calc(100vw - 26rem);
+}
+.sv-card-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.sv-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    'key name crew'
+    'key type type'
+    'bar bar bar'
+    'doing doing doing';
+  column-gap: 8px;
+  row-gap: 2px;
+  min-width: 13.5rem;
+  max-width: 17rem;
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid var(--c-border-strong);
+  border-left: 4px solid #3d7fe0;
+  border-radius: var(--r-md);
+  background: rgba(14, 12, 9, 0.88);
+  color: var(--c-text);
+  font-family: var(--font-body);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+.sv-card-key {
+  grid-area: key;
+  align-self: start;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--c-accent);
+}
+.sv-card-name {
+  grid-area: name;
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  color: var(--c-accent-hi);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sv-card-type {
+  grid-area: type;
+  font-size: var(--fs-sm);
+}
+.sv-card-crew {
+  grid-area: crew;
+  font-size: var(--fs-md);
+}
+.sv-card .sv-hullbar {
+  grid-area: bar;
+  margin: 4px 0 2px;
+}
+.sv-card-doing {
+  grid-area: doing;
+  font-size: var(--fs-md);
+  color: #e8dcc0;
+}
+.sv-card-more {
+  align-self: center;
+  font-size: var(--fs-md);
+  color: var(--c-text-dim);
+}
+.sv-hullbar {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+.sv-hullbar > span {
+  display: block;
+  height: 100%;
+}
+.sv-hullbar.tone-good > span {
+  background: #6cc060;
+}
+.sv-hullbar.tone-warn > span {
+  background: #e0b040;
+}
+.sv-hullbar.tone-bad > span {
+  background: #d04030;
+}
+.sv-orders {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--r-md);
+  background: rgba(14, 12, 9, 0.88);
+  border: 1px solid var(--c-border);
+  width: max-content;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+.sv-orders-label {
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+  margin-right: 4px;
+}
+.sv-orders-gap {
+  width: 12px;
+}
+.sv-chip {
+  height: 2.3rem;
+  padding: 0 14px;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  background: var(--c-surface);
+  color: var(--c-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+.sv-chip:hover,
+.sv-chip:focus-visible {
+  border-color: var(--c-accent);
+}
+.sv-chip.is-on {
+  background: var(--c-accent);
+  color: var(--c-accent-ink);
+  border-color: var(--c-accent-hi);
+}
+.sv-chip.is-danger {
+  border-color: #8a3a2a;
+  color: #ffc4b4;
+}
+
+/* Happenings */
+.sv-ticker {
+  position: absolute;
+  right: var(--sp-4);
+  bottom: var(--sp-4);
+  width: min(24rem, 34vw);
+  pointer-events: none;
+}
+.sv-ticker ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.sv-ticker li button {
+  pointer-events: auto;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  border: 0;
+  border-left: 3px solid var(--c-border-strong);
+  border-radius: var(--r-sm);
+  background: rgba(10, 14, 16, 0.8);
+  color: var(--c-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+.sv-ticker li.tone-good button {
+  border-left-color: #6cc060;
+}
+.sv-ticker li.tone-bad button {
+  border-left-color: #d04030;
+}
+
+.sv-follow,
+.sv-paused {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--c-accent);
+  background: rgba(20, 16, 10, 0.88);
+  color: var(--c-accent-hi);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+.sv-paused {
+  top: 9.2rem;
+}
+.sv-follow {
+  bottom: var(--sp-4);
+  left: auto;
+  right: calc(min(24rem, 34vw) + 2.5rem);
+  transform: none;
+}
+.sv-notice {
+  position: absolute;
+  top: 12rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  border-radius: var(--r-md);
+  background: rgba(110, 30, 20, 0.9);
+  color: #fff;
+  font-size: var(--fs-md);
+}
+.sv-ff {
+  position: absolute;
+  top: 9.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 20px;
+  border-radius: var(--r-md);
+  background: rgba(20, 14, 9, 0.9);
+  border: 1px solid var(--c-accent);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.sv-tip {
+  position: absolute;
+  z-index: 5;
+  max-width: 18rem;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  background: rgba(14, 10, 6, 0.94);
+  border: 1px solid var(--c-border-strong);
+  font-size: var(--fs-md);
+  pointer-events: none;
+}
+.sv-tip-title {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sv-tip-hint {
+  margin-top: 4px;
+  color: #ff9a80;
+}
+.sv-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+.sv-swatch.is-own {
+  background: #3d7fe0;
+}
+.sv-swatch.is-foe {
+  background: #d2412f;
+}
+
+/* Cards over the sea */
+.sv-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 10, 14, 0.45);
+}
+.sv-modal-card {
+  box-sizing: border-box;
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  background: var(--c-bg-2);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5) var(--sp-6);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+.sv-modal-card h2 {
+  margin: 0 0 var(--sp-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  color: var(--c-accent-hi);
+}
+.sv-lead {
+  font-size: var(--fs-md);
+  margin: 0 0 var(--sp-3);
+}
+.sv-menu {
+  width: min(30rem, calc(100vw - 2rem));
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-2);
+  box-sizing: border-box;
+}
+.sv-menu-small {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+.sv-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+.sv-howto {
+  display: grid;
+  gap: 10px;
+  margin: var(--sp-3) 0;
+}
+.sv-howto div {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: var(--sp-3);
+  align-items: baseline;
+}
+.sv-howto dt {
+  font-family: var(--font-legible);
+  font-size: var(--fs-md);
+  color: var(--c-accent);
+}
+.sv-howto dd {
+  margin: 0;
+  font-size: var(--fs-md);
+}
+
+/* Summary */
+.sv-summary-wrap {
+  background: radial-gradient(ellipse at center, rgba(4, 10, 14, 0.55), rgba(4, 10, 14, 0.85));
+}
+.sv-summary {
+  width: min(56rem, calc(100vw - 2rem));
+}
+.sv-summary h2 {
+  font-size: var(--fs-3xl);
+}
+.sv-summary.outcome-victory h2 {
+  color: #a9e08e;
+}
+.sv-summary.outcome-defeat h2 {
+  color: #ff9e88;
+}
+.sv-summary.outcome-escaped h2 {
+  color: #ffd27a;
+}
+.sv-sum-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-3);
+  margin: var(--sp-3) 0;
+}
+.sv-sum-stat {
+  display: grid;
+  justify-items: center;
+  padding: var(--sp-2);
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--c-border);
+}
+.sv-sum-value {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  color: var(--c-accent-hi);
+}
+.sv-sum-label {
+  font-size: var(--fs-md);
+}
+.sv-sum-sub {
+  font-size: var(--fs-sm);
+}
+.sv-sum-plunder {
+  font-size: var(--fs-lg);
+  margin: 0 0 var(--sp-3);
+}
+.sv-sum-fleets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+}
+.sv-sum-fleet h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  color: var(--c-accent);
+}
+.sv-sum-fleet ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.sv-sum-fleet li {
+  display: grid;
+  justify-items: center;
+  width: 6rem;
+  text-align: center;
+}
+.sv-sum-ship {
+  font-size: var(--fs-sm);
+  line-height: 1.15;
+}
+.sv-sum-fate {
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+}
+.sv-sum-fleet li.fate-sunk .sv-sum-fate,
+.sv-sum-fleet li.fate-taken .sv-sum-fate {
+  color: #ff9e88;
+}
+.sv-sum-fleet.is-foe li.fate-sunk .sv-sum-fate,
+.sv-sum-fleet.is-foe li.fate-taken .sv-sum-fate {
+  color: #a9e08e;
+}
+.sv-error {
+  color: #ff9e88;
+}
+
+@keyframes sv-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sv-play.is-paused {
+    animation: none;
+  }
+}
+@media (max-width: 1100px) {
+  .sv-ticker {
+    display: none;
+  }
+  .sv-cards {
+    max-width: calc(100vw - 2rem);
+  }
+  .sv-title-sub {
+    display: none;
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "codex.chronicle.lede": "The saga of your house so far, newest deeds first.",
+  "codex.chronicle.filter": "Show",
+  "codex.chronicle.filterAll": "Every entry",
+  "codex.chronicle.filterNotable": "Great deeds",
+  "codex.chronicle.count": "{count, plural, =0 {Nothing written yet} one {# entry} other {# entries}}",
+  "codex.chronicle.empty": "The saga has not yet begun. Deeds, births, deaths and battles will be written here.",
+  "codex.chronicle.emptyFiltered": "No great deeds yet. Choose “Every entry” to see the rest.",
+  "codex.chronicle.year": "The year {year} A.S.",
+  "codex.chronicle.person": "{name}"
+}

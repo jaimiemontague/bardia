@@ -1,0 +1,51 @@
+.credits-page {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-5);
+}
+.credits-frame {
+  position: relative;
+  z-index: 1;
+  width: min(44rem, 100%);
+  max-height: calc(100vh - 2 * var(--sp-5));
+}
+.credits-scroll {
+  padding-right: var(--sp-2);
+  text-align: center;
+}
+.credits-lede {
+  font-size: var(--fs-lg);
+  font-style: italic;
+  color: var(--c-text-2);
+}
+.credits-section {
+  margin: var(--sp-4) 0;
+}
+.credits-section h3 {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--c-accent-hi);
+  margin-bottom: var(--sp-1);
+}
+.credits-libs {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 24rem;
+}
+.credits-libs li {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  border-bottom: 1px dotted rgba(166, 123, 47, 0.25);
+}
+.credits-end {
+  margin-top: var(--sp-5);
+  font-family: var(--font-display);
+  letter-spacing: 0.2em;
+  color: var(--c-accent-hi);
+}

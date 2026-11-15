@@ -1,0 +1,146 @@
+/* The Ledger (route 'ledger') on the §20 layout: the treasury large, a few lines in words, the rest in Details. */
+.frame.frame-screen.lg-ledger {
+  width: min(64rem, 100%);
+  height: auto;
+}
+.lg-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-2) var(--sp-2) var(--sp-4);
+}
+.lg-treasury {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+}
+.lg-treasury-label {
+  font-size: var(--fs-md);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-text-dim);
+}
+.lg-treasury-value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-family: var(--font-display);
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  color: var(--gold-0);
+  text-shadow: var(--text-shadow-carve);
+}
+.lg-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-6);
+}
+.lg-col {
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, rgba(255, 228, 180, 0.04), rgba(0, 0, 0, 0.22));
+}
+.lg-col-h {
+  margin: 0 0 var(--sp-3);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  letter-spacing: 0.06em;
+  color: var(--gold-1);
+}
+.lg-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.lg-line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  font-size: var(--fs-md);
+}
+.lg-line-icon {
+  align-self: center;
+  color: var(--gold-1);
+}
+.lg-line-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--c-text);
+}
+.lg-line-value {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.lg-col-in .lg-line-value {
+  color: var(--c-success);
+}
+.lg-col-out .lg-line-value {
+  color: var(--c-text);
+}
+.lg-nothing {
+  margin: 0;
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.lg-net {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+}
+.lg-net.tone-bad {
+  color: var(--c-danger);
+}
+.lg-net.tone-good {
+  color: var(--c-success);
+}
+.lg-arrears {
+  margin: 0;
+  text-align: center;
+  font-size: var(--fs-md);
+  color: var(--c-danger);
+}
+.lg-note {
+  margin: 0;
+  text-align: center;
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.lg-table {
+  width: 100%;
+  max-width: 40rem;
+  border-collapse: collapse;
+  font-size: var(--fs-md);
+}
+.lg-table th,
+.lg-table td {
+  padding: 3px 8px;
+  text-align: left;
+}
+.lg-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.lg-head th {
+  padding-top: 10px;
+  font-family: var(--font-display, inherit);
+  opacity: 0.85;
+}
+.lg-total td {
+  border-top: 1px solid rgba(127, 127, 127, 0.35);
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .lg-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

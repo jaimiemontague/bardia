@@ -1,0 +1,279 @@
+/* The Expedition Planner (SCR-07) on the §20 layout: who and what sails on the left, what they take on the right. */
+.pl-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.3fr);
+  gap: var(--sp-5) var(--sp-7);
+  align-items: start;
+}
+.pl-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  min-width: 0;
+}
+.pl-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+  margin-bottom: var(--sp-3);
+  padding-bottom: var(--sp-1);
+  border-bottom: 1px solid rgba(240, 200, 120, 0.16);
+}
+.pl-section-head h3 {
+  font-size: var(--fs-lg);
+  color: var(--c-accent-hi);
+  text-shadow: var(--text-shadow-carve);
+}
+.pl-aside {
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.pl-empty {
+  margin: 0;
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.pl-leaders,
+.pl-ships {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-2);
+}
+.pl-leaders {
+  grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+}
+.pl-leader .portrait {
+  width: 2.6rem;
+}
+.pl-leader,
+.pl-ship {
+  padding-right: var(--sp-6);
+}
+.pl-ship .choice-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pl-men {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+/* The two side names once, over the slider column; each kind of warrior is then one row. */
+.pl-legend,
+.pl-unit {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: var(--sp-3);
+  align-items: start;
+}
+.pl-legend {
+  font-size: var(--fs-md);
+  color: var(--c-text-2);
+}
+.pl-legend-left {
+  grid-column: 2;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.pl-legend-right {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--gold-0);
+}
+.pl-legend .icon {
+  color: inherit;
+}
+.pl-unit-name {
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--c-text);
+  padding-top: 0.55rem;
+  overflow-wrap: anywhere;
+}
+.pl-shortfall {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-3);
+  margin-top: var(--sp-2);
+  font-size: var(--fs-md);
+}
+.pl-details {
+  margin-top: calc(var(--sp-2) * -1);
+}
+.pl-details > .disclosure-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-carve);
+}
+.pl-details > .disclosure-body[hidden] {
+  display: none;
+}
+.pl-details > .disclosure-body > .btn {
+  align-self: flex-start;
+}
+.pl-details-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-5);
+}
+.pl-details-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+.pl-sub {
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--c-text-dim);
+}
+.pl-issues {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: var(--fs-md);
+}
+.pl-note {
+  margin: 0;
+  font-size: var(--fs-md);
+}
+
+/* Footer: the steward's one sentence, Quick muster, the travel-mode slot and Launch. */
+.pl-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3) var(--sp-5);
+  flex-wrap: wrap;
+}
+.pl-steward {
+  flex: 1 1 22rem;
+  min-width: 0;
+}
+.pl-say {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-lg);
+  font-style: italic;
+}
+.pl-say > .icon {
+  flex: none;
+}
+.pl-say-good {
+  color: var(--c-success);
+}
+.pl-say-warn {
+  color: var(--c-warning);
+}
+.pl-say-bad {
+  color: var(--c-danger);
+}
+.pl-say > span {
+  color: var(--c-text-2);
+}
+.pl-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+.pl-travel:empty {
+  display: none;
+}
+/* Set sail | March overland: two big carved halves beside Launch. */
+.pl-travel {
+  display: inline-flex;
+  border-radius: var(--r-sm);
+  box-shadow: 0 0 0 1px var(--c-border), var(--shadow-carve);
+  background: rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.pl-travel-option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 0.55rem 1.1rem;
+  border: none;
+  border-right: 1px solid var(--c-border);
+  background: transparent;
+  color: var(--c-text-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  cursor: pointer;
+}
+.pl-travel-option:last-child {
+  border-right: none;
+}
+.pl-travel-option:hover {
+  color: var(--c-text);
+}
+.pl-travel-option:focus-visible {
+  outline: 2px solid var(--c-focus, #e9c877);
+  outline-offset: -2px;
+}
+.pl-travel-option.is-active {
+  color: #1d1308;
+  background: linear-gradient(180deg, #e9c877, #c4953f);
+}
+:root[data-theme='parchment'] .pl-travel-option.is-active {
+  color: #fff4e0;
+  background: linear-gradient(180deg, #b0412f, #8f2f22);
+}
+:root[data-contrast='high'] .pl-travel-option.is-active {
+  background: #ffd400;
+  color: #000;
+}
+.pl-onfoot {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--c-text-2);
+}
+
+@media (max-width: 1100px) {
+  .pl-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pl-leaders {
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  }
+  .pl-ships {
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .pl-details-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* The steward's sentence stays beside its icon when the footer is narrow (the travel choice shares the row). */
+.pl-say {
+  flex-wrap: nowrap;
+  align-items: flex-start;
+}
+.pl-say > span {
+  min-width: 0;
+}

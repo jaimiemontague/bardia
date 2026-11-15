@@ -1,0 +1,42 @@
+/* The Sacred Grove (route 'building.grove'): a quiet, green-lit scene; the gods as cards, the offering on the right. */
+.gv-frame > .frame-body {
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 0%, rgba(90, 130, 70, 0.12), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(214, 140, 50, 0.08), transparent 70%);
+  border-radius: var(--r-md);
+}
+.gv-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .gv-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.gv-gods .choice {
+  min-height: 4.8rem;
+  padding-right: 6rem;
+}
+.gv-favor {
+  font-size: var(--fs-md);
+}
+.gv-gods .choice-badge {
+  top: 50%;
+  right: 2.6rem;
+  transform: translateY(-50%);
+  padding: 0.1rem 0.6rem;
+}
+.gv-gods .choice-badge:has(.is-low) {
+  background: var(--c-danger);
+}
+.gv-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.gv-frame .tone-warn {
+  color: var(--c-warning);
+}

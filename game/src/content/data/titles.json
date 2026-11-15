@@ -1,0 +1,41 @@
+[
+  { "level": 1, "title": "the Untried", "variants": [] },
+  { "level": 2, "title": "Oar-Hand", "variants": [] },
+  { "level": 3, "title": "Salt-Bitten", "variants": [] },
+  { "level": 4, "title": "Shield-Bearer", "variants": [] },
+  { "level": 5, "title": "Wave-Strider", "variants": [] },
+  { "level": 6, "title": "Wolf-Feeder", "variants": [] },
+  { "level": 7, "title": "Raven-Glutter", "variants": [] },
+  {
+    "level": 8,
+    "title": "Ring-Giver",
+    "variants": [{ "when": { "stat": "honorMinusDread", "op": "lt", "value": 0 }, "title": "Hall-Burner" }]
+  },
+  { "level": 9, "title": "Hall-Warden", "variants": [] },
+  { "level": 10, "title": "Storm-Rider", "variants": [] },
+  { "level": 11, "title": "Shield-Breaker", "variants": [] },
+  {
+    "level": 12,
+    "title": "Spear-Storm",
+    "variants": [
+      { "when": { "stat": "honor", "op": "gte", "value": 30 }, "title": "Oath-Keeper" },
+      { "when": { "stat": "honor", "op": "lte", "value": -30 }, "title": "Oath-Breaker" }
+    ]
+  },
+  { "level": 13, "title": "Sea-King", "variants": [] },
+  { "level": 14, "title": "Kin-Shield", "variants": [] },
+  {
+    "level": 15,
+    "title": "Gold-Spender",
+    "variants": [{ "when": { "stat": "dread", "op": "gte", "value": 60 }, "title": "Land-Waster" }]
+  },
+  { "level": 16, "title": "Land-Taker", "variants": [] },
+  { "level": 17, "title": "Wave-Lord", "variants": [] },
+  {
+    "level": 18,
+    "title": "Kingmaker",
+    "variants": [{ "when": { "stat": "honor", "op": "lt", "value": 0 }, "title": "Crown-Thief" }]
+  },
+  { "level": 19, "title": "Saga-Worthy", "variants": [] },
+  { "level": 20, "title": "Song-Eternal", "variants": [] }
+]

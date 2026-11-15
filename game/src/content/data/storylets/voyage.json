@@ -1,0 +1,43 @@
+{
+  "$notes": "At sea (design §19.2 'Rare and strange: a raven follows your fleet (omen)'). Belief is reported as belief and every omen has a natural explanation (§4.7, ADR-002).",
+  "storylets": [
+    {
+      "id": "ravenOverTheWake",
+      "scope": "fleet",
+      "trigger": "onVoyageDay",
+      "triggerParams": { "player": true },
+      "when": "event.voyageDays >= 3 && fleet.rations > 0",
+      "weight": 10,
+      "cooldownDays": 120,
+      "titleKey": "narrative.storylet.ravenOverTheWake.title",
+      "textKey": "narrative.storylet.ravenOverTheWake.text",
+      "illustration": "narrative.illus.ravenOverTheWake",
+      "choices": [
+        {
+          "labelKey": "narrative.storylet.ravenOverTheWake.feed",
+          "previewKey": "narrative.storylet.ravenOverTheWake.feed.preview",
+          "effects": [
+            { "op": "changeFavor", "god": "valgrim", "amount": 2 },
+            { "op": "addRations", "count": -10, "fleetId": "$fleet" }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.ravenOverTheWake.seer",
+          "previewKey": "narrative.storylet.ravenOverTheWake.seer.preview",
+          "effects": [
+            { "op": "changeFavor", "god": "valgrim", "amount": 1 },
+            { "op": "narrate", "key": "narrative.storylet.ravenOverTheWake.seerReading", "voice": "seer" }
+          ]
+        },
+        {
+          "labelKey": "narrative.storylet.ravenOverTheWake.shoo",
+          "previewKey": "narrative.storylet.ravenOverTheWake.shoo.preview",
+          "effects": [
+            { "op": "changeDread", "amount": 1 },
+            { "op": "changeFavor", "god": "valgrim", "amount": -2 }
+          ]
+        }
+      ]
+    }
+  ]
+}

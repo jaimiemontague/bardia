@@ -1,0 +1,245 @@
+/* Affairs of State (SCR-09) on the §20 layout: one holding at a time, three doors, one decision in view. */
+.af-affairs > .frame-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+/* Which holding */
+.af-holdings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.af-holding {
+  padding: var(--sp-1) var(--sp-4);
+  border: 1px solid var(--c-border);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--c-text-dim);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast),
+    color var(--dur-fast),
+    background var(--dur-fast);
+}
+.af-holding:hover {
+  border-color: var(--gold-2);
+  color: var(--c-text);
+}
+.af-holding.is-active {
+  border-color: var(--c-accent);
+  background: linear-gradient(180deg, rgba(243, 213, 138, 0.2), rgba(110, 80, 30, 0.2));
+  color: var(--gold-0);
+}
+.af-holding:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+
+/* Doors on the left, the chosen decision on the right */
+.af-layout {
+  display: grid;
+  grid-template-columns: minmax(15rem, 19rem) minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: start;
+}
+.af-doors {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.af-doors .choice {
+  min-height: 5.2rem;
+  padding-right: var(--sp-6);
+}
+.af-stage {
+  min-width: 0;
+}
+.af-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  animation: bardia-rise var(--dur-med) var(--ease);
+}
+.af-ask-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+}
+.af-ask {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--gold-0);
+}
+.af-big {
+  margin: 0;
+  font-size: var(--fs-lg);
+  line-height: 1.4;
+  color: var(--c-text);
+}
+.af-line {
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: 1.4;
+}
+.af-dim {
+  font-size: var(--fs-md);
+  color: var(--c-text-dim);
+}
+.af-note {
+  margin: var(--sp-1) 0;
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-dim);
+}
+.af-status {
+  font-size: var(--fs-md);
+  font-weight: 400;
+}
+.af-panel .tone-good {
+  color: var(--c-success);
+}
+.af-panel .tone-bad {
+  color: var(--c-danger);
+}
+.af-panel .tone-warn {
+  color: var(--c-warning);
+}
+.af-panel .tone-info {
+  color: var(--c-info);
+}
+
+/* Taxes */
+.af-taxes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+.af-taxes .choice {
+  padding-right: var(--sp-6);
+}
+.af-loyalty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  max-width: 34rem;
+}
+.af-reasons {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-md);
+}
+.af-reasons li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: 2px 0;
+}
+.af-reasons .num {
+  font-variant-numeric: tabular-nums;
+}
+.af-details-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-6);
+}
+
+/* Buildings */
+.af-queue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  max-width: 34rem;
+}
+.af-buildings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr));
+  gap: var(--sp-2);
+}
+.af-buildings .choice {
+  padding-right: var(--sp-6);
+}
+.af-buildings .choice-badge {
+  top: 4px;
+}
+.af-build-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(16rem, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+}
+.af-pick {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, rgba(255, 228, 180, 0.05), rgba(0, 0, 0, 0.25));
+}
+.af-pick .af-go {
+  flex-direction: column;
+  align-items: stretch;
+}
+.af-pick .af-go .bld-why {
+  flex: none;
+}
+.af-pick-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.af-pick-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  color: var(--gold-0);
+}
+.af-pick-head .af-note {
+  margin: 0;
+}
+.af-go {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-4);
+}
+.af-go .bld-why {
+  flex: 1 1 14rem;
+  margin: 0;
+  font-size: var(--fs-md);
+}
+
+/* Garrison */
+.af-units {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: var(--sp-2);
+}
+.af-units .choice {
+  padding-right: var(--sp-6);
+}
+
+@media (max-width: 900px) {
+  .af-layout,
+  .af-details-grid,
+  .af-build-split,
+  .af-taxes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .af-doors {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

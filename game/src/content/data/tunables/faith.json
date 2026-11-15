@@ -1,0 +1,331 @@
+{
+  "omens": {
+    "durationDays": {
+      "voyage": 30,
+      "battle": 30,
+      "duel": 30,
+      "harvest": 90
+    },
+    "readCost": 20,
+    "pietyDivisor": 10,
+    "valgrimFavorPerExtraDie": 20,
+    "maxExtraDice": 2,
+    "consumeOnUse": {
+      "voyage": false,
+      "battle": true,
+      "duel": true,
+      "harvest": false
+    },
+    "seerTiers": [
+      "templeStead",
+      "capital",
+      "city"
+    ],
+    "churchTiers": [
+      "cloister",
+      "capital",
+      "city",
+      "town"
+    ],
+    "fleetAtSettlementRadius": 3,
+    "extraModifiers": {
+      "voyage": {
+        "ill": {},
+        "uncertain": {},
+        "fair": {},
+        "blessed": {}
+      },
+      "battle": {
+        "ill": {},
+        "uncertain": {},
+        "fair": {},
+        "blessed": {}
+      },
+      "duel": {
+        "ill": {
+          "duel.nervePct": -10
+        },
+        "uncertain": {},
+        "fair": {
+          "duel.nervePct": 5
+        },
+        "blessed": {
+          "duel.nervePct": 10
+        }
+      },
+      "harvest": {
+        "ill": {
+          "harvest.outputPct": -10
+        },
+        "uncertain": {},
+        "fair": {
+          "harvest.outputPct": 5
+        },
+        "blessed": {
+          "harvest.outputPct": 10
+        }
+      }
+    },
+    "aiMonthlyReadings": true,
+    "aiBaseline": 0
+  },
+  "sacrifice": {
+    "sizes": {
+      "modest": {
+        "silver": 40,
+        "livestockTons": 1,
+        "rangePos": 0
+      },
+      "generous": {
+        "silver": 100,
+        "livestockTons": 3,
+        "rangePos": 0.5
+      },
+      "lavish": {
+        "silver": 250,
+        "livestockTons": 6,
+        "rangePos": 1
+      }
+    },
+    "kindMult": {
+      "silver": 1,
+      "livestock": 1.25
+    },
+    "diminishing": [
+      1,
+      0.5,
+      0.25,
+      0
+    ],
+    "templeSteadGroveTier": 2
+  },
+  "alms": {
+    "sizes": {
+      "modest": {
+        "silver": 40,
+        "piety": 2
+      },
+      "generous": {
+        "silver": 100,
+        "piety": 5
+      },
+      "lavish": {
+        "silver": 250,
+        "piety": 8
+      }
+    },
+    "diminishing": [
+      1,
+      0.5,
+      0.25,
+      0
+    ]
+  },
+  "favor": {
+    "neglectOnlyIfUntended": true,
+    "stormSeverityScale": {
+      "minor": 0.5,
+      "moderate": 1,
+      "severe": 1.5
+    },
+    "noFuneralCauses": [
+      "drowned",
+      "lostAtSea",
+      "missing"
+    ],
+    "aiPietyDivisor": 10,
+    "ai": {
+      "offeringChance": 0.4,
+      "offeringSize": "modest",
+      "minTreasuryMult": 4
+    }
+  },
+  "piety": {
+    "neglectPerMonth": 1,
+    "startOnConversion": 10
+  },
+  "deeds": {
+    "battleWon": {
+      "amount": 2,
+      "maxPerMonth": 3,
+      "piety": 1
+    },
+    "seaBattleWon": {
+      "amount": 2,
+      "gods": [
+        "valgrim",
+        "saltha"
+      ],
+      "maxPerMonth": 3,
+      "piety": 1
+    },
+    "holdingDefended": {
+      "amount": 3,
+      "maxPerMonth": 2,
+      "piety": 2
+    },
+    "feastHeld": {
+      "balanceKey": "feast",
+      "maxPerMonth": 1,
+      "piety": 1
+    },
+    "harvestFeast": {
+      "balanceKey": "feast",
+      "maxPerMonth": 1,
+      "piety": 1
+    },
+    "marriage": {
+      "amount": 3,
+      "maxPerMonth": 2,
+      "piety": 3
+    },
+    "giftGiven": {
+      "amount": 1,
+      "maxPerMonth": 2,
+      "piety": 1
+    },
+    "stormSurvived": {
+      "amount": 2,
+      "maxPerMonth": 2
+    },
+    "holmgangWon": {
+      "amount": 4,
+      "maxPerMonth": 2
+    },
+    "duelWon": {
+      "amount": 2,
+      "gods": [
+        "eidr"
+      ],
+      "maxPerMonth": 2
+    },
+    "oathKept": {
+      "amount": 2,
+      "maxPerMonth": 1,
+      "piety": 1
+    },
+    "oathBroken": {
+      "balanceKey": "oathBroken",
+      "gods": [
+        "eidr"
+      ],
+      "piety": -5
+    },
+    "weregildPaid": {
+      "amount": 3,
+      "piety": 3
+    },
+    "hallBurned": {
+      "amount": 2,
+      "maxPerMonth": 2,
+      "piety": -2
+    },
+    "foeTricked": {
+      "amount": 2,
+      "maxPerMonth": 2
+    },
+    "properFuneral": {
+      "amount": 2,
+      "maxPerMonth": 2,
+      "piety": 2
+    },
+    "famineEndured": {
+      "amount": 2,
+      "maxPerMonth": 1
+    },
+    "legendLearned": {
+      "amount": 1,
+      "maxPerMonth": 3
+    },
+    "relicFound": {
+      "balanceKey": "relic",
+      "gods": [
+        "valgrim"
+      ],
+      "piety": 5
+    },
+    "templeSteadRaided": {
+      "balanceKey": "templeSteadRaided",
+      "gods": "all"
+    },
+    "groveDesecrated": {
+      "amount": -10,
+      "gods": "all"
+    },
+    "missionaryWelcomed": {
+      "amount": -10,
+      "gods": "all"
+    },
+    "missionarySentAway": {
+      "amount": 5,
+      "gods": "all"
+    },
+    "chapelBuilt": {
+      "piety": 10
+    },
+    "pilgrimage": {
+      "piety": 15,
+      "maxPerMonth": 1
+    }
+  },
+  "wrath": {
+    "lanternFaiths": [
+      "lantern",
+      "goldenLantern"
+    ],
+    "plunderLantern": 5,
+    "clergyCaptives": 5,
+    "annexLantern": 5,
+    "fateKinds": {
+      "burn": [
+        "sackAndBurn",
+        "sack",
+        "burn"
+      ],
+      "plunder": [
+        "plunderAndLeave",
+        "plunder",
+        "raid"
+      ],
+      "captives": [
+        "takeCaptives",
+        "captives"
+      ],
+      "annex": [
+        "annex"
+      ]
+    },
+    "applySermonsOpinion": true,
+    "holyDays": [
+      {
+        "monthIndex": 1,
+        "day": 20
+      },
+      {
+        "monthIndex": 3,
+        "day": 1
+      },
+      {
+        "monthIndex": 8,
+        "day": 1
+      },
+      {
+        "monthIndex": 9,
+        "day": 24
+      }
+    ]
+  },
+  "conversion": {
+    "targetFaith": "lantern",
+    "minLanternOpinion": 20,
+    "lanternDiplomacy": 20,
+    "traditionalistLoyalty": -20,
+    "resentmentYears": 5,
+    "holdingSharePerYear": 0.05,
+    "chapelShareMult": 2,
+    "flipShare": 0.5,
+    "convertKin": true,
+    "chapelCost": 600,
+    "contactWindowDays": 180
+  }
+}

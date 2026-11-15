@@ -1,0 +1,13 @@
+{
+  "founding": {
+    "hall": { "cost": 1000, "days": 40 },
+    "smithy": { "cost": 600, "days": 30 },
+    "shipyard": { "cost": 800, "days": 40 },
+    "meadhall": { "cost": 500, "days": 25 },
+    "seersHut": { "cost": 400, "days": 20 }
+  },
+  "harbourBuildings": ["shipyard"],
+  "chronicle": { "importance": 1, "topTierImportance": 2 },
+  "garrison": { "penaltyShareOfRecommended": 0.4 },
+  "loyalty": { "residence": 1 }
+}

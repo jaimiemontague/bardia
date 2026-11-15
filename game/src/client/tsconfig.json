@@ -1,0 +1,4 @@
+{
+  "//": "Editor entry point for client files: the app program (client + sim + content, no tests). Not used by scripts.",
+  "extends": "../../tsconfig.app.json"
+}

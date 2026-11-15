@@ -1,0 +1,404 @@
+/* The Home Hall hub (SCR-05) on the §20 layout: the village picture is the screen, small calm cards beside it. */
+.hub {
+  display: grid;
+  grid-template-columns: min(calc(16.5rem * var(--text-scale)), 23%) minmax(0, 1fr) min(calc(18.5rem * var(--text-scale)), 25%);
+  gap: var(--sp-3);
+  height: 100%;
+  padding: var(--sp-3);
+  min-height: 0;
+  /* The night over the village runs behind the whole hall, so the picture and its margins read as one scene. */
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(70, 60, 90, 0.35), transparent 70%),
+    linear-gradient(180deg, #121624 0%, #1b1a26 45%, #17120d 100%);
+}
+.hub-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-height: 0;
+  overflow: auto;
+  padding: 2px;
+}
+
+/* ---- Cards beside the picture ---- */
+.hub-card {
+  flex: none;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: linear-gradient(180deg, rgba(36, 25, 18, 0.92), rgba(22, 15, 10, 0.92));
+  border: 1px solid rgba(240, 200, 120, 0.18);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 6px 18px rgba(0, 0, 0, 0.45);
+}
+.hub-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+.hub-card-head h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-md);
+  letter-spacing: 0.08em;
+  color: var(--c-accent-hi);
+  text-shadow: var(--text-shadow-carve);
+}
+.hub-card-head h2 .icon {
+  color: var(--gold-1);
+}
+
+/* First voyage: the current step large, the rest folded away. */
+.hub-voyage-progress,
+.hub-town-tier,
+.hub-counsel-count {
+  font-size: var(--fs-sm);
+  color: var(--c-text-dim);
+  font-style: italic;
+  white-space: nowrap;
+}
+.hub-voyage-step {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-1);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--gold-0);
+}
+.hub-voyage-hint {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-md);
+  font-style: italic;
+  color: var(--c-text-2);
+}
+.hub-voyage-next .btn {
+  white-space: normal;
+  text-align: left;
+}
+.hub-voyage-all {
+  margin-top: var(--sp-1);
+}
+.hub-voyage-all > .disclosure-body {
+  padding-top: var(--sp-1);
+}
+.hub-voyage-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--fs-md);
+}
+.hub-voyage-steps li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 1px 4px;
+  border-radius: var(--r-sm);
+}
+.hub-voyage-steps li.is-done {
+  color: var(--c-text-faint);
+  text-decoration: line-through;
+  text-decoration-color: rgba(194, 178, 147, 0.4);
+}
+.hub-voyage-steps li.is-done .icon {
+  color: var(--cb-good);
+}
+.hub-voyage-steps li.is-next {
+  background: rgba(212, 167, 79, 0.16);
+  color: var(--gold-0);
+}
+.hub-voyage-steps li.is-todo {
+  color: var(--c-text-dim);
+}
+
+/* Counsel: one line at a time. */
+.hub-counsel-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+.hub-counsel-line {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  padding: var(--sp-1) 0 var(--sp-1) var(--sp-3);
+  border-left: 3px solid var(--gold-2);
+  animation: bardia-rise var(--dur-med) var(--ease);
+}
+.hub-counsel-icon {
+  flex: none;
+  margin-top: 4px;
+  color: var(--gold-1);
+}
+.hub-counsel-body p {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-md);
+  line-height: 1.4;
+}
+.hub-counsel-body .btn {
+  white-space: normal;
+  text-align: left;
+}
+.hub-counsel-line.hub-tone-urgent {
+  border-left-color: var(--cb-bad);
+}
+.hub-counsel-line.hub-tone-urgent .hub-counsel-icon {
+  color: var(--cb-bad);
+}
+.hub-counsel-line.hub-tone-warn {
+  border-left-color: var(--cb-warn);
+}
+.hub-counsel-line.hub-tone-warn .hub-counsel-icon {
+  color: var(--cb-warn);
+}
+.hub-counsel-line.hub-tone-info {
+  border-left-color: var(--c-border-strong);
+}
+
+/* The one gold button, the sea chart and the sea's state. */
+.hub-go {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.hub-go-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+.hub-bar-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--fs-md);
+  color: var(--c-text-dim);
+  font-style: italic;
+}
+.hub-bar-note.hub-warn {
+  color: var(--cb-warn);
+}
+
+/* Time at home: a small control. */
+.hub-time .hub-card-head h2 {
+  cursor: help;
+}
+.hub-waits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+}
+.hub-wait {
+  min-height: var(--ctl-h-sm);
+  padding: 0 4px;
+  white-space: nowrap;
+  border: none;
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--c-text-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background var(--dur-fast);
+}
+.hub-waits .hub-wait + .hub-wait {
+  border-left: 1px solid var(--c-border);
+}
+.hub-wait:hover:not(:disabled) {
+  background: rgba(212, 167, 79, 0.16);
+  color: var(--gold-0);
+}
+.hub-wait:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.hub-wait-event {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: 100%;
+  margin-top: var(--sp-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+}
+
+/* ---- The village ---- */
+.hub-centre {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+.hub-stage {
+  position: relative;
+  flex: 1;
+  min-height: 16rem;
+  container-type: size;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: #171c2c;
+  /* A soft edge into the night around it. */
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.7),
+    0 0 40px rgba(0, 0, 0, 0.5);
+}
+.hub-stage > .hv-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* The viewBox's own area: same aspect, centred, as large as fits (what preserveAspectRatio="xMidYMid meet" draws). */
+.hub-picture {
+  position: relative;
+  width: min(100cqw, calc(100cqh * 1.3));
+  container-type: inline-size;
+  pointer-events: none;
+}
+.hub-picture > * {
+  pointer-events: auto;
+}
+.hv-building {
+  cursor: pointer;
+}
+.hv-building:hover {
+  filter: brightness(1.18);
+}
+.hv-smoke {
+  animation: hv-drift 9s ease-in-out infinite alternate;
+}
+.hv-spark {
+  animation: hv-flicker 1.4s ease-in-out infinite alternate;
+}
+@keyframes hv-drift {
+  from {
+    transform: translateX(-4px);
+  }
+  to {
+    transform: translateX(6px);
+  }
+}
+@keyframes hv-flicker {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hv-smoke,
+  .hv-spark {
+    animation: none;
+  }
+}
+:root[data-motion='reduced'] .hv-smoke,
+:root[data-motion='reduced'] .hv-spark {
+  animation: none;
+}
+
+.hub-hotspot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.28em 0.6em 0.28em 0.45em;
+  border-radius: 999px;
+  border: 1px solid rgba(240, 200, 120, 0.6);
+  background: rgba(14, 9, 6, 0.8);
+  color: #f3dfb0;
+  font-family: var(--font-display);
+  /* Labels scale with the picture, inside readable limits. */
+  font-size: clamp(0.68rem, 1.45cqw, 0.92rem);
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  transition:
+    transform var(--dur-fast) var(--ease),
+    background var(--dur-fast);
+  z-index: 1;
+}
+.hub-hotspot:hover,
+.hub-hotspot:focus-visible {
+  background: rgba(80, 52, 22, 0.95);
+  transform: translate(-50%, -50%) scale(1.06);
+  z-index: 2;
+}
+.hub-hotspot:focus-visible {
+  outline: 2px solid var(--gold-0);
+  outline-offset: 2px;
+}
+.hub-hotspot .icon {
+  color: var(--gold-0);
+  flex: none;
+}
+.hub-hotspot-tier {
+  font-family: var(--font-body);
+  font-size: 0.85em;
+  padding: 0 0.4em;
+  border-radius: 999px;
+  background: rgba(212, 167, 79, 0.22);
+  color: var(--gold-0);
+}
+.hub-hotspot.is-unbuilt {
+  border-style: dashed;
+  border-color: rgba(194, 178, 147, 0.55);
+  color: var(--bone-2);
+  background: rgba(14, 9, 6, 0.65);
+}
+.hub-hotspot.is-unbuilt .hub-hotspot-tier {
+  background: rgba(150, 140, 120, 0.2);
+  color: var(--bone-2);
+  font-style: italic;
+}
+@container (max-width: 760px) {
+  .hub-hotspot .icon {
+    display: none;
+  }
+  .hub-hotspot {
+    padding: 0.25em 0.5em;
+  }
+}
+
+
+@container shell (max-width: 74rem) {
+  .hub {
+    grid-template-columns: min(calc(14.5rem * var(--text-scale)), 24%) minmax(0, 1fr) min(calc(16.5rem * var(--text-scale)), 26%);
+  }
+}
+/* Narrow: one scrolling column, the village first. */
+@container shell (max-width: 60rem) {
+  .hub {
+    grid-template-columns: minmax(0, 1fr);
+    grid-auto-rows: auto;
+    align-content: start;
+    overflow-y: auto;
+  }
+  .hub-centre {
+    order: -1;
+  }
+  .hub-stage {
+    min-height: 26rem;
+  }
+  .hub-col {
+    overflow: visible;
+  }
+}

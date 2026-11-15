@@ -1,0 +1,55 @@
+{
+  "ui.hub.placeholderPanorama": {
+    "kind": "image",
+    "path": "ui/hub-placeholder-panorama.jpg",
+    "size": [1600, 800],
+    "anchor": [0.5, 0.5],
+    "placeholder": {
+      "generator": "panorama",
+      "params": { "scene": "homeHallDusk" },
+      "label": "Placeholder hub panorama: the home hall and village at dusk"
+    }
+  },
+  "ui.sfx.click": {
+    "kind": "sfx",
+    "path": "sfx/ui/click.ogg",
+    "durationS": 0.08,
+    "placeholder": { "generator": "sfx", "params": { "preset": "woodTap" }, "label": "UI click (wood tap)" }
+  },
+  "ui.sfx.hover": {
+    "kind": "sfx",
+    "path": "sfx/ui/hover.ogg",
+    "durationS": 0.05,
+    "placeholder": { "generator": "sfx", "params": { "preset": "softTick" }, "label": "UI hover tick" }
+  },
+  "ui.sfx.open": {
+    "kind": "sfx",
+    "path": "sfx/ui/open.ogg",
+    "durationS": 0.3,
+    "placeholder": { "generator": "sfx", "params": { "preset": "chestOpen" }, "label": "Panel opens (lid creak)" }
+  },
+  "ui.sfx.close": {
+    "kind": "sfx",
+    "path": "sfx/ui/close.ogg",
+    "durationS": 0.25,
+    "placeholder": { "generator": "sfx", "params": { "preset": "chestClose" }, "label": "Panel closes (lid thud)" }
+  },
+  "ui.sfx.toast": {
+    "kind": "sfx",
+    "path": "sfx/ui/toast.ogg",
+    "durationS": 0.4,
+    "placeholder": { "generator": "sfx", "params": { "preset": "bellSmall" }, "label": "Notification chime" }
+  },
+  "ui.sfx.critical": {
+    "kind": "sfx",
+    "path": "sfx/ui/critical.ogg",
+    "durationS": 1.2,
+    "placeholder": { "generator": "sfx", "params": { "preset": "hornLow" }, "label": "Critical notification (low horn)" }
+  },
+  "ui.sfx.pageTurn": {
+    "kind": "sfx",
+    "path": "sfx/ui/page-turn.ogg",
+    "durationS": 0.35,
+    "placeholder": { "generator": "sfx", "params": { "preset": "vellum" }, "label": "Wizard step (vellum page turn)" }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "//": "Shared compiler options. Programs: tsconfig.app.json (client + sim + content, no tests: the shipped app; used by `build`), tsconfig.json (sim + content + tools + tests + configs, NO client: test-only module augmentations stay out of the client), tsconfig.sim.json (sim + content without DOM/Node types). `npm run typecheck` runs all three.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": false,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@sim/*": ["./src/sim/*"],
+      "@content/*": ["./src/content/*"],
+      "@client/*": ["./src/client/*"]
+    }
+  }
+}

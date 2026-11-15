@@ -1,0 +1,920 @@
+{
+  "worldgen": {
+    "synthesizeMissingCapitals": true,
+    "synthesizedSeatTier": "capital",
+    "synthesizedTier": "town",
+    "popSkew": 1.5,
+    "popByCulture": {
+      "skarn": {
+        "capital": [
+          2500,
+          4500
+        ]
+      },
+      "hvarn": {
+        "capital": [
+          2500,
+          4500
+        ]
+      },
+      "eyjar": {
+        "capital": [
+          2500,
+          5000
+        ]
+      },
+      "albric": {
+        "capital": [
+          3000,
+          6000
+        ]
+      },
+      "cael": {
+        "capital": [
+          1500,
+          3000
+        ]
+      },
+      "corvani": {
+        "capital": [
+          6000,
+          12000
+        ]
+      },
+      "velkar": {
+        "capital": [
+          3000,
+          6000
+        ]
+      },
+      "kurgai": {
+        "capital": [
+          2000,
+          4000
+        ]
+      },
+      "saraleonese": {
+        "capital": [
+          22000,
+          30000
+        ],
+        "city": [
+          5000,
+          8000
+        ]
+      },
+      "isafolder": {
+        "town": [
+          700,
+          900
+        ]
+      },
+      "rime": {
+        "capital": [
+          1500,
+          1800
+        ],
+        "town": [
+          700,
+          900
+        ]
+      }
+    },
+    "provinceCapitalPopBoost": 0.35,
+    "economy": {
+      "ruined": 0.01,
+      "destitute": 0.06,
+      "poor": 0.38,
+      "fair": 0.42,
+      "thriving": 0.13
+    },
+    "economyByCulture": {
+      "corvani": {
+        "ruined": 0.01,
+        "destitute": 0.03,
+        "poor": 0.2,
+        "fair": 0.5,
+        "thriving": 0.26
+      },
+      "saraleonese": {
+        "ruined": 0,
+        "destitute": 0.02,
+        "poor": 0.15,
+        "fair": 0.5,
+        "thriving": 0.33
+      },
+      "kurgai": {
+        "ruined": 0,
+        "destitute": 0.08,
+        "poor": 0.4,
+        "fair": 0.4,
+        "thriving": 0.12
+      },
+      "isafolder": {
+        "ruined": 0,
+        "destitute": 0.15,
+        "poor": 0.55,
+        "fair": 0.28,
+        "thriving": 0.02
+      },
+      "rime": {
+        "ruined": 0,
+        "destitute": 0.15,
+        "poor": 0.55,
+        "fair": 0.28,
+        "thriving": 0.02
+      }
+    },
+    "seatMinEconomy": "fair",
+    "garrisonMix": {
+      "skarn": {
+        "bondi": 0.55,
+        "archers": 0.13,
+        "huscarls": 0.1,
+        "fjordWallHuscarls": 0.12,
+        "berserkers": 0.03,
+        "skirmishers": 0.07
+      },
+      "hvarn": {
+        "bondi": 0.5,
+        "archers": 0.12,
+        "elkBowArchers": 0.2,
+        "huscarls": 0.1,
+        "wolfcoats": 0.04,
+        "skirmishers": 0.04
+      },
+      "eyjar": {
+        "bondi": 0.55,
+        "archers": 0.14,
+        "huscarls": 0.1,
+        "strandRiders": 0.14,
+        "skirmishers": 0.07
+      },
+      "isafolder": {
+        "bondi": 0.7,
+        "archers": 0.2,
+        "skirmishers": 0.1
+      },
+      "albric": {
+        "fyrdSpearmen": 0.6,
+        "albricBowmen": 0.2,
+        "thegns": 0.2
+      },
+      "cael": {
+        "caelRaiders": 0.7,
+        "skirmishers": 0.3
+      },
+      "corvani": {
+        "javelinmen": 0.45,
+        "menAtArms": 0.3,
+        "horsemen": 0.25
+      },
+      "velkar": {
+        "druzhina": 0.35,
+        "horseArchers": 0.3,
+        "archers": 0.35
+      },
+      "kurgai": {
+        "steppeHorseArchers": 1
+      },
+      "saraleonese": {
+        "emberGuard": 0.4,
+        "archers": 0.3,
+        "skirmishers": 0.3
+      },
+      "rime": {
+        "archers": 0.6,
+        "skirmishers": 0.4
+      }
+    },
+    "garrisonMixByTier": {
+      "cloister": {
+        "cloisterGuard": 1
+      }
+    },
+    "seatGarrisonMult": 1.25,
+    "fortByTier": {
+      "hamlet": [
+        0,
+        0
+      ],
+      "village": [
+        0,
+        1
+      ],
+      "town": [
+        1,
+        2
+      ],
+      "city": [
+        2,
+        3
+      ],
+      "capital": [
+        2,
+        3
+      ],
+      "cloister": [
+        0,
+        1
+      ],
+      "fortress": [
+        2,
+        3
+      ],
+      "emporium": [
+        1,
+        2
+      ],
+      "templeStead": [
+        0,
+        1
+      ]
+    },
+    "burhTiers": [
+      "town",
+      "city",
+      "capital"
+    ],
+    "stoneWallChance": {
+      "corvani": 0.35,
+      "saraleonese": 0.8
+    },
+    "stoneWallTiers": [
+      "city",
+      "capital"
+    ],
+    "empireSeatStoneWalls": true,
+    "buildingsByTier": {
+      "hamlet": {
+        "farms": 1
+      },
+      "village": {
+        "meadhall": 1,
+        "market": 1,
+        "grove": 1,
+        "farms": 1
+      },
+      "town": {
+        "hall": 1,
+        "meadhall": 1,
+        "market": 1,
+        "smithy": 1,
+        "shipyard": 1,
+        "grove": 1,
+        "farms": 1,
+        "seersHut": 1
+      },
+      "city": {
+        "hall": 2,
+        "meadhall": 2,
+        "market": 2,
+        "smithy": 2,
+        "shipyard": 2,
+        "grove": 2,
+        "farms": 2,
+        "watchtowers": 1,
+        "seersHut": 1
+      },
+      "capital": {
+        "hall": 3,
+        "meadhall": 2,
+        "market": 2,
+        "smithy": 2,
+        "shipyard": 2,
+        "grove": 2,
+        "farms": 2,
+        "watchtowers": 1,
+        "seersHut": 1
+      },
+      "cloister": {
+        "farms": 1
+      },
+      "fortress": {
+        "hall": 1,
+        "smithy": 1,
+        "watchtowers": 2
+      },
+      "emporium": {
+        "hall": 1,
+        "meadhall": 2,
+        "market": 2,
+        "shipyard": 1,
+        "farms": 1
+      },
+      "templeStead": {
+        "meadhall": 1,
+        "grove": 2,
+        "seersHut": 1,
+        "farms": 1
+      }
+    },
+    "harbourBuildings": [
+      "shipyard"
+    ],
+    "oldWaysBuildings": [
+      "seersHut"
+    ],
+    "equipmentByCulture": {
+      "skarn": [
+        1,
+        1
+      ],
+      "hvarn": [
+        1,
+        1
+      ],
+      "eyjar": [
+        1,
+        1
+      ],
+      "isafolder": [
+        1,
+        1
+      ],
+      "rime": [
+        1,
+        1
+      ],
+      "albric": [
+        2,
+        2
+      ],
+      "cael": [
+        1,
+        1
+      ],
+      "corvani": [
+        2,
+        2
+      ],
+      "velkar": [
+        2,
+        2
+      ],
+      "kurgai": [
+        2,
+        2
+      ],
+      "saraleonese": [
+        3,
+        3
+      ]
+    },
+    "equipmentDefault": [
+      1,
+      1
+    ],
+    "equipmentTierBonus": {
+      "capital": 1,
+      "city": 1,
+      "fortress": 1
+    },
+    "treasuryMonths": [
+      3,
+      9
+    ],
+    "ruler": {
+      "femaleChance": 0.2,
+      "attributes": [
+        3,
+        7
+      ],
+      "skills": {
+        "melee": [
+          1,
+          6
+        ],
+        "archery": [
+          0,
+          4
+        ],
+        "command": [
+          2,
+          6
+        ],
+        "seafaring": [
+          0,
+          3
+        ],
+        "wildcraft": [
+          0,
+          4
+        ],
+        "speechcraft": [
+          1,
+          5
+        ],
+        "stewardship": [
+          1,
+          5
+        ],
+        "runecraft": [
+          0,
+          3
+        ]
+      },
+      "cultureSkills": {
+        "skarn": {
+          "seafaring": 2
+        },
+        "hvarn": {
+          "seafaring": 1,
+          "archery": 1,
+          "wildcraft": 1
+        },
+        "eyjar": {
+          "seafaring": 2,
+          "speechcraft": 1
+        },
+        "isafolder": {
+          "seafaring": 1
+        },
+        "cael": {
+          "wildcraft": 1
+        },
+        "corvani": {
+          "stewardship": 1
+        },
+        "saraleonese": {
+          "stewardship": 1,
+          "speechcraft": 1
+        },
+        "kurgai": {
+          "archery": 2
+        },
+        "velkar": {
+          "seafaring": 1
+        },
+        "rime": {
+          "wildcraft": 2
+        }
+      },
+      "yearsPerLevel": 4,
+      "maxLevel": 12,
+      "personalityTraits": [
+        1,
+        3
+      ],
+      "giftChance": 0.15,
+      "flawChance": 0.1
+    },
+    "leader": {
+      "femaleChance": 0.15,
+      "attributes": [
+        3,
+        6
+      ],
+      "skills": {
+        "melee": [
+          0,
+          4
+        ],
+        "archery": [
+          0,
+          3
+        ],
+        "command": [
+          0,
+          4
+        ],
+        "seafaring": [
+          0,
+          3
+        ],
+        "wildcraft": [
+          0,
+          3
+        ],
+        "speechcraft": [
+          0,
+          4
+        ],
+        "stewardship": [
+          1,
+          5
+        ],
+        "runecraft": [
+          0,
+          2
+        ]
+      },
+      "yearsPerLevel": 5,
+      "maxLevel": 8,
+      "personalityTraits": [
+        0,
+        2
+      ]
+    },
+    "family": {
+      "spouseChance": 0.85,
+      "spouseAgeGap": [
+        -3,
+        8
+      ],
+      "minMarriageAge": 18,
+      "foreignSpouseChance": 0.3,
+      "maxChildren": 5,
+      "childbearingAge": [
+        18,
+        40
+      ],
+      "childGapYears": [
+        1,
+        4
+      ],
+      "childChance": 0.7,
+      "siblingWeights": [
+        0.25,
+        0.35,
+        0.25,
+        0.15
+      ],
+      "siblingAgeGap": 10,
+      "parentAgeAtBirth": [
+        20,
+        38
+      ],
+      "parentMaxAge": 70,
+      "parentDeathChance": 0.6,
+      "kinGovernors": true
+    }
+  },
+  "personality": {
+    "templates": {
+      "skarn": {
+        "aggression": 65,
+        "greed": 55,
+        "honor": 55,
+        "caution": 40,
+        "ambition": 60,
+        "piety": 50
+      },
+      "hvarn": {
+        "aggression": 55,
+        "greed": 55,
+        "honor": 55,
+        "caution": 50,
+        "ambition": 55,
+        "piety": 55
+      },
+      "eyjar": {
+        "aggression": 50,
+        "greed": 65,
+        "honor": 50,
+        "caution": 50,
+        "ambition": 55,
+        "piety": 45
+      },
+      "isafolder": {
+        "aggression": 35,
+        "greed": 45,
+        "honor": 65,
+        "caution": 55,
+        "ambition": 35,
+        "piety": 50
+      },
+      "rime": {
+        "aggression": 30,
+        "greed": 40,
+        "honor": 60,
+        "caution": 65,
+        "ambition": 25,
+        "piety": 60
+      },
+      "albric": {
+        "aggression": 40,
+        "greed": 50,
+        "honor": 60,
+        "caution": 60,
+        "ambition": 50,
+        "piety": 65
+      },
+      "cael": {
+        "aggression": 55,
+        "greed": 40,
+        "honor": 60,
+        "caution": 45,
+        "ambition": 45,
+        "piety": 70
+      },
+      "corvani": {
+        "aggression": 50,
+        "greed": 60,
+        "honor": 50,
+        "caution": 50,
+        "ambition": 70,
+        "piety": 60
+      },
+      "velkar": {
+        "aggression": 50,
+        "greed": 65,
+        "honor": 50,
+        "caution": 55,
+        "ambition": 50,
+        "piety": 55
+      },
+      "kurgai": {
+        "aggression": 70,
+        "greed": 60,
+        "honor": 45,
+        "caution": 40,
+        "ambition": 60,
+        "piety": 45
+      },
+      "saraleonese": {
+        "aggression": 35,
+        "greed": 60,
+        "honor": 45,
+        "caution": 70,
+        "ambition": 55,
+        "piety": 65
+      }
+    },
+    "defaultTemplate": {
+      "aggression": 50,
+      "greed": 50,
+      "honor": 50,
+      "caution": 50,
+      "ambition": 50,
+      "piety": 50
+    },
+    "traitShifts": {
+      "brave": {
+        "aggression": 10,
+        "caution": -10
+      },
+      "craven": {
+        "aggression": -10,
+        "caution": 15
+      },
+      "generous": {
+        "greed": -15
+      },
+      "greedy": {
+        "greed": 20
+      },
+      "honest": {
+        "honor": 15
+      },
+      "deceitful": {
+        "honor": -20
+      },
+      "wrathful": {
+        "aggression": 15,
+        "caution": -5
+      },
+      "patient": {
+        "caution": 10,
+        "aggression": -5
+      },
+      "pious": {
+        "piety": 20
+      },
+      "skeptic": {
+        "piety": -20
+      },
+      "ambitious": {
+        "ambition": 20
+      },
+      "content": {
+        "ambition": -20
+      },
+      "just": {
+        "honor": 10
+      },
+      "ruthless": {
+        "honor": -10,
+        "aggression": 5
+      },
+      "proud": {
+        "ambition": 10,
+        "honor": 5
+      }
+    }
+  },
+  "politics": {
+    "defaultRule": {
+      "seatKind": "kingdom",
+      "holdAll": false,
+      "memberKind": "jarldom",
+      "swornChance": 0.5,
+      "unclaimedKind": "jarldom",
+      "siblingRulers": false,
+      "rulerAge": [
+        25,
+        55
+      ]
+    },
+    "regions": {
+      "albrenn": {
+        "seatKind": "petty",
+        "holdAll": true
+      },
+      "cael": {
+        "seatKind": "confederacy",
+        "memberKind": "clan",
+        "swornChance": 0.6
+      },
+      "corvaine": {
+        "seatKind": "realm",
+        "holdAll": true,
+        "siblingRulers": true,
+        "rulerAge": [
+          24,
+          40
+        ]
+      },
+      "velkar": {
+        "seatKind": "realm",
+        "memberKind": "city",
+        "swornChance": 0.5
+      },
+      "saraleon": {
+        "seatKind": "empire",
+        "holdAll": true,
+        "rulerAge": [
+          30,
+          60
+        ]
+      },
+      "rimewild": {
+        "unclaimedKind": "city"
+      },
+      "isafold": {
+        "unclaimedKind": "clan"
+      }
+    },
+    "kingdoms": {
+      "polovnaKhaganate": {
+        "seatKind": "khanate",
+        "holdAll": true
+      }
+    },
+    "neutralKind": "city"
+  },
+  "relations": {
+    "border": -5,
+    "fealty": 15,
+    "regionalRivalry": -20,
+    "faithDifference": -10,
+    "noise": 10,
+    "feud": -30,
+    "feudDecayPerMonth": 1,
+    "rivalryRegions": [
+      "corvaine",
+      "albrenn"
+    ],
+    "conflicts": [
+      {
+        "regionId": "corvaine",
+        "count": 1,
+        "kind": "war",
+        "neighboursOnly": true
+      },
+      {
+        "regionId": "albrenn",
+        "count": 1,
+        "kind": "war",
+        "neighboursOnly": true
+      },
+      {
+        "regionId": "velkar",
+        "count": 1,
+        "kind": "war",
+        "neighboursOnly": true,
+        "kindA": "khanate"
+      },
+      {
+        "regionId": "skarnheim",
+        "count": 1,
+        "kind": "feud",
+        "neighboursOnly": true
+      },
+      {
+        "regionId": "hvarnland",
+        "count": 1,
+        "kind": "feud",
+        "neighboursOnly": true
+      },
+      {
+        "regionId": "eyjamark",
+        "count": 1,
+        "kind": "feud",
+        "neighboursOnly": true
+      },
+      {
+        "regionId": "cael",
+        "count": 1,
+        "kind": "feud",
+        "neighboursOnly": true
+      },
+      {
+        "regionId": "skarnheim",
+        "otherRegionId": "hvarnland",
+        "count": 1,
+        "kind": "feud",
+        "neighboursOnly": false,
+        "kindA": "kingdom",
+        "kindB": "kingdom"
+      },
+      {
+        "regionId": "hvarnland",
+        "otherRegionId": "eyjamark",
+        "count": 1,
+        "kind": "feud",
+        "neighboursOnly": false,
+        "kindA": "kingdom",
+        "kindB": "kingdom"
+      }
+    ],
+    "relatePlayerWithAll": true
+  },
+  "player": {
+    "preferHarbour": true,
+    "secondaryGarrisonMult": 0.5,
+    "colorIndex": 0
+  },
+  "rival": {
+    "traits": [
+      "proud",
+      "wrathful",
+      "deceitful",
+      "ruthless",
+      "ambitious"
+    ],
+    "traitCount": [
+      2,
+      3
+    ],
+    "personality": {
+      "aggression": 20,
+      "honor": -20,
+      "ambition": 15
+    },
+    "borderFortTier": 2,
+    "minAge": 25
+  },
+  "knowledge": {
+    "homelandSeaBuffer": 10,
+    "startCharts": [
+      {
+        "provinces": [
+          "northwold",
+          "cliffmarch",
+          "eastfen",
+          "seawold",
+          "southdown"
+        ],
+        "zones": [
+          "whaleRoad",
+          "albrennSea"
+        ],
+        "coastOnly": true,
+        "landBuffer": 4,
+        "seaBuffer": 12
+      }
+    ],
+    "riverMouthRegions": [
+      "velkar"
+    ],
+    "riverMouthRadius": 14,
+    "settlementRadius": 5,
+    "minSightCells": 1,
+    "zoneCompleteShare": 0.9
+  },
+  "index": {
+    "laneHorizonDays": 8,
+    "maxLanesPerSettlement": 24,
+    "portSearchRadius": 8,
+    "seaNeighbourCells": 90,
+    "fallbackDetour": 1.3,
+    "fallbackKmPerDay": 120
+  },
+  "movement": {
+    "dayStartHour": 5,
+    "beachMaxCoastCells": 6,
+    "portageUndermannedMult": 2,
+    "marchStartHour": 7,
+    "marchHours": 10,
+    "shoalPenaltyShips": [
+      "drakkar",
+      "knarr",
+      "galley"
+    ],
+    "shoalPenalty": 1.25,
+    "stormPadCells": 2,
+    "snapRadius": 16,
+    "smoothLookahead": 48,
+    "portageRangeShare": 0.5,
+    "windRouteWeight": 1
+  },
+  "steering": {
+    "touchRadius": 1.75,
+    "armyTouchRadius": 1.5,
+    "subStepCells": 0.5,
+    "aheadCells": 1,
+    "armyMarchesAnyHour": true,
+    "riversStopWarbands": true
+  }
+}

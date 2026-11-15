@@ -1,0 +1,574 @@
+/* Arrival card, aftermath, settlement hub and cargo panels. */
+.st-facts p {
+  margin: 0 0 4px;
+}
+.st-options {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.st-option {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.st-option > button {
+  width: 100%;
+}
+.st-option-off .st-option-text > span:first-child {
+  opacity: 0.6;
+}
+.st-option-text {
+  display: grid;
+  gap: 4px;
+}
+.st-reason {
+  font-size: 0.9em;
+}
+.st-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.st-chip {
+  font-size: 0.82em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(127, 127, 127, 0.18);
+  font-variant-numeric: tabular-nums;
+}
+.st-hub {
+  position: absolute;
+  /* Left of the zoom column, below the map-mode bar; the bottom stays clear for the selection card. */
+  right: 150px;
+  top: 60px;
+  width: min(560px, 46vw);
+  max-height: calc(100% - 200px);
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+}
+.st-hub > .frame-body {
+  overflow: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+.st-hub > .frame-footer {
+  flex: 0 0 auto;
+}
+.st-market {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.st-market th,
+.st-market td {
+  padding: 3px 6px;
+  border-bottom: 1px solid rgba(127, 127, 127, 0.2);
+  text-align: left;
+}
+.st-market .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.st-market-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+.st-market-actions button + button {
+  margin-left: 4px;
+}
+.st-meadhall {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* ---------------------------------------------------------------- Home Market / Mead-hall overlays */
+.mk-screen,
+.mh-screen {
+  width: min(980px, 96vw);
+  max-height: 100%;
+}
+.mk-screen > .frame-body,
+.mh-screen > .frame-body {
+  overflow: auto;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+.mk-purpose {
+  margin: 0 0 var(--sp-2);
+  font-style: italic;
+}
+.mk-note {
+  margin: 0 0 var(--sp-2);
+}
+.mh-subhead {
+  margin: var(--sp-4) 0 var(--sp-2);
+  font-family: var(--font-display, inherit);
+  color: var(--c-text-2);
+}
+.mh-empty {
+  padding: var(--sp-3) 0;
+  font-style: italic;
+}
+
+/* Market board (shared home/abroad). */
+.mk-board {
+  display: grid;
+  gap: var(--sp-3);
+}
+.mk-table-wrap {
+  overflow-x: auto;
+}
+.mk-table tbody tr {
+  cursor: pointer;
+}
+.mk-table tbody tr:hover {
+  background: rgba(255, 225, 170, 0.05);
+}
+.mk-table tbody tr.is-selected {
+  background: rgba(212, 170, 80, 0.14);
+  box-shadow: inset 3px 0 0 var(--c-accent);
+}
+.mk-pick {
+  all: unset;
+  cursor: pointer;
+}
+.mk-pick:focus-visible {
+  outline: 2px solid var(--c-focus);
+  outline-offset: 2px;
+}
+.mk-signal.mk-cheap {
+  color: var(--c-success);
+}
+.mk-signal.mk-dear {
+  color: var(--c-warning);
+}
+.mk-elsewhere {
+  font-size: 0.88em;
+}
+.mk-deal {
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md, 6px);
+  background: var(--tex-panel-sunk);
+}
+.mk-deal-head,
+.mk-deal-actions,
+.mk-deal-quotes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-4);
+}
+.mk-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.mk-qty .text-input {
+  width: 6em;
+}
+.mk-why {
+  font-size: 0.9em;
+}
+
+/* Prices at known markets. */
+.mk-known-table th {
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+.mk-known-sub {
+  font-size: 0.8em;
+  font-weight: normal;
+}
+.mk-known-table td.mk-cheap {
+  color: var(--c-success);
+}
+.mk-known-table td.mk-dear {
+  color: var(--c-warning);
+}
+.mk-known-table td.mk-best {
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--c-accent);
+}
+
+/* Trade routes. */
+.mk-route-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-2);
+}
+.mk-route {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md, 6px);
+}
+.mk-route p {
+  margin: 2px 0;
+}
+.mk-route-head {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+.mk-route-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-2) var(--sp-4);
+}
+.mk-route-form > .mk-goods,
+.mk-route-form > p,
+.mk-route-form > .mk-deal-actions {
+  grid-column: 1 / -1;
+}
+.mk-field {
+  display: grid;
+  gap: 4px;
+}
+.mk-route-trip {
+  margin: 0;
+}
+.mk-goods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md, 6px);
+  padding: var(--sp-2);
+  margin: 0;
+}
+.mk-goods legend {
+  padding: 0 4px;
+  color: var(--c-text-dim);
+}
+.mk-good {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.92em;
+}
+.mk-good.is-on {
+  color: var(--c-accent-hi);
+}
+
+/* Mead-hall panels (shared home/abroad). */
+.mh-actions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-2);
+}
+.mh-action {
+  display: grid;
+  grid-template-columns: minmax(180px, 250px) 1fr;
+  gap: var(--sp-3);
+  align-items: start;
+}
+.mh-action > button {
+  width: 100%;
+  white-space: normal;
+}
+.mh-action-text {
+  display: grid;
+  gap: 2px;
+}
+.mh-result {
+  margin: var(--sp-3) 0 0;
+  padding: var(--sp-2) var(--sp-3);
+  border-left: 3px solid var(--c-accent);
+  background: rgba(212, 170, 80, 0.08);
+}
+.mh-keeper {
+  margin-top: var(--sp-3);
+}
+.mh-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+.mh-news-list,
+.mh-offers,
+.mh-intel-list,
+.mh-maps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-2);
+}
+.mh-news,
+.mh-offer,
+.mh-intel-place {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md, 6px);
+}
+.mh-news-head,
+.mh-offer-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+.mh-importance {
+  font-size: 0.85em;
+  color: var(--c-text-dim);
+}
+.mh-headline {
+  margin: 4px 0 2px;
+}
+.mh-meta {
+  margin: 0;
+  font-size: 0.88em;
+}
+.mh-chip-rumour {
+  color: var(--c-warning);
+}
+.mh-chip-confirmed,
+.mh-chip-witnessed {
+  color: var(--c-success);
+}
+.mh-price {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--c-accent-hi);
+}
+.mh-backstory {
+  margin: 4px 0;
+  font-style: italic;
+}
+.mh-offer-stats {
+  margin: 0 0 var(--sp-2);
+  font-size: 0.88em;
+}
+.mh-offer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.mh-offer.is-hired {
+  opacity: 0.6;
+}
+.mh-intel-place ul {
+  margin: 4px 0 0;
+  padding-left: 1.1em;
+}
+.mh-fact-stale {
+  color: var(--c-text-faint);
+}
+
+/* Two-sided deal bar (yours / theirs). */
+.mk-yours {
+  color: var(--c-accent-hi);
+}
+.mk-theirs {
+  color: var(--c-text-2);
+}
+.mk-deal-sides {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--sp-3);
+}
+.mk-side {
+  display: grid;
+  gap: var(--sp-2);
+  align-content: start;
+  padding: var(--sp-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md, 6px);
+}
+.mk-side-title {
+  font-family: var(--font-display, inherit);
+  color: var(--c-text-2);
+}
+.mk-side > button {
+  justify-self: start;
+}
+
+/* Quick deals: Sell all loot, Buy provisions. */
+.mk-quick {
+  display: grid;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+.mk-quick-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--sp-2) var(--sp-4);
+}
+.mk-quick-item {
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+}
+.mk-confirm {
+  padding: var(--sp-3);
+  border: 1px solid var(--c-accent-lo);
+  border-radius: var(--r-md, 6px);
+  background: var(--tex-panel-sunk);
+}
+.mk-confirm p {
+  margin: 0 0 var(--sp-2);
+}
+.mk-confirm-lines {
+  list-style: none;
+  margin: 0 0 var(--sp-2);
+  padding: 0;
+  display: grid;
+  gap: 2px;
+  max-width: 420px;
+}
+.mk-confirm-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+.mk-confirm-total {
+  font-weight: 700;
+  color: var(--c-accent-hi);
+}
+
+/* ---------------------------------------------------------------- Visit (the hub abroad) as a scene */
+.st-visit {
+  position: fixed;
+  inset: 0;
+  /* Above the map and its bottom bar, below decisions (250) and the top bar (260). */
+  z-index: 240;
+  background: var(--oak-0);
+}
+.st-places {
+  margin-top: auto;
+  display: grid;
+  gap: clamp(8px, 1.4vh, 14px);
+}
+.st-place {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  padding: clamp(10px, 1.6vh, 16px) var(--sp-4);
+  text-align: left;
+  font: inherit;
+  color: var(--bone-0);
+  background: linear-gradient(180deg, rgba(52, 37, 25, 0.94), rgba(24, 17, 11, 0.95));
+  border: 1px solid #5c4329;
+  border-left: 5px solid var(--gold-2);
+  border-radius: var(--r-md);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+.st-place:hover:not(:disabled) {
+  transform: translateX(5px);
+  border-color: var(--gold-1);
+}
+.st-place:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 2px;
+}
+.st-place.is-open {
+  border-color: var(--gold-1);
+  background: linear-gradient(180deg, rgba(92, 67, 41, 0.96), rgba(42, 29, 19, 0.96));
+}
+.st-place.is-leave {
+  border-left-color: var(--sea-1);
+}
+.st-place:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.st-place-glyph {
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+  color: var(--gold-1);
+}
+.st-place-glyph svg {
+  width: 100%;
+  height: 100%;
+}
+.st-place-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.st-place-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+}
+.st-place-line {
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  color: var(--bone-2);
+}
+.st-visit-panel {
+  position: absolute;
+  top: calc(4.6rem + clamp(10px, 3vh, 36px));
+  bottom: clamp(14px, 3.5vh, 40px);
+  right: clamp(16px, 2.4vw, 40px);
+  left: calc(clamp(16px, 3.2vw, 56px) + min(38rem, 40vw) + clamp(16px, 2vw, 32px));
+  display: flex;
+  flex-direction: column;
+  background:
+    var(--tex-grain, none),
+    linear-gradient(180deg, rgba(36, 25, 18, 0.97), rgba(20, 14, 10, 0.97));
+  border: 1px solid var(--c-border);
+  border-top: 3px solid var(--gold-2);
+  border-radius: var(--r-lg);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+  animation: scn-panel-in 360ms var(--ease) both;
+}
+.st-visit-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--c-border);
+}
+.st-visit-panel-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  color: var(--bone-0);
+}
+.st-visit-panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--sp-4);
+  font-size: var(--fs-md);
+}
+/* The quay picture dims a little behind an open panel. */
+.st-visit.has-panel .scn-picture {
+  filter: brightness(0.7);
+  transition: filter var(--dur-med) var(--ease);
+}
+.st-governor {
+  margin-top: 6px;
+}
+/* Cargo after a raid: larger type to match the scenes. */
+.st-cargo .st-cargo-hold {
+  font-size: var(--fs-md);
+  margin: 0 0 var(--sp-2);
+}
+.st-cargo .st-cargo-table {
+  font-size: var(--fs-md);
+}

@@ -1,0 +1,147 @@
+.main-menu {
+  position: relative;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  align-items: stretch;
+}
+.main-menu > .menu-backdrop {
+  position: fixed;
+}
+.main-menu-column {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  /* Centred while it fits; scrolls from the top when it does not (auto margins never clip). */
+  justify-content: flex-start;
+  gap: var(--sp-6);
+  min-height: 100%;
+  height: max-content;
+  width: min(34rem, 92vw);
+  padding: var(--sp-7) var(--sp-7) var(--sp-5);
+  background: linear-gradient(90deg, rgba(6, 4, 3, 0.86) 0%, rgba(6, 4, 3, 0.72) 70%, rgba(6, 4, 3, 0) 100%);
+}
+.main-menu-title {
+  margin-top: auto;
+  animation: bardia-rise var(--dur-slow) var(--ease) both;
+}
+.main-menu-footer {
+  margin-bottom: auto;
+}
+.main-menu-rune {
+  font-family: var(--font-display);
+  font-size: calc(var(--fs-3xl) * 0.9);
+  color: var(--gold-2);
+  opacity: 0.8;
+  line-height: 1;
+  margin-bottom: var(--sp-1);
+}
+.main-menu-wordmark {
+  /* A logo, not reading text: capped so a large text size cannot push it out of its column. */
+  font-size: min(var(--fs-hero), 5rem, 13vw);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1;
+  background: linear-gradient(180deg, #fbe7ad 0%, #e2b85d 42%, #9b6d26 72%, #e4bf6d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.85)) drop-shadow(0 0 22px rgba(220, 170, 80, 0.18));
+}
+:root[data-contrast='high'] .main-menu-wordmark {
+  background: none;
+  color: #ffd400;
+  filter: none;
+}
+.main-menu-tagline {
+  margin: var(--sp-2) 0 0;
+  font-style: italic;
+  font-size: var(--fs-lg);
+  color: var(--bone-1);
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 2px #000;
+}
+.main-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.main-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  min-height: 3.3rem;
+  padding: var(--sp-2) var(--sp-4);
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bone-0);
+  background: linear-gradient(90deg, rgba(49, 34, 23, 0.92), rgba(36, 25, 18, 0.7) 75%, rgba(36, 25, 18, 0));
+  border: none;
+  border-left: 3px solid var(--iron-3);
+  border-radius: 2px;
+  cursor: pointer;
+  text-shadow: 0 1px 0 #000;
+  transition:
+    border-color var(--dur-fast),
+    padding-left var(--dur-med) var(--ease),
+    color var(--dur-fast),
+    background var(--dur-fast);
+  animation: bardia-rise var(--dur-slow) var(--ease) both;
+}
+.main-menu-item:not(:disabled):hover,
+.main-menu-item:not(:disabled):focus-visible {
+  color: var(--gold-0);
+  border-left-color: var(--gold-1);
+  padding-left: calc(var(--sp-4) + 6px);
+  background: linear-gradient(90deg, rgba(92, 67, 41, 0.92), rgba(49, 34, 23, 0.7) 75%, rgba(36, 25, 18, 0));
+  outline: none;
+}
+.main-menu-item.is-primary {
+  border-left-color: var(--gold-1);
+}
+/* Dim the contents, not the button: the entrance animation (fill-mode both) owns the button's opacity. */
+.main-menu-item:disabled {
+  cursor: default;
+  border-left-color: var(--iron-2, rgba(0, 0, 0, 0.4));
+  background: linear-gradient(90deg, rgba(36, 25, 18, 0.7), rgba(36, 25, 18, 0.4) 75%, rgba(36, 25, 18, 0));
+}
+.main-menu-item:disabled > * {
+  opacity: 0.4;
+}
+.main-menu-icon {
+  width: 1.3em;
+  height: 1.3em;
+  color: var(--gold-1);
+}
+.main-menu-label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.main-menu-detail {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: var(--bone-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.main-menu-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  color: var(--bone-3);
+}
+:root[data-theme='parchment'] .main-menu-item {
+  color: var(--bone-0);
+}

@@ -1,0 +1,80 @@
+{
+  "military.sfx.musterHorn": {
+    "kind": "sfx",
+    "path": "sfx/military/muster-horn.ogg",
+    "durationS": 3.5,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "battle.warHorn",
+        "call": "muster",
+        "bus": "sfx",
+        "brief": "One long cow-horn call rolling over the farms: the war-arrow has gone out and the men are gathering."
+      },
+      "label": "Muster horn"
+    }
+  },
+  "military.sfx.shipLaunch": {
+    "kind": "sfx",
+    "path": "sfx/military/ship-launch.ogg",
+    "durationS": 2.5,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "sea.splash",
+        "size": 0.9,
+        "bus": "sfx",
+        "brief": "A new hull slides off the rollers into the fjord: timber groaning, a heavy splash, a cheer from the slipway."
+      },
+      "label": "Ship launched"
+    }
+  },
+  "military.sfx.smithy": {
+    "kind": "sfx",
+    "path": "sfx/military/smithy.ogg",
+    "durationS": 2,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": {
+        "sfx": "town.smithy",
+        "bus": "sfx",
+        "brief": "Hammer on anvil and the hiss of quenched iron: the realm armoury has been improved."
+      },
+      "label": "Armoury upgraded"
+    }
+  },
+  "military.sfx.coins": {
+    "kind": "sfx",
+    "path": "sfx/military/hire.ogg",
+    "durationS": 1,
+    "placeholder": {
+      "generator": "audio.sfx",
+      "params": { "sfx": "ui.coin", "bus": "sfx", "brief": "A purse of hack-silver set down on a mead-hall table: a sellsword is hired." },
+      "label": "Sellsword hired"
+    }
+  },
+  "military.illus.muster": {
+    "kind": "image",
+    "path": "military/muster.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "shieldWall", "seed": 9001 }, "label": "The War-Arrow" }
+  },
+  "military.illus.shipyard": {
+    "kind": "image",
+    "path": "military/shipyard.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "voyage", "seed": 9002 }, "label": "The Shipyard" }
+  },
+  "military.illus.desertion": {
+    "kind": "image",
+    "path": "military/desertion.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "fog", "seed": 9003 }, "label": "Gone in the Night" }
+  },
+  "military.illus.transferIntercepted": {
+    "kind": "image",
+    "path": "military/transfer-intercepted.png",
+    "size": [640, 360],
+    "placeholder": { "generator": "vignette", "params": { "scene": "raid", "seed": 9004 }, "label": "Raiders on the Road" }
+  }
+}

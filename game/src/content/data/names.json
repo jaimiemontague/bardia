@@ -1,0 +1,19 @@
+{
+  "bynames": [
+    "the Stout", "Split-Beard", "Crow-Eye", "the Unlucky", "Salt-Hand", "the Quiet", "Iron-Shin", "the Tall",
+    "Gap-Tooth", "the Black", "the White", "Red-Cloak", "Elk-Shanks", "the Lean", "Bent-Nose", "the Wise",
+    "Mead-Belly", "Oar-Breaker", "the Gray", "Squint", "the Loud", "Frost-Brow", "the Generous", "Ring-Hoarder",
+    "Thin-Hair", "the Peaceful", "Storm-Mouth", "the Hasty", "Half-Hand", "Goose-Neck", "the Fat", "Bear-Paw",
+    "the Fair", "Hook-Nose", "the Sly", "Boat-Builder", "Ember-Hair", "Wolf-Tooth", "the Pale", "Long-Arm",
+    "Eel-Catcher", "the Grim", "Seal-Skin", "the Smith", "Ash-Spear", "Raven-Hair", "the Young", "Old-Bones",
+    "Hard-Fist", "the Unwashed", "Sweet-Voice", "Barrel-Chest", "the Stammerer", "Cold-Heart", "Fox-Cloak",
+    "the Merry", "Wide-Strider", "Stone-Jaw", "the Lawful", "Gold-Tooth", "Wet-Foot", "the Patient", "Nail-Biter",
+    "Horse-Thief", "the Skald", "Twice-Wed", "Ice-Walker", "the Shipless", "Copper-Beard", "the Rich"
+  ],
+  "ships": {
+    "firsts": ["Sea", "Wave", "Storm", "Iron", "Gray", "Salt", "Raven", "Foam", "Wind", "Swift", "Red", "Black", "White", "Frost", "Spray", "Tide", "Gold", "Night", "Long", "Ember"],
+    "seconds": ["Wolf", "Mare", "Wing", "Swan", "Gull", "Goose", "Steed", "Hawk", "Stag", "Otter", "Elk", "Bear", "Crane", "Serpent", "Skate", "Seal", "Heron", "Eagle", "Falcon", "Hound"],
+    "patterns": ["{first}-{second}", "{first}-{second}", "{first} {second}"],
+    "ofHomeChance": 0.3
+  }
+}

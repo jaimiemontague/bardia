@@ -1,0 +1,1580 @@
+{
+  "portraits.character": {
+    "kind": "image",
+    "path": "portraits/character.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portrait",
+      "label": "Character portrait: composed from the layer pieces below; a file here replaces EVERY generic portrait"
+    }
+  },
+  "portraits.silhouette": {
+    "kind": "image",
+    "path": "portraits/silhouette.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "silhouette",
+      "label": "Unknown or unmet figure (hooded silhouette)"
+    }
+  },
+  "portraits.layer.background.north": {
+    "kind": "image",
+    "path": "portraits/layers/background/north.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "background",
+        "variant": "north"
+      },
+      "label": "Portrait layer: Background, north (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.background.west": {
+    "kind": "image",
+    "path": "portraits/layers/background/west.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "background",
+        "variant": "west"
+      },
+      "label": "Portrait layer: Background, west (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.background.south": {
+    "kind": "image",
+    "path": "portraits/layers/background/south.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "background",
+        "variant": "south"
+      },
+      "label": "Portrait layer: Background, south (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.background.east": {
+    "kind": "image",
+    "path": "portraits/layers/background/east.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "background",
+        "variant": "east"
+      },
+      "label": "Portrait layer: Background, east (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.background.steppe": {
+    "kind": "image",
+    "path": "portraits/layers/background/steppe.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "background",
+        "variant": "steppe"
+      },
+      "label": "Portrait layer: Background, steppe (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.background.far": {
+    "kind": "image",
+    "path": "portraits/layers/background/far.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "background",
+        "variant": "far"
+      },
+      "label": "Portrait layer: Background, far (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hairBack.shoulder": {
+    "kind": "image",
+    "path": "portraits/layers/hair-back/shoulder.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hairBack",
+        "variant": "shoulder"
+      },
+      "label": "Portrait layer: Hair behind the head and shoulders, shoulder (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hairBack.longLoose": {
+    "kind": "image",
+    "path": "portraits/layers/hair-back/long-loose.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hairBack",
+        "variant": "longLoose"
+      },
+      "label": "Portrait layer: Hair behind the head and shoulders, longLoose (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hairBack.warriorTail": {
+    "kind": "image",
+    "path": "portraits/layers/hair-back/warrior-tail.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hairBack",
+        "variant": "warriorTail"
+      },
+      "label": "Portrait layer: Hair behind the head and shoulders, warriorTail (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hairBack.braidedBack": {
+    "kind": "image",
+    "path": "portraits/layers/hair-back/braided-back.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hairBack",
+        "variant": "braidedBack"
+      },
+      "label": "Portrait layer: Hair behind the head and shoulders, braidedBack (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hairBack.plaitSingle": {
+    "kind": "image",
+    "path": "portraits/layers/hair-back/plait-single.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hairBack",
+        "variant": "plaitSingle"
+      },
+      "label": "Portrait layer: Hair behind the head and shoulders, plaitSingle (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hairBack.longWavy": {
+    "kind": "image",
+    "path": "portraits/layers/hair-back/long-wavy.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hairBack",
+        "variant": "longWavy"
+      },
+      "label": "Portrait layer: Hair behind the head and shoulders, longWavy (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hairBack.loose": {
+    "kind": "image",
+    "path": "portraits/layers/hair-back/loose.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hairBack",
+        "variant": "loose"
+      },
+      "label": "Portrait layer: Hair behind the head and shoulders, loose (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hairBack.bun": {
+    "kind": "image",
+    "path": "portraits/layers/hair-back/bun.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hairBack",
+        "variant": "bun"
+      },
+      "label": "Portrait layer: Hair behind the head and shoulders, bun (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.north-male-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/north-male-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "north-male-common"
+      },
+      "label": "Portrait layer: Body and clothing, north-male-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.north-male-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/north-male-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "north-male-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, north-male-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.north-male-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/north-male-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "north-male-noble"
+      },
+      "label": "Portrait layer: Body and clothing, north-male-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.north-female-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/north-female-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "north-female-common"
+      },
+      "label": "Portrait layer: Body and clothing, north-female-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.north-female-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/north-female-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "north-female-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, north-female-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.north-female-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/north-female-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "north-female-noble"
+      },
+      "label": "Portrait layer: Body and clothing, north-female-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.west-male-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/west-male-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "west-male-common"
+      },
+      "label": "Portrait layer: Body and clothing, west-male-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.west-male-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/west-male-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "west-male-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, west-male-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.west-male-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/west-male-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "west-male-noble"
+      },
+      "label": "Portrait layer: Body and clothing, west-male-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.west-female-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/west-female-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "west-female-common"
+      },
+      "label": "Portrait layer: Body and clothing, west-female-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.west-female-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/west-female-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "west-female-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, west-female-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.west-female-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/west-female-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "west-female-noble"
+      },
+      "label": "Portrait layer: Body and clothing, west-female-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.south-male-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/south-male-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "south-male-common"
+      },
+      "label": "Portrait layer: Body and clothing, south-male-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.south-male-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/south-male-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "south-male-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, south-male-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.south-male-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/south-male-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "south-male-noble"
+      },
+      "label": "Portrait layer: Body and clothing, south-male-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.south-female-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/south-female-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "south-female-common"
+      },
+      "label": "Portrait layer: Body and clothing, south-female-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.south-female-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/south-female-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "south-female-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, south-female-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.south-female-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/south-female-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "south-female-noble"
+      },
+      "label": "Portrait layer: Body and clothing, south-female-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.east-male-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/east-male-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "east-male-common"
+      },
+      "label": "Portrait layer: Body and clothing, east-male-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.east-male-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/east-male-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "east-male-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, east-male-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.east-male-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/east-male-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "east-male-noble"
+      },
+      "label": "Portrait layer: Body and clothing, east-male-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.east-female-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/east-female-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "east-female-common"
+      },
+      "label": "Portrait layer: Body and clothing, east-female-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.east-female-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/east-female-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "east-female-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, east-female-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.east-female-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/east-female-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "east-female-noble"
+      },
+      "label": "Portrait layer: Body and clothing, east-female-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.steppe-male-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/steppe-male-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "steppe-male-common"
+      },
+      "label": "Portrait layer: Body and clothing, steppe-male-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.steppe-male-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/steppe-male-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "steppe-male-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, steppe-male-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.steppe-male-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/steppe-male-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "steppe-male-noble"
+      },
+      "label": "Portrait layer: Body and clothing, steppe-male-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.steppe-female-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/steppe-female-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "steppe-female-common"
+      },
+      "label": "Portrait layer: Body and clothing, steppe-female-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.steppe-female-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/steppe-female-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "steppe-female-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, steppe-female-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.steppe-female-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/steppe-female-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "steppe-female-noble"
+      },
+      "label": "Portrait layer: Body and clothing, steppe-female-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.far-male-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/far-male-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "far-male-common"
+      },
+      "label": "Portrait layer: Body and clothing, far-male-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.far-male-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/far-male-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "far-male-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, far-male-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.far-male-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/far-male-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "far-male-noble"
+      },
+      "label": "Portrait layer: Body and clothing, far-male-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.far-female-common": {
+    "kind": "image",
+    "path": "portraits/layers/body/far-female-common.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "far-female-common"
+      },
+      "label": "Portrait layer: Body and clothing, far-female-common (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.far-female-warrior": {
+    "kind": "image",
+    "path": "portraits/layers/body/far-female-warrior.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "far-female-warrior"
+      },
+      "label": "Portrait layer: Body and clothing, far-female-warrior (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.far-female-noble": {
+    "kind": "image",
+    "path": "portraits/layers/body/far-female-noble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "far-female-noble"
+      },
+      "label": "Portrait layer: Body and clothing, far-female-noble (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.robe-clergy": {
+    "kind": "image",
+    "path": "portraits/layers/body/robe-clergy.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "robe-clergy"
+      },
+      "label": "Portrait layer: Body and clothing, robe-clergy (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.body.robe-seer": {
+    "kind": "image",
+    "path": "portraits/layers/body/robe-seer.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "body",
+        "variant": "robe-seer"
+      },
+      "label": "Portrait layer: Body and clothing, robe-seer (paint in greyscale: tinted by the clothing colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.oval-male": {
+    "kind": "image",
+    "path": "portraits/layers/face/oval-male.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "oval-male"
+      },
+      "label": "Portrait layer: Face shape, oval-male (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.oval-female": {
+    "kind": "image",
+    "path": "portraits/layers/face/oval-female.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "oval-female"
+      },
+      "label": "Portrait layer: Face shape, oval-female (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.round-male": {
+    "kind": "image",
+    "path": "portraits/layers/face/round-male.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "round-male"
+      },
+      "label": "Portrait layer: Face shape, round-male (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.round-female": {
+    "kind": "image",
+    "path": "portraits/layers/face/round-female.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "round-female"
+      },
+      "label": "Portrait layer: Face shape, round-female (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.square-male": {
+    "kind": "image",
+    "path": "portraits/layers/face/square-male.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "square-male"
+      },
+      "label": "Portrait layer: Face shape, square-male (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.square-female": {
+    "kind": "image",
+    "path": "portraits/layers/face/square-female.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "square-female"
+      },
+      "label": "Portrait layer: Face shape, square-female (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.long-male": {
+    "kind": "image",
+    "path": "portraits/layers/face/long-male.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "long-male"
+      },
+      "label": "Portrait layer: Face shape, long-male (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.long-female": {
+    "kind": "image",
+    "path": "portraits/layers/face/long-female.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "long-female"
+      },
+      "label": "Portrait layer: Face shape, long-female (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.heart-male": {
+    "kind": "image",
+    "path": "portraits/layers/face/heart-male.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "heart-male"
+      },
+      "label": "Portrait layer: Face shape, heart-male (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.heart-female": {
+    "kind": "image",
+    "path": "portraits/layers/face/heart-female.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "heart-female"
+      },
+      "label": "Portrait layer: Face shape, heart-female (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.broad-male": {
+    "kind": "image",
+    "path": "portraits/layers/face/broad-male.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "broad-male"
+      },
+      "label": "Portrait layer: Face shape, broad-male (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.face.broad-female": {
+    "kind": "image",
+    "path": "portraits/layers/face/broad-female.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "face",
+        "variant": "broad-female"
+      },
+      "label": "Portrait layer: Face shape, broad-female (paint in greyscale: tinted by the skin tone; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.scar.cheekLeft": {
+    "kind": "image",
+    "path": "portraits/layers/scar/cheek-left.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "scar",
+        "variant": "cheekLeft"
+      },
+      "label": "Portrait layer: Scar / eye injury, cheekLeft (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.scar.cheekRight": {
+    "kind": "image",
+    "path": "portraits/layers/scar/cheek-right.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "scar",
+        "variant": "cheekRight"
+      },
+      "label": "Portrait layer: Scar / eye injury, cheekRight (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.scar.brow": {
+    "kind": "image",
+    "path": "portraits/layers/scar/brow.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "scar",
+        "variant": "brow"
+      },
+      "label": "Portrait layer: Scar / eye injury, brow (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.scar.lip": {
+    "kind": "image",
+    "path": "portraits/layers/scar/lip.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "scar",
+        "variant": "lip"
+      },
+      "label": "Portrait layer: Scar / eye injury, lip (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.scar.nose": {
+    "kind": "image",
+    "path": "portraits/layers/scar/nose.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "scar",
+        "variant": "nose"
+      },
+      "label": "Portrait layer: Scar / eye injury, nose (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.scar.chin": {
+    "kind": "image",
+    "path": "portraits/layers/scar/chin.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "scar",
+        "variant": "chin"
+      },
+      "label": "Portrait layer: Scar / eye injury, chin (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.scar.eyePatch": {
+    "kind": "image",
+    "path": "portraits/layers/scar/eye-patch.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "scar",
+        "variant": "eyePatch"
+      },
+      "label": "Portrait layer: Scar / eye injury, eyePatch (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.scar.blindEye": {
+    "kind": "image",
+    "path": "portraits/layers/scar/blind-eye.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "scar",
+        "variant": "blindEye"
+      },
+      "label": "Portrait layer: Scar / eye injury, blindEye (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.age.child": {
+    "kind": "image",
+    "path": "portraits/layers/age/child.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "age",
+        "variant": "child"
+      },
+      "label": "Portrait layer: Age overlay (lines, greying cues), child (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.age.youth": {
+    "kind": "image",
+    "path": "portraits/layers/age/youth.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "age",
+        "variant": "youth"
+      },
+      "label": "Portrait layer: Age overlay (lines, greying cues), youth (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.age.adult": {
+    "kind": "image",
+    "path": "portraits/layers/age/adult.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "age",
+        "variant": "adult"
+      },
+      "label": "Portrait layer: Age overlay (lines, greying cues), adult (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.age.middle": {
+    "kind": "image",
+    "path": "portraits/layers/age/middle.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "age",
+        "variant": "middle"
+      },
+      "label": "Portrait layer: Age overlay (lines, greying cues), middle (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.age.old": {
+    "kind": "image",
+    "path": "portraits/layers/age/old.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "age",
+        "variant": "old"
+      },
+      "label": "Portrait layer: Age overlay (lines, greying cues), old (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.beard.stubble": {
+    "kind": "image",
+    "path": "portraits/layers/beard/stubble.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "beard",
+        "variant": "stubble"
+      },
+      "label": "Portrait layer: Beard, stubble (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.beard.short": {
+    "kind": "image",
+    "path": "portraits/layers/beard/short.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "beard",
+        "variant": "short"
+      },
+      "label": "Portrait layer: Beard, short (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.beard.full": {
+    "kind": "image",
+    "path": "portraits/layers/beard/full.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "beard",
+        "variant": "full"
+      },
+      "label": "Portrait layer: Beard, full (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.beard.long": {
+    "kind": "image",
+    "path": "portraits/layers/beard/long.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "beard",
+        "variant": "long"
+      },
+      "label": "Portrait layer: Beard, long (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.beard.forked": {
+    "kind": "image",
+    "path": "portraits/layers/beard/forked.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "beard",
+        "variant": "forked"
+      },
+      "label": "Portrait layer: Beard, forked (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.beard.braided": {
+    "kind": "image",
+    "path": "portraits/layers/beard/braided.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "beard",
+        "variant": "braided"
+      },
+      "label": "Portrait layer: Beard, braided (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.beard.moustache": {
+    "kind": "image",
+    "path": "portraits/layers/beard/moustache.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "beard",
+        "variant": "moustache"
+      },
+      "label": "Portrait layer: Beard, moustache (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.beard.goatee": {
+    "kind": "image",
+    "path": "portraits/layers/beard/goatee.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "beard",
+        "variant": "goatee"
+      },
+      "label": "Portrait layer: Beard, goatee (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.cropped": {
+    "kind": "image",
+    "path": "portraits/layers/hair/cropped.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "cropped"
+      },
+      "label": "Portrait layer: Hair, cropped (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.swept": {
+    "kind": "image",
+    "path": "portraits/layers/hair/swept.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "swept"
+      },
+      "label": "Portrait layer: Hair, swept (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.shoulder": {
+    "kind": "image",
+    "path": "portraits/layers/hair/shoulder.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "shoulder"
+      },
+      "label": "Portrait layer: Hair, shoulder (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.longLoose": {
+    "kind": "image",
+    "path": "portraits/layers/hair/long-loose.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "longLoose"
+      },
+      "label": "Portrait layer: Hair, longLoose (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.warriorTail": {
+    "kind": "image",
+    "path": "portraits/layers/hair/warrior-tail.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "warriorTail"
+      },
+      "label": "Portrait layer: Hair, warriorTail (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.balding": {
+    "kind": "image",
+    "path": "portraits/layers/hair/balding.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "balding"
+      },
+      "label": "Portrait layer: Hair, balding (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.tonsure": {
+    "kind": "image",
+    "path": "portraits/layers/hair/tonsure.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "tonsure"
+      },
+      "label": "Portrait layer: Hair, tonsure (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.braidedBack": {
+    "kind": "image",
+    "path": "portraits/layers/hair/braided-back.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "braidedBack"
+      },
+      "label": "Portrait layer: Hair, braidedBack (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.braidsTwo": {
+    "kind": "image",
+    "path": "portraits/layers/hair/braids-two.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "braidsTwo"
+      },
+      "label": "Portrait layer: Hair, braidsTwo (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.plaitSingle": {
+    "kind": "image",
+    "path": "portraits/layers/hair/plait-single.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "plaitSingle"
+      },
+      "label": "Portrait layer: Hair, plaitSingle (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.crownBraid": {
+    "kind": "image",
+    "path": "portraits/layers/hair/crown-braid.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "crownBraid"
+      },
+      "label": "Portrait layer: Hair, crownBraid (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.bun": {
+    "kind": "image",
+    "path": "portraits/layers/hair/bun.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "bun"
+      },
+      "label": "Portrait layer: Hair, bun (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.longWavy": {
+    "kind": "image",
+    "path": "portraits/layers/hair/long-wavy.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "longWavy"
+      },
+      "label": "Portrait layer: Hair, longWavy (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.loose": {
+    "kind": "image",
+    "path": "portraits/layers/hair/loose.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "loose"
+      },
+      "label": "Portrait layer: Hair, loose (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.childShort": {
+    "kind": "image",
+    "path": "portraits/layers/hair/child-short.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "childShort"
+      },
+      "label": "Portrait layer: Hair, childShort (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.hair.childBraids": {
+    "kind": "image",
+    "path": "portraits/layers/hair/child-braids.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "hair",
+        "variant": "childBraids"
+      },
+      "label": "Portrait layer: Hair, childBraids (paint in greyscale: tinted by the hair colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.helmetSpectacle": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/helmet-spectacle.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "helmetSpectacle"
+      },
+      "label": "Portrait layer: Headwear, helmetSpectacle (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.helmetConical": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/helmet-conical.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "helmetConical"
+      },
+      "label": "Portrait layer: Headwear, helmetConical (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.helmetRidge": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/helmet-ridge.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "helmetRidge"
+      },
+      "label": "Portrait layer: Headwear, helmetRidge (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.hood": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/hood.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "hood"
+      },
+      "label": "Portrait layer: Headwear, hood (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.headscarf": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/headscarf.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "headscarf"
+      },
+      "label": "Portrait layer: Headwear, headscarf (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.veil": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/veil.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "veil"
+      },
+      "label": "Portrait layer: Headwear, veil (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.furHat": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/fur-hat.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "furHat"
+      },
+      "label": "Portrait layer: Headwear, furHat (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.pointedCap": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/pointed-cap.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "pointedCap"
+      },
+      "label": "Portrait layer: Headwear, pointedCap (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.circlet": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/circlet.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "circlet"
+      },
+      "label": "Portrait layer: Headwear, circlet (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.diadem": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/diadem.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "diadem"
+      },
+      "label": "Portrait layer: Headwear, diadem (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.headwear.furHood": {
+    "kind": "image",
+    "path": "portraits/layers/headwear/fur-hood.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "headwear",
+        "variant": "furHood"
+      },
+      "label": "Portrait layer: Headwear, furHood (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.accessory.hammer": {
+    "kind": "image",
+    "path": "portraits/layers/accessory/hammer.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "accessory",
+        "variant": "hammer"
+      },
+      "label": "Portrait layer: Accessory, hammer (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.accessory.flame": {
+    "kind": "image",
+    "path": "portraits/layers/accessory/flame.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "accessory",
+        "variant": "flame"
+      },
+      "label": "Portrait layer: Accessory, flame (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.accessory.riverFish": {
+    "kind": "image",
+    "path": "portraits/layers/accessory/river-fish.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "accessory",
+        "variant": "riverFish"
+      },
+      "label": "Portrait layer: Accessory, riverFish (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.accessory.sunDisc": {
+    "kind": "image",
+    "path": "portraits/layers/accessory/sun-disc.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "accessory",
+        "variant": "sunDisc"
+      },
+      "label": "Portrait layer: Accessory, sunDisc (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.accessory.beads": {
+    "kind": "image",
+    "path": "portraits/layers/accessory/beads.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "accessory",
+        "variant": "beads"
+      },
+      "label": "Portrait layer: Accessory, beads (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.accessory.torc": {
+    "kind": "image",
+    "path": "portraits/layers/accessory/torc.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "accessory",
+        "variant": "torc"
+      },
+      "label": "Portrait layer: Accessory, torc (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.accessory.earrings": {
+    "kind": "image",
+    "path": "portraits/layers/accessory/earrings.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "accessory",
+        "variant": "earrings"
+      },
+      "label": "Portrait layer: Accessory, earrings (full colour; transparent 512x640 canvas)"
+    }
+  },
+  "portraits.layer.accessory.bandage": {
+    "kind": "image",
+    "path": "portraits/layers/accessory/bandage.png",
+    "size": [512, 640],
+    "placeholder": {
+      "generator": "portraitLayer",
+      "params": {
+        "slot": "accessory",
+        "variant": "bandage"
+      },
+      "label": "Portrait layer: Accessory, bandage (full colour; transparent 512x640 canvas)"
+    }
+  }
+}

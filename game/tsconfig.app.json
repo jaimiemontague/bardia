@@ -1,0 +1,9 @@
+{
+  "//": "The shipped app: client + sim + content, without any test file (so no test augmentation leaks in). Used by `npm run build` and `npm run typecheck`; src/client/tsconfig.json points editors at it.",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["vite/client"]
+  },
+  "include": ["src/client", "src/sim", "src/content"],
+  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx", "src/sim/testing.ts", "src/sim/modules/*/testing.ts"]
+}
