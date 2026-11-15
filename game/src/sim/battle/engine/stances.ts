@@ -5,7 +5,8 @@
  *   Skirmish (default for ranged units): an idle squad runs back while a melee enemy is closer than
  *     `tunables.skirmishKeepFrac` × its shooting range, then turns to face the threat and shoots again;
  *   Hold: never moves without orders and never pursues.
- * Only idle squads react (an order always wins), and only on human-controlled sides: the battle AI
+ * Only idle squads react (an order always wins; a squad the player drove and let go holds its
+ * ground), and only on human-controlled sides: the battle AI
  * (ai/) gives its own squads their orders. Deterministic (state only, no RNG), checked four times a
  * second.
  */
@@ -19,7 +20,7 @@ import type { BattleState, BSquad } from './types';
 export const STANCE_INTERVAL_TICKS = 5;
 
 function idle(s: BSquad): boolean {
-  return s.status === 'active' && !s.retreating && s.task.kind === 'none' && s.waypoints.length === 0 && s.contacts === 0 && !s.unit.nonCombatant;
+  return s.status === 'active' && !s.retreating && !s.driveHeld && s.task.kind === 'none' && s.waypoints.length === 0 && s.contacts === 0 && !s.unit.nonCombatant;
 }
 
 /** Lets idle human-commanded squads act on their stance. */

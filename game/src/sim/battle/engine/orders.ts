@@ -1,6 +1,7 @@
 /**
- * The order API (§13.5): move (with Shift waypoints and a facing), attack, formation, stance,
- * abilities, loot, halt, retreat and the global Retreat to Ships. The client's orders are queued
+ * The order API (§13.5): move (with Shift waypoints and a facing), attack, drive (direct control
+ * with the keys, see drive.ts), formation, stance, abilities, loot, halt, retreat and the global
+ * Retreat to Ships. The client's orders are queued
  * and applied at the start of the next tick (and recorded with that tick for replays); the AI's
  * orders are applied immediately inside the tick (and regenerated on replay).
  */
@@ -8,10 +9,16 @@ import { clamp, dcos, dsin } from '@sim/core/dmath';
 import type { FormationId } from '@sim/core/state';
 import { ABILITY_IDS, abilityCooldownS, type AbilityId } from '../data';
 import { effectiveRange } from '../formulas';
+import { applyDrive, enemyAhead } from './drive';
 import { emit } from './events';
 import { angleOf, gapBetween, gapToPoint, onField, updateFootprint } from './geometry';
 import { resolveDuel, sideMorale } from './leaders';
 import type { BattleOrder, BattleState, BSquad, SideIdx, SquadTaskKind } from './types';
+
+/** A drive component: −1, 0 or 1. */
+function isStep(v: unknown): boolean {
+  return v === -1 || v === 0 || v === 1;
+}
 
 /** Result of issuing an order: null = accepted, else an error code. */
 export type OrderError = string | null;
@@ -60,11 +67,12 @@ export function setTask(state: BattleState, s: BSquad, kind: SquadTaskKind, x: n
   t.fire = opts.fire === true;
   s.gatherT = 0;
   s.actT = 0;
+  s.driveHeld = false;
   s.path.length = 0;
   s.pathPos = 0;
   s.pathGoal = -1;
   s.pathRetreat = kind === 'retreat';
-  if (kind === 'none' || kind === 'retreat') {
+  if (kind === 'none' || kind === 'retreat' || kind === 'drive') {
     s.pathPending = false;
   } else requestPath(state, s);
 }
@@ -175,7 +183,7 @@ function ability(state: BattleState, side: SideIdx, order: Extract<BattleOrder, 
     case 'charge': {
       if (!s.unit.canCharge) return 'abilityUnavailable';
       if (s.formation === 'shieldWall' && !data.b.formations.shieldWall.canCharge) return 'formationForbids';
-      const target = order.target !== undefined ? squadById(state, order.target) : nearestEnemy(state, s, 30);
+      const target = order.target !== undefined ? squadById(state, order.target) : order.ahead === true ? enemyAhead(state, s) : nearestEnemy(state, s, 30);
       if (!target || target.side === side || !onField(target) || sd.visible[target.idx] !== 1) return 'noTarget';
       setTask(state, s, 'attack', target.x, target.y, { run: true, target: target.idx });
       s.chargeArmed = true;
@@ -342,6 +350,13 @@ export function applyOrder(state: BattleState, side: SideIdx, order: BattleOrder
       if (c.value <= 0) return 'empty';
       for (const s of squads) if (!(s.unit.cavalry && c.building >= 0)) setTask(state, s, 'loot', c.x, c.y, { target: ci });
       return squads.length === 0 ? 'noSquads' : null;
+    }
+    case 'drive': {
+      if (!isStep(order.dx) || !isStep(order.dy)) return 'badTarget';
+      const squads = own(state, side, order.squads);
+      if (squads.length === 0) return 'noSquads';
+      applyDrive(state, squads, order.dx, order.dy, order.run === true);
+      return null;
     }
     case 'halt': {
       const squads = own(state, side, order.squads);

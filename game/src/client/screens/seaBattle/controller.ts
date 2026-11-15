@@ -2,10 +2,17 @@
  * SeaController: the client-side driver of one sea battle (no React, no Pixi, unit tested in node).
  * It owns the sea-battle engine (src/sim/seabattle, fixed 20 Hz), runs it from real frame time at the
  * chosen speed (1×, 2×, 4×) with pause, keeps the latest render snapshot and the interpolation
- * factor, turns the player's clicks into engine inputs (select ships, sail there, attack in the
- * ship's style, hold, withdraw), keeps a short log and the visual effects of engine events, settles
- * captain duels, and can hand the player's side to the AI to fight the rest out quickly ("let your
- * captains finish it").
+ * factor, and turns the player's hand into engine inputs:
+ *   - the helm (owner play-test 2026-11-15): the held W A S D / arrow keys become one 'helm' input
+ *     per change (throttle and rudder of the steered ship), never one per frame;
+ *   - the broadside: holding Space draws the bows and runs an aim marker out from the side facing the
+ *     nearest enemy, between the shortest and the longest bowshot and back (the sweep is presentation
+ *     only); letting go sends one 'loose' input with that side and range;
+ *   - the number keys and Tab take the helm of another ship, G throws grapnels (or cuts them);
+ *   - the mouse still commands the other ships (select them, right click to sail there or to attack in
+ *     each ship's style, hold, withdraw).
+ * It keeps a short log and the visual effects of engine events, settles captain duels, and can hand
+ * the player's side to the AI to fight the rest out quickly ("let your captains finish it").
  *
  * The controller never decides a rule: every order goes through the engine's input API, and the
  * result comes from the engine.
@@ -13,7 +20,8 @@
 import type { Content } from '@content/index';
 import type { SeaBattleResult, SeaBattleSetup } from '@sim/core/state';
 import { hasKey } from '../../i18n/index';
-import { SeaBattleEngine, seaContent, seaEventTextKey, type SeaEvent, type SeaOrderKind, type SeaRenderState, type SeaShipView, type SeaSideKey } from '@sim/seabattle/index';
+import { SeaBattleEngine, seaContent, seaEventTextKey, type SeaBroadside, type SeaEvent, type SeaOrderKind, type SeaRenderState, type SeaShipView, type SeaSideKey } from '@sim/seabattle/index';
+import type { SteerKeyDir } from '../../input/steering';
 import {
   canRam,
   defaultStyle,
@@ -43,7 +51,7 @@ export interface SeaLogLine {
 /** A visual effect started by an engine event (the view animates it from `born`, real seconds). */
 export interface SeaFx {
   id: number;
-  kind: 'arrows' | 'ram' | 'splash' | 'sink' | 'grapple' | 'caption' | 'seaFire';
+  kind: 'arrows' | 'ram' | 'splash' | 'sink' | 'grapple' | 'caption' | 'seaFire' | 'fall';
   born: number;
   from?: number;
   to?: number;
@@ -59,6 +67,62 @@ export interface SeaFx {
 export interface SeaCue {
   id: 'battle.arrowVolley' | 'battle.clash' | 'battle.shieldBash' | 'sea.splash' | 'sea.hullCreak' | 'battle.warHorn' | 'battle.seaFire' | 'battle.warCry';
   params?: Record<string, string | number>;
+}
+
+/** The aim marker while the player draws (world metres; the view draws it at the steered ship). */
+export interface SeaAim {
+  ship: number;
+  side: SeaBroadside;
+  rangeM: number;
+  /** Where the arrows would fall if loosed now (from the current engine pose). */
+  x: number;
+  y: number;
+  /** 0 at the shortest bowshot, 1 at the longest. */
+  reach: number;
+}
+
+/** The numbers the aim and the helm strip read (seabattle tunables `aim`). */
+export interface SeaAimConfig {
+  minRangeM: number;
+  maxRangeM: number;
+  sweepRealS: number;
+  fallRadiusM: number;
+  nockS: number;
+}
+
+/** What the steered ship's bows can do now. */
+export type SeaVolleyState = 'ready' | 'nocking' | 'boarding' | 'none';
+
+/** Throttle and rudder for a held steering direction (W ahead, S astern, A port, D starboard). */
+export function helmFor(dir: SteerKeyDir | null): { throttle: number; rudder: number } {
+  if (dir === null) return { throttle: 0, rudder: 0 };
+  const throttle = dir.startsWith('n') ? 1 : dir.startsWith('s') ? -1 : 0;
+  const rudder = dir.endsWith('e') ? 1 : dir.endsWith('w') ? -1 : 0;
+  return { throttle, rudder };
+}
+
+/**
+ * The aim marker's range after `heldS` real seconds of drawing: it runs out from the shortest to the
+ * longest bowshot in `sweepRealS`, then back, and so on, so a release has to be timed.
+ */
+export function sweepRange(heldS: number, cfg: Pick<SeaAimConfig, 'minRangeM' | 'maxRangeM' | 'sweepRealS'>): number {
+  const u = Math.max(0, heldS) / Math.max(1e-6, cfg.sweepRealS);
+  const leg = u % 2;
+  const f = leg <= 1 ? leg : 2 - leg;
+  return cfg.minRangeM + (cfg.maxRangeM - cfg.minRangeM) * f;
+}
+
+/** The side of a ship (compass heading in degrees) that faces a point: starboard is right of the bow. */
+export function sideFacing(ship: Pick<SeaShipView, 'x' | 'y' | 'heading'>, x: number, y: number): SeaBroadside {
+  const h = (ship.heading * Math.PI) / 180;
+  // Starboard unit vector (x east, y south): the heading turned 90° clockwise.
+  return (x - ship.x) * Math.cos(h) + (y - ship.y) * Math.sin(h) >= 0 ? 'starboard' : 'port';
+}
+
+/** Unit vector out of a ship's side (x east, y south). */
+export function broadsideOf(headingDeg: number, side: SeaBroadside): [number, number] {
+  const h = (headingDeg * Math.PI) / 180;
+  return side === 'starboard' ? [Math.cos(h), Math.sin(h)] : [-Math.cos(h), -Math.sin(h)];
 }
 
 const OTHER: Record<SeaSideKey, SeaSideKey> = { attacker: 'defender', defender: 'attacker' };
@@ -88,6 +152,7 @@ const LOGGED: ReadonlySet<SeaEvent['kind']> = new Set<SeaEvent['kind']>([
   'duelRequested',
   'duelResolved',
   'ended',
+  'fall',
 ]);
 
 /** Floating caption per event kind (locale key under seaView.fx). */
@@ -126,6 +191,12 @@ export class SeaController {
   notice: { key: string; at: number } | null = null;
   /** Seconds of real time since the battle opened (animation clock). */
   realTime = 0;
+  /** The aim and helm numbers (seabattle tunables). */
+  readonly aimCfg: SeaAimConfig;
+  /** Throttle and rudder the held keys ask for. */
+  private wanted = { throttle: 0, rudder: 0 };
+  /** Real time the player began to draw (Space held), or null. */
+  private drawFrom: number | null = null;
   private readonly t: Translate;
   private cues: SeaCue[] = [];
   private acc = 0;
@@ -144,11 +215,12 @@ export class SeaController {
     this.sideIdx = this.side === 'attacker' ? 0 : 1;
     const ships = content.balance.ships as Readonly<Record<string, { tags: readonly string[] }>>;
     this.galleyTypes = Object.keys(ships).filter((k) => ships[k]!.tags.includes('ram'));
+    const aim = content.tunables.seabattle.aim;
+    this.aimCfg = { minRangeM: aim.minRangeM, maxRangeM: aim.maxRangeM, sweepRealS: aim.sweepRealS, fallRadiusM: aim.fallRadiusM, nockS: aim.nockS };
     this.snap = this.engine.snapshot();
     for (const s of this.snap.ships) if (s.side === this.side) this.styles[s.idx] = defaultStyle(s, this.galleyTypes);
-    // The player's flagship starts selected: the first right-click already does something.
-    const flag = this.snap.ships.find((s) => s.side === this.side && s.isPlayer) ?? this.snap.ships.find((s) => s.side === this.side);
-    if (flag) this.selected = [flag.idx];
+    // Nothing is selected at first: the player steers the flagship with the keys; the mouse selects
+    // the other ships when they are wanted.
   }
 
   // ---- subscription (React reads through useSyncExternalStore) ----------------------------------
@@ -274,6 +346,8 @@ export class SeaController {
     this.snap = engine.snapshot();
     for (const e of engine.drainEvents()) this.digest(e);
     this.selected = this.selected.filter((i) => this.snap.ships[i]?.status === 'active');
+    this.syncHelm();
+    if (this.drawFrom !== null && this.volleyState() !== 'ready') this.drawFrom = null;
     if (engine.status === 'ended') {
       this.paused = true;
       this.fastForward = false;
@@ -313,6 +387,8 @@ export class SeaController {
       case 'ram':
       case 'grapple':
         return this.mine(e.from) ? 'good' : 'bad';
+      case 'fall':
+        return e.hits > 0 ? (this.mine(e.from) ? 'good' : 'bad') : 'neutral';
       case 'boardingWon':
         return this.mine(e.winner) ? 'good' : 'bad';
       case 'cutFree':
@@ -335,6 +411,10 @@ export class SeaController {
     switch (e.kind) {
       case 'volley':
         return { ship: n(e.from), target: n(e.to), hits: Math.round(e.hits) };
+      case 'loose':
+        return { ship: n(e.from) };
+      case 'fall':
+        return { ship: n(e.from), target: e.struck.map(n).join(', '), hits: Math.round(e.hits) };
       case 'ram':
         return { ship: n(e.from), target: n(e.to), damage: Math.round(e.damage) };
       case 'seaFire':
@@ -401,6 +481,17 @@ export class SeaController {
         this.cue({ id: 'battle.arrowVolley', params: { size: Math.min(1, 0.3 + e.hits / 10) } });
         break;
       }
+      case 'loose':
+        this.cue({ id: 'battle.arrowVolley', params: { size: 1 } });
+        break;
+      case 'fall': {
+        this.addFx({ kind: 'fall', from: e.from, x: e.x, y: e.y, fire: e.fire, n: Math.round(e.hits) });
+        if (this.mine(e.from)) {
+          const text = e.struck.length === 0 ? this.t('seaView.fx.miss') : this.t('seaView.fx.hit', { n: Math.round(e.hits) });
+          this.addFx({ kind: 'caption', x: e.x, y: e.y, text, tone: e.struck.length === 0 ? 'neutral' : 'good' });
+        }
+        break;
+      }
       case 'ram':
         if (place) this.addFx({ kind: 'ram', to: e.to, from: e.from, x: place.x, y: place.y });
         this.cue({ id: 'sea.hullCreak' });
@@ -437,6 +528,7 @@ export class SeaController {
       this.addFx({ kind: 'caption', x: place.x, y: place.y, from: place.ship, text: this.t(`seaView.fx.${caption}`), tone: this.toneOf(e) });
     }
     if (!LOGGED.has(e.kind)) return;
+    if (e.kind === 'fall' && !this.mine(e.from)) return;
     const line: SeaLogLine = { id: this.nextId++, timeS: e.t, text: this.t(seaEventTextKey(e), this.eventVars(e)), tone: this.toneOf(e), at: this.realTime };
     if (place) line.ship = place.ship;
     this.log.push(line);
@@ -445,6 +537,168 @@ export class SeaController {
 
   private say(key: string): void {
     this.notice = { key, at: this.realTime };
+    this.changed();
+  }
+
+  // ---- the helm and the broadside --------------------------------------------------------------
+
+  /** The ship the player steers, or undefined. */
+  helmShip(): SeaShipView | undefined {
+    const s = this.ship(this.snap.helm);
+    return s && s.status === 'active' ? s : undefined;
+  }
+
+  /** The held steering keys changed (W ahead, S astern, A port, D starboard; null: none held). */
+  setHelmDir(dir: SteerKeyDir | null): void {
+    this.wanted = helmFor(dir);
+    if (this.snap.status === 'ended' || this.fastForward || !this.helmShip()) return;
+    this.engine.input({ kind: 'helm', throttle: this.wanted.throttle, rudder: this.wanted.rudder });
+    this.ordered();
+  }
+
+  /** What the held keys ask of the helm now. */
+  get helmWanted(): { throttle: number; rudder: number } {
+    return { ...this.wanted };
+  }
+
+  /**
+   * Puts the held keys back on the helm when the engine let go of them (the helm passed to another
+   * ship, a grapple was cut or won, an autopilot arrived): one input, only when they differ.
+   */
+  private syncHelm(): void {
+    if (this.fastForward || this.engine.status === 'ended') return;
+    const i = this.engine.helmShip;
+    const s = i >= 0 ? this.engine.w.ships[i] : undefined;
+    if (!s || s.status !== 'active' || s.controller !== 'player' || s.hasMove || s.grapple >= 0) return;
+    if (s.throttle === this.wanted.throttle && s.rudder === this.wanted.rudder) return;
+    this.engine.input({ kind: 'helm', throttle: this.wanted.throttle, rudder: this.wanted.rudder });
+  }
+
+  /** Takes the helm of the k-th ship of the roster (number keys, 1-based). */
+  takeHelmIndex(k: number): void {
+    const s = this.roster()[k - 1];
+    if (s && s.status === 'active') this.takeHelm(s.idx);
+  }
+
+  /** Takes the helm of a ship (engine index). */
+  takeHelm(idx: number): void {
+    const s = this.ship(idx);
+    if (!s || s.side !== this.side || s.status !== 'active' || this.fastForward || this.snap.status === 'ended') return;
+    this.drawFrom = null;
+    this.engine.input({ kind: 'takeHelm', ship: idx });
+    this.syncHelm();
+    this.ordered();
+  }
+
+  /** Tab: the helm passes to the next ship of the fleet still in the fight. */
+  cycleHelm(): void {
+    const live = this.roster().filter((s) => s.status === 'active');
+    if (live.length < 2) return;
+    const at = live.findIndex((s) => s.idx === this.snap.helm);
+    this.takeHelm(live[(at + 1) % live.length]!.idx);
+  }
+
+  /** What the steered ship's bows can do now. */
+  volleyState(): SeaVolleyState {
+    const s = this.helmShip();
+    if (!s || s.archers < 0.5) return 'none';
+    if (s.grappledTo >= 0) return 'boarding';
+    return s.volleyIn > 1e-9 ? 'nocking' : 'ready';
+  }
+
+  /** Share of the nocking done (1 = ready). */
+  nockProgress(): number {
+    const s = this.helmShip();
+    if (!s) return 0;
+    return Math.max(0, Math.min(1, 1 - s.volleyIn / Math.max(1e-6, this.aimCfg.nockS)));
+  }
+
+  /** Is the player drawing (Space held, the marker out)? */
+  get drawing(): boolean {
+    return this.drawFrom !== null;
+  }
+
+  /** The enemy ship still fighting nearest to the steered ship, or undefined. */
+  nearestEnemy(): SeaShipView | undefined {
+    const me = this.helmShip();
+    if (!me) return undefined;
+    let best: SeaShipView | undefined;
+    let bestD = Infinity;
+    for (const s of this.snap.ships) {
+      if (s.side === this.side || s.status !== 'active') continue;
+      const d = Math.hypot(s.x - me.x, s.y - me.y);
+      if (d < bestD) {
+        bestD = d;
+        best = s;
+      }
+    }
+    return best;
+  }
+
+  /** The side the bows would loose over now: the one facing the nearest enemy. */
+  aimSide(): SeaBroadside {
+    const me = this.helmShip();
+    const foe = this.nearestEnemy();
+    return me && foe ? sideFacing(me, foe.x, foe.y) : 'starboard';
+  }
+
+  /** The aim marker while drawing, else null. */
+  get aim(): SeaAim | null {
+    if (this.drawFrom === null) return null;
+    const me = this.helmShip();
+    if (!me) return null;
+    const side = this.aimSide();
+    const rangeM = sweepRange(this.realTime - this.drawFrom, this.aimCfg);
+    const [ux, uy] = broadsideOf(me.heading, side);
+    const span = Math.max(1e-6, this.aimCfg.maxRangeM - this.aimCfg.minRangeM);
+    return { ship: me.idx, side, rangeM, x: me.x + ux * rangeM, y: me.y + uy * rangeM, reach: (rangeM - this.aimCfg.minRangeM) / span };
+  }
+
+  /** Space pressed: the archers draw (when their bows are nocked). Returns true when drawing began. */
+  beginDraw(): boolean {
+    if (this.drawFrom !== null) return true;
+    if (this.paused || this.fastForward || this.engine.status !== 'running') return false;
+    const state = this.volleyState();
+    if (state !== 'ready') {
+      this.say(state === 'nocking' ? 'seaView.notice.nocking' : state === 'boarding' ? 'seaView.notice.boarding' : 'seaView.notice.noArchers');
+      return false;
+    }
+    this.drawFrom = this.realTime;
+    this.changed();
+    return true;
+  }
+
+  /** Space let go: the archers loose where the marker is. */
+  releaseDraw(): void {
+    const aim = this.aim;
+    this.drawFrom = null;
+    if (!aim || this.paused || this.fastForward || this.engine.status !== 'running') {
+      this.changed();
+      return;
+    }
+    this.engine.input({ kind: 'loose', side: aim.side, rangeM: aim.rangeM, ship: aim.ship });
+    this.refresh();
+    this.changed();
+  }
+
+  /** The draw is let down without loosing (a card opened, the window lost focus). */
+  cancelDraw(): void {
+    if (this.drawFrom === null) return;
+    this.drawFrom = null;
+    this.changed();
+  }
+
+  /** G: throw grapnels at the enemy alongside, or (being boarded) cut the lines. */
+  grapnels(): void {
+    const s = this.helmShip();
+    if (!s || this.fastForward || this.snap.status === 'ended') return;
+    if (s.grappledTo >= 0) {
+      this.engine.input({ kind: 'cutFree' });
+      return this.ordered();
+    }
+    if (this.snap.helmGrapple < 0) return this.say('seaView.notice.notAlongside');
+    this.engine.input({ kind: 'grapple', target: this.snap.helmGrapple });
+    this.refresh();
     this.changed();
   }
 
@@ -522,13 +776,16 @@ export class SeaController {
     const hit = shipAt(this.snap, x, y, tolM, inflate, this.enemySide);
     const foe = this.ship(hit);
     if (foe && foe.side !== this.side && (foe.status === 'active' || foe.status === 'struck')) {
-      for (const s of ships) this.orderShip(s, orderForStyle(this.styleOf(s.idx), this.canRam(s)), { target: foe.idx });
+      // The ship under the player's own hand is fought with the keys, not sent off by its captain.
+      const sent = ships.filter((s) => !(s.isHelm && s.controller === 'player'));
+      if (sent.length === 0) return this.say('seaView.notice.atHelm');
+      for (const s of sent) this.orderShip(s, orderForStyle(this.styleOf(s.idx), this.canRam(s)), { target: foe.idx });
       return this.ordered();
     }
     if (isLandAt(this.snap.arena, x, y)) return this.say('seaView.notice.land');
     for (const p of formationTargets(ships, x, y)) {
       const s = this.ship(p.idx)!;
-      if (s.isPlayer && s.controller !== 'ai') this.engine.input({ kind: 'moveTo', x: p.x, y: p.y });
+      if (s.isHelm && s.controller !== 'ai') this.engine.input({ kind: 'moveTo', x: p.x, y: p.y });
       else this.orderShip(s, 'move', { x: p.x, y: p.y });
     }
     this.ordered();
@@ -595,6 +852,7 @@ export class SeaController {
     if (this.engine.status === 'ended') return;
     if (this.engine.status === 'duelRequested') this.engine.autoResolveCaptainDuel();
     this.engine.input({ kind: 'captains' });
+    this.drawFrom = null;
     this.fastForward = true;
     this.paused = false;
     this.selected = [];

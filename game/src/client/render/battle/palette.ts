@@ -69,6 +69,8 @@ export const COLORS = {
   ink: 0x1a120c,
   night: 0x0b1530,
   extract: 0x5ac8dc,
+  /** Aim marker of a volley being drawn (Space held). */
+  aim: 0xffd84a,
 } as const;
 
 /** 0xRRGGBB from an RGB triple. */

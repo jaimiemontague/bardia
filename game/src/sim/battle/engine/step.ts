@@ -40,7 +40,7 @@ export function stepBattle(state: BattleState): void {
   }
   if (state.costsDirty) {
     rebuildCosts(state);
-    for (const s of state.squads) if (s.status === 'active' && s.task.kind !== 'none' && s.task.kind !== 'retreat') requestPath(state, s);
+    for (const s of state.squads) if (s.status === 'active' && s.task.kind !== 'none' && s.task.kind !== 'retreat' && s.task.kind !== 'drive') requestPath(state, s);
   }
   arrivals(state);
   wakeSleepers(state);

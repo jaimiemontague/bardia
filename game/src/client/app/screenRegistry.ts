@@ -53,6 +53,7 @@ export function normalizeDescriptor(candidate: unknown, source: string): Registe
     priority: typeof d.priority === 'number' && Number.isFinite(d.priority) ? d.priority : 0,
     titleKey: typeof d.titleKey === 'string' ? d.titleKey : undefined,
     realtime: typeof d.realtime === 'boolean' ? d.realtime : undefined,
+    staysUnder: d.staysUnder === true,
     source,
   };
 }

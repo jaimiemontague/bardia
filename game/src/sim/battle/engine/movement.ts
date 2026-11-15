@@ -7,6 +7,7 @@ import { formationSpeed } from '../formulas';
 import { S, Z } from '../map/grid';
 import { lineClear, PathStatus, smoothPath } from '../path';
 import { tileSpeed } from './costs';
+import { drivePaces, driveSquad, drivesAway } from './drive';
 import { emit } from './events';
 import { angleOf, figureSlots, gapBetween, gapToPoint, onField, slotWorld, turnToward } from './geometry';
 import { requestPath } from './orders';
@@ -18,7 +19,8 @@ const DY = [0, 0, 1, -1, 1, -1, 1, -1];
 const tmpPath: number[] = [];
 const tmpSlots: number[] = [];
 
-function tileOf(state: BattleState, x: number, y: number): number {
+/** Tile index under a point (clamped to the map). */
+export function tileOf(state: BattleState, x: number, y: number): number {
   const w = state.map.w;
   const tx = Math.min(w - 1, Math.max(0, Math.floor(x)));
   const ty = Math.min(state.map.h - 1, Math.max(0, Math.floor(y)));
@@ -249,6 +251,7 @@ export function moveSquads(state: BattleState): void {
   const dt = state.dt;
   const t = state.data.t;
   const turn = (t.turnRateDegPerS * Math.PI) / 180 * dt;
+  drivePaces(state);
   for (const s of state.squads) {
     s.moving = false;
     s.running = false;
@@ -274,7 +277,13 @@ export function moveSquads(state: BattleState): void {
       if (foe) turnToward(s, angleOf(foe.x - s.x, foe.y - s.y), turn);
       if (s.task.kind === 'move' && s.task.run) {
         // A running move order breaks off from melee (taking blows as it goes).
+      } else if (drivesAway(state, s)) {
+        // So does a squad the player steers away from its foe.
       } else continue;
+    }
+    if (s.task.kind === 'drive') {
+      driveSquad(state, s, turn);
+      continue;
     }
     const goal = taskGoal(state, s);
     if (!goal) {

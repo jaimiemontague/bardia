@@ -1,18 +1,20 @@
 /**
- * The Shipyard (route 'building.shipyard'), laid out by ARCHITECTURE §20:
- *   - your ships as picture cards: the name, where she lies and one line of state in words ("Sound",
- *     "Needs repair: 40 silver"), with repair as the card's one button (`repairShip`, priced and checked by
- *     the military module's `repairQuote`);
- *   - building a ship as one flow: pick a kind from cards (one plain line each), then one sentence of cost
- *     and time and one gold button (`queueShip`, priced and checked by `shipOrderPreview`);
- *   - what is on the slipways as one line each with a progress bar (`shipOrdersOf`).
- * Behind Details: hull and sail of every ship, the chosen kind's crew, hold, speed and yard, and the timber
- * surcharge. The client computes no rule of its own.
+ * The Shipyard (route 'building.shipyard'): entering it shows the slip by the fjord
+ * (render/interiors/rooms/shipyard.tsx). Its menu waits behind two places in the picture (ARCHITECTURE §20):
+ *   - the Shipwright, adze in hand: building a ship as one flow (pick a kind from cards, one plain line each,
+ *     then one sentence of cost and time and one gold button: `queueShip`, priced and checked by
+ *     `shipOrderPreview`), what is on the slipways as one line each with a progress bar (`shipOrdersOf`), and
+ *     behind Details the chosen kind's crew, hold, speed and yard and the timber surcharge;
+ *   - the ships drawn up on the strand: your ships as picture cards (the name, where she lies, one line of
+ *     state in words, "Sound" or "Needs repair: 40 silver") with repair as the card's one button (`repairShip`,
+ *     priced and checked by `repairQuote`), and behind Details the hull and sail of every ship.
+ * Route params `{ person: 'shipwright' | 'strand' }` open a panel at once. The client computes no rule of its own.
  *
- * Test ids: shipyard, shipyard-close, shipyard-ships, shipyard-ship-<shipId> (data-ship), repair-<shipId>,
- * repair-all, shipyard-orders (the kind picker), shipyard-type-<type> (data-ship-type), shipyard-cost,
- * shipyard-why, order-<type> (the gold button for the chosen kind), shipyard-queue, shipyard-details,
- * shipyard-fleet (the hull and sail table, rows tr[data-ship]).
+ * Test ids: shipyard (the room's picture), shipyard-work, shipyard-strand, shipyard-ships,
+ * shipyard-ship-<shipId> (data-ship), repair-<shipId>, repair-all, shipyard-orders (the kind picker),
+ * shipyard-type-<type> (data-ship-type), shipyard-cost, shipyard-why, order-<type> (the gold button for the
+ * chosen kind), shipyard-queue, shipyard-details, shipyard-fleet-details, shipyard-fleet (the hull and sail
+ * table, rows tr[data-ship]).
  */
 import { useState, type ReactElement } from 'react';
 import type { Content } from '@content/index';
@@ -33,11 +35,17 @@ import { useGame } from '../../app/gameStore';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatGameDate } from '../../i18n/calendar';
 import { formatNumber, t as tr, tOr, useT } from '../../i18n/index';
+import { InteriorRoom, useRoutePerson } from '../../render/interiors/index';
+import { shipyardRoom } from '../../render/interiors/rooms/shipyard';
+import { ambienceOf } from '../../render/scenes/ambience';
 import { Button, ChoiceCard, Disclosure, Meter, ShipPicture, StatLine } from '../../ui/index';
 import { shipTypeName } from '../expedition/names';
-import { BuildingFrame, WhyNot } from '../hub/BuildingFrame';
+import { WhyNot } from '../hub/BuildingFrame';
 import { capitalOf } from '../hub/counsel';
 import './shipyard.css';
+
+/** The places in the Shipyard (route param `person`). */
+export type ShipyardPerson = 'shipwright' | 'strand';
 
 /** Plain words for a ship-order issue. */
 export function orderIssueText(p: ShipOrderPreview, issue: ShipOrderPreview['issues'][number]): string {
@@ -163,15 +171,22 @@ function Slipways({ state, content }: { state: GameState; content: Content }): R
   );
 }
 
+/** The kinds the Build flow offers and the one it shows (its first open kind until the player picks one). */
+function buildChoice(state: GameState, content: Content, picked: ShipTypeId | undefined): { types: ShipTypeId[]; previews: Map<ShipTypeId, ShipOrderPreview>; type: ShipTypeId | undefined } {
+  const capital = capitalOf(state);
+  const types = SHIP_TYPE_IDS.filter((ty: ShipTypeId) => content.balance.ships[ty].buildable);
+  if (!capital) return { types, previews: new Map(), type: undefined };
+  const previews = new Map(types.map((ty) => [ty, shipOrderPreview(state, content, { holdingId: capital.id, shipType: ty })]));
+  const open = types.filter((ty) => !previews.get(ty)?.issues.some((i) => CLOSED.includes(i)));
+  return { types, previews, type: picked !== undefined && open.includes(picked) ? picked : open[0] };
+}
+
 function Build({ state, content, picked, onPick }: { state: GameState; content: Content; picked: ShipTypeId | undefined; onPick(type: ShipTypeId): void }): ReactElement {
   const t = useT();
   const dispatch = useGame((s) => s.dispatch);
   const capital = capitalOf(state);
-  const types = SHIP_TYPE_IDS.filter((type: ShipTypeId) => content.balance.ships[type].buildable);
+  const { types, previews, type } = buildChoice(state, content, picked);
   if (!capital) return <section className="sy-section" />;
-  const previews = new Map(types.map((type) => [type, shipOrderPreview(state, content, { holdingId: capital.id, shipType: type })]));
-  const open = types.filter((type) => !previews.get(type)?.issues.some((i) => CLOSED.includes(i)));
-  const type = picked !== undefined && open.includes(picked) ? picked : open[0];
   const p = type ? previews.get(type) : undefined;
   const pending = state.pending !== null;
   const reasons = p ? p.issues.map((i) => orderIssueText(p, i)) : [];
@@ -233,119 +248,152 @@ function Build({ state, content, picked, onPick }: { state: GameState; content: 
   );
 }
 
-function Details({ state, content, type }: { state: GameState; content: Content; type: ShipTypeId | undefined }): ReactElement {
+/** The chosen kind's numbers (behind Details in the Shipwright's panel). */
+function KindDetails({ state, content, type }: { state: GameState; content: Content; type: ShipTypeId | undefined }): ReactElement {
   const t = useT();
   const capital = capitalOf(state);
-  const ships = [...shipsOf(state, state.player.factionId)].sort(byName);
   const def = type ? content.balance.ships[type] : undefined;
   const p = type && capital ? shipOrderPreview(state, content, { holdingId: capital.id, shipType: type }) : undefined;
   return (
     <Disclosure className="sy-details" data-testid="shipyard-details">
-      <div className="sy-details-grid">
+      {type && def ? (
         <div>
-          <h4 className="sy-sub">{t('military.ui.shipyard.fleetDetails')}</h4>
-          {ships.length === 0 ? (
-            <p className="sy-note">{t('military.ui.shipyard.noShips')}</p>
-          ) : (
-            <table className="sy-table" data-testid="shipyard-fleet">
-              <thead>
-                <tr>
-                  <th>{t('military.ui.shipyard.col.ship')}</th>
-                  <th>{t('military.ui.shipyard.col.where')}</th>
-                  <th>{t('military.ui.shipyard.col.hull')}</th>
-                  <th>{t('military.ui.shipyard.col.sail')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ships.map((ship) => {
-                  const d = findShipDef(content.balance, ship.type);
-                  return (
-                    <tr key={ship.id} data-ship={ship.id}>
-                      <td>{ship.name}</td>
-                      <td>
-                        {ship.dockedAt !== undefined
-                          ? t('military.ui.shipyard.docked', { place: state.settlements[ship.dockedAt]?.name ?? '' })
-                          : t('military.ui.shipyard.atSea')}
-                      </td>
-                      <td className="num">{t('military.ui.shipyard.hpValue', { hp: Math.round(ship.hullHp), max: d?.hull ?? 0 })}</td>
-                      <td className="num">{t('military.ui.shipyard.hpValue', { hp: Math.round(ship.sailHp), max: d?.sail ?? 0 })}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
+          <h4 className="sy-sub">{shipTypeName(content, type)}</h4>
+          <StatLine icon="men" label={t('military.ui.shipyard.col.crew')} value={t('military.ui.shipyard.crewValue', { min: def.crewMin, max: def.crewMax })} />
+          <StatLine icon="ship" label={t('military.ui.shipyard.col.hold')} value={t('military.ui.shipyard.holdValue', { tons: def.cargoT })} />
+          <StatLine icon="wind" label={t('military.ui.shipyard.speed')} value={t('military.ui.shipyard.speedValue', { knots: def.sailKn })} />
+          <StatLine icon="crown" label={t('military.ui.shipyard.yardNeeded')} value={t('military.ui.shipyard.tierValue', { tier: def.shipyardTier })} />
+          {p && p.timberSurcharge > 0 && <p className="sy-note">{t('military.ui.shipyard.timberNote', { timber: formatNumber(p.timberSurcharge) })}</p>}
         </div>
-        {type && def && (
-          <div>
-            <h4 className="sy-sub">{shipTypeName(content, type)}</h4>
-            <StatLine icon="men" label={t('military.ui.shipyard.col.crew')} value={t('military.ui.shipyard.crewValue', { min: def.crewMin, max: def.crewMax })} />
-            <StatLine icon="ship" label={t('military.ui.shipyard.col.hold')} value={t('military.ui.shipyard.holdValue', { tons: def.cargoT })} />
-            <StatLine icon="wind" label={t('military.ui.shipyard.speed')} value={t('military.ui.shipyard.speedValue', { knots: def.sailKn })} />
-            <StatLine icon="crown" label={t('military.ui.shipyard.yardNeeded')} value={t('military.ui.shipyard.tierValue', { tier: def.shipyardTier })} />
-            {p && p.timberSurcharge > 0 && <p className="sy-note">{t('military.ui.shipyard.timberNote', { timber: formatNumber(p.timberSurcharge) })}</p>}
-          </div>
-        )}
-      </div>
+      ) : (
+        <p className="sy-note">{t('military.ui.shipyard.pickType')}</p>
+      )}
     </Disclosure>
   );
 }
 
-/** The Shipyard for a state (exported for tests). */
-export function Shipyard({ state, onClose }: { state: GameState; onClose(): void }): ReactElement {
+/** The hull and sail of every ship (behind Details on the strand). */
+function FleetDetails({ state, content }: { state: GameState; content: Content }): ReactElement {
   const t = useT();
-  const loaded = loadContent();
-  const content = loaded.ok ? loaded.content : null;
-  const capital = capitalOf(state);
-  const tier = buildingTier(capital, 'shipyard');
-  const slots = content && capital ? shipyardSlots(state, content.balance, capital.id) : 0;
-  const [picked, setPicked] = useState<ShipTypeId | undefined>(undefined);
-  // The kind the Build flow shows (its first open kind until the player picks one), for Details too.
-  const shown = (() => {
-    if (!content || !capital) return undefined;
-    const types = SHIP_TYPE_IDS.filter((ty: ShipTypeId) => content.balance.ships[ty].buildable);
-    const open = types.filter((ty) => !shipOrderPreview(state, content, { holdingId: capital.id, shipType: ty }).issues.some((i) => CLOSED.includes(i)));
-    return picked !== undefined && open.includes(picked) ? picked : open[0];
-  })();
+  const ships = [...shipsOf(state, state.player.factionId)].sort(byName);
   return (
-    <BuildingFrame
-      title={t('military.ui.shipyard.title')}
-      subtitle={
-        capital
-          ? tier > 0
-            ? t('military.ui.shipyard.subtitle', { place: capital.name, tier, slots })
-            : t('military.ui.shipyard.none', { place: capital.name })
-          : undefined
-      }
-      onClose={onClose}
-      testId="shipyard"
-      className="sy-frame"
-    >
-      {content && (
-        <div className="sy-screen">
-          <div className="sy-grid">
-            <div className="sy-col">
-              <Ships state={state} content={content} />
-              <Slipways state={state} content={content} />
-            </div>
-            <Build state={state} content={content} picked={shown} onPick={setPicked} />
-          </div>
-          <Details state={state} content={content} type={shown} />
-        </div>
+    <Disclosure className="sy-details" data-testid="shipyard-fleet-details">
+      <h4 className="sy-sub">{t('military.ui.shipyard.fleetDetails')}</h4>
+      {ships.length === 0 ? (
+        <p className="sy-note">{t('military.ui.shipyard.noShips')}</p>
+      ) : (
+        <table className="sy-table" data-testid="shipyard-fleet">
+          <thead>
+            <tr>
+              <th>{t('military.ui.shipyard.col.ship')}</th>
+              <th>{t('military.ui.shipyard.col.where')}</th>
+              <th>{t('military.ui.shipyard.col.hull')}</th>
+              <th>{t('military.ui.shipyard.col.sail')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ships.map((ship) => {
+              const d = findShipDef(content.balance, ship.type);
+              return (
+                <tr key={ship.id} data-ship={ship.id}>
+                  <td>{ship.name}</td>
+                  <td>
+                    {ship.dockedAt !== undefined ? t('military.ui.shipyard.docked', { place: state.settlements[ship.dockedAt]?.name ?? '' }) : t('military.ui.shipyard.atSea')}
+                  </td>
+                  <td className="num">{t('military.ui.shipyard.hpValue', { hp: Math.round(ship.hullHp), max: d?.hull ?? 0 })}</td>
+                  <td className="num">{t('military.ui.shipyard.hpValue', { hp: Math.round(ship.sailHp), max: d?.sail ?? 0 })}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       )}
-    </BuildingFrame>
+    </Disclosure>
   );
 }
 
-function ShipyardScreen({ close }: ScreenProps): ReactElement {
+/** The Shipwright's panel: the yard in one line, building a ship, the slipways, the chosen kind behind Details. */
+export function ShipwrightWork({ state, picked, onPick }: { state: GameState; picked?: ShipTypeId; onPick?(type: ShipTypeId): void }): ReactElement | null {
+  const t = useT();
+  const [own, setOwn] = useState<ShipTypeId | undefined>(undefined);
+  const loaded = loadContent();
+  const content = loaded.ok ? loaded.content : null;
+  const capital = capitalOf(state);
+  if (!content) return null;
+  const choice = picked ?? own;
+  const pick = onPick ?? setOwn;
+  const tier = buildingTier(capital, 'shipyard');
+  const slots = capital ? shipyardSlots(state, content.balance, capital.id) : 0;
+  const shown = buildChoice(state, content, choice).type;
+  return (
+    <div className="sy-screen" data-testid="shipyard-work">
+      {capital && (
+        <p className="sy-yard">{tier > 0 ? t('hub.interior.shipyard.yard', { place: capital.name, tier, slots }) : t('military.ui.shipyard.none', { place: capital.name })}</p>
+      )}
+      <Build state={state} content={content} picked={shown} onPick={pick} />
+      <Slipways state={state} content={content} />
+      <KindDetails state={state} content={content} type={shown} />
+    </div>
+  );
+}
+
+/** The panel of the ships on the strand: every ship as a card with its state and repair, the hulls behind Details. */
+export function StrandWork({ state }: { state: GameState }): ReactElement | null {
+  const loaded = loadContent();
+  if (!loaded.ok) return null;
+  return (
+    <div className="sy-screen" data-testid="shipyard-strand">
+      <Ships state={state} content={loaded.content} />
+      <FleetDetails state={state} content={loaded.content} />
+    </div>
+  );
+}
+
+/**
+ * The Shipyard for a state (exported for tests): the slip with the Shipwright and the ships on the strand; the
+ * panel of `person` open (controlled) or of `initialPerson` (the room keeps it).
+ */
+export function Shipyard({
+  state,
+  onClose,
+  person,
+  initialPerson,
+  onPersonChange,
+}: {
+  state: GameState;
+  onClose(): void;
+  person?: string | null;
+  initialPerson?: ShipyardPerson;
+  onPersonChange?(id: string | null): void;
+}): ReactElement {
+  const t = useT();
+  const capital = capitalOf(state);
+  // The kind picked in the Shipwright's flow outlives his panel closing.
+  const [picked, setPicked] = useState<ShipTypeId | undefined>(undefined);
+  return (
+    <InteriorRoom
+      room={shipyardRoom}
+      ambience={ambienceOf(state)}
+      subtitle={capital ? t('hub.interior.at', { place: capital.name }) : undefined}
+      {...(person !== undefined ? { person } : { initialPerson: initialPerson ?? null })}
+      onPersonChange={onPersonChange}
+      stageTestId="shipyard"
+      onLeave={onClose}
+      panel={(id) => (id === 'strand' ? <StrandWork state={state} /> : <ShipwrightWork state={state} picked={picked} onPick={setPicked} />)}
+    />
+  );
+}
+
+function ShipyardScreen({ params, close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  const [person, setPerson] = useRoutePerson(shipyardRoom, ['building.shipyard'], params);
   if (!state) return <div />;
-  return <Shipyard state={state} onClose={close} />;
+  return <Shipyard state={state} person={person} onPersonChange={setPerson} onClose={close} />;
 }
 
 export const screen: ScreenDescriptor = {
   id: 'shipyard',
-  route: 'building.shipyard',
+  route: 'building.shipyard', staysUnder: true,
   component: ShipyardScreen,
   layout: 'overlay',
   titleKey: 'military.ui.shipyard.title',

@@ -24,8 +24,24 @@ import { shipsAtHome } from './village';
 
 /** What a Counsel line's (or checklist step's) button does. */
 export type CounselAction =
-  | { kind: 'route'; route: string; labelKey: string; vars?: Record<string, string | number> }
+  | { kind: 'route'; route: string; params?: Readonly<Record<string, string>>; labelKey: string; vars?: Record<string, string | number> }
   | { kind: 'wait'; days: number; labelKey: string; vars?: Record<string, string | number> };
+
+/** The Muster: the Great hall with the Hirdmaster's panel open on the muster (route params of the interior). */
+export const MUSTER_ACTION: CounselAction = {
+  kind: 'route',
+  route: 'building.greatHall',
+  params: { person: 'hirdmaster', view: 'muster' },
+  labelKey: 'hub.action.muster',
+};
+
+/** Ordering a ship and the slipways: the Shipyard with the Shipwright's panel open. */
+export const SHIPWRIGHT_ACTION: CounselAction = {
+  kind: 'route',
+  route: 'building.shipyard',
+  params: { person: 'shipwright' },
+  labelKey: 'hub.action.shipyard',
+};
 
 /** How loudly a line speaks (drives its colour and glyph). */
 export type CounselTone = 'urgent' | 'warn' | 'advice' | 'info';
@@ -183,7 +199,7 @@ export function firstVoyage(state: GameState, facts: VoyageFacts = voyageFacts(s
       id: 'muster',
       key: 'hub.voyage.muster',
       done: facts.mustered || facts.launched,
-      action: { kind: 'route', route: 'muster', labelKey: 'hub.action.muster' },
+      action: MUSTER_ACTION,
     },
     {
       id: 'plan',
@@ -202,7 +218,7 @@ export function firstVoyage(state: GameState, facts: VoyageFacts = voyageFacts(s
       id: 'home',
       key: 'hub.voyage.home',
       done: deed && !facts.atSea,
-      action: { kind: 'route', route: 'building.market', labelKey: 'hub.action.market' },
+      action: { kind: 'route', route: 'building.market', params: { person: 'merchant' }, labelKey: 'hub.action.market' },
     },
   ];
   return steps;
@@ -301,7 +317,7 @@ export function computeCounsel(
         tone: 'warn',
         icon: 'ship',
         key: 'hub.counsel.noShips',
-        action: { kind: 'route', route: 'building.shipyard', labelKey: 'hub.action.shipyard' },
+        action: SHIPWRIGHT_ACTION,
       });
     else if (men === 0)
       lines.push({
@@ -309,7 +325,7 @@ export function computeCounsel(
         tone: 'warn',
         icon: 'men',
         key: 'hub.counsel.noMen',
-        action: { kind: 'route', route: 'muster', labelKey: 'hub.action.muster' },
+        action: MUSTER_ACTION,
       });
     else if (!ice.iced) {
       lines.push({
@@ -331,7 +347,7 @@ export function computeCounsel(
       icon: 'silver',
       key: 'hub.counsel.idleMen',
       vars: { silver: idle.silver, men: idle.men, unit: idle.unit },
-      action: { kind: 'route', route: 'muster', labelKey: 'hub.action.muster' },
+      action: MUSTER_ACTION,
     });
   } else {
     const ship = affordableShip(state, content);
@@ -342,7 +358,7 @@ export function computeCounsel(
         icon: 'silver',
         key: 'hub.counsel.idleShip',
         vars: { shipType: ship.type, cost: ship.cost },
-        action: { kind: 'route', route: 'building.shipyard', labelKey: 'hub.action.shipyard' },
+        action: SHIPWRIGHT_ACTION,
       });
     }
   }
@@ -374,7 +390,7 @@ export function computeCounsel(
         icon: 'ship',
         key: 'hub.counsel.shipBuilding',
         vars: { shipType: first.type, doneAt: first.doneHour, count: orders.length },
-        action: { kind: 'route', route: 'building.shipyard', labelKey: 'hub.action.shipyard' },
+        action: SHIPWRIGHT_ACTION,
       });
     }
   }

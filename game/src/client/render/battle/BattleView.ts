@@ -2,10 +2,13 @@
  * The battlefield view (PixiJS 8; design §13.5, §25 battle screen). Layers, bottom to top:
  *   world layer (camera transform): the baked ground (terrain, trees, walls, ships, extraction zone);
  *   screen layer (redrawn every frame): buildings and fire, gates, loot, smoke, order lines, figures,
- *   squad footprints and facing, arrows, clash sparks, the night veil, the selection box;
+ *   squad footprints and facing, the arrows of the squads the keys are driving, the aim markers of
+ *   archers drawing a volley, arrows in flight, clash sparks, the night veil, the selection box;
  *   label layer: squad badges (name, men, morale and stamina bars) and floating captions.
  * The view reads the battle through `BattleViewSource` (the screen's controller) and reports the
- * player's pointer input through `BattleViewInput`; it never orders the engine itself.
+ * player's pointer input through `BattleViewInput`; it never orders the engine itself. The camera
+ * opens on the player's war-band and glides after the squads the player drives (tunables.drive);
+ * dragging with the middle button looks around and stops the following until the next drive or C.
  */
 import { Application, Container, Graphics, Sprite, Text, Texture, type TextStyleOptions } from 'pixi.js';
 import type { Content } from '@content/index';
@@ -30,6 +33,13 @@ export interface BattleViewSource {
   readonly fx: readonly { id: number; x: number; y: number; text: string; tone: 'good' | 'bad' | 'neutral'; born: number }[];
   readonly realTime: number;
   readonly engine: { readonly alpha: number; readonly state: { readonly map: BattleMap } };
+  /** The camera follows `followPoint()` while this is on. */
+  readonly cameraFollow: boolean;
+  /** The squads the held keys are driving. */
+  readonly driven: readonly string[];
+  followPoint(): [number, number] | null;
+  /** Aim markers of archers drawing a volley (marker, and the near and far ends of its run). */
+  aimView(): readonly { id: string; x: number; y: number; nearX: number; nearY: number; farX: number; farY: number }[];
   rosterIds(): string[];
   squadName(id: string): string;
   unitName(unitId: string): string;
@@ -43,6 +53,8 @@ export interface BattleViewInput {
   command(x: number, y: number, opts: { facing?: number; queue: boolean; run: boolean }): void;
   hover(target: BattleHover | null, screenX: number, screenY: number): void;
   cancel(): void;
+  /** The player started looking around with the mouse (the camera stops following). */
+  lookAround(): void;
   /** Called every animation frame with the elapsed real seconds, before drawing. */
   frame(dtS: number): void;
 }
@@ -164,11 +176,30 @@ export class BattleView {
     this.view = { width: Math.max(1, w), height: Math.max(1, h) };
     if (!this.fitted && w > 10 && h > 10) {
       this.fitted = true;
-      this.fit();
+      this.openOnBand();
     } else {
       const map = this.src.engine.state.map;
       this.cam = clampBattleCamera(this.cam, this.view, map.w, map.h);
     }
+  }
+
+  /** Opening view: zoomed in on the player's war-band (tunables.drive.cameraViewTiles across). */
+  private openOnBand(): void {
+    const map = this.src.engine.state.map;
+    const fitScale = fitBattleScale(this.view, map.w, map.h);
+    const scale = Math.max(fitScale, this.view.width / this.content.tunables.battle.drive.cameraViewTiles);
+    const p = this.src.followPoint() ?? [map.w / 2, map.h / 2];
+    this.cam = clampBattleCamera({ x: p[0], y: p[1], scale }, this.view, map.w, map.h);
+  }
+
+  /** Glides the camera toward the followed squads (frame-rate independent). */
+  private follow(dt: number): void {
+    if (!this.src.cameraFollow || this.pan) return;
+    const p = this.src.followPoint();
+    if (!p) return;
+    const k = 1 - Math.exp(-this.content.tunables.battle.drive.cameraFollowRate * dt);
+    const map = this.src.engine.state.map;
+    this.cam = clampBattleCamera({ ...this.cam, x: this.cam.x + (p[0] - this.cam.x) * k, y: this.cam.y + (p[1] - this.cam.y) * k }, this.view, map.w, map.h);
   }
 
   private tick(): void {
@@ -177,6 +208,7 @@ export class BattleView {
     this.lastFrame = now;
     this.input.frame(dt);
     if (!this.app || this.destroyed) return;
+    this.follow(dt);
     this.draw();
   }
 
@@ -249,6 +281,7 @@ export class BattleView {
         if (target) [tx, ty] = pos(target);
       }
       if (kind === 'none' || kind === 'halt') continue;
+      if (kind === 'drive' && !plan) continue; // drawn as a direction arrow below
       const color = kind === 'attack' || kind === 'gate' ? COLORS.attack : kind === 'loot' ? COLORS.loot : kind === 'torch' || kind === 'volley' ? COLORS.torch : kind === 'retreat' ? COLORS.extract : COLORS.move;
       const [ax, ay] = this.sx(x, y);
       const [bx, by] = this.sx(tx, ty);
@@ -369,6 +402,55 @@ export class BattleView {
         const [X, Y] = this.sx(x - Math.cos(facing) * (s.hd + 0.8), y - Math.sin(facing) * (s.hd + 0.8));
         g.circle(X, Y, Math.max(4, S * 0.45)).fill({ color: COLORS.gold }).stroke({ width: 1.5, color: COLORS.ink });
       }
+    }
+
+    // The squads the keys are driving: a bright arrow ahead of each, pointing the way they go.
+    const driven = new Set(src.driven);
+    for (const s of snap.squads) {
+      if (s.driveX === 0 && s.driveY === 0) continue;
+      if (!driven.has(s.id) && !selected.has(s.id)) continue;
+      const [x, y] = pos(s);
+      const ux = s.driveX;
+      const uy = s.driveY;
+      // The footprint's extent along the way it goes (half-width across it, half-depth along it).
+      const fc = Math.cos(s.facing);
+      const fs = Math.sin(s.facing);
+      const reach = s.hw * Math.abs(-fs * ux + fc * uy) + s.hd * Math.abs(fc * ux + fs * uy);
+      const [ax, ay] = this.sx(x + ux * (reach + 1.3), y + uy * (reach + 1.3));
+      const [bx, by] = this.sx(x + ux * (reach + 3.4), y + uy * (reach + 3.4));
+      const k = Math.max(7, Math.min(14, S * 0.75));
+      g.moveTo(ax, ay).lineTo(bx - ux * k * 0.6, by - uy * k * 0.6).stroke({ width: Math.max(3, S * 0.22), color: COLORS.select, alpha: 0.95 });
+      g.poly([bx + ux * k * 0.5, by + uy * k * 0.5, bx - ux * k * 0.6 - uy * k * 0.7, by - uy * k * 0.6 + ux * k * 0.7, bx - ux * k * 0.6 + uy * k * 0.7, by - uy * k * 0.6 - ux * k * 0.7])
+        .fill({ color: COLORS.select, alpha: 0.95 })
+        .stroke({ width: 1.5, color: COLORS.ink, alpha: 0.7 });
+    }
+
+    // Archers drawing a volley: the line it can reach, and the marker where the arrows will fall.
+    const volleyR = this.content.tunables.battle.volleyRadiusTiles;
+    for (const m of src.aimView()) {
+      const s = byId[m.id];
+      if (!s) continue;
+      const [x, y] = pos(s);
+      const dx = x - s.x;
+      const dy = y - s.y;
+      const [nx, ny] = this.sx(m.nearX + dx, m.nearY + dy);
+      const [fx2, fy2] = this.sx(m.farX + dx, m.farY + dy);
+      const [mx, my] = this.sx(m.x + dx, m.y + dy);
+      this.dashed(g, nx, ny, fx2, fy2, COLORS.aim, 2, 0.55);
+      const ux = Math.cos(s.facing);
+      const uy = Math.sin(s.facing);
+      for (const [px, py] of [
+        [nx, ny],
+        [fx2, fy2],
+      ] as const) {
+        g.moveTo(px - uy * 7, py + ux * 7).lineTo(px + uy * 7, py - ux * 7).stroke({ width: 2, color: COLORS.aim, alpha: 0.8 });
+      }
+      const R = Math.max(10, volleyR * S);
+      g.circle(mx, my, R).fill({ color: COLORS.aim, alpha: 0.18 }).stroke({ width: 3, color: COLORS.aim, alpha: 1 });
+      g.circle(mx, my, R * 0.35).stroke({ width: 2, color: COLORS.aim, alpha: 0.9 });
+      g.moveTo(mx - R * 1.25, my).lineTo(mx - R * 0.55, my).moveTo(mx + R * 0.55, my).lineTo(mx + R * 1.25, my);
+      g.moveTo(mx, my - R * 1.25).lineTo(mx, my - R * 0.55).moveTo(mx, my + R * 0.55).lineTo(mx, my + R * 1.25);
+      g.stroke({ width: 2, color: COLORS.aim, alpha: 1 });
     }
 
     // Arrows in flight (a shallow arc).
@@ -615,6 +697,7 @@ export class BattleView {
       canvas.setPointerCapture?.(e.pointerId);
       if (e.button === 1) {
         this.pan = { sx, sy, cx: this.cam.x, cy: this.cam.y };
+        this.input.lookAround();
         e.preventDefault();
         return;
       }

@@ -297,5 +297,17 @@
       "objectiveClearTiles": 8
     }
   },
-  "eventLogMax": 4000
+  "eventLogMax": 4000,
+  "drive": {
+    "speedMult": 1.3,
+    "turnRateMult": 1.5,
+    "chargeRangeTiles": 18,
+    "chargeConeDeg": 70,
+    "breakOffDeg": 100,
+    "slideProbeTiles": 3,
+    "aimMinTiles": 4,
+    "aimSweepS": 1.4,
+    "cameraFollowRate": 4,
+    "cameraViewTiles": 64
+  }
 }

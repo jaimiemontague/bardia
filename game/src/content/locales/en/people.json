@@ -391,5 +391,8 @@
   "people.ui.longhouse.captains": "Captains",
   "people.ui.longhouse.askHolding": "Which holding?",
   "people.ui.longhouse.askFleet": "Which fleet?",
-  "people.ui.longhouse.askWhoSeat": "Who should be {seat}?"
+  "people.ui.longhouse.askWhoSeat": "Who should be {seat}?",
+  "people.interior.longhouse.houseElder.name": "The House-elder",
+  "people.interior.longhouse.houseElder.greeting": "I know every soul under this roof. Ask me who should serve, and where.",
+  "people.interior.longhouse.subtitle": "Where your household eats and sleeps, at {place}"
 }

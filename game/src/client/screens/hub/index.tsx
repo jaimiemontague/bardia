@@ -5,6 +5,8 @@
  * rest folded away), the town in three numbers, the Hirdmaster's Counsel one piece of advice at a time
  * (counsel.ts: most important first, each with its one action, "next" for the rest), the one gold button
  * (plan an expedition) and the time-at-home control (§7.3 waits through the core `wait` command).
+ * Clicking a building opens route `building.<id>`; converted buildings show their interior there
+ * (render/interiors), and Counsel buttons may deep-link to a person inside (`{ person: '<id>' }`).
  */
 import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import type { Content } from '@content/index';
@@ -65,13 +67,13 @@ export function counselVars(
 
 /** Runs a Counsel or checklist action. */
 function runAction(action: CounselAction, dispatch: ReturnType<typeof useGame.getState>['dispatch']): void {
-  if (action.kind === 'route') navigation.open(action.route);
+  if (action.kind === 'route') navigation.open(action.route, action.params);
   else dispatch({ type: 'wait', days: action.days });
 }
 
 function sameAction(a: CounselAction | undefined, b: CounselAction | undefined): boolean {
   if (!a || !b || a.kind !== b.kind) return false;
-  return a.kind === 'route' ? a.route === (b as typeof a).route : a.days === (b as typeof a).days;
+  return a.kind === 'route' ? a.route === (b as typeof a).route && a.params?.['person'] === (b as typeof a).params?.['person'] : a.days === (b as typeof a).days;
 }
 
 function ActionButton({ action, disabled, testId }: { action: CounselAction; disabled: boolean; testId: string }): ReactElement {
@@ -368,6 +370,9 @@ function HubScreen(_props: ScreenProps): ReactElement {
     </div>
   );
 }
+
+/** The developer room gallery (`/?interiors=<building>` on dev builds), registered with the hub. */
+export { interiorGalleryScreen } from '../../render/interiors/gallery';
 
 export const screen: ScreenDescriptor = {
   id: 'hub',

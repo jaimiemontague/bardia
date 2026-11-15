@@ -47,6 +47,9 @@ export const FX = {
   move: 0x9be37a,
   attack: 0xff6a4f,
   shoot: 0xffc857,
+  /** The ring of the ship at the player's helm, and the aim marker's rim. */
+  helm: 0xf2c94c,
+  aim: 0xfff6d8,
   fire: 0xff8a1e,
   fireCore: 0xffd56a,
   smoke: 0x4a4744,

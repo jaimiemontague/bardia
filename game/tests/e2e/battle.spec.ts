@@ -1,11 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * The playable battle through the real UI: Main Menu → Skirmish → a raid on a village. Reads the
- * "how to command" card, selects squads with the number keys and Ctrl+A, gives a right-click order
- * on the field, sets a formation, runs the battle at 4×, lets the captains finish it from the pause
- * menu, reads the summary and returns to the main menu. Screenshots at deployment, mid-fight, the
- * later fight and the summary land in the output folder (BARDIA_E2E_OUT) for a visual check.
+ * The playable battle through the real UI, fought with the keyboard (owner play-test 2026-11-15):
+ * Main Menu → Skirmish → a raid. Reads the "how to command" card, holds W A S D and checks through
+ * the dev handle `__bardiaBattle` that the whole war-band moved and that it stopped when the key was
+ * let go, charges with Space, draws and looses an aimed volley with the archers, pauses with P, steps
+ * through the squads with Tab, and plays the battle to its summary. Screenshots (1366×768) of the
+ * card, the squads on the move and the archers aiming land in BARDIA_E2E_OUT for a visual check.
  */
 
 const OUT = process.env.BARDIA_E2E_OUT ?? 'test-results';
@@ -14,112 +15,243 @@ async function shot(page: Page, name: string): Promise<void> {
   await page.screenshot({ path: `${OUT}/battle-${name}.png` });
 }
 
-/** Screen point of a map tile, assuming the field is fitted to a 1600×1000 viewport (96×72 tiles). */
-function tileToScreen(tx: number, ty: number): { x: number; y: number } {
-  const scale = Math.min(1600 / 98, 1000 / 74);
-  return { x: 800 + (tx - 48) * scale, y: 500 + (ty - 36) * scale };
+/** What the tests read from the battle controller (window.__bardiaBattle, dev builds only). */
+interface SquadLite {
+  id: string;
+  side: string;
+  x: number;
+  y: number;
+  facing: number;
+  status: string;
+  task: string;
+  taskTarget: string | null;
+  abilities: string[];
+  cooldowns: Record<string, number>;
+  activity: string;
+}
+interface BattleHandle {
+  side: string;
+  selected: string[];
+  paused: boolean;
+  driveDir: { dx: number; dy: number; run: boolean } | null;
+  aiming: { squads: string[] } | null;
+  snap: { squads: SquadLite[]; status: string };
+  ownSquads(): SquadLite[];
+  aimView(): { id: string; x: number; y: number }[];
+}
+type BattleWindow = Window & { __bardiaBattle?: BattleHandle };
+
+async function own(page: Page): Promise<SquadLite[]> {
+  return page.evaluate(() => {
+    const c = (window as BattleWindow).__bardiaBattle!;
+    return JSON.parse(JSON.stringify(c.ownSquads())) as SquadLite[];
+  });
 }
 
-test('a skirmish raid is played to a result and back to the main menu', async ({ page }) => {
-  test.setTimeout(150_000);
-  const errors: string[] = [];
-  page.on('pageerror', (err) => errors.push(err.message));
-  await page.setViewportSize({ width: 1600, height: 1000 });
+/** Runs `fn` on the battle controller in the page (its result must be JSON-safe). */
+async function handle<T>(page: Page, fn: (c: BattleHandle) => T): Promise<T> {
+  return (await page.evaluate(`(${fn.toString()})(window.__bardiaBattle)`)) as T;
+}
+
+const KEYS = { up: 'KeyW', down: 'KeyS', left: 'KeyA', right: 'KeyD' } as const;
+
+/** Holds the movement keys for a direction (8-way) toward (dx, dy); returns the keys held. */
+async function holdToward(page: Page, dx: number, dy: number, held: string[]): Promise<string[]> {
+  const want: string[] = [];
+  const ax = Math.abs(dx);
+  const ay = Math.abs(dy);
+  if (ax > ay * 0.41) want.push(dx > 0 ? KEYS.right : KEYS.left);
+  if (ay > ax * 0.41) want.push(dy > 0 ? KEYS.down : KEYS.up);
+  for (const k of held) if (!want.includes(k)) await page.keyboard.up(k);
+  for (const k of want) if (!held.includes(k)) await page.keyboard.down(k);
+  return want;
+}
+
+async function release(page: Page, held: string[]): Promise<void> {
+  for (const k of held) await page.keyboard.up(k);
+}
+
+/** The nearest seen enemy to a point, or null. */
+async function nearestFoe(page: Page, x: number, y: number): Promise<SquadLite | null> {
+  const foes = await page.evaluate(() => {
+    const c = (window as BattleWindow).__bardiaBattle!;
+    return JSON.parse(JSON.stringify(c.snap.squads.filter((s) => s.side !== c.side && s.status === 'active'))) as SquadLite[];
+  });
+  foes.sort((a, b) => Math.hypot(a.x - x, a.y - y) - Math.hypot(b.x - x, b.y - y));
+  return foes[0] ?? null;
+}
+
+async function openRaid(page: Page): Promise<void> {
+  await page.setViewportSize({ width: 1366, height: 768 });
   // Other agents edit this folder while the dev server runs: cut the HMR socket so no reload interrupts the battle.
   await page.routeWebSocket(/./, () => {});
   await page.goto('/');
   await page.getByTestId('menu-skirmish').click();
   await expect(page.getByTestId('skirmish')).toBeVisible();
-  await shot(page, '0-presets');
-
   await page.getByTestId('skirmish-preset-raid').click();
-  const screen = page.getByTestId('battle-screen');
-  await expect(screen).toBeVisible();
+  await expect(page.getByTestId('battle-screen')).toBeVisible();
   await expect(page.getByTestId('battle-canvas')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByTestId('battle-howto')).toBeVisible();
+}
+
+test('a skirmish raid is fought with the keyboard to its summary', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors: string[] = [];
+  page.on('pageerror', (err) => errors.push(err.message));
+  await openRaid(page);
+  const screen = page.getByTestId('battle-screen');
   await page.waitForTimeout(600);
   await shot(page, '1-howto');
+
+  // The card dismissed, the battle waits; the whole war-band is selected.
   await page.getByTestId('battle-howto-plan').click();
   await expect(screen).toHaveAttribute('data-paused', 'true');
+  const start = await own(page);
+  expect(await handle(page, (c) => c.selected.length)).toBe(start.length);
+  await expect(page.getByTestId('battle-panel-name')).toContainText(new RegExp(`${start.length} squads`));
 
-  // Select the first squad by number, then everyone, and send them at the village.
-  await page.keyboard.press('Digit1');
-  await expect(page.getByTestId('battle-panel-name')).toHaveText(/Haldrek/);
-  await page.getByTestId('battle-formation-line').click();
-  await page.keyboard.press('Control+KeyA');
-  await expect(page.getByTestId('battle-panel-name')).toContainText(/4 squads/);
-  const target = tileToScreen(48, 32);
-  await page.mouse.click(target.x, target.y, { button: 'right' });
-  await expect(page.getByTestId('battle-panel-order').first()).toBeVisible().catch(() => undefined);
-  await page.waitForTimeout(400);
-  await shot(page, '2-deployment-orders');
-
-  // Unpause with Space and run at 4×.
-  await page.keyboard.press('Space');
+  // Hold W: the first movement key starts the battle and everyone moves up the screen.
+  await page.keyboard.down('KeyW');
   await expect(screen).toHaveAttribute('data-paused', 'false');
-  await page.getByTestId('battle-speed-4').click();
-  await page.waitForFunction(() => {
-    const el = document.querySelector('[data-testid="battle-clock"]');
-    const m = /(\d+):(\d+)/.exec(el?.textContent ?? '');
-    return m !== null && Number(m[1]) * 60 + Number(m[2]) >= 25;
-  }, undefined, { timeout: 40_000 });
-  await shot(page, '3-mid-fight');
-  // Select the archers and look at their panel (morale tooltip anchor present).
-  await page.keyboard.press('Digit3');
-  await expect(page.getByTestId('battle-squad-panel')).toBeVisible();
-  // Wait for a squad to break (the log says so) or a minute of battle.
-  await page.waitForFunction(() => {
-    const el = document.querySelector('[data-testid="battle-clock"]');
-    const m = /(\d+):(\d+)/.exec(el?.textContent ?? '');
-    const log = document.querySelector('[data-testid="battle-log"]')?.textContent ?? '';
-    return /breaks and runs/.test(log) || (m !== null && Number(m[1]) * 60 + Number(m[2]) >= 75) || document.querySelector('[data-testid="battle-summary"]') !== null;
-  }, undefined, { timeout: 60_000 });
-  await expect(page.getByTestId('battle-log').locator('li').first()).toBeVisible();
-  if (!(await page.getByTestId('battle-summary').isVisible())) {
-    await page.keyboard.press('Space');
-    await page.waitForTimeout(300);
-    // Hover the archers' morale to read why it moves.
-    await page.getByTestId('battle-squad-panel').getByText('Morale', { exact: true }).hover();
-    await page.waitForTimeout(600);
-    await shot(page, '4-rout');
-    await page.keyboard.press('Space');
+  await page.waitForTimeout(1600);
+  await shot(page, '2-on-the-move');
+  const moving = await own(page);
+  for (const s of moving) {
+    const s0 = start.find((q) => q.id === s.id)!;
+    expect(s.y).toBeLessThan(s0.y - 0.8);
+    expect(s.task).toBe('drive');
+  }
+  // Let go: they halt at once and hold.
+  await page.keyboard.up('KeyW');
+  await page.waitForTimeout(250);
+  const stopped = await own(page);
+  await page.waitForTimeout(1000);
+  const later = await own(page);
+  for (const s of later) {
+    const s1 = stopped.find((q) => q.id === s.id)!;
+    expect(s.task).not.toBe('drive');
+    if (s.activity !== 'fighting') expect(Math.hypot(s.x - s1.x, s.y - s1.y)).toBeLessThan(0.3);
   }
 
-  // Pause menu → let the captains finish it.
+  // P pauses and resumes (Space no longer does).
+  await page.keyboard.press('KeyP');
+  await expect(screen).toHaveAttribute('data-paused', 'true');
+  await expect(page.getByTestId('battle-paused-banner')).toContainText('P');
+  await page.keyboard.press('KeyP');
+  await expect(screen).toHaveAttribute('data-paused', 'false');
+
+  // Tab: one squad alone; then the first squad (the huscarls) leads the way to the enemy and charges with Space.
+  await page.keyboard.press('Tab');
+  expect(await handle(page, (c) => c.selected.length)).toBe(1);
+  await page.keyboard.press('Digit1');
+  const leader = (await handle(page, (c) => c.selected[0]))!;
+  await page.getByTestId('battle-speed-2').click();
+  let held: string[] = [];
+  let charged = false;
+  for (let i = 0; i < 120 && !charged; i++) {
+    const me = (await own(page)).find((s) => s.id === leader);
+    if (!me) break;
+    const foe = await nearestFoe(page, me.x, me.y);
+    const tx = foe ? foe.x : 48;
+    const ty = foe ? foe.y : 36;
+    const d = Math.hypot(tx - me.x, ty - me.y);
+    if (foe && d < 15) {
+      held = await holdToward(page, tx - me.x, ty - me.y, held);
+      await page.waitForTimeout(250);
+      await release(page, held);
+      held = [];
+      await page.keyboard.press('Space');
+      await page.waitForTimeout(200);
+      const after = (await own(page)).find((s) => s.id === leader);
+      charged = after !== undefined && (after.cooldowns['charge'] ?? 0) > 0;
+      continue;
+    }
+    held = await holdToward(page, tx - me.x, ty - me.y, held);
+    await page.waitForTimeout(300);
+  }
+  await release(page, held);
+  expect(charged).toBe(true);
+  await page.waitForTimeout(400);
+  const charger = (await own(page)).find((s) => s.id === leader);
+  if (charger) expect(['attack', 'none']).toContain(charger.task);
+
+  // The archers: face the enemy, hold Space to draw (the marker runs out), let go to loose.
+  const archers = (await own(page)).find((s) => s.abilities.includes('volley'));
+  expect(archers).toBeDefined();
+  await page.keyboard.press(`Digit${(await handle(page, (c) => c.ownSquads().map((s) => s.id))).indexOf(archers!.id) + 1}`);
+  const foe = await nearestFoe(page, archers!.x, archers!.y);
+  held = await holdToward(page, (foe?.x ?? 48) - archers!.x, (foe?.y ?? 36) - archers!.y, []);
+  await page.waitForTimeout(700);
+  await release(page, held);
+  await page.keyboard.down('Space');
+  await page.waitForTimeout(900);
+  expect(await handle(page, (c) => c.aiming?.squads.length ?? 0)).toBe(1);
+  expect(await handle(page, (c) => c.aimView().length)).toBe(1);
+  await page.keyboard.press('KeyP');
+  await page.waitForTimeout(150);
+  await shot(page, '3-archers-aiming');
+  await page.keyboard.press('KeyP');
+  await page.keyboard.up('Space');
+  await page.waitForTimeout(300);
+  expect(await handle(page, (c) => c.aiming)).toBeNull();
+  const loosed = (await own(page)).find((s) => s.id === archers!.id);
+  if (loosed) expect(loosed.task).toBe('volley');
+
+  // Everyone again (Ctrl+A), into the enemy at 4×; then the captains finish whatever is left.
+  await page.keyboard.press('Control+KeyA');
+  await page.getByTestId('battle-speed-4').click();
+  held = [];
+  for (let i = 0; i < 40 && !(await page.getByTestId('battle-summary').isVisible()); i++) {
+    const band = await own(page);
+    if (band.length === 0) break;
+    const cx = band.reduce((a, s) => a + s.x, 0) / band.length;
+    const cy = band.reduce((a, s) => a + s.y, 0) / band.length;
+    const f = await nearestFoe(page, cx, cy);
+    if (!f) break;
+    held = await holdToward(page, f.x - cx, f.y - cy, held);
+    await page.waitForTimeout(400);
+  }
+  await release(page, held);
+  await shot(page, '4-melee');
   if (!(await page.getByTestId('battle-summary').isVisible())) {
     await page.getByTestId('battle-menu').click();
     await expect(page.getByTestId('battle-pause-menu')).toBeVisible();
-    await shot(page, '5-pause-menu');
     await page.getByTestId('battle-captains').click();
   }
   await expect(page.getByTestId('battle-summary')).toBeVisible({ timeout: 60_000 });
   await expect(page.getByTestId('battle-outcome')).toHaveAttribute('data-outcome', /victory|defeat|retreat|draw/);
   await page.waitForTimeout(300);
-  await shot(page, '6-summary');
+  await shot(page, '5-summary');
 
   await page.getByTestId('battle-return').click();
   await expect(page.getByTestId('main-menu')).toBeVisible();
   expect(errors).toEqual([]);
 });
 
-test('the skirmish picker offers every match-up and Escape opens the battle menu', async ({ page }) => {
+test('right-click orders still work, and Escape opens the battle menu', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (err) => errors.push(err.message));
-  await page.setViewportSize({ width: 1600, height: 1000 });
-  // Other agents edit this folder while the dev server runs: cut the HMR socket so no reload interrupts the battle.
+  await page.setViewportSize({ width: 1366, height: 768 });
   await page.routeWebSocket(/./, () => {});
   await page.goto('/');
   await page.getByTestId('menu-skirmish').click();
   for (const id of ['raid', 'field', 'assault', 'cloister']) await expect(page.getByTestId(`skirmish-preset-${id}`)).toBeVisible();
-  await page.getByTestId('skirmish-preset-assault').click();
+  await page.getByTestId('skirmish-preset-field').click();
   await expect(page.getByTestId('battle-howto')).toBeVisible();
   await page.getByTestId('battle-howto-start').click();
-  await expect(page.getByTestId('battle-screen')).toHaveAttribute('data-paused', 'false');
-  await page.waitForTimeout(1500);
-  await shot(page, 'assault-start');
+  const screen = page.getByTestId('battle-screen');
+  await expect(screen).toHaveAttribute('data-paused', 'false');
+  // Right-click a spot just above the middle of the screen: the band marches there.
+  await page.keyboard.press('Digit1');
+  const before = (await own(page))[0]!;
+  const canvas = await page.getByTestId('battle-canvas').boundingBox();
+  await page.mouse.click(canvas!.x + canvas!.width / 2, canvas!.y + canvas!.height / 2 - 120, { button: 'right' });
+  await page.waitForTimeout(1200);
+  const after = (await own(page)).find((s) => s.id === before.id)!;
+  expect(after.task === 'move' || Math.hypot(after.x - before.x, after.y - before.y) > 0.5).toBe(true);
   await page.keyboard.press('Escape');
   await expect(page.getByTestId('battle-pause-menu')).toBeVisible();
-  await expect(page.getByTestId('battle-screen')).toHaveAttribute('data-paused', 'true');
+  await expect(screen).toHaveAttribute('data-paused', 'true');
   await page.getByTestId('battle-leave').click();
   await expect(page.getByTestId('skirmish')).toBeVisible();
   expect(errors).toEqual([]);
@@ -180,8 +312,12 @@ test('a campaign raid fought on the field returns to the saga', async ({ page })
   await expect(page.locator('[data-testid="game-shell"][data-mode="battle"]')).toBeVisible();
   await expect(page.getByTestId('battle-howto')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByTestId('battle-setup')).toHaveCount(0);
-  await page.getByTestId('battle-howto-start').click();
-  await page.waitForTimeout(2500);
+  await page.getByTestId('battle-howto-plan').click();
+  // The first movement key starts the campaign battle too.
+  await page.keyboard.down('KeyW');
+  await expect(page.getByTestId('battle-screen')).toHaveAttribute('data-paused', 'false');
+  await page.waitForTimeout(1500);
+  await page.keyboard.up('KeyW');
   await shot(page, 'campaign-field');
   await page.getByTestId('battle-menu').click();
   await page.getByTestId('battle-captains').click();

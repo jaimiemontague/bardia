@@ -24,6 +24,29 @@ export interface SeaEngineOptions {
 
 export type SideIdx = 0 | 1;
 
+/** A ship's side for a broadside volley: port (left of the bow) or starboard (right). */
+export type SeaBroadside = 'port' | 'starboard';
+
+/**
+ * A volley loosed by hand from a ship's side, in flight until `landT` (battle seconds). Its power
+ * (men struck per unit of centring before the target's defence) is fixed when it is loosed.
+ */
+export interface SeaShot {
+  from: number;
+  side: SideIdx;
+  broadside: SeaBroadside;
+  /** Where the archers stood and where the arrows fall (arena metres). */
+  fromX: number;
+  fromY: number;
+  x: number;
+  y: number;
+  rangeM: number;
+  firedT: number;
+  landT: number;
+  power: number;
+  fire: boolean;
+}
+
 /** What a ship's controller is trying to do. */
 export type SeaGoal =
   | 'idle'
@@ -226,6 +249,14 @@ export interface SeaWorld {
   playerCharId: CharId | undefined;
   /** Engine index of the ship carrying the player, or −1 (player not in the fight any more). */
   playerShip: number;
+  /**
+   * Engine index of the ship under the player's own hand (W A S D and the hand-loosed volleys), or
+   * −1. The flagship at the start; any of the player's ships after a 'takeHelm'. Only this ship can
+   * have the 'player' controller.
+   */
+  helm: number;
+  /** Hand-loosed volleys in flight (insertion order). */
+  shots: SeaShot[];
   offerDuels: boolean;
   aiControlsPlayer: boolean;
   captainFates: Record<string, SeaCaptainFate>;
@@ -239,9 +270,16 @@ export interface SeaWorld {
 // Inputs (the client calls engine.input(...) between steps; every input is logged with its tick).
 
 export type SeaInput =
-  /** Direct helm of the flagship: throttle −1..1 (negative backs water under oars), rudder −1..1. */
+  /** Direct helm of the steered ship: throttle −1..1 (negative backs water under oars), rudder −1..1 (+ = starboard). */
   | { kind: 'helm'; throttle: number; rudder: number }
-  /** Click-to-move for the flagship (autopilot with hazard avoidance). */
+  /** The player takes the helm of another of their ships (the one steered so far follows the fleet). */
+  | { kind: 'takeHelm'; ship: number }
+  /**
+   * The archers of the steered ship (or `ship`) loose a volley over its side, square to the keel,
+   * `rangeM` out (clamped to tunables.aim). Ignored while they are still nocking (the volley timer).
+   */
+  | { kind: 'loose'; side: SeaBroadside; rangeM: number; ship?: number }
+  /** Click-to-move for the steered ship (autopilot with hazard avoidance). */
   | { kind: 'moveTo'; x: number; y: number }
   /** Sail/oars toggle (default the flagship). */
   | { kind: 'propulsion'; mode: SeaPropulsion; ship?: number }
@@ -277,6 +315,10 @@ export type SeaInput =
 
 export type SeaEvent = { t: number } & (
   | { kind: 'volley'; from: number; to: number; hits: number; fire: boolean }
+  /** A hand-loosed volley leaves the ship; it falls at (x, y) after `flightS` battle seconds. */
+  | { kind: 'loose'; from: number; side: SeaBroadside; x: number; y: number; rangeM: number; fire: boolean; flightS: number }
+  /** A hand-loosed volley falls: `struck` ships under it, `hits` men struck in all (0 = into the sea). */
+  | { kind: 'fall'; from: number; x: number; y: number; fire: boolean; hits: number; struck: number[]; centred: number }
   | { kind: 'ignite'; ship: number; part: 'sail' | 'hull'; cause: 'arrows' | 'seaFire' | 'burnout' }
   | { kind: 'douseStarted'; ship: number }
   | { kind: 'extinguished'; ship: number }
@@ -347,6 +389,8 @@ export interface SeaShipView {
   routed: boolean;
   isFlagship: boolean;
   isPlayer: boolean;
+  /** The ship the player steers by hand (W A S D, hold Space to loose). */
+  isHelm: boolean;
   controller: SeaShip['controller'];
   order: SeaOrderKind;
   orderTarget: number;
@@ -363,6 +407,14 @@ export interface SeaShipView {
 export interface SeaRenderState {
   tick: number;
   timeS: number;
+  /** Battle seconds per step (the previous pose is `stepS` earlier). */
+  stepS: number;
+  /** The ship the player steers (−1 none). */
+  helm: number;
+  /** An enemy the steered ship could throw grapnels at right now (−1 none). */
+  helmGrapple: number;
+  /** Hand-loosed volleys in flight. */
+  shots: { from: number; fromX: number; fromY: number; x: number; y: number; firedT: number; landT: number; fire: boolean }[];
   status: SeaWorld['status'];
   wind: { dir: number; str: WindStrength };
   arena: { sizeM: number; cellM: number; w: number; h: number; terrain: Uint8Array; template: string };

@@ -1,16 +1,17 @@
 /**
  * The sea-battle HUD (§20: about half as much on screen, bigger): a slim top bar (time and pace, the
- * wind rose, withdraw, menu), one line per fleet with the balance of the fight between them, a slim
- * card per selected ship (name, hull, crew, what it is doing) with the attack style and two orders,
- * the last few happenings, and the cards that interrupt play: how to command, the pause menu,
- * withdraw, a captain duel, the captains' fast-forward and the summary. Everything reads the
- * SeaController; every button gives an engine input through it.
+ * wind rose, withdraw, menu), one line per fleet with the balance of the fight between them, the helm
+ * strip of the ship the player steers (way on, sail or oars, bows ready or nocking), a slim card per
+ * selected ship (name, hull, crew, what it is doing) with the attack style and two orders, the last
+ * few happenings, and the cards that interrupt play: how to command, the pause menu, withdraw, a
+ * captain duel, the captains' fast-forward and the summary. Everything reads the SeaController; every
+ * button gives an engine input through it.
  */
 import type { ReactElement, ReactNode } from 'react';
 import { formatNumber, useT } from '../../i18n/index';
 import { Button, Icon, Tooltip } from '../../ui/index';
 import type { SeaController, SeaSpeed } from './controller';
-import { ATTACK_STYLES, balanceWord, clock, compassPoint, doingKey, strengthShare, type SeaSummary } from './logic';
+import { ATTACK_STYLES, balanceWord, clock, compassPoint, doingKey, strengthShare, wayWord, type SeaSummary } from './logic';
 import { ShipGlyph } from './ShipGlyph';
 
 // ---- top bar ---------------------------------------------------------------------------------
@@ -119,6 +120,53 @@ export function FleetBar({ c }: { c: SeaController }): ReactElement {
   );
 }
 
+// ---- the helm --------------------------------------------------------------------------------
+
+/**
+ * The ship under the player's hand: which one it is, the way on her, sail or oars, and whether the
+ * bows are ready (hold Space) or the crew is still nocking (a bar fills).
+ */
+export function HelmStrip({ c }: { c: SeaController }): ReactElement | null {
+  const t = useT();
+  const s = c.helmShip();
+  if (!s || c.fastForward || c.snap.status === 'ended') return null;
+  const key = c.roster().findIndex((r) => r.idx === s.idx) + 1;
+  const way = s.grounded ? 'aground' : wayWord(s.speedMs, s.maxSpeedMs);
+  const volley = c.volleyState();
+  const nock = c.nockProgress();
+  const alongside = c.snap.helmGrapple >= 0 && s.grappledTo < 0;
+  return (
+    <section className={`sv-helm volley-${volley}${c.drawing ? ' is-drawing' : ''}`} data-testid="sea-helm" data-ship={s.idx} data-volley={volley} data-way={way} aria-label={t('seaView.helm.label')}>
+      <div className="sv-helm-ship">
+        <span className="sv-card-key">{key}</span>
+        <span className="sv-helm-name">{s.name}</span>
+        <span className="sv-helm-type muted">{t('seaView.helm.yours')}</span>
+      </div>
+      <div className="sv-helm-row">
+        <span className="sv-helm-way" data-testid="sea-helm-way">
+          {t(`seaView.helm.way.${way}`)}
+        </span>
+        <span className="sv-helm-prop muted">{t(s.rowing ? 'seaView.helm.oars' : 'seaView.helm.sail')}</span>
+      </div>
+      <div className="sv-helm-volley" data-testid="sea-helm-volley">
+        {volley === 'nocking' ? (
+          <span className="sv-nock" aria-hidden="true">
+            <span style={{ width: `${Math.round(nock * 100)}%` }} />
+          </span>
+        ) : (
+          <span className={`sv-bowdot is-${volley}`} aria-hidden="true" />
+        )}
+        <span className="sv-helm-volley-text">{t(c.drawing ? 'seaView.helm.volley.drawing' : `seaView.helm.volley.${volley}`)}</span>
+      </div>
+      {alongside && (
+        <div className="sv-helm-hint" data-testid="sea-helm-grapple">
+          {t('seaView.helm.alongside')}
+        </div>
+      )}
+    </section>
+  );
+}
+
 // ---- selected ships --------------------------------------------------------------------------
 
 function HullBar({ pct }: { pct: number }): ReactElement {
@@ -216,12 +264,14 @@ export function Ticker({ c, onFocus }: { c: SeaController; onFocus(x: number, y:
 
 export function HowTo({ onPlan, onStart }: { onPlan(): void; onStart(): void }): ReactElement {
   const t = useT();
-  const rows = ['select', 'order', 'style', 'pause', 'camera'];
+  const rows = ['steer', 'loose', 'board', 'helm', 'mouse', 'pause'];
   return (
     <div className="sv-modal" role="dialog" aria-modal="true" aria-labelledby="sv-howto-title" data-testid="sea-howto">
       <div className="sv-modal-card">
         <h2 id="sv-howto-title">{t('seaView.howto.title')}</h2>
-        <p className="sv-lead">{t('seaView.howto.intro')}</p>
+        <p className="sv-lead sv-howto-lead" data-testid="sea-howto-lead">
+          {t('seaView.howto.intro')}
+        </p>
         <dl className="sv-howto">
           {rows.map((r) => (
             <div key={r}>

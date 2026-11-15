@@ -74,6 +74,18 @@
     "losSamples": 6,
     "fireArrowsDefault": true
   },
+  "aim": {
+    "minRangeM": 20,
+    "maxRangeM": 110,
+    "sweepRealS": 1.25,
+    "fallRadiusM": 12,
+    "aimedHitMult": 3.6,
+    "farHitMult": 0.7,
+    "fullCentring": 0.8,
+    "nockS": 12,
+    "flightBaseS": 1.2,
+    "arrowSpeedMs": 40
+  },
   "fire": {
     "burningMoralePerS": -1,
     "sailBurnoutHullChance": 0.35,

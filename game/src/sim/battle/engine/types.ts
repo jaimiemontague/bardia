@@ -21,7 +21,7 @@ export function sideIdx(key: BattleSideKey): SideIdx {
 export type SquadStatus = 'reserve' | 'asleep' | 'active' | 'routing' | 'escaped' | 'destroyed' | 'surrendered';
 
 /** What a squad is doing (set by orders and the AI). */
-export type SquadTaskKind = 'none' | 'move' | 'attack' | 'loot' | 'torch' | 'gate' | 'douse' | 'retreat' | 'volley';
+export type SquadTaskKind = 'none' | 'move' | 'attack' | 'loot' | 'torch' | 'gate' | 'douse' | 'retreat' | 'volley' | 'drive';
 
 export interface SquadTask {
   kind: SquadTaskKind;
@@ -127,6 +127,15 @@ export interface BSquad {
   routedOnce: boolean;
   /** Retreating to the extraction zone on orders (saved there). */
   retreating: boolean;
+  /** Direct control (task 'drive'): unit direction of travel on the map (screen up = −y). */
+  driveX: number;
+  driveY: number;
+  /** Squads driven by the same order move at the pace of the slowest of them (order sequence number). */
+  driveGroup: number;
+  /** Side (+1 / −1) a driven squad last turned to slip past an obstacle (kept so it does not dither). */
+  driveSlide: number;
+  /** Released after a drive: stands its ground (the stance does not send it off) until the next order. */
+  driveHeld: boolean;
   /** Seconds since the squad last took or dealt damage. */
   quietT: number;
   /** Player's hit points (0..100) when `isPlayer`. */
@@ -323,7 +332,17 @@ export type BattleOrder =
   | { kind: 'attack'; squads: string[]; target: string; run?: boolean }
   | { kind: 'formation'; squads: string[]; formation: FormationId }
   | { kind: 'stance'; squads: string[]; stance: SquadStance }
-  | { kind: 'ability'; squad: string; ability: AbilityId; x?: number; y?: number; target?: string; fire?: boolean }
+  /**
+   * `ahead`: a charge with no target runs at the nearest seen enemy inside the cone in front of the
+   * squad (tunables.drive.chargeConeDeg / chargeRangeTiles).
+   */
+  | { kind: 'ability'; squad: string; ability: AbilityId; x?: number; y?: number; target?: string; fire?: boolean; ahead?: boolean }
+  /**
+   * Direct control (W A S D): the squads walk (or run) that way until the next drive, keeping their
+   * places in the line at the pace of the slowest. dx/dy are screen directions (dy −1 = up); 0, 0
+   * stops the squads still driving, and they hold their ground.
+   */
+  | { kind: 'drive'; squads: string[]; dx: -1 | 0 | 1; dy: -1 | 0 | 1; run?: boolean }
   | { kind: 'loot'; squads: string[]; cache: string }
   | { kind: 'halt'; squads: string[] }
   | { kind: 'retreat'; squads: string[] }
@@ -436,6 +455,8 @@ export interface BattleState {
   costsDirty: boolean;
   /** Squads with a pending path request, in request order. */
   pathQueue: number[];
+  /** Drive orders given so far (each one forms a group that keeps pace together). */
+  driveSeq: number;
   cosFront: number;
   cosRear: number;
   end: EndState | null;

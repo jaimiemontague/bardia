@@ -432,6 +432,33 @@ export const schema = strict({
   }),
   /** Engine event log cap (oldest entries are dropped). */
   eventLogMax: z.number().int().min(16),
+  /**
+   * Direct control with the keys (owner play-test 2026-11-15): W A S D / arrows drive the selected
+   * squads, Space charges ahead or draws an aimed volley. The engine reads the movement and charge
+   * numbers; the battle screen reads the aim and camera numbers.
+   */
+  drive: strict({
+    /** A driven squad walks (or runs) at its usual speed × this, so the keys answer briskly. */
+    speedMult: pos,
+    /** A driven squad turns this many times faster than tunables.turnRateDegPerS. */
+    turnRateMult: pos,
+    /** Space (charge ahead): the nearest seen enemy within this gap (tiles)… */
+    chargeRangeTiles: pos,
+    /** …and inside this cone around the squad's facing (full angle, degrees). */
+    chargeConeDeg: z.number().finite().min(1).max(360),
+    /** A driven squad locked in melee breaks off when its direction turns more than this from its foe (degrees). */
+    breakOffDeg: z.number().finite().min(0).max(180),
+    /** Blocked head-on, a driven squad looks this many tiles to each side for a way round (else it stops). */
+    slideProbeTiles: z.number().int().min(0),
+    /** Aimed volley (hold Space): the marker starts this far in front of the archers (tiles, at most their range)… */
+    aimMinTiles: nonNeg,
+    /** …and runs out to their full range in this many seconds, then back again, while Space is held. */
+    aimSweepS: pos,
+    /** The camera closes this share of the gap to the driven squads per second (exponential follow rate, 1/s). */
+    cameraFollowRate: pos,
+    /** Tiles across the screen when the battle opens on the war-band (wider zooms out). */
+    cameraViewTiles: pos,
+  }),
 });
 export type Tunables = z.infer<typeof schema>;
 export type BattleMapStyle = (typeof MAP_STYLES)[number];

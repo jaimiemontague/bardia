@@ -1,13 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * The sea battle through the real UI: Main Menu → Skirmish → a sea match-up. Reads the "how to
- * command" card, selects ships with the number keys and Ctrl+A, sails them with a right click on the
- * water, sends them at an enemy ship with a right click on it, sets the attack style, runs the fight
- * at 4×, lets the captains finish it from the battle menu, reads the summary and returns. A second
- * test plays a short match-up at 1366×768; a third puts a sea fight in front of a quick-start saga and
- * takes the helm on the Before-the-Sea-Battle card, into the scene and back to the saga.
- * Screenshots land in the output folder (BARDIA_E2E_OUT) for a visual check.
+ * The sea battle through the real UI, fought with the keyboard (owner play-test 2026-11-15):
+ * Main Menu → Skirmish → a sea match-up. Reads the "how to command" card, holds W and sees the
+ * flagship gather way, holds D and sees her turn, holds Space to draw (the aim marker runs out from
+ * the side) and lets go to loose a volley, checks that P (not Space) pauses, sends the other ship at
+ * an enemy with the mouse, then fights on with the keys (steering side-on and loosing when an enemy
+ * lies under the marker) until the captains finish it, reads the summary and returns. A second test
+ * plays the merchant raid; a third puts a sea fight in front of a quick-start saga, takes the helm
+ * on the Before-the-Sea-Battle card, into the scene and back to the saga.
+ * Screenshots (1366×768) land in the output folder (BARDIA_E2E_OUT) for a visual check.
  */
 
 const OUT = process.env.BARDIA_E2E_OUT ?? 'test-results';
@@ -23,6 +25,24 @@ interface ShipPos {
   x: number;
   y: number;
 }
+
+/** The scene's controller as the tests read it (dev build: exposed on window). */
+type SeaHandle = {
+  snap: {
+    status: string;
+    helm: number;
+    timeS: number;
+    shots: unknown[];
+    ships: { idx: number; side: string; status: string; x: number; y: number; heading: number; speedMs: number; isHelm: boolean }[];
+  };
+  side: string;
+  paused: boolean;
+  aim: { rangeM: number; side: string } | null;
+  aimCfg: { minRangeM: number; maxRangeM: number };
+  engine: { inputLog: { input?: { kind: string } }[] };
+  volleyState(): string;
+  helmShip(): { idx: number; x: number; y: number; heading: number; speedMs: number } | undefined;
+};
 
 /** Screen position of every ship (dev build: the scene exposes its controller and view). */
 async function ships(page: Page): Promise<ShipPos[]> {
@@ -41,25 +61,32 @@ async function ships(page: Page): Promise<ShipPos[]> {
   });
 }
 
-/** A point near (x, y) where the sea itself (not a HUD card) takes the click. */
-async function openWater(page: Page, x: number, y: number): Promise<{ x: number; y: number }> {
-  return page.evaluate(
-    ([x0, y0]) => {
-      for (let r = 0; r < 400; r += 20) {
-        for (const [dx, dy] of [
-          [0, r],
-          [0, -r],
-          [r, 0],
-          [-r, 0],
-        ]) {
-          const el = document.elementFromPoint(x0! + dx!, y0! + dy!);
-          if (el instanceof HTMLCanvasElement) return { x: x0! + dx!, y: y0! + dy! };
-        }
-      }
-      return { x: x0!, y: y0! };
-    },
-    [x, y],
-  );
+/** The steered ship's speed (m/s) and heading (degrees). */
+async function helm(page: Page): Promise<{ idx: number; speed: number; heading: number }> {
+  return page.evaluate(() => {
+    const c = (window as unknown as { __bardiaSeaBattle?: SeaHandle }).__bardiaSeaBattle;
+    const s = c?.helmShip();
+    return { idx: s?.idx ?? -1, speed: s?.speedMs ?? 0, heading: s?.heading ?? 0 };
+  });
+}
+
+async function looses(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const c = (window as unknown as { __bardiaSeaBattle?: SeaHandle }).__bardiaSeaBattle;
+    return c ? c.engine.inputLog.filter((x) => x.input?.kind === 'loose').length : 0;
+  });
+}
+
+/** Zooms out (the minus key) until an enemy ship is in clear view; returns its screen position. */
+async function enemyInView(page: Page): Promise<ShipPos | undefined> {
+  const vp = page.viewportSize() ?? { width: 1366, height: 768 };
+  for (let i = 0; i < 10; i++) {
+    const foe = (await ships(page)).find((s) => s.side === 'foe' && s.status === 'active' && s.x > 120 && s.x < vp.width - 120 && s.y > 170 && s.y < vp.height - 200);
+    if (foe) return foe;
+    await page.keyboard.press('Minus');
+    await page.waitForTimeout(80);
+  }
+  return undefined;
 }
 
 async function battleTime(page: Page): Promise<number> {
@@ -68,110 +95,179 @@ async function battleTime(page: Page): Promise<number> {
   return m ? Number(m[1]) * 60 + Number(m[2]) : 0;
 }
 
-test('a sea skirmish is commanded with the mouse, fought, finished by the captains and left', async ({ page }) => {
-  test.setTimeout(180_000);
+/**
+ * What the keys should do now (read in the page): the turn toward having the nearest enemy on the
+ * beam at about 55 m, and — when the bows are ready and the enemy lies near the line square to the
+ * keel — the range to loose at.
+ */
+async function plan(page: Page): Promise<{ over: boolean; turn: number; ahead: boolean; loose: number | null }> {
+  return page.evaluate(() => {
+    const c = (window as unknown as { __bardiaSeaBattle?: SeaHandle }).__bardiaSeaBattle;
+    if (!c || c.snap.status !== 'running') return { over: true, turn: 0, ahead: false, loose: null };
+    const me = c.helmShip();
+    if (!me) return { over: true, turn: 0, ahead: false, loose: null };
+    let foe: SeaHandle['snap']['ships'][number] | undefined;
+    let best = Infinity;
+    for (const s of c.snap.ships) {
+      if (s.side === c.side || s.status !== 'active') continue;
+      const d = Math.hypot(s.x - me.x, s.y - me.y);
+      if (d < best) {
+        best = d;
+        foe = s;
+      }
+    }
+    if (!foe) return { over: true, turn: 0, ahead: false, loose: null };
+    const wrap = (a: number) => ((((a + 180) % 360) + 360) % 360) - 180;
+    const to = (Math.atan2(foe.x - me.x, -(foe.y - me.y)) * 180) / Math.PI;
+    const beamA = wrap(to - 90);
+    const beamB = wrap(to + 90);
+    const want = best > 80 ? to : Math.abs(wrap(beamA - me.heading)) < Math.abs(wrap(beamB - me.heading)) ? beamA : beamB;
+    const turn = wrap(want - me.heading);
+    let loose: number | null = null;
+    if (c.volleyState() === 'ready') {
+      const h = (me.heading * Math.PI) / 180;
+      const fh = (foe.heading * Math.PI) / 180;
+      const lead = 1.2 + best / 40;
+      const fx = foe.x + Math.sin(fh) * foe.speedMs * lead - me.x;
+      const fy = foe.y - Math.cos(fh) * foe.speedMs * lead - me.y;
+      const out = Math.abs(fx * Math.cos(h) + fy * Math.sin(h));
+      const along = fx * Math.sin(h) - fy * Math.cos(h);
+      if (Math.abs(along) < 9 && out >= c.aimCfg.minRangeM && out <= c.aimCfg.maxRangeM) loose = out;
+    }
+    return { over: false, turn, ahead: best > 40, loose };
+  });
+}
+
+/** Holds Space until the marker reaches `rangeM` (± 4 m), then lets go. */
+async function drawAndLoose(page: Page, rangeM: number): Promise<void> {
+  await page.keyboard.down('Space');
+  await page
+    .waitForFunction(
+      (r) => {
+        const c = (window as unknown as { __bardiaSeaBattle?: SeaHandle }).__bardiaSeaBattle;
+        return !c?.aim || Math.abs(c.aim.rangeM - r) < 4;
+      },
+      rangeM,
+      { timeout: 3000, polling: 'raf' },
+    )
+    .catch(() => undefined);
+  await page.keyboard.up('Space');
+}
+
+/** Fights with the keys for `seconds` of real time: steer side-on, loose when the enemy lies under the line. */
+async function fightWithKeys(page: Page, seconds: number): Promise<void> {
+  const until = Date.now() + seconds * 1000;
+  let held: string | null = null;
+  const hold = async (k: string | null) => {
+    if (held === k) return;
+    if (held) await page.keyboard.up(held);
+    if (k) await page.keyboard.down(k);
+    held = k;
+  };
+  await page.keyboard.down('KeyW');
+  while (Date.now() < until) {
+    const p = await plan(page);
+    if (p.over) break;
+    await hold(p.turn > 12 ? 'KeyD' : p.turn < -12 ? 'KeyA' : null);
+    if (p.loose !== null) await drawAndLoose(page, p.loose);
+    else await page.waitForTimeout(120);
+  }
+  await hold(null);
+  await page.keyboard.up('KeyW');
+}
+
+test('a sea skirmish fought with the keys: steer, draw and loose, to the summary', async ({ page }) => {
+  test.setTimeout(240_000);
   const errors: string[] = [];
   page.on('pageerror', (err) => errors.push(err.message));
-  await page.setViewportSize({ width: 1600, height: 1000 });
+  await page.setViewportSize({ width: 1366, height: 768 });
   // Other agents edit this folder while the dev server runs: cut the HMR socket so no reload interrupts the battle.
   await page.routeWebSocket(/./, () => {});
   await page.goto('/');
   await page.getByTestId('menu-skirmish').click();
   await expect(page.getByTestId('skirmish')).toBeVisible();
-  for (const id of ['raid', 'field', 'assault', 'cloister', 'seaPair', 'seaMerchant', 'seaStand']) await expect(page.getByTestId(`skirmish-preset-${id}`)).toBeVisible();
-  await shot(page, '0-presets');
+  for (const id of ['seaPair', 'seaMerchant', 'seaStand']) await expect(page.getByTestId(`skirmish-preset-${id}`)).toBeVisible();
 
   await page.getByTestId('skirmish-preset-seaPair').click();
   const screen = page.getByTestId('sea-battle-screen');
   await expect(screen).toBeVisible();
   await expect(page.getByTestId('sea-canvas')).toBeVisible({ timeout: 15_000 });
   await expect(page.getByTestId('sea-howto')).toBeVisible();
+  await expect(page.getByTestId('sea-howto-lead')).toHaveText(/W A S D steer · hold Space to draw, let go to loose/);
   await page.waitForTimeout(700);
   await shot(page, '1-howto');
-  await page.getByTestId('sea-howto-plan').click();
-  await expect(screen).toHaveAttribute('data-paused', 'true');
-  // Both fleets are on the water before the first tick.
-  const start = await ships(page);
-  expect(start.filter((s) => s.side === 'own').length).toBe(2);
-  expect(start.filter((s) => s.side === 'foe').length).toBe(2);
-  await page.waitForTimeout(400);
-  await shot(page, '2-before-start');
-
-  // Select by number, then the whole fleet; sail toward the enemy with a right click on the water.
-  await page.keyboard.press('Digit2');
-  await expect(page.getByTestId('sea-ship-cards').locator('.sv-card')).toHaveCount(1);
-  await page.keyboard.press('Control+KeyA');
-  await expect(page.getByTestId('sea-ship-cards').locator('.sv-card')).toHaveCount(2);
-  const own = start.filter((s) => s.side === 'own');
-  const foe = start.filter((s) => s.side === 'foe');
-  const ox = own.reduce((a, s) => a + s.x, 0) / own.length;
-  const oy = own.reduce((a, s) => a + s.y, 0) / own.length;
-  const fx = foe.reduce((a, s) => a + s.x, 0) / foe.length;
-  const fy = foe.reduce((a, s) => a + s.y, 0) / foe.length;
-  const mark = await openWater(page, ox + (fx - ox) * 0.35, oy + (fy - oy) * 0.35);
-  await page.mouse.click(mark.x, mark.y, { button: 'right' });
-  await expect(page.getByTestId('sea-ship-doing').first()).toHaveText(/Sailing to the mark/);
-  // The flagship goes for an enemy ship by boarding, the other shoots.
-  await page.keyboard.press('Digit1');
-  await page.getByTestId('sea-style-board').click();
-  const target = (await ships(page)).find((s) => s.side === 'foe' && s.status === 'active')!;
-  await page.mouse.click(target.x, target.y, { button: 'right' });
-  await page.keyboard.press('Digit2');
-  await page.getByTestId('sea-style-shoot').click();
-  await page.mouse.click(target.x, target.y, { button: 'right' });
-  await page.waitForTimeout(300);
-  await shot(page, '3-orders');
-
-  // Space starts; 4× speeds it up.
-  await page.keyboard.press('Space');
+  await page.getByTestId('sea-howto-start').click();
   await expect(screen).toHaveAttribute('data-paused', 'false');
-  await page.getByTestId('sea-speed-4').click();
-  await page.waitForFunction(
-    () => {
-      const w = window as unknown as { __bardiaSeaBattle?: { snap: { ships: { side: string; status: string; x: number; y: number }[]; status: string } } };
-      const s = w.__bardiaSeaBattle?.snap;
-      if (!s) return false;
-      if (s.status === 'ended') return true;
-      const a = s.ships.filter((x) => x.side === 'attacker' && x.status === 'active');
-      const d = s.ships.filter((x) => x.side === 'defender' && x.status === 'active');
-      return a.some((p) => d.some((q) => Math.hypot(p.x - q.x, p.y - q.y) < 160));
-    },
-    undefined,
-    { timeout: 90_000 },
-  );
-  await page.waitForTimeout(1500);
-  await shot(page, '4-engaged');
-  // A deck fight (or the end, if the fight went another way): pause on it and let the camera close in.
-  const boarded = await page
-    .waitForFunction(
-      () => {
-        const w = window as unknown as { __bardiaSeaBattle?: { snap: { boardings: { phase: string }[]; status: string; duel: unknown } } };
-        const s = w.__bardiaSeaBattle?.snap;
-        return !s || s.status !== 'running' || s.duel !== null || s.boardings.some((b) => b.phase === 'fighting');
-      },
-      undefined,
-      { timeout: 60_000, polling: 50 },
-    )
-    .then(() => true)
-    .catch(() => false);
-  if (await page.getByTestId('sea-duel').isVisible()) {
-    await shot(page, '5-duel');
-    await page.getByTestId('sea-duel-fight').click();
-  } else if (boarded && (await page.getByTestId('sea-battle-screen').getAttribute('data-status')) === 'running') {
-    await page.keyboard.press('Space');
-    await page.waitForTimeout(1800);
-    await shot(page, '5-boarding');
-    await page.keyboard.press('Space');
-  }
+  const strip = page.getByTestId('sea-helm');
+  await expect(strip).toBeVisible();
+  await expect(strip).toHaveAttribute('data-volley', 'ready');
+  const start = await helm(page);
+  expect(start.idx).toBeGreaterThanOrEqual(0);
+  expect(start.speed).toBeLessThan(0.3);
+
+  // Hold W: she gathers way.
+  await page.keyboard.down('KeyW');
+  await page.waitForTimeout(2500);
+  const underway = await helm(page);
+  expect(underway.speed).toBeGreaterThan(0.8);
+  await expect(strip).not.toHaveAttribute('data-way', 'stopped');
+  await shot(page, '2-underway');
+  // Hold D as well: she turns to starboard.
+  await page.keyboard.down('KeyD');
+  await page.waitForTimeout(1200);
+  await page.keyboard.up('KeyD');
+  const turned = await helm(page);
+  const dh = ((turned.heading - underway.heading + 540) % 360) - 180;
+  expect(dh).toBeGreaterThan(8);
+  await page.keyboard.up('KeyW');
+
+  // Hold Space: the bows are drawn and the marker runs out; let go: a volley is loosed.
+  await page.keyboard.down('Space');
+  await page.waitForTimeout(450);
+  await expect(strip).toHaveClass(/is-drawing/);
+  const aim = await page.evaluate(() => (window as unknown as { __bardiaSeaBattle?: SeaHandle }).__bardiaSeaBattle?.aim ?? null);
+  expect(aim).not.toBeNull();
+  await shot(page, '3-aim');
+  await page.keyboard.up('Space');
+  await expect.poll(() => looses(page)).toBe(1);
+  await expect(strip).toHaveAttribute('data-volley', 'nocking');
+  await page.waitForTimeout(250);
+  await shot(page, '4-loosed');
+  // Space no longer pauses; P does.
+  await expect(screen).toHaveAttribute('data-paused', 'false');
+  await page.keyboard.press('KeyP');
+  await expect(screen).toHaveAttribute('data-paused', 'true');
+  await page.keyboard.press('KeyP');
+  await expect(screen).toHaveAttribute('data-paused', 'false');
+
+  // The mouse still commands the other ship: Shift+2 selects it, a right click sends it at an enemy.
+  await page.keyboard.press('Shift+Digit2');
+  await expect(page.getByTestId('sea-ship-cards').locator('.sv-card')).toHaveCount(1);
+  await page.keyboard.press('KeyP');
+  const target = await enemyInView(page);
+  expect(target).toBeDefined();
+  await page.mouse.click(target!.x, target!.y, { button: 'right' });
+  await expect(page.getByTestId('sea-ship-doing').first()).toHaveText(/Closing to board|Shooting from bowshot|Going in to ram/);
+  await shot(page, '5-orders');
+  // C: the camera follows your ship again.
+  await page.keyboard.press('KeyC');
+  await page.keyboard.press('KeyP');
+
+  // Fight on with the keys at 2× (steer side-on, loose when the enemy lies under the line).
+  await page.getByTestId('sea-speed-2').click();
+  await fightWithKeys(page, 45);
+  await shot(page, '6-fight');
+  expect(await looses(page)).toBeGreaterThan(1);
   expect(await battleTime(page)).toBeGreaterThan(0);
 
   // Escape → battle menu → let the captains finish it.
   if (!(await page.getByTestId('sea-summary').isVisible())) {
+    if (await page.getByTestId('sea-duel').isVisible()) await page.getByTestId('sea-duel-fight').click();
     await page.keyboard.press('Escape');
-    await expect(page.getByTestId('sea-pause-menu')).toBeVisible();
-    await expect(screen).toHaveAttribute('data-paused', 'true');
-    await shot(page, '6-menu');
-    await page.getByTestId('sea-captains').click();
+    if (await page.getByTestId('sea-pause-menu').isVisible()) {
+      await expect(screen).toHaveAttribute('data-paused', 'true');
+      await page.getByTestId('sea-captains').click();
+    }
   }
   await expect(page.getByTestId('sea-summary')).toBeVisible({ timeout: 90_000 });
   await expect(page.getByTestId('sea-outcome')).toHaveAttribute('data-outcome', /victory|defeat|escaped|draw/);
@@ -182,7 +278,7 @@ test('a sea skirmish is commanded with the mouse, fought, finished by the captai
   expect(errors).toEqual([]);
 });
 
-test('a short sea match-up at 1366×768: the merchant raid to its summary', async ({ page }) => {
+test('the merchant raid: Tab takes another helm, the fleet is sent with the mouse, to the summary', async ({ page }) => {
   test.setTimeout(150_000);
   const errors: string[] = [];
   page.on('pageerror', (err) => errors.push(err.message));
@@ -190,21 +286,27 @@ test('a short sea match-up at 1366×768: the merchant raid to its summary', asyn
   await page.routeWebSocket(/./, () => {});
   await page.goto('/');
   await page.getByTestId('menu-skirmish').click();
-  await shot(page, 'small-0-presets');
   await page.getByTestId('skirmish-preset-seaMerchant').click();
   await expect(page.getByTestId('sea-howto')).toBeVisible({ timeout: 15_000 });
-  await page.waitForTimeout(500);
-  await shot(page, 'small-1-howto');
   await page.getByTestId('sea-howto-start').click();
   await expect(page.getByTestId('sea-battle-screen')).toHaveAttribute('data-paused', 'false');
-  // Send the whole fleet at the laden knarr.
+  const first = await helm(page);
+  await page.keyboard.press('Tab');
+  await expect.poll(async () => (await helm(page)).idx).not.toBe(first.idx);
+  await expect(page.getByTestId('sea-helm')).toHaveAttribute('data-ship', String((await helm(page)).idx));
+  await page.keyboard.press('Digit1');
+  await expect.poll(async () => (await helm(page)).idx).toBe(first.idx);
+  // Send the whole fleet at the laden knarr; the steered ship stays in hand.
   await page.keyboard.press('Control+KeyA');
-  const knarr = (await ships(page)).find((s) => s.side === 'foe')!;
-  await page.mouse.click(knarr.x, knarr.y, { button: 'right' });
+  const knarr = await enemyInView(page);
+  expect(knarr).toBeDefined();
+  await page.mouse.click(knarr!.x, knarr!.y, { button: 'right' });
+  await page.keyboard.press('KeyC');
   await page.getByTestId('sea-speed-4').click();
-  await page.waitForTimeout(9000);
+  await fightWithKeys(page, 12);
   await shot(page, 'small-2-mid');
   if (!(await page.getByTestId('sea-summary').isVisible())) {
+    if (await page.getByTestId('sea-duel').isVisible()) await page.getByTestId('sea-duel-fight').click();
     await page.getByTestId('sea-menu').click();
     await page.getByTestId('sea-captains').click();
   }
@@ -281,9 +383,6 @@ test('a campaign sea fight: take the helm on the setup card, fight in the scene,
   await page.waitForTimeout(400);
   await shot(page, 'campaign-0-setup');
   await expect(page.getByTestId('sea-battle-odds')).toHaveAttribute('data-band', /decisive|likely|even|risky|hopeless/);
-  await page.getByTestId('sea-battle-details').locator('summary').click();
-  await page.waitForTimeout(200);
-  await shot(page, 'campaign-1-setup-details');
   await expect(page.getByTestId('sea-battle-fight')).toBeEnabled();
   await page.getByTestId('sea-battle-fight').click();
   await expect(page.locator('[data-testid="game-shell"][data-mode="seaBattle"]')).toBeVisible();
@@ -291,7 +390,11 @@ test('a campaign sea fight: take the helm on the setup card, fight in the scene,
   await expect(setupCard).toHaveCount(0);
   await page.getByTestId('sea-howto-start').click();
   await page.getByTestId('sea-speed-2').click();
-  await page.waitForTimeout(3000);
+  // The keys steer in the campaign as in a skirmish.
+  await page.keyboard.down('KeyW');
+  await page.waitForTimeout(2500);
+  expect((await helm(page)).speed).toBeGreaterThan(0.5);
+  await page.keyboard.up('KeyW');
   await shot(page, 'campaign-2-scene');
   await page.keyboard.press('Escape');
   await expect(page.getByTestId('sea-pause-menu')).toBeVisible();

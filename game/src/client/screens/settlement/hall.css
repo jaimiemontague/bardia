@@ -1,25 +1,6 @@
-/* The mead-hall (home and abroad) on the §20 layout: a warm scene with big choices, a result area, what has
-   been heard lately beside it, and sellswords as cards. Class prefix hall-. */
+/* The mead-hall's pieces (home and abroad) on the §20 layout: big choices, a result area, what has been heard
+   lately, and sellswords as cards. Class prefix hall-. */
 
-.hall-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-  gap: var(--sp-6);
-  align-items: start;
-}
-.hall-main,
-.hall-side {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-4);
-  min-width: 0;
-}
-.hall-mood {
-  margin: 0;
-  font-size: var(--fs-lg);
-  font-style: italic;
-  color: var(--c-text-2);
-}
 .hall-scene {
   display: flex;
   flex-direction: column;
@@ -209,9 +190,4 @@
 /* ------------------------------------------------------------- narrow hosts (the visit panel abroad) */
 .st-visit-panel .hall-choices {
   grid-template-columns: minmax(0, 1fr);
-}
-@media (max-width: 1000px) {
-  .hall-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }

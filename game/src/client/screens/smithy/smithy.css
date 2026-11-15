@@ -1,19 +1,25 @@
-/* The Smithy on the §20 layout: two big cards (armour, weapons), every reckoning behind Details. */
+/* The smith's panel (inside the room, render/interiors) on the §20 layout: two big cards (armour, weapons),
+   every reckoning behind Details. */
 .smy-screen {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-5);
+  gap: var(--sp-4);
+}
+.smy-forges {
+  margin: 0;
+  font-size: var(--fs-md);
+  color: var(--c-text-2);
 }
 .smy-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--sp-5);
+  gap: var(--sp-3);
 }
 .smy-card {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
-  padding: var(--sp-5) var(--sp-6);
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-4);
   border: 1px solid var(--c-border);
   border-radius: var(--r-md);
   background:
@@ -129,9 +135,12 @@
   color: var(--gold-0);
 }
 
+/* The panel is narrow: the reckoning and the table of tiers stack. */
+.smy-details-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
 @media (max-width: 900px) {
-  .smy-cards,
-  .smy-details-grid {
+  .smy-cards {
     grid-template-columns: minmax(0, 1fr);
   }
 }

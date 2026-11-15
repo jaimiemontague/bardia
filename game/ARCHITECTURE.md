@@ -488,5 +488,25 @@ bigger, and more immersive. These rules bind every client screen. Reference wind
 8. **The player steers.** On the map the expedition is a ship (or a war-band on land) the player moves directly;
    touching a settlement opens its scene.
 9. **Existing `data-testid` values are a contract**: keep the id and its meaning on any element that still exists.
-10. **Original work only.** Bardia is its own game: never copy the look, layout, art, names or text of any existing
-    game, and never open the old disc image in the project root.
+10. **Based on the old game, never a copy of it** (owner, 2026-11-15; this replaces the earlier "never open the
+    disc"). The old disc image in the project root (`../Vikings Ultimate Conquest ISO`) is there to be used: open it
+    and study it. Take from it what each place is and how it works: what kind of room it is, who is in it, what you
+    get from each person, how a battle is steered, how a screen is put together. Then make Bardia's own version.
+    Nothing from the disc goes into the code or the repository (no file, picture, sound, text, name, map or number),
+    no screen is a one-for-one redrawing of an old one, and Bardia's world, names, writing and pictures stay its own.
+    Extract disc files only to a scratch folder outside the project, never into `game/`.
+11. **Buildings are rooms** (owner, 2026-11-15). Clicking a building opens its inside, never a menu over the
+    village. A room is a painting plus a table of people (`src/client/render/interiors`: `InteriorRoomDef`,
+    `InteriorRoom`, `useRoutePerson`; one file per room in `rooms/`, read the header of `index.ts` first). Each
+    menu sits behind the person who would give it; most rooms have one person, none more than three. The painting
+    never holds a hotspot: people are placed by the table in the 1600×900 picture, so a final painting (asset id
+    `hub.interior.<building>`) replaces the drawn one without moving anyone. A route param `{ person: '<id>' }`
+    opens a room with that person's menu already open; use it for every link that names a thing to do. A room's
+    screen descriptor sets `staysUnder: true`, which keeps it drawn under a panel opened from it.
+12. **Battles are fought with the keys** (owner, 2026-11-15). W A S D or the arrow keys move what the player
+    controls, Space attacks, P pauses. On land the selected squads are driven (`drive` order; Space charges, or
+    draws and looses an aimed volley). At sea the player steers one ship (`helm`, `takeHelm`) and looses its
+    arrows by holding and releasing Space (`loose`); the steered ship never shoots by itself. Send an input when
+    the held keys change, never per frame, and always through the engine's order or input log so replays hold.
+    Mouse orders stay as a second way to command. The numbers live in the tunables (`battle.json` `drive`,
+    `seabattle.json` `aim`).

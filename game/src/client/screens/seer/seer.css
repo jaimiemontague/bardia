@@ -1,12 +1,11 @@
-/* The Seer's Hut (route 'building.seer'): a quiet, firelit scene with two big choices and what the seer says. */
-.sr-frame > .frame-body {
-  background:
-    radial-gradient(ellipse 60% 45% at 50% 100%, rgba(214, 120, 40, 0.13), transparent 70%),
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(60, 80, 110, 0.12), transparent 70%);
-  border-radius: var(--r-md);
+/* The Seer's panel (inside the Seer's hut, render/interiors): two big choices and what the seer says. */
+.sr-work {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
 }
 .sr-choices .choice {
-  min-height: 9rem;
+  min-height: 7.5rem;
   justify-content: flex-start;
 }
 .sr-board {
@@ -27,13 +26,8 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--sp-3);
-}
-@media (max-width: 900px) {
-  .sr-omens {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 .sr-omen {
   flex: 1 1 auto;
@@ -132,7 +126,7 @@
   gap: 2px;
   text-align: right;
 }
-@media (max-width: 760px) {
+@container (max-width: 40rem) {
   .sr-patient {
     grid-template-columns: auto minmax(0, 1fr);
   }

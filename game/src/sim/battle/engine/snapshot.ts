@@ -8,6 +8,7 @@
 import type { CharId, FormationId } from '@sim/core/state';
 import { ABILITY_IDS, type AbilityId } from '../data';
 import type { SquadStance } from '../types';
+import { effectiveRange } from '../formulas';
 import { onField } from './geometry';
 import type { BattleEngineEvent, BattleState, BSquad, DuelRequest, EndState, EngineStatus, SideIdx, SquadStatus, SquadTaskKind } from './types';
 import { SIDE_KEYS } from './types';
@@ -57,6 +58,13 @@ export interface SquadView {
   taskX: number;
   taskY: number;
   waypoints: number[];
+  /** Direct control: unit direction of travel while driven (0, 0 otherwise). */
+  driveX: number;
+  driveY: number;
+  /** Let go after a drive: standing its ground until the next order. */
+  held: boolean;
+  /** Shooting range on level ground (tiles from the front of the footprint; 0 without missiles). */
+  range: number;
   chargeActive: boolean;
   frenzyActive: boolean;
   /** Abilities this squad can use and their cooldowns (s). */
@@ -248,6 +256,10 @@ function squadView(state: BattleState, s: BSquad): SquadView {
     carryCap: Math.round(s.men * state.data.t.carryValuePerMan),
     task: s.task.kind,
     taskTarget,
+    driveX: s.task.kind === 'drive' ? s.driveX : 0,
+    driveY: s.task.kind === 'drive' ? s.driveY : 0,
+    held: s.driveHeld && s.task.kind === 'none',
+    range: s.unit.hasRanged ? effectiveRange(state.data.b, s.unit.range, false) : 0,
     taskX: s.task.x,
     taskY: s.task.y,
     waypoints: [...s.waypoints],

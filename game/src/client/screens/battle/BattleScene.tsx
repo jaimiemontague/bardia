@@ -3,10 +3,12 @@
  * BattleController. Shared by the campaign's battle screen (mode 'battle') and the Skirmish route; the
  * host decides what the end-of-battle button does (`onDone`) and what "leave" means in the pause menu.
  *
- * Keys (rebindable through the shell's bindings, read in the 'battle' context so they also work in a
- * Skirmish outside a campaign): Space pause, 1/2/3… squads, F formation, Q shield wall, W charge,
- * E volley or torch, R rally, T challenge, Backspace retreat, Esc cancel or pause menu, arrows pan,
- * +/- zoom, Ctrl+A select all.
+ * Keys. Direct control (keys.ts, owner play-test 2026-11-15): W A S D or the arrows drive the
+ * selected squads (Shift runs), Space charges ahead or draws an aimed volley, P pauses, Tab steps
+ * through the squads, C brings the camera back. Rebindable through the shell's bindings (read in the
+ * 'battle' context so they also work in a Skirmish outside a campaign): 1/2/3… squads, F formation,
+ * Q shield wall, E volley or torch, R rally, T challenge, Backspace retreat. Esc cancels or opens
+ * the pause menu, +/- zoom, Ctrl+A selects all. Right-click orders stay as a second way to command.
  */
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactElement, type ReactNode } from 'react';
 import { comboFromEvent, type InputContext } from '../../input/bindings';
@@ -18,6 +20,7 @@ import { BattleView, type BattleHover } from '../../render/battle/BattleView';
 import { Button } from '../../ui/index';
 import type { BattleController } from './controller';
 import { BattleLog, ConfirmRetreat, DuelCard, FastForward, HowTo, MoraleExplain, Objectives, PauseMenu, Roster, SquadPanel, Summary, TopBar } from './hud';
+import { BattleKeys } from './keys';
 import { summarize } from './summary';
 import './battle.css';
 
@@ -53,10 +56,11 @@ export function BattleScene({ controller: c, title, nameOf, doneLabelKey, onDone
   const [showSummary, setShowSummary] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const keys = useMemo(() => new BattleKeys(c), [c]);
 
-  // Development builds expose the running battle for tests and the console.
+  // The running battle is exposed for the browser tests and the console (as the sea battle does), in every build:
+  // the browser tests run against the production build and drive the battle with the keys.
   useEffect(() => {
-    if (!import.meta.env.DEV) return undefined;
     const w = window as unknown as { __bardiaBattle?: BattleController };
     w.__bardiaBattle = c;
     return () => {
@@ -77,6 +81,7 @@ export function BattleScene({ controller: c, title, nameOf, doneLabelKey, onDone
         command: (x, y, opts) => c.commandAt(x, y, opts),
         hover: (target, x, y) => setHover(target ? { target, x, y } : null),
         cancel: () => c.cancelTargeting(),
+        lookAround: () => c.setFollow(false),
         frame: (dt) => c.frame(dt),
       },
       c.content,
@@ -98,6 +103,32 @@ export function BattleScene({ controller: c, title, nameOf, doneLabelKey, onDone
   }, [ended]);
 
   const anyCard = howTo || menu || confirm || showSummary || c.snap.duel !== null;
+
+  // A card coming up (or the window losing focus) lets go of every held key: the squads halt.
+  useEffect(() => {
+    if (anyCard) keys.releaseAll();
+  }, [anyCard, keys]);
+  useEffect(() => {
+    const up = (e: KeyboardEvent) => {
+      if (keys.keyUp(e)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    const blur = () => keys.releaseAll();
+    const vis = () => {
+      if (document.visibilityState === 'hidden') keys.releaseAll();
+    };
+    window.addEventListener('keyup', up, true);
+    window.addEventListener('blur', blur);
+    document.addEventListener('visibilitychange', vis);
+    return () => {
+      window.removeEventListener('keyup', up, true);
+      window.removeEventListener('blur', blur);
+      document.removeEventListener('visibilitychange', vis);
+      keys.releaseAll();
+    };
+  }, [keys]);
 
   // Keyboard (capture phase: the battle's keys win over the shell's while the scene has no card up).
   useEffect(() => {
@@ -124,13 +155,12 @@ export function BattleScene({ controller: c, title, nameOf, doneLabelKey, onDone
         return;
       }
       if (anyCard) return;
-      const v = viewRef.current;
-      if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'ArrowUp' || e.code === 'ArrowDown') {
+      // Direct control first: W A S D / arrows, Shift, Space, P, Tab, C.
+      if (keys.keyDown(e)) {
         stop();
-        const step = 90;
-        v?.panScreen(e.code === 'ArrowLeft' ? -step : e.code === 'ArrowRight' ? step : 0, e.code === 'ArrowUp' ? -step : e.code === 'ArrowDown' ? step : 0);
         return;
       }
+      const v = viewRef.current;
       if (combo === 'Equal' || combo === 'NumpadAdd' || combo === 'Shift+Equal') {
         stop();
         v?.zoomBy(1.2);
@@ -194,14 +224,17 @@ export function BattleScene({ controller: c, title, nameOf, doneLabelKey, onDone
     };
     window.addEventListener('keydown', onKey, true);
     return () => window.removeEventListener('keydown', onKey, true);
-  }, [c, anyCard, confirm, howTo, menu, showSummary]);
+  }, [c, keys, anyCard, confirm, howTo, menu, showSummary]);
 
   const summary = useMemo(() => {
     const r = c.result();
     return r && showSummary ? summarize(c.setup, r, c.side, (id) => nameOf?.(id)) : null;
   }, [c, showSummary, nameOf]);
 
-  const focus = (x: number, y: number) => viewRef.current?.centreOn(x, y);
+  const focus = (x: number, y: number) => {
+    c.setFollow(false);
+    viewRef.current?.centreOn(x, y);
+  };
   const notice = c.notice && c.realTime - c.notice.at < 2.5 ? c.notice.key : null;
 
   return (

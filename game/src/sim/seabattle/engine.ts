@@ -33,6 +33,7 @@ import {
   updateMorale,
   updateSeaFire,
 } from './combat';
+import { looseVolley, updateShots } from './volley';
 import type {
   SeaEngineContent,
   SeaEngineOptions,
@@ -92,6 +93,8 @@ export class SeaBattleEngine {
       playerSide,
       playerCharId: playerSide >= 0 ? setup.playerCharId : undefined,
       playerShip: -1,
+      helm: -1,
+      shots: [],
       offerDuels: opts.offerCaptainDuels !== false && !aiControlsPlayer,
       aiControlsPlayer,
       captainFates: {},
@@ -118,7 +121,10 @@ export class SeaBattleEngine {
       w.playerShip = flag;
       const f = w.ships[flag];
       if (f) {
-        if (!aiControlsPlayer) f.controller = 'player';
+        if (!aiControlsPlayer) {
+          f.controller = 'player';
+          w.helm = flag;
+        }
         if (w.playerCharId !== undefined) {
           f.captainId = w.playerCharId;
           w.captainFates[w.playerCharId] = 'fine';
@@ -292,9 +298,13 @@ export class SeaBattleEngine {
     const s = this.w.ships.find((x) => x.shipId === shipId);
     return s ? s.idx : -1;
   }
-  /** The ship the player steers (−1 when there is none). */
+  /** The ship carrying the player (−1 when there is none, or the captains command the side). */
   get playerShip(): number {
     return this.w.playerSide >= 0 && !this.w.aiControlsPlayer ? this.w.playerShip : -1;
+  }
+  /** The ship the player steers by hand (−1 when there is none). */
+  get helmShip(): number {
+    return this.w.playerSide >= 0 && !this.w.aiControlsPlayer ? this.w.helm : -1;
   }
 
   /** Combat events since the last drain. */
@@ -314,7 +324,8 @@ export class SeaBattleEngine {
     if (w.status === 'ended' || ps === -1 || w.aiControlsPlayer) return;
     this.inputLog.push({ tick: w.tick, input: JSON.parse(JSON.stringify(input)) as SeaInput });
     const side = w.sides[ps];
-    const flag = w.playerShip >= 0 ? w.ships[w.playerShip] : undefined;
+    // The ship under the player's hand answers the helm, grapnel and default inputs.
+    const flag = w.helm >= 0 ? w.ships[w.helm] : undefined;
     const own = (i: number | undefined): SeaShip | undefined => {
       const s = i === undefined ? flag : w.ships[i];
       return s && s.side === w.playerSide && s.status === 'active' ? s : undefined;
@@ -328,6 +339,16 @@ export class SeaBattleEngine {
           flag.hasMove = false;
         }
         return;
+      case 'takeHelm': {
+        const s = Number.isInteger(input.ship) ? own(input.ship) : undefined;
+        if (s) setHelm(w, s);
+        return;
+      }
+      case 'loose': {
+        const s = own(input.ship);
+        if (s && (input.side === 'port' || input.side === 'starboard')) looseVolley(w, s, input.side, input.rangeM);
+        return;
+      }
       case 'moveTo':
         if (flag && flag.status === 'active' && Number.isFinite(input.x) && Number.isFinite(input.y)) {
           takeHelm(flag);
@@ -405,6 +426,7 @@ export class SeaBattleEngine {
         // hands over at the same tick).
         w.aiControlsPlayer = true;
         w.offerDuels = false;
+        w.helm = -1;
         for (const s of w.ships) {
           if (s.side !== ps) continue;
           s.controller = 'ai';
@@ -434,6 +456,7 @@ export class SeaBattleEngine {
   resolveCaptainDuel(result: DuelResult | null): void {
     if (this.w.status !== 'duelRequested' || !this.w.duel) return;
     resolveDuel(this.w, result);
+    ensureHelm(this.w);
     this.inputLog.push({ tick: this.w.tick, duel: result === null ? null : (JSON.parse(JSON.stringify(result)) as DuelResult) });
   }
 
@@ -492,6 +515,7 @@ export class SeaBattleEngine {
       updateArchery(w, s);
       updateSeaFire(w, s);
     }
+    updateShots(w);
     for (const s of ships) {
       if (s.status === 'sunk' || s.status === 'burned' || s.status === 'fled') continue;
       updateFire(w, s);
@@ -500,6 +524,7 @@ export class SeaBattleEngine {
     for (const s of ships) updateMorale(w, s);
     for (const s of ships) if (s.hull <= 0 && s.status !== 'sunk' && s.status !== 'burned' && s.status !== 'fled') sink(w, s);
     this.slipAway();
+    ensureHelm(w);
     this.checkEnd();
   }
 
@@ -690,6 +715,7 @@ export class SeaBattleEngine {
       routed: s.routed,
       isFlagship: w.sides[s.side].flagship === s.idx,
       isPlayer: s.idx === w.playerShip && w.playerSide >= 0 && !w.aiControlsPlayer,
+      isHelm: s.idx === w.helm && w.playerSide >= 0 && !w.aiControlsPlayer,
       controller: s.controller,
       order: s.order.kind,
       orderTarget: s.order.target,
@@ -700,9 +726,14 @@ export class SeaBattleEngine {
       ramReady: s.galley && s.ramCd <= 0,
       seaFireCharges: s.siphonCharges,
     }));
+    const helm = w.helm >= 0 && !w.aiControlsPlayer ? w.ships[w.helm] : undefined;
     return {
       tick: w.tick,
       timeS: w.timeS,
+      stepS: w.dt,
+      helm: helm ? helm.idx : -1,
+      helmGrapple: helm && helm.status === 'active' && helm.grapple < 0 ? nearestGrappleTarget(w, helm) : -1,
+      shots: w.shots.map((x) => ({ from: x.from, fromX: x.fromX, fromY: x.fromY, x: x.x, y: x.y, firedT: x.firedT, landT: x.landT, fire: x.fire })),
       status: w.status,
       wind: { dir: w.windFrom / DEG, str: w.windStr },
       arena: { sizeM: w.arena.sizeM, cellM: w.arena.cellM, w: w.arena.w, h: w.arena.h, terrain: w.arena.terrain, template: w.arena.template },
@@ -733,11 +764,58 @@ export class SeaBattleEngine {
   }
 }
 
-/** The flagship returns to the player's direct helm (from an order it was following). */
+/** The steered ship returns to the player's direct helm (from an order it was following). */
 function takeHelm(s: SeaShip): void {
   if (s.controller !== 'orders') return;
   s.controller = 'player';
   s.order = { kind: 'follow', target: -1 };
+}
+
+/**
+ * The player takes the helm of `s`: the ship steered so far goes back to its captain (keeping
+ * station on the new one), and `s` comes under the player's hand with its way off the helm
+ * (throttle and rudder at rest until the next 'helm' input).
+ */
+function setHelm(w: SeaWorld, s: SeaShip): void {
+  const old = w.helm >= 0 ? w.ships[w.helm] : undefined;
+  if (old === s) {
+    takeHelm(s);
+    return;
+  }
+  if (old && old.controller === 'player') {
+    old.controller = 'orders';
+    old.order = { kind: 'follow', target: -1 };
+    old.hasMove = false;
+    old.replanT = 0;
+  }
+  s.controller = 'player';
+  s.order = { kind: 'follow', target: -1 };
+  s.hasMove = false;
+  s.throttle = 0;
+  s.rudder = 0;
+  s.goal = 'idle';
+  s.goalTarget = -1;
+  w.helm = s.idx;
+}
+
+/**
+ * Keeps the helm on a ship that can be steered: when the steered ship is lost (sunk, struck, taken,
+ * fled), the helm passes to the ship carrying the player, else to the player's first ship still in
+ * the fight. No helm once the captains command the side or the player is out of the fight.
+ */
+function ensureHelm(w: SeaWorld): void {
+  if (w.playerSide === -1 || w.aiControlsPlayer) {
+    w.helm = -1;
+    return;
+  }
+  const cur = w.helm >= 0 ? w.ships[w.helm] : undefined;
+  if (cur && cur.status === 'active' && cur.side === w.playerSide && w.playerShip >= 0) return;
+  if (cur && cur.controller === 'player') cur.controller = 'orders';
+  w.helm = -1;
+  if (w.playerShip < 0) return;
+  const carrier = w.ships[w.playerShip];
+  const next = carrier && carrier.status === 'active' ? carrier : w.ships.find((x) => x.side === w.playerSide && x.status === 'active');
+  if (next) setHelm(w, next);
 }
 
 /** A validated order (null when it cannot be given: a move without a finite point). */

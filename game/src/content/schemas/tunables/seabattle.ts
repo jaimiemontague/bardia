@@ -123,6 +123,30 @@ export const schema = strict({
     /** Fire arrows are loosed by default when pitch is aboard (pre-battle toggle). */
     fireArrowsDefault: z.boolean(),
   }),
+  /**
+   * The volley the player looses by hand from the steered ship's side (hold Space to draw, let go to
+   * loose). Ranges in metres, times in battle seconds unless named real.
+   */
+  aim: strict({
+    /** Shortest and longest bowshot the aim marker runs between, out from the ship's side. */
+    minRangeM: positive,
+    maxRangeM: positive,
+    /** Real seconds for the marker to run from the shortest to the longest bowshot (then back). */
+    sweepRealS: positive,
+    /** Radius of the fall of shot: a hull within this of the aim point is under the arrows. */
+    fallRadiusM: positive,
+    /** Hand-loosed volleys hit this much harder than the captains' own (aimed, all bows at once). */
+    aimedHitMult: positive,
+    /** Power left at the longest bowshot (1 at the shortest, straight line between). */
+    farHitMult: share,
+    /** Centring needed for the full blow: hits ∝ min(1, centring / fullCentring), centring 1 = dead centre. */
+    fullCentring: positive,
+    /** Battle seconds to nock again after a hand-loosed volley. */
+    nockS: positive,
+    /** Flight time: flightBaseS + range / arrowSpeedMs battle seconds. */
+    flightBaseS: nonNeg,
+    arrowSpeedMs: positive,
+  }),
   fire: strict({
     /** Morale per battle second aboard a burning ship. */
     burningMoralePerS: finite,

@@ -6,7 +6,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
  * and the battle setup (auto-resolve), close the Cargo screen, sail home and stand down in the hall.
  * Quick start picks a random house, so the raid can also fail (leaders wounded, slain or taken): the run then
  * answers the alerts and the captivity decision and still sails home.
- * Back home, the loot the fleet brought is in the house storehouse: the market sells it all and the treasury rises.
+ * Back home, the loot the fleet brought is in the house storehouse: the Merchant sells it all and the treasury rises.
  * Screenshots land in test-results/ for a visual check.
  */
 const OUT = process.env.BARDIA_E2E_OUT ?? 'test-results';
@@ -126,6 +126,8 @@ test('launch an expedition, raid a neighbour and bring the loot home', async ({ 
   // Sell the loot at the home market: the treasury rises by the total shown.
   await page.getByTestId('hotspot-market').click();
   await expect(page.getByTestId('home-market')).toBeVisible();
+  // The market is behind the Merchant in the storehouse.
+  await page.getByTestId('interior-person-merchant').click();
   const sellAll = page.getByTestId('sell-all');
   if (await sellAll.isEnabled()) {
     const before = await marketTreasury(page);
@@ -143,6 +145,6 @@ test('launch an expedition, raid a neighbour and bring the loot home', async ({ 
     await expect(page.getByTestId('sell-all-why')).toContainText(/no loot/i);
   }
   await page.screenshot({ path: `${OUT}/slice-market-home.png` });
-  await page.getByTestId('market-close').click();
+  await page.getByTestId('interior-leave').click();
   expect(errors).toEqual([]);
 });

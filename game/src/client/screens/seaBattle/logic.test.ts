@@ -16,6 +16,7 @@ import {
   shipsInRect,
   strengthShare,
   summarizeSea,
+  wayWord,
 } from './logic';
 
 function ship(p: Partial<SeaShipView> & { idx: number }): SeaShipView {
@@ -172,6 +173,18 @@ describe('attack styles and orders', () => {
     expect(doingKey(ship({ idx: 0, goal: 'board' }), true)).toBe('seaView.doing.boarding');
     expect(doingKey(ship({ idx: 0, goal: 'idle', moveTo: { x: 1, y: 2 } }), false)).toBe('seaView.doing.sail');
     expect(doingKey(ship({ idx: 0, status: 'struck' }), false)).toBe('seaView.doing.status.struck');
+    // The ship at the player's helm, and a fresh order shown before the captain has planned it.
+    expect(doingKey(ship({ idx: 0, isHelm: true, controller: 'player' }), false)).toBe('seaView.doing.helm');
+    expect(doingKey(ship({ idx: 0, order: 'board', goal: 'follow' }), false)).toBe('seaView.doing.board');
+    expect(doingKey(ship({ idx: 0, order: 'shoot', goal: 'idle' }), false)).toBe('seaView.doing.shoot');
+  });
+
+  it('puts the way on a ship in a word', () => {
+    expect(wayWord(-0.5, 3)).toBe('astern');
+    expect(wayWord(0.1, 3)).toBe('stopped');
+    expect(wayWord(0.8, 3)).toBe('slow');
+    expect(wayWord(1.8, 3)).toBe('half');
+    expect(wayWord(2.9, 3)).toBe('full');
   });
 });
 

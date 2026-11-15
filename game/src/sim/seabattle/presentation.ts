@@ -8,6 +8,8 @@ import type { SeaEvent, SeaEventKind } from './engineTypes';
 /** Sound cue per event kind (null = silent). */
 export const SEA_EVENT_SFX: Readonly<Record<SeaEventKind, string | null>> = {
   volley: 'seabattle.sfx.volley',
+  loose: 'seabattle.sfx.volley',
+  fall: null,
   ignite: 'seabattle.sfx.ignite',
   douseStarted: 'seabattle.sfx.douse',
   extinguished: 'seabattle.sfx.extinguished',
@@ -38,7 +40,7 @@ export const SEA_EVENT_SFX: Readonly<Record<SeaEventKind, string | null>> = {
 
 /** Fire volleys use their own cue. */
 export function seaEventSfx(e: SeaEvent): string | null {
-  if (e.kind === 'volley') return e.fire ? 'seabattle.sfx.fireVolley' : SEA_EVENT_SFX.volley;
+  if (e.kind === 'volley' || e.kind === 'loose') return e.fire ? 'seabattle.sfx.fireVolley' : SEA_EVENT_SFX.volley;
   return SEA_EVENT_SFX[e.kind];
 }
 
@@ -47,6 +49,10 @@ export function seaEventTextKey(e: SeaEvent): string {
   switch (e.kind) {
     case 'volley':
       return e.fire ? 'seabattle.log.fireVolley' : 'seabattle.log.volley';
+    case 'loose':
+      return e.fire ? 'seabattle.log.looseFire' : 'seabattle.log.loose';
+    case 'fall':
+      return e.hits > 0 ? 'seabattle.log.fallHit' : 'seabattle.log.fallMiss';
     case 'ignite':
       return e.part === 'hull' ? 'seabattle.log.igniteHull' : 'seabattle.log.igniteSail';
     case 'sunk':
@@ -68,6 +74,10 @@ export function seaEventTextKey(e: SeaEvent): string {
 export const SEA_LOG_KEYS: readonly string[] = [
   'seabattle.log.volley',
   'seabattle.log.fireVolley',
+  'seabattle.log.loose',
+  'seabattle.log.looseFire',
+  'seabattle.log.fallHit',
+  'seabattle.log.fallMiss',
   'seabattle.log.igniteSail',
   'seabattle.log.igniteHull',
   'seabattle.log.douseStarted',

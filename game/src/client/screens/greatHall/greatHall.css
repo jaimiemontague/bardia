@@ -1,9 +1,28 @@
-/* The Great hall and its Muster on the §20 layout: words and big doors; one decision per tab. */
+/* The Great hall's panels (inside the room, render/interiors) on the §20 layout: words and big doors; one
+   decision per tab. The panel is about half the window wide, so everything stacks in one column. */
 .gh-realm {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
-  gap: var(--sp-6);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
   align-items: start;
+}
+.gh-person {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.gh-person-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: var(--fs-md);
+}
+.gh-person-go {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-1);
+  margin-top: var(--sp-3);
 }
 .gh-words {
   display: flex;
@@ -35,7 +54,7 @@
   gap: var(--sp-4);
 }
 .gh-doors .choice {
-  min-height: 9.5rem;
+  min-height: 8rem;
   justify-content: flex-start;
 }
 
@@ -139,5 +158,56 @@
   bottom: -2px;
   z-index: 2;
   padding-bottom: var(--sp-2);
-  background: linear-gradient(180deg, rgba(25, 18, 12, 0.92), var(--oak-1) 55%);
+  background: linear-gradient(180deg, rgba(25, 18, 12, 0.92), #18100a 55%);
+}
+
+/* In the room's panel the panel body scrolls, not the tab panel, so the muster's cost line and gold button
+   stick to the bottom of the panel. */
+.gh-work .tabs-panel {
+  overflow: visible;
+}
+/* The muster in the Hirdmaster's panel: no intro (his greeting says it), tighter cards, and the foot flows after
+   the slider so the slider is never hidden under it. */
+.gh-work .gh-intro {
+  display: none;
+}
+.gh-work .gh-muster {
+  gap: var(--sp-3);
+}
+.gh-work .gh-kinds .choice {
+  min-height: 0;
+  padding-top: var(--sp-1);
+  padding-bottom: var(--sp-1);
+}
+/* The cost line and the gold button stay in view at the bottom of the panel, on one compact row; the neutral
+   "move the handle" hint is left out (the slider says it), real reasons still show. */
+.gh-work .gh-muster-foot {
+  flex-wrap: nowrap;
+  padding-top: var(--sp-2);
+  padding-bottom: var(--sp-1);
+}
+.gh-work .gh-cost {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-md);
+}
+.gh-work .gh-go {
+  flex: 0 1 auto;
+  flex-wrap: nowrap;
+}
+.gh-work .gh-go .bld-why.muted {
+  display: none;
+}
+.gh-work .gh-kinds .choice-title {
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+.gh-work .gh-kinds .choice-line {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.gh-work .tabs-list {
+  margin-bottom: var(--sp-2);
 }

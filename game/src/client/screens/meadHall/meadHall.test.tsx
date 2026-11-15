@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 /**
- * The home Mead-hall against the full module registry: the hall's four big choices at home (news, travellers'
- * talk, a round, sellswords) answered in the result area, the latest news beside them, sellswords as cards with
- * the reason one cannot be hired, and what travellers told (Other places).
+ * The home Mead-hall against the full module registry, as a room with three people: the Hall-keeper (news and a
+ * round, the latest news, other places), the Travellers (what is said of the ports nearby) and the Sellswords
+ * (fighters for hire as cards with the reason one cannot be hired); deep links open a person's panel.
  */
 import type { ReactElement } from 'react';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
@@ -11,10 +11,15 @@ import { getContent } from '@content/index';
 import type { GameState } from '@sim/core/state';
 import { GameSession } from '@sim/game';
 import { hireIssues, lieutenantCapacity, sellswordOffers } from '@sim/modules/military/lieutenants';
+import { App } from '../../app/App';
 import { useGame } from '../../app/gameStore';
+import { useNavigation } from '../../app/navigation';
+import { buildRegistry } from '../../app/screenRegistry';
 import { missingKeysSeen } from '../../i18n/index';
 import { resetClientState } from '../../testing/clientTestKit';
+import * as hub from '../hub/index';
 import { tavernBlock, tavernCost } from '../settlement/meadHall';
+import * as meadHall from './index';
 import { HomeMeadHall, screen as descriptor } from './index';
 
 function state(): GameState {
@@ -36,48 +41,62 @@ function Live(): ReactElement | null {
 }
 
 describe('the home Mead-hall', () => {
-  it('is the building.meadHall route', () => {
+  it('is the building.meadHall route, a room with the Hall-keeper, the Travellers and the Sellswords', () => {
     expect(descriptor.route).toBe('building.meadHall');
     expect(descriptor.layout).toBe('overlay');
+    render(<Live />);
+    expect(screen.getByTestId('interior-meadHall')).toBeTruthy();
+    expect(screen.getByTestId('home-meadhall')).toBeTruthy();
+    for (const p of ['keeper', 'travellers', 'sellswords']) expect(screen.getByTestId(`interior-person-${p}`).tagName).toBe('BUTTON');
+    expect(screen.queryByTestId('interior-panel')).toBeNull();
   });
 
-  it('asks for news, talks to travellers and buys a round at home', () => {
+  it('the keeper gives news and sells a round; the travellers talk of other places', () => {
     const cap = state().player.capitalId;
     expect(tavernBlock(state(), getContent(), cap, 'anyNews')).toBeUndefined();
     render(<Live />);
-    // At most four big choices; the drink is not offered.
-    expect(screen.getByTestId('meadhall').querySelectorAll('.choice').length).toBe(4);
+    fireEvent.click(screen.getByTestId('interior-person-keeper'));
+    // His two choices; the drink is not offered.
+    expect(screen.getByTestId('meadhall').querySelectorAll('.choice').length).toBe(2);
     expect(screen.queryByTestId('tavern-drink')).toBeNull();
+    expect(screen.queryByTestId('tavern-travellers')).toBeNull();
     expect(screen.queryByTestId('tavern-result')).toBeNull();
     act(() => fireEvent.click(screen.getByTestId('tavern-anyNews')));
     expect(screen.getByTestId('tavern-result').textContent).toMatch(/keeper/i);
     expect(screen.getByTestId('keeper-news')).toBeTruthy();
-    act(() => fireEvent.click(screen.getByTestId('tavern-travellers')));
-    expect(screen.getByTestId('tavern-result').textContent).toMatch(/travellers/i);
     const renown = state().player.house.renown;
     const treasury = state().factions[state().player.factionId]?.treasury ?? 0;
     act(() => fireEvent.click(screen.getByTestId('tavern-buyRound')));
     expect(state().factions[state().player.factionId]?.treasury).toBe(treasury - tavernCost(state(), getContent(), cap, 'buyRound'));
     expect(state().player.house.renown).toBeGreaterThan(renown);
     expect(screen.getByTestId('tavern-result').textContent).toMatch(/Renown/);
-    // What the travellers said shows under Other places.
+
+    fireEvent.click(screen.getByTestId('interior-person-travellers'));
+    expect(screen.getByTestId('meadhall').querySelectorAll('.choice').length).toBe(1);
+    act(() => fireEvent.click(screen.getByTestId('tavern-travellers')));
+    expect(screen.getByTestId('tavern-result').textContent).toMatch(/travellers/i);
+    // What the travellers said shows under Other places, with them and with the keeper.
+    fireEvent.click(screen.getByTestId('hall-places-toggle'));
+    expect(screen.getByTestId('intel-panel').querySelectorAll('[data-testid^="intel-set_"]').length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByTestId('interior-person-keeper'));
     fireEvent.click(screen.getByTestId('hall-places-toggle'));
     expect(screen.getByTestId('intel-panel').querySelectorAll('[data-testid^="intel-set_"]').length).toBeGreaterThan(0);
     expect(screen.getByTestId('maps-empty')).toBeTruthy();
   });
 
-  it('shows the latest news beside the choices', () => {
-    render(<Live />);
+  it('the keeper keeps the latest news', () => {
+    render(<HomeMeadHall state={state()} initialPerson="keeper" onClose={() => {}} />);
     expect(screen.getByTestId('news-log')).toBeTruthy();
     expect(screen.getByTestId('news-empty').textContent).toMatch(/No news/);
   });
 
-  it('lists sellswords as cards and says why one cannot be hired', () => {
+  it('the sellswords show themselves as cards and say why one cannot be hired', () => {
     const cap = state().player.capitalId;
     const offers = sellswordOffers(state(), getContent(), cap);
     render(<Live />);
     expect(screen.queryByTestId('sellswords')).toBeNull();
-    fireEvent.click(screen.getByTestId('hall-sellswords'));
+    fireEvent.click(screen.getByTestId('interior-person-sellswords'));
+    expect(screen.getByTestId('meadhall-sellswords')).toBeTruthy();
     if (offers.length === 0) {
       expect(screen.getByTestId('sellswords-empty')).toBeTruthy();
       return;
@@ -95,7 +114,17 @@ describe('the home Mead-hall', () => {
     }
   });
 
+  it('deep links: a person param opens that panel', () => {
+    render(<App registry={buildRegistry({ hub, meadHall })} />);
+    act(() => useNavigation.getState().open('building.meadHall', { person: 'sellswords' }));
+    expect(screen.getByTestId('interior-panel').getAttribute('data-person')).toBe('sellswords');
+    fireEvent.click(screen.getByTestId('interior-person-travellers'));
+    expect(useNavigation.getState().stack.at(-1)?.params).toEqual({ person: 'travellers' });
+  });
+
   it('every string it asked for exists', () => {
-    expect(missingKeysSeen().filter((k) => /^(economy|settlements|news|intel|military)\./.test(k))).toEqual([]);
+    render(<Live />);
+    for (const p of ['keeper', 'travellers', 'sellswords']) fireEvent.click(screen.getByTestId(`interior-person-${p}`));
+    expect(missingKeysSeen().filter((k) => /^(hub|economy|settlements|news|intel|military)\./.test(k))).toEqual([]);
   });
 });

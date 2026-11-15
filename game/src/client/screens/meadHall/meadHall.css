@@ -1,0 +1,13 @@
+/* The home Mead-hall's panels (inside the room, render/interiors): one person's choices with their result area,
+   then what the keeper has heard. The shared pieces' styles are ../settlement/hall.css. */
+.mh-work {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.mh-work .hall-choices .choice {
+  min-height: 0;
+}
+.mh-work .hall-result {
+  min-height: 4.5rem;
+}

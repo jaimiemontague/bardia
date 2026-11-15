@@ -75,6 +75,11 @@ export interface ScreenDescriptor {
   titleKey?: string;
   /** Whether the time controls may run while this screen is the scene (default: mode === 'map'). */
   realtime?: boolean;
+  /**
+   * A room the player stands in (a building interior): it stays drawn, inert, under an overlay or modal route
+   * opened from it, so the ledger opens over the hall and not over the village.
+   */
+  staysUnder?: boolean;
 }
 
 /** A descriptor normalised for lookups. */
@@ -88,6 +93,8 @@ export interface RegisteredScreen {
   priority: number;
   titleKey: string | undefined;
   realtime: boolean | undefined;
+  /** Stays drawn under an overlay opened from it (see `ScreenDescriptor.staysUnder`). */
+  staysUnder: boolean;
   /** Module path it was found in (diagnostics). */
   source: string;
 }

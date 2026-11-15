@@ -152,6 +152,18 @@ export function balanceWord(share: number): 'winning' | 'ahead' | 'even' | 'behi
   return 'losing';
 }
 
+/** The way on a ship in a word (helm strip): backing water, stopped, slow, half or full way. */
+export type WayWord = 'astern' | 'stopped' | 'slow' | 'half' | 'full';
+
+/** The way on a ship from its speed and its top speed now (m/s). */
+export function wayWord(speedMs: number, maxSpeedMs: number): WayWord {
+  if (speedMs < -0.15) return 'astern';
+  if (Math.abs(speedMs) < 0.25) return 'stopped';
+  const r = speedMs / Math.max(0.5, maxSpeedMs);
+  if (r < 0.4) return 'slow';
+  return r < 0.75 ? 'half' : 'full';
+}
+
 /** What a ship is doing, as a locale key under seaView.doing. */
 export function doingKey(s: SeaShipView, grappled: boolean): string {
   if (s.status !== 'active') return `seaView.doing.status.${s.status}`;
@@ -159,6 +171,16 @@ export function doingKey(s: SeaShipView, grappled: boolean): string {
   if (s.grounded) return 'seaView.doing.grounded';
   if (s.routed) return 'seaView.doing.routed';
   if (s.dousing) return 'seaView.doing.dousing';
+  if (s.isHelm && s.controller === 'player' && !s.moveTo) return 'seaView.doing.helm';
+  // A fresh order shows at once (also while paused), before the captain has planned it.
+  if (s.controller === 'orders' && (s.goal === 'follow' || s.goal === 'screen' || s.goal === 'idle')) {
+    if (s.order === 'board') return 'seaView.doing.board';
+    if (s.order === 'shoot') return 'seaView.doing.shoot';
+    if (s.order === 'attack') return 'seaView.doing.ram';
+    if (s.order === 'hold') return 'seaView.doing.hold';
+    if (s.order === 'move') return 'seaView.doing.sail';
+    if (s.order === 'withdraw') return 'seaView.doing.withdraw';
+  }
   switch (s.goal) {
     case 'flee':
       return 'seaView.doing.withdraw';

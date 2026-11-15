@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 /**
  * Affairs of State (route 'affairs', SCR-09) through the real UI on the §20 layout (one decision in view at a
- * time, chosen from three doors): quick start, open the screen from the Great Hall, set a tax from its card,
+ * time, chosen from three doors): quick start, open the screen from the Great Hall's Lawspeaker, set a tax from its card,
  * pick and queue a building, wait at home until it is built, move men with the garrison's two-sided slider,
  * and check the screen at 1280×720, 1366×768 and 1920×1080.
  * Screenshots: <BARDIA_E2E_OUT or test-results>/affairs-*.png.
@@ -39,9 +39,10 @@ async function quickStart(page: Page): Promise<void> {
   while (await answerOne(page)) await page.waitForTimeout(200);
 }
 
-/** Opens the Affairs of State screen: hub → Great Hall → Affairs. */
+/** Opens the Affairs of State screen: hub → Great Hall → the Lawspeaker → Affairs. */
 async function openAffairs(page: Page): Promise<void> {
   await page.getByTestId('hotspot-greatHall').click();
+  await page.getByTestId('interior-person-lawspeaker').click();
   await page.getByTestId('hall-affairs').click();
   await expect(page.getByTestId('affairs')).toBeVisible();
   await clearViteOverlay(page);
@@ -49,11 +50,11 @@ async function openAffairs(page: Page): Promise<void> {
   await page.waitForTimeout(350);
 }
 
-/** Closes Affairs of State and any route under it (the Great Hall), back to the hub. */
+/** Closes Affairs of State and any route under it (the Great Hall: Esc closes the Lawspeaker, then leaves), back to the hub. */
 async function closeToHub(page: Page): Promise<void> {
   await page.getByTestId('affairs-close').click();
   await expect(page.getByTestId('affairs')).toHaveCount(0);
-  for (let i = 0; i < 3 && (await page.locator('.route-host').count()) > 0; i++) {
+  for (let i = 0; i < 4 && (await page.locator('.route-host').count()) > 0; i++) {
     await page.keyboard.press('Escape');
     await page.waitForTimeout(150);
   }

@@ -1,9 +1,10 @@
 import { expect, test, type Page } from '@playwright/test';
 
 /**
- * The home town's Market and Mead-hall through the real UI: quick start, open each from its hub hotspot,
- * use what works at home (a deal through the two-sided slider, sell all, other ports, trade routes; the hall's
- * choices, news, sellswords, other places) and close it again. Screenshots land in the run's output folder.
+ * The home town's Market and Mead-hall through the real UI: quick start, enter each from its hub hotspot, speak
+ * with its people (the Merchant; the Hall-keeper, the Travellers and the Sellswords), use what works at home (a
+ * deal through the two-sided slider, sell all, other ports, trade routes; the hall's choices, news, sellswords,
+ * other places) and walk out again. Screenshots land in the run's output folder.
  */
 const OUT = process.env.BARDIA_E2E_OUT ?? 'test-results';
 
@@ -23,13 +24,14 @@ async function startSaga(page: Page): Promise<void> {
   }
 }
 
-test('the home market: a deal on the slider, sell all, other ports and trade routes', async ({ page }) => {
+test('the home market: the Merchant, a deal on the slider, sell all, other ports and trade routes', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (err) => errors.push(err.message));
   await startSaga(page);
   await page.getByTestId('hotspot-market').click();
   const market = page.getByTestId('home-market');
   await expect(market).toBeVisible();
+  await page.getByTestId('interior-person-merchant').click();
   await expect(page.getByTestId('home-stores')).toContainText('Storehouse');
   // A new saga: provisions for the first voyage are stored, and there is no loot yet.
   await expect(page.getByTestId('sell-all')).toBeDisabled();
@@ -60,35 +62,40 @@ test('the home market: a deal on the slider, sell all, other ports and trade rou
   await page.getByTestId('market-view-goods').click();
   await expect(page.getByTestId('market')).toBeVisible();
 
-  await page.getByTestId('market-close').click();
+  await page.getByTestId('interior-leave').click();
   await expect(market).toBeHidden();
   expect(errors).toEqual([]);
 });
 
-test('the home mead-hall: four choices, news, sellswords and other places', async ({ page }) => {
+test('the home mead-hall: the keeper, the travellers and the sellswords', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (err) => errors.push(err.message));
   await startSaga(page);
   await page.getByTestId('hotspot-meadHall').click();
   const hall = page.getByTestId('home-meadhall');
   await expect(hall).toBeVisible();
+  await page.getByTestId('interior-person-keeper').click();
   await page.getByTestId('tavern-anyNews').click();
   await expect(page.getByTestId('tavern-result')).toContainText(/keeper/i);
+  // What has been heard sits under his choices.
+  await expect(page.getByTestId('news-log')).toBeVisible();
+  await page.screenshot({ path: `${OUT}/town-meadhall.png` });
+
+  // Back to the room (the keeper's panel covers the travellers' corner), then to the travellers.
+  await page.getByTestId('interior-back').click();
+  await page.getByTestId('interior-person-travellers').click();
   await page.getByTestId('tavern-travellers').click();
   await expect(page.getByTestId('tavern-result')).toContainText(/travellers/i);
-  await page.screenshot({ path: `${OUT}/town-meadhall.png` });
-  // What has been heard sits beside the choices.
-  await expect(page.getByTestId('news-log')).toBeVisible();
-
-  await page.getByTestId('hall-sellswords').click();
-  await expect(page.getByTestId('sellswords').or(page.getByTestId('sellswords-empty'))).toBeVisible();
-  await page.screenshot({ path: `${OUT}/town-meadhall-sellswords.png` });
-
   await page.getByTestId('hall-places-toggle').click();
   await expect(page.getByTestId('intel-panel')).toBeVisible();
   await page.screenshot({ path: `${OUT}/town-meadhall-intel.png` });
 
-  await page.getByTestId('meadhall-close').click();
+  await page.getByTestId('interior-back').click();
+  await page.getByTestId('interior-person-sellswords').click();
+  await expect(page.getByTestId('sellswords').or(page.getByTestId('sellswords-empty'))).toBeVisible();
+  await page.screenshot({ path: `${OUT}/town-meadhall-sellswords.png` });
+
+  await page.getByTestId('interior-leave').click();
   await expect(hall).toBeHidden();
   expect(errors).toEqual([]);
 });

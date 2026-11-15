@@ -3,13 +3,14 @@
  * out by ARCHITECTURE §20 as a warm scene rather than a form: a few big choices, each answered in one or two
  * readable lines in the result area below them.
  *
- *   TavernPanel    — the choices: ask for news, hear the travellers, buy a round (settlements' `tavernAction`),
- *                    and, when `sellswords` is set, look for sellswords; then the result area
+ *   TavernPanel    — the choices: ask for news, hear the travellers, buy a round (settlements' `tavernAction`;
+ *                    `actions` picks which, so each person in the home hall offers their own), and, when
+ *                    `sellswords` is set, look for sellswords; then the result area
  *   SellswordPanel — this month's sellswords as cards: who, the price, one Hire button (military
  *                    `sellswordOffers`, validated by `hireIssues`)
  *   NewsLog        — the latest few things heard (news `playerNews`); the rest behind Details
  *   IntelPanel     — what the house believes about other places (intel `intelSummary`) and the maps it holds
- *   MeadHallScene  — all of it on one screen: the choices on the left, "Heard lately" and "Other places" right
+ * The home Mead-hall (../meadHall) puts them behind its Hall-keeper, Travellers and Sellswords.
  *
  * The settlements module's "have a drink" is not offered: it costs silver for a small chance of one rumour,
  * while "ask for news" is free and hears it all. Every rule (costs, presence, availability) is read from the
@@ -115,8 +116,23 @@ export function NewsRow({ state, view }: { state: GameState; view: NewsView | Pl
 
 type HallResult = { kind: 'tavern'; action: TavernActionId; text: string } | { kind: 'sellswords' };
 
-/** The hall's choices and the result area (see the file header). */
-export function TavernPanel({ state, content, settlementId, sellswords = false }: { state: GameState; content: Content; settlementId: SettlementId; sellswords?: boolean }): ReactElement {
+/**
+ * The hall's choices and the result area (see the file header). `actions` picks which of the hall's choices are
+ * offered (default all three: the visit abroad); the home Mead-hall's people each offer their own.
+ */
+export function TavernPanel({
+  state,
+  content,
+  settlementId,
+  sellswords = false,
+  actions = HALL_ACTIONS,
+}: {
+  state: GameState;
+  content: Content;
+  settlementId: SettlementId;
+  sellswords?: boolean;
+  actions?: readonly TavernActionId[];
+}): ReactElement {
   const t = useT();
   const dispatch = useGame((s) => s.dispatch);
   const [result, setResult] = useState<HallResult | undefined>(undefined);
@@ -134,10 +150,11 @@ export function TavernPanel({ state, content, settlementId, sellswords = false }
     if (a === 'buyRound') return t('news.ui.hall.line.buyRound', { silver: cost, home: home ? 'yes' : 'no' });
     return t(`news.ui.hall.line.${a}`);
   };
+  const count = actions.length + (sellswords ? 1 : 0);
   return (
     <div className="hall-scene" data-testid="meadhall">
-      <ChoiceGrid columns={sellswords ? 2 : 3} label={t('settlements.tavern.title')} className="hall-choices">
-        {HALL_ACTIONS.map((a) => {
+      <ChoiceGrid columns={count >= 4 ? 2 : Math.max(1, count)} label={t('settlements.tavern.title')} className="hall-choices">
+        {actions.map((a) => {
           const block = tavernBlock(state, content, settlementId, a);
           return (
             <ChoiceCard
@@ -357,25 +374,6 @@ export function IntelPanel({ state, content }: { state: GameState; content: Cont
           ))}
         </ul>
       )}
-    </div>
-  );
-}
-
-/** The whole mead-hall on one screen: choices and their answers left, what has been heard right. */
-export function MeadHallScene({ state, content, settlementId }: { state: GameState; content: Content; settlementId: SettlementId }): ReactElement {
-  const t = useT();
-  return (
-    <div className="hall-layout">
-      <div className="hall-main">
-        <p className="hall-mood">{t('news.ui.hall.mood')}</p>
-        <TavernPanel state={state} content={content} settlementId={settlementId} sellswords />
-      </div>
-      <aside className="hall-side">
-        <NewsLog state={state} content={content} />
-        <Disclosure summary={t('news.ui.places.title')} className="hall-places" data-testid="hall-places">
-          <IntelPanel state={state} content={content} />
-        </Disclosure>
-      </aside>
     </div>
   );
 }

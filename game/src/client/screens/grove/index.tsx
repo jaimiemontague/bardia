@@ -1,9 +1,14 @@
 /**
- * The Sacred Grove (hub building route 'building.grove'), laid out by ARCHITECTURE §20 as a quiet scene: the
- * gods of the Old Ways as cards (name, one line, the house's Favor), and on the right the one thing to do here:
- * honour the chosen god with a sacrifice (`sacrifice`): what to give, how much, and in one line what it costs
- * and the Favor it would bring (the real command tried on a copy of the state). What the god's Favor does, the
- * omens it feeds and what raises it are behind Details.
+ * The Sacred Grove (hub building route 'building.grove'): entering it shows the clearing with its standing
+ * stones, god-posts and altar stone (render/interiors/rooms/grove.tsx). Its menu waits behind one person, the
+ * Grove-keeper beside the altar, and is laid out by ARCHITECTURE §20: the gods of the Old Ways as cards (name, one
+ * line, the house's Favor), and beside them the one thing to do here: honour the chosen god with a sacrifice
+ * (`sacrifice`): what to give, how much, and in one line what it costs and the Favor it would bring (the real
+ * command tried on a copy of the state). What the god's Favor does, the omens it feeds and what raises it are
+ * behind Details. Route params `{ person: 'groveKeeper' }` open his panel at once.
+ *
+ * Test ids: grove (the room's picture), grove-work, god-select-<god>, favor-<god>, grove-offering,
+ * grove-kind-<kind>, grove-size-<size>, grove-preview, grove-sacrifice, grove-why, grove-details.
  */
 import { useState, type ReactElement } from 'react';
 import { GOD_IDS, type GodId } from '@content/schemas/ids';
@@ -13,6 +18,9 @@ import { groveTierOf } from '@sim/modules/faith/favor';
 import { monthCount, monthOf, presentAt } from '@sim/modules/faith/state';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatNumber, tOr, useT } from '../../i18n/index';
+import { InteriorRoom, useRoutePerson } from '../../render/interiors/index';
+import { groveRoom } from '../../render/interiors/rooms/grove';
+import { ambienceOf } from '../../render/scenes/ambience';
 import { Button, ChoiceCard, ChoiceGrid, Disclosure } from '../../ui/index';
 import {
   faithText,
@@ -20,7 +28,6 @@ import {
   NoGame,
   reasonText,
   runCommand,
-  ScreenFrame,
   silverDelta,
   tryCommand,
   useHousehold,
@@ -157,37 +164,27 @@ function Offering({ h, god }: { h: Household; god: GodId }): ReactElement {
   );
 }
 
-function GroveScreen({ close }: ScreenProps): ReactElement {
+/** The Grove-keeper's panel: the gods as cards and the offering to the chosen one. */
+export function GroveWork({ h }: { h: Household }): ReactElement {
   const t = useT();
-  const h = useHousehold();
   const [god, setGod] = useState<GodId>('valgrim');
-  if (!h) return <NoGame close={close} />;
-  const place = presentAt(h.state, h.content.tunables.faith, h.state.player.rulerId);
-  const s = place !== undefined ? h.state.settlements[place] : undefined;
-  const tier = s ? groveTierOf(h.content.tunables.faith, s) : 0;
   const house = h.state.player.house;
   const oldWays = house.faith === 'oldways';
   return (
-    <ScreenFrame
-      id="grove"
-      className="gv-frame"
-      title={t('ui.route.building.grove')}
-      lede={t('faith.ui.grove.scene')}
-      subtitle={s ? t('faith.ui.grove.at', { place: s.name, tier }) : t('faith.ui.grove.away')}
-      close={close}
-    >
+    <div className="gv-work" data-testid="grove-work">
       {!oldWays && (
         <p className="hh-big tone-warn">
           {t('faith.ui.grove.notOldWays', { faith: faithText(house.faith) })}
         </p>
       )}
       <div className="gv-layout">
-        <ChoiceGrid columns={2} className="gv-gods" label={t('faith.ui.grove.gods')}>
+        <ChoiceGrid columns={1} className="gv-gods" label={t('faith.ui.grove.gods')}>
           {GOD_IDS.map((g) => {
             const favor = house.favor[g] ?? 0;
             return (
               <ChoiceCard
                 key={g}
+                size="sm"
                 icon="sun"
                 title={godText(h.content, g)}
                 line={tOr(`faith.god.${g}.epithet`, h.content.gods[g].epithet)}
@@ -205,13 +202,55 @@ function GroveScreen({ close }: ScreenProps): ReactElement {
         </ChoiceGrid>
         <Offering h={h} god={god} />
       </div>
-    </ScreenFrame>
+    </div>
   );
+}
+
+/**
+ * The Sacred Grove for a household (exported for tests): the clearing with the Grove-keeper in it; his panel open
+ * when `person` (controlled) or `initialPerson` says so.
+ */
+export function Grove({
+  h,
+  onClose,
+  person,
+  initialPerson,
+  onPersonChange,
+}: {
+  h: Household;
+  onClose(): void;
+  person?: string | null;
+  initialPerson?: 'groveKeeper';
+  onPersonChange?(id: string | null): void;
+}): ReactElement {
+  const t = useT();
+  const place = presentAt(h.state, h.content.tunables.faith, h.state.player.rulerId);
+  const s = place !== undefined ? h.state.settlements[place] : undefined;
+  const tier = s ? groveTierOf(h.content.tunables.faith, s) : 0;
+  return (
+    <InteriorRoom
+      room={groveRoom}
+      ambience={ambienceOf(h.state)}
+      subtitle={s ? t('faith.ui.grove.at', { place: s.name, tier }) : t('faith.ui.grove.away')}
+      {...(person !== undefined ? { person } : { initialPerson: initialPerson ?? null })}
+      onPersonChange={onPersonChange}
+      stageTestId="grove"
+      onLeave={onClose}
+      panel={() => <GroveWork h={h} />}
+    />
+  );
+}
+
+function GroveScreen({ params, close }: ScreenProps): ReactElement {
+  const h = useHousehold();
+  const [person, setPerson] = useRoutePerson(groveRoom, ['building.grove'], params);
+  if (!h) return <NoGame close={close} />;
+  return <Grove h={h} person={person} onPersonChange={setPerson} onClose={close} />;
 }
 
 export const screen: ScreenDescriptor = {
   id: 'grove',
-  route: 'building.grove',
+  route: 'building.grove', staysUnder: true,
   component: GroveScreen,
   layout: 'overlay',
   titleKey: 'ui.route.building.grove',

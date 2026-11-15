@@ -11,6 +11,11 @@ import { HOURS_PER_DAY } from '@sim/core/time';
 import { heirCandidates } from '@sim/modules/people/death';
 import { ASSIGNABLE_ROLES } from '@sim/modules/people/schemas';
 import { useGame } from '../../app/gameStore';
+import { useNavigation } from '../../app/navigation';
+import { roomById } from '../../render/interiors/registry';
+import { groveRoom } from '../../render/interiors/rooms/grove';
+import { longhouseRoom } from '../../render/interiors/rooms/longhouse';
+import { seerRoom } from '../../render/interiors/rooms/seer';
 import { resetClientState } from '../../testing/clientTestKit';
 import { groupByYear } from '../chronicle/index';
 import * as character from './index';
@@ -97,6 +102,22 @@ describe('household screens: registration and strings', () => {
     expect(mine.filter(([, v]) => v.includes('—'))).toEqual([]);
   });
 
+  it('the Longhouse, the Seer’s hut and the Grove are rooms with one person each and real strings', () => {
+    for (const room of [longhouseRoom, seerRoom, groveRoom]) {
+      expect(roomById(room.id)).toBe(room);
+      expect(room.people).toHaveLength(1);
+      for (const p of room.people) {
+        expect(Object.hasOwn(strings, p.nameKey), p.nameKey).toBe(true);
+        expect(Object.hasOwn(strings, p.greetingKey), p.greetingKey).toBe(true);
+      }
+    }
+    expect(longhouseRoom.people.map((p) => p.id)).toEqual(['houseElder']);
+    expect(seerRoom.people.map((p) => p.id)).toEqual(['seer']);
+    expect(groveRoom.people.map((p) => p.id)).toEqual(['groveKeeper']);
+    for (const k of ['people.interior.longhouse.subtitle', 'faith.interior.seer.subtitle'])
+      expect(Object.hasOwn(strings, k), k).toBe(true);
+  });
+
   it('templated key families are complete', () => {
     const content = getContent();
     const keys: string[] = [
@@ -163,6 +184,12 @@ describe('longhouse', () => {
     const lt = lieutenant(state());
     const Screen = longhouse.screen.component;
     render(<Screen close={() => undefined} />);
+    // The room first: the House-elder holds the offices.
+    expect(screen.getByTestId('interior-longhouse')).toBeTruthy();
+    expect(screen.getByTestId('longhouse')).toBeTruthy();
+    expect(screen.queryByTestId('longhouse-work')).toBeNull();
+    fireEvent.click(screen.getByTestId('interior-person-houseElder'));
+    expect(screen.getByTestId('interior-panel').getAttribute('data-person')).toBe('houseElder');
     // The lieutenants' card shows its holders; the steward's seat is chosen and filled from the cards.
     fireEvent.click(screen.getByTestId('office-steward'));
     expect(screen.getByTestId('longhouse-focus').getAttribute('data-office')).toBe('steward');
@@ -178,6 +205,21 @@ describe('longhouse', () => {
       expect(screen.getByTestId('office-captain').textContent).toMatch(/no fleet/i);
     }
   });
+
+  it('takes the wounded straight to the Seer’s care', () => {
+    attach(
+      startGame((s) => {
+        const c = s.characters[lieutenant(s)];
+        if (c) c.health = { ...c.health, wound: 'serious', woundUntilHour: s.time.hour + 30 * HOURS_PER_DAY };
+      }),
+    );
+    const Screen = longhouse.screen.component;
+    render(<Screen params={{ person: 'houseElder' }} close={() => undefined} />);
+    fireEvent.click(screen.getByTestId('longhouse-to-seer'));
+    const top = useNavigation.getState().stack.at(-1);
+    expect(top?.id).toBe('building.seer');
+    expect(top?.params).toEqual({ person: 'seer', view: 'heal' });
+  });
 });
 
 describe('rune-seer', () => {
@@ -186,6 +228,8 @@ describe('rune-seer', () => {
     const before = state().factions[state().player.factionId]?.treasury ?? 0;
     const Screen = seer.screen.component;
     render(<Screen close={() => undefined} />);
+    expect(screen.getByTestId('interior-seer')).toBeTruthy();
+    fireEvent.click(screen.getByTestId('interior-person-seer'));
     expect(screen.getByTestId('seer-no-readings')).toBeTruthy();
     fireEvent.click(screen.getByTestId('seer-read'));
     expect(state().factions[state().player.factionId]?.treasury).toBe(
@@ -225,9 +269,11 @@ describe('rune-seer', () => {
       }
     });
     attach(session);
+    // A deep link opens the Seer's panel on the wounded.
     const Screen = seer.screen.component;
-    render(<Screen close={() => undefined} />);
-    fireEvent.click(screen.getByTestId('seer-heal'));
+    render(<Screen params={{ person: 'seer', view: 'heal' }} close={() => undefined} />);
+    expect(screen.getByTestId('interior-panel').getAttribute('data-person')).toBe('seer');
+    expect(screen.getByTestId('seer-healing')).toBeTruthy();
     const btn = screen.getByTestId(`heal-seer-${target}`) as HTMLButtonElement;
     expect(screen.queryByTestId(`heal-why-seer-${target}`)?.textContent ?? '').toBe('');
     expect(btn.disabled).toBe(false);
@@ -243,6 +289,8 @@ describe('grove', () => {
     attach(startGame());
     const Screen = grove.screen.component;
     render(<Screen close={() => undefined} />);
+    expect(screen.getByTestId('grove')).toBeTruthy();
+    fireEvent.click(screen.getByTestId('interior-person-groveKeeper'));
     fireEvent.click(screen.getByTestId('god-select-saltha'));
     expect(screen.getByTestId('grove-preview').textContent).toMatch(/Saltha Favor \+\d+/);
     const favor = state().player.house.favor.saltha;

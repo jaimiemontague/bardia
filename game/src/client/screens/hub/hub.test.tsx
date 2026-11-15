@@ -2,7 +2,8 @@
 /**
  * The Home Hall and its war-side buildings against the full module registry: the layout table, the Counsel
  * and the First Voyage (ice and thaw from the weather module), the hub screen and its hotspots, the Great
- * hall's Muster, the Shipyard, the Smithy, and the planner's "why Launch is disabled".
+ * hall as a room (its three people, the Muster, deep links), the Shipyard, the Smithy's smith, and the planner's
+ * "why Launch is disabled".
  */
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -18,6 +19,7 @@ import { missingKeysSeen } from '../../i18n/index';
 import { resetClientState } from '../../testing/clientTestKit';
 import { ExpeditionPlanner } from '../expedition/index';
 import { harbourIce } from '../expedition/seaIce';
+import * as greatHall from '../greatHall/index';
 import { GreatHall } from '../greatHall/index';
 import { Shipyard } from '../shipyard/index';
 import { Smithy } from '../smithy/index';
@@ -172,18 +174,45 @@ describe('the hub screen', () => {
 });
 
 describe('the Great hall', () => {
-  it('summarises the realm and opens the planner, affairs and the ledger', () => {
+  it('is a room: the Hirdmaster summarises the realm and opens the planner, the Steward the ledger, the Lawspeaker affairs', () => {
     start(OPEN_SEED);
     render(<GreatHall state={state()} onClose={() => {}} />);
+    expect(screen.getByTestId('interior-greatHall')).toBeTruthy();
+    expect(screen.getByTestId('great-hall')).toBeTruthy();
+    expect(screen.queryByTestId('interior-panel')).toBeNull();
+    fireEvent.click(screen.getByTestId('interior-person-hirdmaster'));
     expect(screen.getByTestId('great-hall-realm').textContent).toMatch(/The treasury holds 2,000 silver/);
     // Five lines in words; the rest behind Details.
     expect(screen.getByTestId('great-hall-details-toggle').getAttribute('aria-expanded')).toBe('false');
-    fireEvent.click(screen.getByTestId('hall-affairs'));
-    expect(useNavigation.getState().stack.at(-1)?.id).toBe('affairs');
-    fireEvent.click(screen.getByTestId('hall-ledger'));
-    expect(useNavigation.getState().stack.at(-1)?.id).toBe('ledger');
     fireEvent.click(screen.getByTestId('hall-planner'));
     expect(useNavigation.getState().stack.at(-1)?.id).toBe('expeditionPlanner');
+    fireEvent.click(screen.getByTestId('interior-person-steward'));
+    expect(screen.getByTestId('great-hall-steward').textContent).toMatch(/2,000 silver/);
+    expect(screen.getByTestId('steward-month').textContent).toMatch(/This month/);
+    expect(screen.getByTestId('interior-panel').querySelectorAll('.btn-primary')).toHaveLength(1);
+    fireEvent.click(screen.getByTestId('hall-ledger'));
+    expect(useNavigation.getState().stack.at(-1)?.id).toBe('ledger');
+    fireEvent.click(screen.getByTestId('interior-person-lawspeaker'));
+    fireEvent.click(screen.getByTestId('hall-affairs'));
+    expect(useNavigation.getState().stack.at(-1)?.id).toBe('affairs');
+  });
+
+  it('deep links: the muster route and the Counsel open the Hirdmaster on the muster, a person param opens that panel', () => {
+    start(OPEN_SEED);
+    const lines = computeCounsel(state(), getContent(), { unreadImportant: 0 });
+    const steps = firstVoyage(state());
+    expect(steps.find((s) => s.id === 'muster')?.action).toEqual({ kind: 'route', route: 'building.greatHall', params: { person: 'hirdmaster', view: 'muster' }, labelKey: 'hub.action.muster' });
+    for (const l of lines) if (l.action?.kind === 'route') expect(l.action.route).not.toBe('muster');
+    render(<App registry={buildRegistry({ hub, greatHall })} />);
+    act(() => useNavigation.getState().open('building.greatHall', { person: 'hirdmaster', view: 'muster' }));
+    expect(screen.getByTestId('interior-panel').getAttribute('data-person')).toBe('hirdmaster');
+    expect(screen.getByTestId('muster')).toBeTruthy();
+    act(() => void useNavigation.getState().back());
+    act(() => useNavigation.getState().open('muster'));
+    expect(screen.getByTestId('muster')).toBeTruthy();
+    act(() => void useNavigation.getState().back());
+    act(() => useNavigation.getState().open('building.greatHall', { person: 'steward' }));
+    expect(screen.getByTestId('great-hall-steward')).toBeTruthy();
   });
 
   it('musters men through the military module', () => {
@@ -212,21 +241,37 @@ describe('the Great hall', () => {
 });
 
 describe('the Shipyard and the Smithy', () => {
-  it('lists the fleet, orders a ship the yard can build and says why others cannot be built', () => {
+  it('lists the fleet on the strand, and the Shipwright orders a ship the yard can build and says why others cannot be built', () => {
     start(OPEN_SEED);
-    const view = render(<Shipyard state={state()} onClose={() => {}} />);
+    const view = render(<Shipyard state={state()} initialPerson="strand" onClose={() => {}} />);
     expect(screen.getByTestId('shipyard-fleet').querySelectorAll('tr[data-ship]')).toHaveLength(2);
+    fireEvent.click(screen.getByTestId('interior-person-shipwright'));
     const drakkar = screen.getByTestId('shipyard-orders').querySelector('[data-ship-type="drakkar"]');
     expect(drakkar?.textContent).toMatch(/Needs a shipyard of tier 3/);
     act(() => fireEvent.click(screen.getByTestId('order-karvi')));
     expect(shipOrdersOf(state(), state().player.capitalId)).toHaveLength(1);
-    view.rerender(<Shipyard state={state()} onClose={() => {}} />);
+    view.rerender(<Shipyard state={state()} initialPerson="strand" onClose={() => {}} />);
     expect(screen.getByTestId('shipyard-queue').textContent).toMatch(/ready/);
+  });
+
+  it('the Counsel and the checklist send the player to the Shipwright and the Merchant', () => {
+    start(OPEN_SEED);
+    const steps = firstVoyage(state());
+    expect(steps.find((s) => s.id === 'home')?.action).toEqual({ kind: 'route', route: 'building.market', params: { person: 'merchant' }, labelKey: 'hub.action.market' });
+    const lines = computeCounsel(state(), getContent(), { unreadImportant: 0 });
+    for (const l of lines) {
+      if (l.action?.kind === 'route' && l.action.route === 'building.shipyard') expect(l.action.params).toEqual({ person: 'shipwright' });
+      if (l.action?.kind === 'route' && l.action.route === 'building.market') expect(l.action.params).toEqual({ person: 'merchant' });
+    }
+    // An order on the slipways is one such line.
+    act(() => void useGame.getState().dispatch({ type: 'queueShip', holdingId: state().player.capitalId, shipType: 'karvi' }));
+    const building = computeCounsel(state(), getContent(), { unreadImportant: 0 }).find((l) => l.id === 'shipBuilding');
+    expect(building?.action).toEqual({ kind: 'route', route: 'building.shipyard', params: { person: 'shipwright' }, labelKey: 'hub.action.shipyard' });
   });
 
   it('shows the armoury and the next tier with its cost or the reason it is out of reach', () => {
     start(OPEN_SEED);
-    render(<Smithy state={state()} onClose={() => {}} />);
+    render(<Smithy state={state()} initialPerson="smith" onClose={() => {}} />);
     expect(screen.getByTestId('smithy-armour').textContent).toMatch(/Hide and wood/);
     expect(screen.getByTestId('smithy-tiers').querySelectorAll('tbody tr').length).toBeGreaterThan(4);
     const button = screen.getByTestId('upgrade-weapons') as HTMLButtonElement;

@@ -159,9 +159,18 @@ function canRamNow(w: SeaWorld, s: SeaShip, t: SeaShip, d: number): boolean {
   return away < w.t.ai.ramCatchRatio * rowSpeed(w, s);
 }
 
+/**
+ * The ship a side's followers keep station on: the ship the player steers (on the player's side,
+ * while the player commands it), else the side's flagship. −1 when there is none.
+ */
+export function formationLeader(w: SeaWorld, side: SideIdx): number {
+  if (side === w.playerSide && !w.aiControlsPlayer && w.helm >= 0 && w.ships[w.helm]?.status === 'active') return w.helm;
+  return w.sides[side].flagship;
+}
+
 function planOrders(w: SeaWorld, s: SeaShip): void {
-  const side = w.sides[s.side];
-  const flag = side.flagship >= 0 ? w.ships[side.flagship] : undefined;
+  const lead = formationLeader(w, s.side);
+  const flag = lead >= 0 ? w.ships[lead] : undefined;
   const flagOk = flag !== undefined && flag !== s && flag.status === 'active';
   switch (s.order.kind) {
     case 'follow':
@@ -371,14 +380,18 @@ export function steerShip(w: SeaWorld, s: SeaShip): void {
     return;
   }
   if (s.controller === 'player') {
-    if (s.hasMove) {
-      const d = headFor(w, s, s.moveX, s.moveY, 1, false);
-      if (d <= w.t.orders.arriveRadiusM) {
-        s.hasMove = false;
-        s.throttle = 0;
-        s.rudder = 0;
-      } else if (d < 60) s.throttle = Math.max(0.25, d / 60);
+    if (!s.hasMove) {
+      // Sail or oars under the player's hand: the oars to back water or to pivot a ship with little
+      // way on her (the helm answers at once), else whichever drives her faster on this heading.
+      chooseProp(w, s, s.h, s.throttle < 0 || (s.rudder !== 0 && Math.abs(s.v) < w.t.physics.sailTurnFullSpeedMs * 0.5));
+      return;
     }
+    const d = headFor(w, s, s.moveX, s.moveY, 1, false);
+    if (d <= w.t.orders.arriveRadiusM) {
+      s.hasMove = false;
+      s.throttle = 0;
+      s.rudder = 0;
+    } else if (d < 60) s.throttle = Math.max(0.25, d / 60);
     return;
   }
   switch (s.goal) {
@@ -537,8 +550,8 @@ function steerSeaFire(w: SeaWorld, s: SeaShip): void {
 }
 
 function steerFormation(w: SeaWorld, s: SeaShip): void {
-  const side = w.sides[s.side];
-  const flag = side.flagship >= 0 ? w.ships[side.flagship] : undefined;
+  const lead = formationLeader(w, s.side);
+  const flag = lead >= 0 ? w.ships[lead] : undefined;
   if (!flag || flag.status !== 'active') {
     s.throttle = 0;
     return;

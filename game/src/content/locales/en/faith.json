@@ -206,5 +206,10 @@
   "faith.ui.grove.favorNow": "Favor with your house: {word} ({favor})",
   "faith.ui.grove.askWhat": "What will you give?",
   "faith.ui.grove.askSize": "How much?",
-  "faith.ui.grove.previewLine": "{cost} for {god} Favor +{gain}"
+  "faith.ui.grove.previewLine": "{cost} for {god} Favor +{gain}",
+  "faith.interior.seer.seer.name": "The Seer",
+  "faith.interior.seer.seer.greeting": "The runes are in the bag and the fire is low. Ask, and I will look.",
+  "faith.interior.seer.subtitle": "A low hut at the edge of {place}",
+  "faith.interior.grove.groveKeeper.name": "The Grove-keeper",
+  "faith.interior.grove.groveKeeper.greeting": "The gods have long memories. Choose whom you would honour, and what you will give."
 }

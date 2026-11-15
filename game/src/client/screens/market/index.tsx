@@ -1,14 +1,19 @@
 /**
- * The home Market (route 'building.market', opened from the home hub's market hotspot; design SCR-16, §11),
- * laid out by ARCHITECTURE §20 as a large framed screen with one question at a time:
+ * The home Market (route 'building.market', opened from the home hub's market hotspot; design SCR-16, §11):
+ * entering it shows the merchant's storehouse open to the harbour (render/interiors/rooms/market.tsx). The whole
+ * market waits behind the Merchant (ARCHITECTURE §20), one question at a time:
  *
  *   one sentence of what the house holds (treasury, storehouse);
  *   the two shortcuts as big cards ("Sell all loot", "Buy provisions for the next voyage", ./quickDeals.tsx);
  *   the goods as tiles beside one deal at a time (the shared ../settlement/market.tsx: a two-sided slider
  *   between the house storehouse and the town's market, every price and limit the economy's own).
  *
- * Where else a good sells best sits behind "Other ports" in the deal panel. Trade routes are a second view
- * (the "Trade routes" button in the header; ./routes.tsx).
+ * Where else a good sells best sits behind "Other ports" in the deal panel. Trade routes are a second view of
+ * his panel (the "Trade routes" button at its top; ./routes.tsx). Route params `{ person: 'merchant' }` open
+ * his panel at once.
+ *
+ * Test ids: home-market (the room's picture), market-work, home-stores, market-view-routes, market-view-goods,
+ * market-closed, and those of the shortcuts, the board and the routes.
  */
 import { useState, type ReactElement } from 'react';
 import type { GameState, GoodId } from '@sim/core/state';
@@ -17,16 +22,20 @@ import { loadContent } from '../../app/content';
 import { useGame } from '../../app/gameStore';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatNumber, tOr, useT } from '../../i18n/index';
-import { Button, Frame, Icon, IconButton } from '../../ui/index';
+import { InteriorRoom, useRoutePerson } from '../../render/interiors/index';
+import { marketRoom } from '../../render/interiors/rooms/market';
+import { ambienceOf } from '../../render/scenes/ambience';
+import { Button, Icon } from '../../ui/index';
 import { hasMarket, knownMarkets } from '../settlement/knownMarkets';
 import { MarketBoard } from '../settlement/market';
 import { QuickCards, QuickConfirm, type QuickKind } from './quickDeals';
 import { RoutesPanel } from './routes';
+import './market.css';
 
 type View = 'goods' | 'routes';
 
-/** The home Market overlay. */
-export function HomeMarket({ state, onClose }: { state: GameState; onClose(): void }): ReactElement {
+/** Everything the home Market offers (the Merchant's panel): the stores line, the shortcuts, the goods, routes. */
+export function MerchantWork({ state }: { state: GameState }): ReactElement {
   const t = useT();
   const [view, setView] = useState<View>('goods');
   const [confirm, setConfirm] = useState<QuickKind | undefined>(undefined);
@@ -34,12 +43,11 @@ export function HomeMarket({ state, onClose }: { state: GameState; onClose(): vo
   const loaded = loadContent();
   const homeId = state.player.capitalId;
   const s = state.settlements[homeId];
-  const close = <IconButton icon="close" label={t('economy.ui.close')} onClick={onClose} data-testid="market-close" />;
   if (!loaded.ok || !s)
     return (
-      <Frame size="screen" title={t('economy.ui.market.title')} className="trd-screen" actions={close} data-testid="home-market">
-        <p className="faint">{t('economy.ui.market.none')}</p>
-      </Frame>
+      <p className="faint" data-testid="market-closed">
+        {t('economy.ui.market.none')}
+      </p>
     );
   const content = loaded.content;
   const open = hasMarket(state, content, homeId);
@@ -67,23 +75,16 @@ export function HomeMarket({ state, onClose }: { state: GameState; onClose(): vo
     setResult(text);
   };
   return (
-    <Frame
-      size="screen"
-      title={view === 'routes' ? t('economy.ui.market.tab.routes') : t('economy.ui.market.title')}
-      subtitle={t('economy.ui.market.subtitle', { place: s.name, state: tOr(`economy.economyState.${s.economy}`, s.economy) })}
-      ornate
-      className="trd-screen"
-      actions={
-        <div className="trd-actions">
-          {switchView}
-          {close}
+    <div className="mkt-work" data-testid="market-work" data-view={view}>
+      <div className="mkt-top">
+        <div className="mkt-top-text">
+          {view === 'routes' && <p className="mkt-place">{t('economy.ui.market.tab.routes')}</p>}
+          <p className="trd-stores" data-testid="home-stores">
+            {t('economy.ui.market.storehouseLine', { silver: formatNumber(treasury), rations: formatNumber(store.rations), tons: Math.round(goodsTons * 10) / 10 })}
+          </p>
         </div>
-      }
-      data-testid="home-market"
-    >
-      <p className="trd-stores" data-testid="home-stores">
-        {t('economy.ui.market.storehouseLine', { silver: formatNumber(treasury), rations: formatNumber(store.rations), tons: Math.round(goodsTons * 10) / 10 })}
-      </p>
+        {switchView}
+      </div>
       {!open ? (
         <p className="faint" data-testid="market-closed">
           {t('economy.ui.market.none')}
@@ -112,14 +113,36 @@ export function HomeMarket({ state, onClose }: { state: GameState; onClose(): vo
           />
         </>
       )}
-    </Frame>
+    </div>
   );
 }
 
-function HomeMarketScreen({ close }: ScreenProps): ReactElement {
-  const state = useGame((s) => s.state);
-  if (!state) return <div />;
-  return <HomeMarket state={state} onClose={close} />;
+/**
+ * The home Market for a state (exported for tests): the storehouse with the Merchant in it; his panel open when
+ * `person` (controlled) or `initialPerson` says so.
+ */
+export function HomeMarket({ state, onClose, person, initialPerson, onPersonChange }: { state: GameState; onClose(): void; person?: string | null; initialPerson?: 'merchant'; onPersonChange?(id: string | null): void }): ReactElement {
+  const t = useT();
+  const s = state.settlements[state.player.capitalId];
+  return (
+    <InteriorRoom
+      room={marketRoom}
+      ambience={ambienceOf(state)}
+      subtitle={s ? t('economy.ui.market.subtitle', { place: t('hub.interior.at', { place: s.name }), state: tOr(`economy.economyState.${s.economy}`, s.economy) }) : undefined}
+      {...(person !== undefined ? { person } : { initialPerson: initialPerson ?? null })}
+      onPersonChange={onPersonChange}
+      stageTestId="home-market"
+      onLeave={onClose}
+      panel={() => <MerchantWork state={state} />}
+    />
+  );
 }
 
-export const screen: ScreenDescriptor = { id: 'homeMarket', route: 'building.market', component: HomeMarketScreen, layout: 'overlay', titleKey: 'economy.ui.market.title' };
+function HomeMarketScreen({ params, close }: ScreenProps): ReactElement {
+  const state = useGame((s) => s.state);
+  const [person, setPerson] = useRoutePerson(marketRoom, ['building.market'], params);
+  if (!state) return <div />;
+  return <HomeMarket state={state} person={person} onPersonChange={setPerson} onClose={close} />;
+}
+
+export const screen: ScreenDescriptor = { id: 'homeMarket', route: 'building.market', staysUnder: true, component: HomeMarketScreen, layout: 'overlay', titleKey: 'economy.ui.market.title' };

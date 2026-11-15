@@ -1,7 +1,8 @@
 /**
- * The sea-battle scene's driver in node: selection, the orders a right click gives, attack styles,
- * withdraw, the captains' fast-forward to a result, and the campaign path out of the scene (the
- * result handed back with the seabattle module's own applySeaBattleResult, back to the voyage).
+ * The sea-battle scene's driver in node: the helm keys (one input per change), the draw-and-loose
+ * sweep, taking the helm of another ship, grapnels, selection, the orders a right click gives,
+ * attack styles, withdraw, the captains' fast-forward to a result, and the campaign path out of the
+ * scene (the result handed back with the seabattle module's own applySeaBattleResult).
  */
 import { describe, expect, it } from 'vitest';
 import { getContent } from '@content/index';
@@ -11,8 +12,9 @@ import type { GameState } from '@sim/core/state';
 import { module as seabattle } from '@sim/seabattle/index';
 import { inDraft, testWorld } from '@sim/testing';
 import { setMissingKeyWarnings, t } from '../../i18n/index';
+import { SteerKeys } from '../../input/steering';
 import { seaSkirmishSetup } from '../skirmish/presets';
-import { SeaController } from './controller';
+import { broadsideOf, helmFor, SeaController, sideFacing, sweepRange } from './controller';
 
 setMissingKeyWarnings(false);
 const content = getContent();
@@ -26,14 +28,137 @@ function play(c: SeaController, maxS = 400): void {
   for (let i = 0; i < maxS * 30 && !c.isOver(); i++) c.frame(1 / 30);
 }
 
-describe('selection', () => {
-  it('starts with the flagship selected and both fleets on the water', () => {
+/** Runs `s` real seconds of frames. */
+function run(c: SeaController, s: number, dt = 1 / 30): void {
+  for (let i = 0; i < Math.round(s / dt) && !c.isOver(); i++) c.frame(dt);
+}
+
+function inputs(c: SeaController, kind: string): number {
+  return c.engine.inputLog.filter((x) => 'input' in x && x.input.kind === kind).length;
+}
+
+type KeyEv = Parameters<SteerKeys['keyDown']>[0];
+const key = (code: string, repeat = false): KeyEv => ({ code, repeat, shiftKey: false, ctrlKey: false, altKey: false, metaKey: false, target: null, preventDefault: () => undefined });
+
+describe('the helm', () => {
+  it('maps the held keys to throttle and rudder', () => {
+    expect(helmFor(null)).toEqual({ throttle: 0, rudder: 0 });
+    expect(helmFor('n')).toEqual({ throttle: 1, rudder: 0 });
+    expect(helmFor('s')).toEqual({ throttle: -1, rudder: 0 });
+    expect(helmFor('e')).toEqual({ throttle: 0, rudder: 1 });
+    expect(helmFor('nw')).toEqual({ throttle: 1, rudder: -1 });
+    expect(helmFor('se')).toEqual({ throttle: -1, rudder: 1 });
+  });
+
+  it('starts at the flagship helm with nothing selected', () => {
     const c = skirmish('seaPair');
     expect(c.side).toBe('attacker');
-    expect(c.selectedShips().map((s) => s.isPlayer)).toEqual([true]);
+    const helm = c.helmShip()!;
+    expect(helm.isPlayer && helm.isHelm).toBe(true);
+    expect(c.selectedShips()).toEqual([]);
     expect(c.snap.ships.filter((s) => s.side === 'defender')).toHaveLength(2);
     expect(c.paused).toBe(true);
   });
+
+  it('W A S D send one input per change, never per frame, and the ship gathers way and turns', () => {
+    const c = skirmish('seaPair');
+    const steer = new SteerKeys({ onChange: (d) => c.setHelmDir(d) });
+    c.setPaused(false);
+    const h0 = c.helmShip()!.heading;
+    steer.keyDown(key('KeyW'));
+    expect(inputs(c, 'helm')).toBe(1);
+    for (let i = 0; i < 20; i++) steer.keyDown(key('KeyW', true));
+    run(c, 3);
+    expect(inputs(c, 'helm')).toBe(1);
+    expect(c.helmShip()!.speedMs).toBeGreaterThan(1);
+    steer.keyDown(key('KeyD'));
+    expect(c.helmWanted).toEqual({ throttle: 1, rudder: 1 });
+    run(c, 1.5);
+    expect(inputs(c, 'helm')).toBe(2);
+    const turned = ((c.helmShip()!.heading - h0 + 540) % 360) - 180;
+    expect(turned).toBeGreaterThan(10);
+    steer.keyUp({ code: 'KeyW' });
+    steer.keyUp({ code: 'KeyD' });
+    expect(inputs(c, 'helm')).toBe(4);
+    expect(c.helmWanted).toEqual({ throttle: 0, rudder: 0 });
+  });
+
+  it('the number keys and Tab take the helm of another ship, which answers the held keys at once', () => {
+    const c = skirmish('seaPair');
+    const [flag, other] = c.roster();
+    c.setHelmDir('n');
+    c.takeHelmIndex(2);
+    expect(c.snap.helm).toBe(other!.idx);
+    expect(c.ship(other!.idx)!.controller).toBe('player');
+    expect(c.ship(flag!.idx)!.controller).toBe('orders');
+    // The held W carries over to the new ship (one input, not one per frame).
+    expect(c.engine.w.ships[other!.idx]!.throttle).toBe(1);
+    c.cycleHelm();
+    expect(c.snap.helm).toBe(flag!.idx);
+  });
+});
+
+describe('the broadside', () => {
+  it('the marker sweeps out to the longest bowshot and back', () => {
+    const cfg = { minRangeM: 20, maxRangeM: 110, sweepRealS: 1 };
+    expect(sweepRange(0, cfg)).toBe(20);
+    expect(sweepRange(0.5, cfg)).toBeCloseTo(65, 9);
+    expect(sweepRange(1, cfg)).toBeCloseTo(110, 9);
+    expect(sweepRange(1.5, cfg)).toBeCloseTo(65, 9);
+    expect(sweepRange(2, cfg)).toBeCloseTo(20, 9);
+  });
+
+  it('shows on the side facing the enemy', () => {
+    const north = { x: 0, y: 0, heading: 0 };
+    expect(sideFacing(north, 50, 0)).toBe('starboard');
+    expect(sideFacing(north, -50, 0)).toBe('port');
+    const east = { x: 0, y: 0, heading: 90 };
+    expect(sideFacing(east, 0, 50)).toBe('starboard');
+    const [sx, sy] = broadsideOf(90, 'starboard');
+    expect(sx).toBeCloseTo(0, 9);
+    expect(sy).toBeCloseTo(1, 9);
+  });
+
+  it('hold Space to draw, let go to loose: one logged input with the side and range, then nocking', () => {
+    const c = skirmish('seaPair');
+    expect(c.beginDraw()).toBe(false); // paused
+    c.setPaused(false);
+    expect(c.volleyState()).toBe('ready');
+    expect(c.beginDraw()).toBe(true);
+    expect(c.aim!.rangeM).toBeCloseTo(c.aimCfg.minRangeM, 6);
+    run(c, c.aimCfg.sweepRealS * 0.5, 1 / 60);
+    const aim = c.aim!;
+    expect(aim.rangeM).toBeGreaterThan(c.aimCfg.minRangeM + 10);
+    expect(aim.rangeM).toBeLessThan(c.aimCfg.maxRangeM - 10);
+    expect(aim.side).toBe(c.aimSide());
+    c.releaseDraw();
+    expect(c.drawing).toBe(false);
+    const log = c.engine.inputLog.filter((x) => 'input' in x && x.input.kind === 'loose');
+    expect(log).toHaveLength(1);
+    const input = (log[0] as { input: { side: string; rangeM: number } }).input;
+    expect(input.side).toBe(aim.side);
+    expect(input.rangeM).toBeCloseTo(aim.rangeM, 6);
+    expect(c.snap.shots).toHaveLength(1);
+    expect(c.volleyState()).toBe('nocking');
+    expect(c.beginDraw()).toBe(false);
+    expect(c.notice?.key).toBe('seaView.notice.nocking');
+    run(c, 3);
+    expect(c.volleyState()).toBe('ready');
+  });
+
+  it('grapnels need an enemy alongside; the steered ship is not sent off by a right click', () => {
+    const c = skirmish('seaPair');
+    c.grapnels();
+    expect(c.notice?.key).toBe('seaView.notice.notAlongside');
+    c.select([c.snap.helm]);
+    const foe = c.snap.ships.find((s) => s.side === 'defender')!;
+    c.commandAt(foe.x, foe.y, 3, 1);
+    expect(c.notice?.key).toBe('seaView.notice.atHelm');
+    expect(c.helmShip()!.controller).toBe('player');
+  });
+});
+
+describe('selection', () => {
 
   it('selects by number, by box, and the whole fleet', () => {
     const c = skirmish('seaPair');
@@ -74,26 +199,27 @@ describe('orders', () => {
     expect(Math.hypot(f.moveTo!.x - o.moveTo!.x, f.moveTo!.y - o.moveTo!.y)).toBeGreaterThanOrEqual(44);
   });
 
-  it('a right click on an enemy attacks it in each ship style', () => {
+  it('a right click on an enemy attacks it in each ship style (the steered ship stays in hand)', () => {
     const c = skirmish('seaPair');
-    c.selectAll();
     const [flag, other] = c.roster();
     c.select([other!.idx]);
     c.setStyle('shoot');
     c.selectAll();
     const foe = c.snap.ships.find((s) => s.side === 'defender')!;
     c.commandAt(foe.x, foe.y, 3, 1);
-    expect(c.ship(flag!.idx)!.order).toBe('board');
-    expect(c.ship(flag!.idx)!.orderTarget).toBe(foe.idx);
+    expect(c.ship(flag!.idx)!.order).toBe('follow');
+    expect(c.ship(flag!.idx)!.controller).toBe('player');
     expect(c.ship(other!.idx)!.order).toBe('shoot');
+    expect(c.ship(other!.idx)!.orderTarget).toBe(foe.idx);
     // Changing the style re-gives the order to ships already attacking.
-    c.select([flag!.idx]);
-    c.setStyle('shoot');
-    expect(c.ship(flag!.idx)!.order).toBe('shoot');
+    c.select([other!.idx]);
+    c.setStyle('board');
+    expect(c.ship(other!.idx)!.order).toBe('board');
   });
 
   it('ramming falls back to boarding for ships without a ram and says so', () => {
     const c = skirmish('seaPair');
+    c.select([c.roster()[1]!.idx]);
     c.setStyle('ram');
     expect(c.notice?.key).toBe('seaView.notice.noRam');
     const foe = c.snap.ships.find((s) => s.side === 'defender')!;

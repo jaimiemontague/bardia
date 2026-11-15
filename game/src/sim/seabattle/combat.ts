@@ -104,6 +104,11 @@ export function volleyHits(w: SeaWorld, s: SeaShip, target: SeaShip, fire: boole
 
 /** Fires a volley if ready; called every step for each active ship. */
 export function updateArchery(w: SeaWorld, s: SeaShip): void {
+  if (s.controller === 'player') {
+    // The ship under the player's hand only nocks: the player looses its volleys (volley.ts).
+    if (s.volleyT > 0) s.volleyT = s.volleyT - w.dt > TIMER_EPS ? s.volleyT - w.dt : 0;
+    return;
+  }
   if (s.volleyT > 0) s.volleyT -= w.dt;
   if (s.volleyT > TIMER_EPS || s.holdFire || s.archers < 0.5 || s.grapple >= 0 || s.status !== 'active') return;
   const ti = volleyTarget(w, s);
@@ -386,7 +391,7 @@ function captainOverboard(w: SeaWorld, s: SeaShip, friend: { idx: number; d: num
     if (isPlayer) {
       w.playerShip = to.idx;
       w.playerTransferredTo = to.shipId;
-      if (!w.aiControlsPlayer) to.controller = 'player';
+      // The engine hands the helm to the player's new ship when the steered one is lost (ensureHelm).
     }
     const side = w.sides[s.side];
     if (side.flagship === s.idx) side.flagship = to.idx;

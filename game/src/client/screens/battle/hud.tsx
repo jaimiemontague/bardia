@@ -16,13 +16,14 @@ import { Button, Icon, KeyHint, Tooltip } from '../../ui/index';
 import type { BattleController, SpeedSetting } from './controller';
 import type { BattleSummary } from './summary';
 
-const ABILITY_KEYS: Readonly<Partial<Record<AbilityId, string>>> = {
-  shieldWall: 'battle.shieldWall',
-  charge: 'battle.charge',
-  volley: 'battle.torchVolley',
-  torch: 'battle.torchVolley',
-  rally: 'battle.rally',
-  challenge: 'battle.challenge',
+/** Key hint of each ability button: a rebindable action, or a fixed key (Space charges and looses). */
+const ABILITY_KEYS: Readonly<Partial<Record<AbilityId, { action: string } | { combo: string }>>> = {
+  shieldWall: { action: 'battle.shieldWall' },
+  charge: { combo: 'Space' },
+  volley: { combo: 'Space' },
+  torch: { action: 'battle.torchVolley' },
+  rally: { action: 'battle.rally' },
+  challenge: { action: 'battle.challenge' },
 };
 const STANCES: readonly SquadStance[] = ['engage', 'hold', 'skirmish'];
 
@@ -232,6 +233,7 @@ function orderText(c: BattleController, s: SquadView, t: ReturnType<typeof useT>
   const name = /^[ad]\d+$/.test(target) ? c.squadName(target) : target ? c.structureName(target) : '';
   if (s.status === 'routing') return t('battleView.order.routing');
   if (s.activity === 'fighting' && kind !== 'retreat') return t('battleView.order.fighting', { target: name, hasTarget: name !== '' ? 'yes' : 'no' });
+  if (kind === 'none' && s.held) return t('battleView.order.held');
   return t(`battleView.order.${kind}`, { target: name, planned: plan ? 'yes' : 'no' });
 }
 
@@ -377,7 +379,7 @@ export function SquadPanel({ c }: { c: BattleController }): ReactElement | null 
               <button type="button" className={`bv-ability${c.targeting === a ? ' is-on' : ''}${r.ready ? '' : ' is-cooling'}`} onClick={() => c.useAbility(a)} data-testid={`battle-ability-${a}`}>
                 <span>{t(`battle.ability.${a}`)}</span>
                 {!r.ready && <span className="bv-cd num">{Math.ceil(r.cooldown)}</span>}
-                {key && <KeyHint action={key} />}
+                {key && ('action' in key ? <KeyHint action={key.action} /> : <KeyHint combo={key.combo} />)}
               </button>
             </Tooltip>
           );
@@ -423,17 +425,15 @@ export function BattleLog({ c, onFocus }: { c: BattleController; onFocus(x: numb
 
 // ---- cards -----------------------------------------------------------------------------------
 
+/** The "how to command" card: the keys first, in a few plain lines (§20). */
 export function HowTo({ onPlan, onStart }: { onPlan(): void; onStart(): void }): ReactElement {
   const t = useT();
   const rows: [string, string][] = [
-    ['battleView.howto.selectKey', 'battleView.howto.select'],
-    ['battleView.howto.boxKey', 'battleView.howto.box'],
-    ['battleView.howto.orderKey', 'battleView.howto.order'],
-    ['battleView.howto.faceKey', 'battleView.howto.face'],
-    ['battleView.howto.queueKey', 'battleView.howto.queue'],
-    ['battleView.howto.pauseKey', 'battleView.howto.pause'],
+    ['battleView.howto.moveKey', 'battleView.howto.move'],
+    ['battleView.howto.attackKey', 'battleView.howto.attack'],
+    ['battleView.howto.pickKey', 'battleView.howto.pick'],
     ['battleView.howto.abilityKey', 'battleView.howto.ability'],
-    ['battleView.howto.cameraKey', 'battleView.howto.camera'],
+    ['battleView.howto.mouseKey', 'battleView.howto.mouse'],
   ];
   return (
     <div className="bv-modal" role="dialog" aria-modal="true" aria-labelledby="bv-howto-title" data-testid="battle-howto">

@@ -57,7 +57,10 @@ export const ACTIONS: readonly ActionDef[] = [
   action('battle.squad8', 'battle', ['Digit8']),
   action('battle.cycleFormation', 'battle', ['KeyF']),
   action('battle.shieldWall', 'battle', ['KeyQ']),
-  action('battle.charge', 'battle', ['KeyW']),
+  // Direct control (owner play-test 2026-11-15): W A S D / arrows move, Space attacks, P pauses. The battle
+  // scenes read these keys themselves, so they are listed here for the Options screen and cannot be rebound yet.
+  action('battle.charge', 'battle', ['Space'], { fixed: true }),
+  action('battle.pause', 'battle', ['KeyP'], { fixed: true }),
   action('battle.torchVolley', 'battle', ['KeyE']),
   action('battle.rally', 'battle', ['KeyR']),
   action('battle.challenge', 'battle', ['KeyT']),

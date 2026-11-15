@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 /**
  * The Home Hall hub (SCR-05): the village labels sit on their own buildings at every window size from 1280×720
  * to 1920×1080 (the label's centre lies on or just above its building, no two labels overlap, none is clipped),
- * the buildings open their screens, the Counsel (one piece of advice at a time) and the First Voyage tell a new
+ * the buildings open their screens (the Great hall and the Smithy as rooms with people in them), the Counsel (one piece of advice at a time) and the First Voyage tell a new
  * player what to do next, and the Expedition Planner moves men and food with its two-sided handles (keyboard and
  * pointer) and launches.
  * Screenshots land in the output folder (BARDIA_E2E_OUT) for a visual check.
@@ -106,14 +106,21 @@ test('the hall buildings open their screens', async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
   await quickStart(page);
 
+  // The Great hall is a room: the Hirdmaster on the high seat holds the realm and the muster.
   await page.getByTestId('hotspot-greatHall').click();
   await expect(page.getByTestId('great-hall')).toBeVisible();
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(450);
   await page.screenshot({ path: `${OUT}/hub-great-hall.png` });
+  await page.getByTestId('interior-person-hirdmaster').click();
+  await expect(page.getByTestId('great-hall-realm')).toBeVisible();
   await page.getByRole('tab', { name: /Muster/ }).click();
   await expect(page.getByTestId('muster')).toBeVisible();
   await page.waitForTimeout(300);
   await page.screenshot({ path: `${OUT}/hub-muster.png` });
+  // Esc closes the Hirdmaster's panel first, then leaves the hall.
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('muster')).toHaveCount(0);
+  await expect(page.getByTestId('great-hall')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.getByTestId('great-hall')).toHaveCount(0);
 
@@ -125,9 +132,13 @@ test('the hall buildings open their screens', async ({ page }) => {
 
   await page.getByTestId('hotspot-smithy').click();
   await expect(page.getByTestId('smithy')).toBeVisible();
-  await page.waitForTimeout(300);
+  await page.getByTestId('interior-person-smith').click();
+  await expect(page.getByTestId('smithy-armour')).toBeVisible();
+  await page.waitForTimeout(450);
   await page.screenshot({ path: `${OUT}/hub-smithy.png` });
   await page.keyboard.press('Escape');
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('smithy')).toHaveCount(0);
 
   // Hotspots are keyboard-focusable buttons.
   await page.getByTestId('hotspot-market').focus();

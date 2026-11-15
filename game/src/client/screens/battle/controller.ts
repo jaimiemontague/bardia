@@ -6,6 +6,11 @@
  * to the battle AI to fight the rest out fast ("let your captains finish it"). Orders given while
  * paused are queued by the engine and shown as planned orders until the next tick applies them.
  *
+ * Direct control (owner play-test 2026-11-15): `drive(dx, dy, run)` steers the selection with the
+ * held keys (one engine `drive` order per change of direction, never per frame), `attackDown()` /
+ * `attackUp()` are Space (melee squads charge the enemy ahead; archers draw while it is held and
+ * loose where the aim marker stands when it is let go), and the camera follows the driven squads.
+ *
  * The controller never decides a rule: every order goes through the engine's validated order API, and
  * the result comes from the engine.
  */
@@ -13,6 +18,7 @@ import type { Content } from '@content/index';
 import { createDefaultBattleAi } from '@sim/battle/ai/index';
 import { ABILITY_IDS, resolveUnit, type AbilityId } from '@sim/battle/data';
 import { BattleEngine, type BattleEngineEvent, type BattleOrder, type BattleRenderState, type SquadView } from '@sim/battle/index';
+import { enemyAhead } from '@sim/battle/engine/drive';
 import type { BattleAiController, SideIdx } from '@sim/battle/engine/types';
 import type { BattleSideKey, SquadStance } from '@sim/battle/types';
 import type { BattleResult, BattleSetup, FormationId } from '@sim/core/state';
@@ -46,10 +52,26 @@ export interface FloatFx {
 
 /** An order given while paused, drawn until the engine applies it. */
 export interface PlannedOrder {
-  kind: 'move' | 'attack' | 'loot' | 'torch' | 'retreat' | 'halt' | 'volley' | 'gate' | 'douse';
+  kind: 'move' | 'attack' | 'loot' | 'torch' | 'retreat' | 'halt' | 'volley' | 'gate' | 'douse' | 'drive';
   x: number;
   y: number;
   target?: string;
+}
+
+/** A direction held on the keys: screen steps (dy −1 = up). */
+export type DriveStep = -1 | 0 | 1;
+
+/** One archer squad drawing an aimed volley: from its front out along its facing to the marker. */
+export interface AimView {
+  id: string;
+  /** Where the arrows will fall (the marker). */
+  x: number;
+  y: number;
+  /** The shortest and longest shot along the same line (the marker runs between them). */
+  nearX: number;
+  nearY: number;
+  farX: number;
+  farY: number;
 }
 
 /** Abilities that need the player to click a target. */
@@ -100,6 +122,16 @@ export class BattleController {
   notice: { key: string; at: number } | null = null;
   /** Seconds of real time since the battle opened (animation clock). */
   realTime = 0;
+  /** The battle has run at least once (the first movement key starts it). */
+  started = false;
+  /** The direction held on the keys, or null. */
+  driveDir: { dx: DriveStep; dy: DriveStep; run: boolean } | null = null;
+  /** The squads the held direction is driving. */
+  driven: string[] = [];
+  /** Archers drawing an aimed volley while Space is held (real-time clock at the draw). */
+  aiming: { since: number; squads: string[] } | null = null;
+  /** The camera glides after the driven (or selected) squads; looking around with the mouse stops it. */
+  cameraFollow = true;
   private readonly t: Translate;
   private readonly names: Record<string, string> = {};
   private readonly unitNames: Record<string, string> = {};
@@ -122,6 +154,10 @@ export class BattleController {
     this.snap = this.engine.snapshot(this.side);
     this.morale.update(this.snap, [], this.engine.state.map.w, this.frenzyUnits);
     for (const e of this.engine.state.events) this.seen.add(e);
+    // The whole war-band starts selected: the first key press moves everyone.
+    this.selected = this.ownSquads()
+      .filter((s) => s.status === 'active')
+      .map((s) => s.id);
   }
 
   // ---- subscription (React reads through useSyncExternalStore) ----------------------------------
@@ -210,6 +246,7 @@ export class BattleController {
   setPaused(paused: boolean): void {
     if (this.snap.status === 'ended') return;
     this.paused = paused;
+    if (!paused) this.started = true;
     this.changed();
   }
 
@@ -220,6 +257,7 @@ export class BattleController {
   setSpeed(speed: SpeedSetting): void {
     this.speed = speed;
     this.paused = false;
+    this.started = true;
     this.changed();
   }
 
@@ -302,6 +340,9 @@ export class BattleController {
       this.fastForward = false;
       this.captains = null;
       this.targeting = null;
+      this.aiming = null;
+      this.driveDir = null;
+      this.driven = [];
     }
     if (this.fastForward) {
       if (this.realTime >= this.notifyAt) this.tickNotify();
@@ -384,6 +425,7 @@ export class BattleController {
     } else this.selected = own;
     if (own.length > 0) this.inspected = null;
     this.targeting = null;
+    this.redrive();
     this.changed();
   }
 
@@ -420,14 +462,195 @@ export class BattleController {
     this.select(this.engine.squadsInRect(this.side, x0, y0, x1, y1), add);
   }
 
-  /** Number key k (1-based) in roster order. */
+  /** Number key k (1-based) in roster order; the camera goes to it. */
   selectIndex(k: number, add = false): void {
     const id = this.rosterIds()[k - 1];
-    if (id !== undefined && this.squad(id)) this.select([id], add);
+    if (id !== undefined && this.squad(id)) {
+      this.select([id], add);
+      this.cameraFollow = true;
+    }
   }
 
+  /** Every own squad on the field (Ctrl+A). */
   selectAll(): void {
     this.select(this.ownSquads().map((s) => s.id));
+  }
+
+  /** Tab / Shift+Tab: the next (or previous) own squad that can take orders, alone; the camera goes to it. */
+  selectNext(step: 1 | -1 = 1): void {
+    const ids = this.ownSquads()
+      .filter((s) => s.status === 'active')
+      .map((s) => s.id);
+    if (ids.length === 0) return;
+    // From the whole band, Tab picks the first squad and Shift+Tab the last.
+    const cur = this.selected.length === 1 ? ids.indexOf(this.selected[0]!) : step > 0 ? -1 : 0;
+    const next = ids[(((cur + step) % ids.length) + ids.length) % ids.length]!;
+    this.select([next]);
+    this.cameraFollow = true;
+  }
+
+  // ---- direct control (keys) -------------------------------------------------------------------
+
+  /**
+   * The held direction changed (W A S D / arrows; 0, 0 = all let go). Sends one `drive` order to the
+   * selection; the first movement key after the how-to card starts the battle.
+   */
+  drive(dx: DriveStep, dy: DriveStep, run = false): void {
+    const cur = this.driveDir;
+    if (dx === 0 && dy === 0) {
+      if (cur === null) return;
+      this.driveDir = null;
+      if (this.driven.length > 0) this.give({ kind: 'drive', squads: this.driven, dx: 0, dy: 0 }, (id) => this.planHalt(id));
+      this.driven = [];
+      this.changed();
+      return;
+    }
+    if (cur && cur.dx === dx && cur.dy === dy && cur.run === run) return;
+    this.driveDir = { dx, dy, run };
+    const squads = this.selectedSquads().map((s) => s.id);
+    if (squads.length === 0) {
+      if (cur === null) this.say('battleView.notice.selectFirst');
+      return;
+    }
+    this.sendDrive(squads);
+    this.cameraFollow = true;
+    if (!this.started && this.paused) this.setPaused(false);
+  }
+
+  /** Lets go of every held key (a card opened, the window lost focus). */
+  stopDriving(): void {
+    this.drive(0, 0);
+    this.aiming = null;
+  }
+
+  private sendDrive(squads: string[]): void {
+    const d = this.driveDir;
+    if (!d) return;
+    const stale = this.driven.filter((id) => !squads.includes(id));
+    if (stale.length > 0) this.give({ kind: 'drive', squads: stale, dx: 0, dy: 0 }, (id) => this.planHalt(id));
+    this.driven = squads;
+    if (squads.length === 0) return;
+    const k = d.dx !== 0 && d.dy !== 0 ? Math.SQRT1_2 : 1;
+    this.give({ kind: 'drive', squads, dx: d.dx, dy: d.dy, run: d.run }, (id) => {
+      const s = this.squad(id);
+      return s ? { kind: 'drive', x: s.x + d.dx * k * (s.hd + 4), y: s.y + d.dy * k * (s.hd + 4) } : null;
+    });
+  }
+
+  private planHalt(id: string): PlannedOrder | null {
+    const s = this.squad(id);
+    return s ? { kind: 'halt', x: s.x, y: s.y } : null;
+  }
+
+  /** While a direction is held, a new selection takes over the drive (the squads left out halt). */
+  private redrive(): void {
+    if (!this.driveDir) return;
+    this.sendDrive(this.selectedSquads().map((s) => s.id));
+  }
+
+  /**
+   * Space pressed: melee squads in the selection charge the nearest enemy ahead of them (the charge
+   * ability, with its cooldown); archers start drawing an aimed volley (loosed by `attackUp`).
+   */
+  attackDown(): void {
+    const sel = this.selectedSquads();
+    if (sel.length === 0) return this.say('battleView.notice.selectFirst');
+    if (this.aiming) return;
+    const archers: string[] = [];
+    let charged = 0;
+    let cooling = false;
+    let noFoe = false;
+    const wallCharges = this.content.balance.battle.formations.shieldWall.canCharge;
+    for (const s of sel) {
+      if (s.abilities.includes('volley') && s.range > 0) {
+        if ((s.cooldowns.volley ?? 0) > 0) cooling = true;
+        else archers.push(s.id);
+        continue;
+      }
+      if (!s.abilities.includes('charge') || (s.formation === 'shieldWall' && !wallCharges)) continue;
+      if ((s.cooldowns.charge ?? 0) > 0) {
+        cooling = true;
+        continue;
+      }
+      const bs = this.engine.state.squads.find((q) => q.id === s.id);
+      const foe = bs ? enemyAhead(this.engine.state, bs) : undefined;
+      if (!foe) {
+        noFoe = true;
+        continue;
+      }
+      charged++;
+      this.give({ kind: 'ability', squad: s.id, ability: 'charge', ahead: true }, () => ({ kind: 'attack', x: foe.x, y: foe.y, target: foe.id }));
+    }
+    if (archers.length > 0) {
+      this.aiming = { since: this.realTime, squads: archers };
+      this.changed();
+    }
+    if (charged === 0 && archers.length === 0) this.say(noFoe ? 'battleView.notice.noFoeAhead' : cooling ? 'battle.orderError.cooldown' : 'battleView.notice.noAttack');
+  }
+
+  /** Space let go: the drawing archers loose where their aim markers stand. */
+  attackUp(): void {
+    if (!this.aiming) return;
+    const marks = this.aimView();
+    this.aiming = null;
+    for (const m of marks) this.give({ kind: 'ability', squad: m.id, ability: 'volley', x: m.x, y: m.y, fire: true }, () => ({ kind: 'volley', x: m.x, y: m.y }));
+    this.changed();
+  }
+
+  /** How far in front of its footprint an archer squad's aim marker stands now (tiles). */
+  aimGap(s: SquadView): number {
+    const d = this.content.tunables.battle.drive;
+    const far = Math.max(0, s.range - 0.1);
+    const near = Math.min(d.aimMinTiles, far);
+    const p = this.aiming ? Math.max(0, this.realTime - this.aiming.since) / d.aimSweepS : 0;
+    const ph = p % 2;
+    return near + (far - near) * (ph <= 1 ? ph : 2 - ph);
+  }
+
+  /** The aim markers of the archers drawing now (empty when Space is not held). */
+  aimView(): AimView[] {
+    const a = this.aiming;
+    if (!a) return [];
+    const d = this.content.tunables.battle.drive;
+    const out: AimView[] = [];
+    for (const id of a.squads) {
+      const s = this.squad(id);
+      if (!s || s.status !== 'active') continue;
+      const fx = Math.cos(s.facing);
+      const fy = Math.sin(s.facing);
+      const far = Math.max(0, s.range - 0.1);
+      const near = Math.min(d.aimMinTiles, far);
+      const g = this.aimGap(s);
+      out.push({ id, x: s.x + fx * (s.hd + g), y: s.y + fy * (s.hd + g), nearX: s.x + fx * (s.hd + near), nearY: s.y + fy * (s.hd + near), farX: s.x + fx * (s.hd + far), farY: s.y + fy * (s.hd + far) });
+    }
+    return out;
+  }
+
+  /** Where the camera should look: the driven squads, else the selection (null when there are none). */
+  followPoint(): [number, number] | null {
+    const ids = this.driveDir && this.driven.length > 0 ? this.driven : this.selected;
+    let x = 0;
+    let y = 0;
+    let n = 0;
+    for (const id of ids) {
+      const s = this.squad(id);
+      if (!s || s.side !== this.side) continue;
+      x += s.x;
+      y += s.y;
+      n++;
+    }
+    return n > 0 ? [x / n, y / n] : null;
+  }
+
+  /** C: the camera goes back to the squads (and follows them again). */
+  recentre(): void {
+    this.cameraFollow = true;
+    this.changed();
+  }
+
+  /** Looking around with the mouse (or jumping to a spot) stops the camera following. */
+  setFollow(on: boolean): void {
+    this.cameraFollow = on;
   }
 
   // ---- orders ----------------------------------------------------------------------------------
@@ -624,6 +847,7 @@ export class BattleController {
   /** Hands the player's side to the battle AI and fights the rest out quickly. */
   letCaptainsFinish(): void {
     if (this.engine.status === 'ended') return;
+    this.stopDriving();
     this.captains = createDefaultBattleAi(this.engine.state, this.sideIdx());
     this.fastForward = true;
     this.paused = false;

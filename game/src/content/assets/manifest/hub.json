@@ -1,1 +1,122 @@
-{}
+{
+  "hub.interior.greatHall": {
+    "kind": "image",
+    "path": "hub/interior-great-hall.jpg",
+    "size": [
+      1600,
+      900
+    ],
+    "placeholder": {
+      "generator": "interior",
+      "params": {
+        "kind": "greatHall"
+      },
+      "label": "Inside the Great Hall: looking down the hall to the hirdmaster on the high seat (centre), the steward by an open chest (left foreground), the lawspeaker with a staff (right foreground). Each person whole, with clear space around them."
+    }
+  },
+  "hub.interior.smithy": {
+    "kind": "image",
+    "path": "hub/interior-smithy.jpg",
+    "size": [
+      1600,
+      900
+    ],
+    "placeholder": {
+      "generator": "interior",
+      "params": {
+        "kind": "smithy"
+      },
+      "label": "The Smithy: the smith at his anvil under an open-sided shelter (centre), the forge glowing behind, the village, fjord and mountains beyond."
+    }
+  },
+  "hub.interior.shipyard": {
+    "kind": "image",
+    "path": "hub/interior-shipyard.jpg",
+    "size": [
+      1600,
+      900
+    ],
+    "placeholder": {
+      "generator": "interior",
+      "params": {
+        "kind": "shipyard"
+      },
+      "label": "The Shipyard: a half-planked hull on stocks on the strand, the master shipwright in front of it (right foreground), finished ships and a boat shed at the left."
+    }
+  },
+  "hub.interior.market": {
+    "kind": "image",
+    "path": "hub/interior-market.jpg",
+    "size": [
+      1600,
+      900
+    ],
+    "placeholder": {
+      "generator": "interior",
+      "params": {
+        "kind": "market"
+      },
+      "label": "The Market: a merchant standing beside his trestle table in an awning-roofed booth, goods around him, a trading ship at the jetty behind."
+    }
+  },
+  "hub.interior.meadHall": {
+    "kind": "image",
+    "path": "hub/interior-mead-hall.jpg",
+    "size": [
+      1600,
+      900
+    ],
+    "placeholder": {
+      "generator": "interior",
+      "params": {
+        "kind": "meadHall"
+      },
+      "label": "Inside the Mead-hall by firelight: the hall-keeper by the ale vat (right foreground), two travellers at a bench (left), hired fighters in the shadows (centre back)."
+    }
+  },
+  "hub.interior.longhouse": {
+    "kind": "image",
+    "path": "hub/interior-longhouse.jpg",
+    "size": [
+      1600,
+      900
+    ],
+    "placeholder": {
+      "generator": "interior",
+      "params": {
+        "kind": "longhouse"
+      },
+      "label": "Inside the family Longhouse: hearth, sleeping benches, a loom, a hound; an elder of the household standing by the fire (centre)."
+    }
+  },
+  "hub.interior.seer": {
+    "kind": "image",
+    "path": "hub/interior-seer.jpg",
+    "size": [
+      1600,
+      900
+    ],
+    "placeholder": {
+      "generator": "interior",
+      "params": {
+        "kind": "seerHut"
+      },
+      "label": "Inside the Seer's hut: dark turf walls, embers, hanging herbs; the seer seated beside her table with a staff (centre)."
+    }
+  },
+  "hub.interior.grove": {
+    "kind": "image",
+    "path": "hub/interior-grove.jpg",
+    "size": [
+      1600,
+      900
+    ],
+    "placeholder": {
+      "generator": "interior",
+      "params": {
+        "kind": "grove"
+      },
+      "label": "The Sacred Grove on a misty morning: old trees, seven carved god-posts, a flat altar stone; the grove-keeper standing at the right."
+    }
+  }
+}

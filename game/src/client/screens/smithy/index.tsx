@@ -1,12 +1,14 @@
 /**
- * The Smithy (route 'building.smithy'), laid out by ARCHITECTURE §20 as two big cards, armour and weapons:
- * what the men carry now, what the next step gives in words, its cost and one button (`upgradeArmoury`,
- * priced and checked by the military module's `upgradePreview`), disabled with the reason. Behind Details:
- * how the cost is reckoned (work, per man, iron), what the Smithy can forge, the recruit bounty note and the
- * table of every tier. The client decides nothing.
+ * The Smithy (route 'building.smithy'): entering it shows the smith's open-sided work-shelter
+ * (render/interiors/rooms/smithy.tsx). Clicking the smith opens his panel with everything the Smithy offers,
+ * laid out by ARCHITECTURE §20 as two big cards, armour and weapons: what the men carry now, what the next step
+ * gives in words, its cost and one button (`upgradeArmoury`, priced and checked by the military module's
+ * `upgradePreview`), disabled with the reason. Behind Details: how the cost is reckoned (work, per man, iron),
+ * what the Smithy can forge, the recruit bounty note and the table of every tier. The client decides nothing.
+ * Route params `{ person: 'smith' }` open his panel at once.
  *
- * Test ids: smithy, smithy-close, smithy-armour, smithy-weapons, upgrade-<track>, upgrade-<track>-why,
- * smithy-cost-<track>, smithy-details, smithy-tiers.
+ * Test ids: smithy (the room's picture), smithy-work, smithy-armour, smithy-weapons, upgrade-<track>,
+ * upgrade-<track>-why, smithy-cost-<track>, smithy-details, smithy-tiers.
  */
 import type { ReactElement } from 'react';
 import type { Content } from '@content/index';
@@ -22,8 +24,11 @@ import { loadContent } from '../../app/content';
 import { useGame } from '../../app/gameStore';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatNumber, t as tr, tOr, useT } from '../../i18n/index';
+import { InteriorRoom, useRoutePerson } from '../../render/interiors/index';
+import { smithyRoom } from '../../render/interiors/rooms/smithy';
+import { ambienceOf } from '../../render/scenes/ambience';
 import { Button, Disclosure, Icon, type IconName } from '../../ui/index';
-import { BuildingFrame, WhyNot } from '../hub/BuildingFrame';
+import { WhyNot } from '../hub/BuildingFrame';
 import { capitalOf } from '../hub/counsel';
 import './smithy.css';
 
@@ -192,47 +197,61 @@ function Details({ state, content, previews, tier }: { state: GameState; content
   );
 }
 
-/** The Smithy for a state (exported for tests). */
-export function Smithy({ state, onClose }: { state: GameState; onClose(): void }): ReactElement {
+/** Everything the Smithy offers (the smith's panel): the line on what it can forge, two cards, Details. */
+export function SmithWork({ state }: { state: GameState }): ReactElement | null {
   const t = useT();
   const loaded = loadContent();
   const content = loaded.ok ? loaded.content : null;
   const capital = capitalOf(state);
   const tier = buildingTier(capital, 'smithy');
-  const previews = content && capital ? TRACKS.map((track) => upgradePreview(state, content, { track, holdingId: capital.id })) : [];
+  if (!content || !capital) return null;
+  const previews = TRACKS.map((track) => upgradePreview(state, content, { track, holdingId: capital.id }));
   // One gold button: the first upgrade the smiths can do now.
   const primary = previews.find((p) => p.ok)?.track;
   return (
-    <BuildingFrame
-      title={t('military.ui.smithy.title')}
-      subtitle={capital && content ? t('military.ui.smithy.subtitle', { place: capital.name, tier, max: smithyMax(content, tier) }) : undefined}
-      onClose={onClose}
-      testId="smithy"
-      className="smy-frame"
-    >
-      {content && capital && (
-        <div className="smy-screen">
-          <div className="smy-cards">
-            {previews.map((p) => (
-              <TrackCard key={p.track} state={state} content={content} track={p.track} preview={p} primary={p.track === primary} />
-            ))}
-          </div>
-          <Details state={state} content={content} previews={previews} tier={tier} />
-        </div>
-      )}
-    </BuildingFrame>
+    <div className="smy-screen" data-testid="smithy-work">
+      <p className="smy-forges">{t('military.ui.smithy.subtitle', { place: capital.name, tier, max: smithyMax(content, tier) })}</p>
+      <div className="smy-cards">
+        {previews.map((p) => (
+          <TrackCard key={p.track} state={state} content={content} track={p.track} preview={p} primary={p.track === primary} />
+        ))}
+      </div>
+      <Details state={state} content={content} previews={previews} tier={tier} />
+    </div>
   );
 }
 
-function SmithyScreen({ close }: ScreenProps): ReactElement {
+/**
+ * The Smithy for a state (exported for tests): the work-shelter with the smith in it; his panel open when
+ * `person` (controlled) or `initialPerson` says so.
+ */
+export function Smithy({ state, onClose, person, initialPerson, onPersonChange }: { state: GameState; onClose(): void; person?: string | null; initialPerson?: 'smith'; onPersonChange?(id: string | null): void }): ReactElement {
+  const t = useT();
+  const capital = capitalOf(state);
+  return (
+    <InteriorRoom
+      room={smithyRoom}
+      ambience={ambienceOf(state)}
+      subtitle={capital ? t('hub.interior.at', { place: capital.name }) : undefined}
+      {...(person !== undefined ? { person } : { initialPerson: initialPerson ?? null })}
+      onPersonChange={onPersonChange}
+      stageTestId="smithy"
+      onLeave={onClose}
+      panel={() => <SmithWork state={state} />}
+    />
+  );
+}
+
+function SmithyScreen({ params, close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  const [person, setPerson] = useRoutePerson(smithyRoom, ['building.smithy'], params);
   if (!state) return <div />;
-  return <Smithy state={state} onClose={close} />;
+  return <Smithy state={state} person={person} onPersonChange={setPerson} onClose={close} />;
 }
 
 export const screen: ScreenDescriptor = {
   id: 'smithy',
-  route: 'building.smithy',
+  route: 'building.smithy', staysUnder: true,
   component: SmithyScreen,
   layout: 'overlay',
   titleKey: 'military.ui.smithy.title',

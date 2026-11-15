@@ -3,16 +3,19 @@
  *   world layer (camera transform): open water beyond the arena and the baked arena (shoals, shores,
  *     islands, rocks);
  *   screen layer (redrawn every frame): swell crests and wind streaks moving downwind, wakes, the
- *     ships (hull, shields, sail, oars, crew, flags, damage), smoke, grapnel lines, arrows in flight,
- *     rams and sinkings, order lines, selection rings, hull bars, the selection box;
+ *     ships (hull, shields, sail, oars, crew, flags, damage), the gold ring of the ship at the
+ *     player's helm, smoke, grapnel lines, arrows in flight, rams and sinkings, order lines, selection
+ *     rings, hull bars, the bowshot rail and the aim marker off the steered ship's side, the player's
+ *     volleys in flight and where they will fall, the selection box;
  *   label layer: ship numbers and names, floating captions.
- * The camera follows the fight by itself (framing every ship still afloat) until the player pans or
- * zooms; C (or the HUD) gives it back. The view reads the battle through `SeaViewSource` (the scene's
- * controller) and reports pointer input through `SeaViewInput`; it never orders the engine itself.
+ * The camera follows the ship the player steers (with the nearest enemy in frame when close) until
+ * the player drags or zooms; C (or the HUD) gives it back. Without a helm it frames the fight. The
+ * view reads the battle through `SeaViewSource` (the scene's controller) and reports pointer input
+ * through `SeaViewInput`; it never orders the engine itself.
  */
 import { Application, Container, Graphics, Sprite, Text, Texture, type TextStyleOptions } from 'pixi.js';
-import type { SeaFx } from '../../screens/seaBattle/controller';
-import type { SeaRenderState, SeaShipView, SeaSideKey } from '@sim/seabattle/index';
+import type { SeaAim, SeaAimConfig, SeaFx, SeaVolleyState } from '../../screens/seaBattle/controller';
+import type { SeaBroadside, SeaRenderState, SeaShipView, SeaSideKey } from '@sim/seabattle/index';
 import { clampSeaCamera, easeCamera, frameRect, minSeaScale, shipInflation, toScreen, toWorld, zoomAround, type SeaCamera, type SeaInsets, type SeaViewport } from './camera';
 import { FX, hash01, SEA, SIDE, type SidePalette } from './palette';
 import { drawRope, drawShip, drawSmoke, forwardOf, halfBeam, hullKind } from './ships';
@@ -28,6 +31,12 @@ export interface SeaViewSource {
   readonly sunkAt: Readonly<Record<number, number>>;
   readonly realTime: number;
   readonly fastForward: boolean;
+  /** The aim marker while the player draws (Space held), else null. */
+  readonly aim: SeaAim | null;
+  readonly aimCfg: SeaAimConfig;
+  /** What the steered ship's bows can do now, and the side facing the nearest enemy. */
+  volleyState(): SeaVolleyState;
+  aimSide(): SeaBroadside;
 }
 
 /** Pointer input in world (metre) coordinates; `tolM` and `inflate` describe the pick area. */
@@ -197,6 +206,38 @@ export class SeaView {
       const pad = 45;
       return frameRect(this.view, this.insets, x0 - pad, y0 - pad, x1 + pad, y1 + pad, snap.arena.sizeM, 5.5, 150);
     }
+    // The ship at the player's helm: her bowshot all round, a little ahead of her, and the nearest
+    // enemy too when it is close enough to fight.
+    const helm = snap.helm >= 0 ? snap.ships[snap.helm] : undefined;
+    if (helm && helm.status === 'active' && !this.src.fastForward) {
+      const [hx, hy, hh] = this.pose(helm);
+      const [fx, fy] = forwardOf(hh);
+      const lead = helm.speedMs * 4;
+      const R = this.src.aimCfg.maxRangeM + 25;
+      const cx = hx + fx * lead;
+      const cy = hy + fy * lead;
+      let ax = cx - R;
+      let ay = cy - R;
+      let bx = cx + R;
+      let by = cy + R;
+      let near: SeaShipView | undefined;
+      let nearD = 360;
+      for (const s of snap.ships) {
+        if (s.side === this.src.side || s.status !== 'active') continue;
+        const d = Math.hypot(s.x - hx, s.y - hy);
+        if (d < nearD) {
+          nearD = d;
+          near = s;
+        }
+      }
+      if (near) {
+        ax = Math.min(ax, near.x - 40);
+        ay = Math.min(ay, near.y - 40);
+        bx = Math.max(bx, near.x + 40);
+        by = Math.max(by, near.y + 40);
+      }
+      return frameRect(this.view, this.insets, ax, ay, bx, by, snap.arena.sizeM, 3.6, 2 * R);
+    }
     // The action around the player's fleet: ships far from it (a runaway, a distant straggler) do not
     // pull the camera out.
     let fx = 0;
@@ -230,7 +271,8 @@ export class SeaView {
     this.lastFrame = now;
     this.input.frame(dt);
     if (!this.app || this.destroyed) return;
-    if (this.following && !this.drag) this.cam = easeCamera(this.cam, this.followTarget(), dt, this.src.fastForward ? 4 : 1.6);
+    const helmCam = this.src.snap.helm >= 0 && !this.src.fastForward;
+    if (this.following && !this.drag) this.cam = easeCamera(this.cam, this.followTarget(), dt, this.src.fastForward ? 4 : helmCam ? 2.6 : 1.6);
     this.draw();
   }
 
@@ -322,6 +364,7 @@ export class SeaView {
         }
         sinking = age / 5;
       }
+      if (s.isHelm && s.status === 'active') this.drawHelmRing(g, s, X, Y, h, k, t);
       if (selected.has(s.idx) || this.hover === s.idx) this.drawRing(g, s, X, Y, h, k, selected.has(s.idx) ? FX.select : s.side === src.side ? FX.hover : FX.attack);
       const board = boardersOn[s.idx];
       const ctx = {
@@ -372,6 +415,9 @@ export class SeaView {
     this.drawOrders(g, snap, poses, selected, k);
     this.drawEffects(g, snap, poses, t, k);
     this.drawBars(g, snap, poses, selected, k);
+    this.drawAim(g, snap, poses, t);
+    this.drawShots(g, snap, t);
+    this.drawPointers(g, snap, poses);
 
     if (this.box) {
       const [x0, y0, x1, y1] = this.box;
@@ -487,6 +533,156 @@ export class SeaView {
     g.poly(pts).fill({ color, alpha: 0.08 }).stroke({ width: 2, color, alpha: 0.95 });
   }
 
+  /** The ship at the player's helm: a gold ring that breathes a little, and a chevron off her bow. */
+  private drawHelmRing(g: Graphics, s: SeaShipView, X: number, Y: number, h: number, k: number, t: number): void {
+    const [fx, fy] = forwardOf(h);
+    const rx = -fy;
+    const ry = fx;
+    const pulse = 1 + 0.05 * Math.sin(t * 3);
+    const a = ((s.lengthM / 2) * k + 13) * pulse;
+    const b = ((s.beamM / 2) * k * 1.4 + 13) * pulse;
+    const pts: number[] = [];
+    for (let i = 0; i < 32; i++) {
+      const th = (i / 32) * Math.PI * 2;
+      const u = Math.cos(th) * a;
+      const v = Math.sin(th) * b;
+      pts.push(X + fx * u + rx * v, Y + fy * u + ry * v);
+    }
+    g.poly(pts).fill({ color: FX.helm, alpha: 0.1 }).stroke({ width: 3, color: FX.helm, alpha: 0.95 });
+    // A chevron ahead of the bow shows which way she points.
+    const tip = a + 14;
+    const cx = X + fx * tip;
+    const cy = Y + fy * tip;
+    g.poly([cx + fx * 9, cy + fy * 9, cx - fx * 3 + rx * 8, cy - fy * 3 + ry * 8, cx - fx * 3 - rx * 8, cy - fy * 3 - ry * 8]).fill({ color: FX.helm, alpha: 0.95 });
+  }
+
+  /**
+   * Off the steered ship's side facing the enemy: a faint rail from the shortest to the longest
+   * bowshot while the bows are ready, and while Space is held the aim marker running along it (a
+   * circle the size of the fall of shot, true to scale).
+   */
+  private drawAim(g: Graphics, snap: SeaRenderState, poses: Record<number, [number, number, number]>, t: number): void {
+    const src = this.src;
+    const helm = snap.helm >= 0 ? snap.ships[snap.helm] : undefined;
+    if (!helm || helm.status !== 'active' || src.fastForward || snap.status !== 'running') return;
+    const aim = src.aim;
+    const state = src.volleyState();
+    if (!aim && state !== 'ready') return;
+    const pose = poses[helm.idx];
+    if (!pose) return;
+    const side = aim ? aim.side : src.aimSide();
+    const [fx, fy] = forwardOf(pose[2]);
+    const [ux, uy] = side === 'starboard' ? [-fy, fx] : [fy, -fx];
+    const cfg = src.aimCfg;
+    const S = this.cam.scale;
+    const at = (r: number) => this.sx(pose[0] + ux * r, pose[1] + uy * r);
+    const [ax, ay] = at(cfg.minRangeM);
+    const [bx, by] = at(cfg.maxRangeM);
+    const railA = aim ? 0.75 : 0.4 + 0.15 * Math.sin(t * 4);
+    this.dashed(g, ax, ay, bx, by, FX.shoot, aim ? 2.4 : 1.8, railA);
+    // Ticks every 20 m across the rail, and a bar at each end.
+    const tx = -uy;
+    const ty = ux;
+    for (let r = cfg.minRangeM; r <= cfg.maxRangeM + 1e-6; r += 20) {
+      const [px, py] = at(r);
+      const w = r === cfg.minRangeM || r + 20 > cfg.maxRangeM ? 9 : 5;
+      g.moveTo(px - tx * w, py - ty * w).lineTo(px + tx * w, py + ty * w).stroke({ width: 1.6, color: FX.shoot, alpha: railA });
+    }
+    if (!aim) return;
+    const [mx, my] = at(aim.rangeM);
+    const rad = Math.max(10, cfg.fallRadiusM * S);
+    const [sx, sy] = at(0);
+    g.moveTo(sx, sy).lineTo(mx, my).stroke({ width: 2, color: FX.shoot, alpha: 0.55 });
+    g.circle(mx, my, rad).fill({ color: FX.shoot, alpha: 0.18 }).stroke({ width: 3, color: FX.aim, alpha: 0.95 });
+    g.circle(mx, my, rad * 0.45).stroke({ width: 1.5, color: FX.aim, alpha: 0.8 });
+    g.moveTo(mx - rad * 1.25, my).lineTo(mx - rad * 0.6, my).moveTo(mx + rad * 0.6, my).lineTo(mx + rad * 1.25, my);
+    g.moveTo(mx, my - rad * 1.25).lineTo(mx, my - rad * 0.6).moveTo(mx, my + rad * 0.6).lineTo(mx, my + rad * 1.25);
+    g.stroke({ width: 2, color: FX.aim, alpha: 0.95 });
+  }
+
+  /**
+   * Ships out of view: a pointer at the edge of the free screen, red for enemies (larger the nearer
+   * they are), small and blue for the player's own, so the helmsman always knows where to steer.
+   */
+  private drawPointers(g: Graphics, snap: SeaRenderState, poses: Record<number, [number, number, number]>): void {
+    if (this.src.fastForward || snap.status === 'ended') return;
+    const W = this.view.width;
+    const H = this.view.height;
+    const left = 26;
+    const right = W - 26;
+    const top = this.insets.top + 34;
+    const bottom = H - 26;
+    const cx = W / 2;
+    const cy = H / 2;
+    const helm = snap.helm >= 0 ? snap.ships[snap.helm] : undefined;
+    for (const s of snap.ships) {
+      if (s.status !== 'active') continue;
+      const p = poses[s.idx];
+      if (!p) continue;
+      const [X, Y] = this.sx(p[0], p[1]);
+      if (X >= 0 && X <= W && Y >= this.insets.top && Y <= H) continue;
+      const dx = X - cx;
+      const dy = Y - cy;
+      // Where the line from the centre leaves the free rectangle.
+      const kx = dx > 0 ? (right - cx) / dx : dx < 0 ? (left - cx) / dx : Infinity;
+      const ky = dy > 0 ? (bottom - cy) / dy : dy < 0 ? (top - cy) / dy : Infinity;
+      const k = Math.min(kx, ky);
+      if (!Number.isFinite(k) || k <= 0) continue;
+      const px = cx + dx * k;
+      const py = cy + dy * k;
+      const l = Math.max(1e-6, Math.hypot(dx, dy));
+      const ux = dx / l;
+      const uy = dy / l;
+      const foe = s.side !== this.src.side;
+      const dist = helm ? Math.hypot(p[0] - helm.x, p[1] - helm.y) : 600;
+      const size = foe ? 11 + 9 * Math.max(0, Math.min(1, 1 - dist / 900)) : 8;
+      const color = foe ? SIDE.enemy.fill : SIDE.player.fill;
+      const tip = [px + ux * size, py + uy * size];
+      const b1 = [px - ux * size * 0.6 - uy * size * 0.75, py - uy * size * 0.6 + ux * size * 0.75];
+      const b2 = [px - ux * size * 0.6 + uy * size * 0.75, py - uy * size * 0.6 - ux * size * 0.75];
+      g.poly([tip[0]!, tip[1]!, b1[0]!, b1[1]!, b2[0]!, b2[1]!])
+        .fill({ color, alpha: foe ? 0.95 : 0.7 })
+        .stroke({ width: 2, color: 0x0b0806, alpha: 0.8 });
+    }
+  }
+
+  /** The player's volleys in flight: a sheaf of arrows arcing out, and a ring where they will fall. */
+  private drawShots(g: Graphics, snap: SeaRenderState, t: number): void {
+    if (snap.shots.length === 0) return;
+    const a = snap.status === 'running' ? this.src.alpha : 1;
+    const now = snap.timeS - snap.stepS * (1 - a);
+    const S = this.cam.scale;
+    const rad = Math.max(8, this.src.aimCfg.fallRadiusM * S);
+    for (const [n, shot] of snap.shots.entries()) {
+      const span = Math.max(1e-6, shot.landT - shot.firedT);
+      const p = Math.max(0, Math.min(1, (now - shot.firedT) / span));
+      const [x0, y0] = this.sx(shot.fromX, shot.fromY);
+      const [x1, y1] = this.sx(shot.x, shot.y);
+      const d = Math.hypot(x1 - x0, y1 - y0);
+      const nx = -(y1 - y0) / Math.max(1, d);
+      const ny = (x1 - x0) / Math.max(1, d);
+      // Where they will come down.
+      g.circle(x1, y1, rad).stroke({ width: 2, color: shot.fire ? FX.fire : FX.shoot, alpha: 0.35 + 0.35 * p });
+      for (let i = 0; i < 11; i++) {
+        const q = Math.max(0, Math.min(1, p - (hash01(n, i, 5) - 0.5) * 0.08));
+        const jx = (hash01(n + 17, i, 1) - 0.5) * 2 * rad * q;
+        const jy = (hash01(n + 17, i, 2) - 0.5) * 2 * rad * q;
+        const arc = Math.sin(q * Math.PI) * d * 0.16;
+        const x = x0 + (x1 - x0) * q + nx * arc + jx;
+        const y = y0 + (y1 - y0) * q + ny * arc + jy;
+        const vx = x1 - x0 + nx * Math.cos(q * Math.PI) * d * 0.5;
+        const vy = y1 - y0 + ny * Math.cos(q * Math.PI) * d * 0.5;
+        const vl = Math.max(1e-6, Math.hypot(vx, vy));
+        const L = Math.max(7, 2.4 * S);
+        g.moveTo(x - (vx / vl) * L, y - (vy / vl) * L)
+          .lineTo(x, y)
+          .stroke({ width: shot.fire ? 2.4 : 1.7, color: shot.fire ? FX.fire : FX.arrow, alpha: 0.95 });
+        if (shot.fire) g.circle(x, y, 2.6 + Math.sin(t * 20 + i)).fill({ color: FX.fireCore, alpha: 0.95 });
+        else g.circle(x - (vx / vl) * L, y - (vy / vl) * L, 1.3).fill({ color: 0xf0e8d8, alpha: 0.9 });
+      }
+    }
+  }
+
   private dashed(g: Graphics, x0: number, y0: number, x1: number, y1: number, color: number, width: number, alpha: number): void {
     const d = Math.hypot(x1 - x0, y1 - y0);
     if (d < 1) return;
@@ -565,6 +761,19 @@ export class SeaView {
             g.circle(x, y, Math.max(1, r * 0.4)).stroke({ width: 1, color: SEA.foam, alpha: (1.3 - age) * 0.8 });
           }
         }
+      } else if (f.kind === 'fall' && age < 1.4) {
+        // The fall of shot: splashes across the circle, a red flash where men were struck.
+        const [X, Y] = this.sx(f.x, f.y);
+        const rad = Math.max(8, this.src.aimCfg.fallRadiusM * this.cam.scale);
+        const hit = (f.n ?? 0) > 0;
+        g.circle(X, Y, rad * (1 + age * 0.5)).stroke({ width: 2.5, color: hit ? FX.attack : SEA.foam, alpha: (1 - age / 1.4) * 0.8 });
+        for (let i = 0; i < 10; i++) {
+          const r = rad * Math.sqrt(hash01(f.id, i, 9));
+          const a = hash01(f.id, i, 10) * Math.PI * 2;
+          const sx = X + Math.cos(a) * r;
+          const sy = Y + Math.sin(a) * r;
+          g.circle(sx, sy, 1.5 + age * 6).stroke({ width: 1.2, color: SEA.foam, alpha: (1 - age / 1.4) * 0.75 });
+        }
       } else if (f.kind === 'ram' && age < 1.6) {
         const p = poses[f.to ?? -1];
         const [X, Y] = p ? this.sx(p[0], p[1]) : this.sx(f.x, f.y);
@@ -630,7 +839,7 @@ export class SeaView {
     for (const s of snap.ships) {
       if (s.status !== 'active' && s.status !== 'struck') continue;
       const own = s.side === this.src.side;
-      const showName = selected.has(s.idx) || this.hover === s.idx;
+      const showName = selected.has(s.idx) || this.hover === s.idx || (s.isHelm && s.status === 'active');
       const num = own ? roster.indexOf(s) + 1 : 0;
       if (!own && !showName) continue;
       live.add(s.idx);

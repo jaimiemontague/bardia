@@ -2,8 +2,9 @@ import { expect, test, type Page } from '@playwright/test';
 
 /**
  * The household screens through the real UI: quick start, then the character sheet, the family,
- * the chronicle (top bar), and the longhouse, rune-seer and grove (hub hotspots). Each screen is
- * opened, checked for its core content, screenshotted into the output folder and closed.
+ * the chronicle (top bar), and the longhouse, rune-seer and grove (hub hotspots; each is a room, and
+ * its menu is behind the one person in it). Each screen is opened, checked for its core content,
+ * screenshotted into the output folder and closed.
  */
 
 const OUT = process.env.BARDIA_E2E_OUT ?? 'test-results';
@@ -79,15 +80,18 @@ test('longhouse, rune-seer and grove open from the hub and act on the saga', asy
 
   await openHotspot(page, 'longhouse');
   await expect(page.getByTestId('longhouse')).toBeVisible();
+  await page.getByTestId('interior-person-houseElder').click();
   await expect(page.getByTestId('longhouse-summary')).toBeVisible();
   await page.getByTestId('office-envoy').click();
   await expect(page.getByTestId('longhouse-focus')).toHaveAttribute('data-office', 'envoy');
   await page.waitForTimeout(600); // let the overlay finish fading in
   await page.screenshot({ path: `${OUT}/longhouse.png` });
-  await page.getByTestId('longhouse-close').click();
+  await page.getByTestId('interior-leave').click();
+  await expect(page.getByTestId('longhouse')).toHaveCount(0);
 
   await openHotspot(page, 'seer');
   await expect(page.getByTestId('seer')).toBeVisible();
+  await page.getByTestId('interior-person-seer').click();
   const read = page.getByTestId('seer-read');
   if (await read.isEnabled()) {
     await read.click();
@@ -96,10 +100,12 @@ test('longhouse, rune-seer and grove open from the hub and act on the saga', asy
   }
   await page.waitForTimeout(600); // let the overlay finish fading in
   await page.screenshot({ path: `${OUT}/seer.png` });
-  await page.getByTestId('seer-close').click();
+  await page.getByTestId('interior-leave').click();
+  await expect(page.getByTestId('seer')).toHaveCount(0);
 
   await openHotspot(page, 'grove');
   await expect(page.getByTestId('grove')).toBeVisible();
+  await page.getByTestId('interior-person-groveKeeper').click();
   await page.getByTestId('god-select-dunnar').click();
   const offer = page.getByTestId('grove-sacrifice');
   if (await offer.isEnabled()) {
@@ -113,7 +119,8 @@ test('longhouse, rune-seer and grove open from the hub and act on the saga', asy
   }
   await page.waitForTimeout(600); // let the overlay finish fading in
   await page.screenshot({ path: `${OUT}/grove.png` });
-  await page.getByTestId('grove-close').click();
+  await page.getByTestId('interior-leave').click();
+  await expect(page.getByTestId('grove')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 

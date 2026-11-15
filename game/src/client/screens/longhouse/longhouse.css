@@ -1,27 +1,41 @@
-/* The Longhouse (route 'building.longhouse'): offices as cards, the chosen office on the right. */
+/* The House-elder's panel (inside the Longhouse room, render/interiors): one line on the hird, the offices as a
+   column of cards, the chosen office beside them. */
+.lh-work {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
 .lh-top {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--sp-3) var(--sp-4);
+  gap: var(--sp-2) var(--sp-3);
 }
 .lh-top > .hh-big {
   flex: 1 1 18rem;
 }
 .lh-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(19rem, 1fr);
-  gap: var(--sp-6);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: var(--sp-4);
   align-items: start;
 }
-@media (max-width: 900px) {
+@container (max-width: 40rem) {
   .lh-layout {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+.lh-offices {
+  gap: var(--sp-2);
+}
 .lh-offices .choice {
-  min-height: 5.6rem;
+  min-height: 4.4rem;
+  padding-top: var(--sp-2);
+  padding-bottom: var(--sp-2);
   padding-right: var(--sp-6);
+}
+.lh-offices .choice-line {
+  font-size: var(--fs-sm);
 }
 .lh-faces {
   display: inline-flex;
@@ -55,15 +69,27 @@
 }
 .lh-holder-name {
   flex: 1 1 auto;
+  min-width: 0;
   font-size: var(--fs-md);
   font-weight: 600;
 }
-.lh-candidates {
-  max-height: 22rem;
-  overflow-y: auto;
-  padding: 2px;
-}
+/* The chosen office fits the visible part of the panel (the room is the size container), so Appoint stays in
+   view: the list of candidates takes what is left and scrolls. */
 .lh-focus {
   position: sticky;
   top: 0;
+  max-height: calc(100cqh - var(--head-h) - 12.5rem);
+  min-height: 18rem;
+  overflow-y: auto;
+}
+.lh-candidates {
+  flex: 1 1 auto;
+  grid-auto-rows: max-content;
+  gap: var(--sp-2);
+  min-height: 5.6rem;
+  overflow-y: auto;
+  padding: 2px;
+}
+.lh-focus > .hh-actions {
+  flex: none;
 }

@@ -1,10 +1,16 @@
 /**
- * The Longhouse (hub building route 'building.longhouse'), laid out by ARCHITECTURE §20: one line on the hird
- * (who holds office, who sits idle, who is hurt), then each office as a card with its holders' portraits and one
- * line on what it does: steward, lieutenants, a governor per holding, a captain per fleet, envoy and seer.
- * Choosing an office brings it forward with its holders (each can be relieved) and the people who could take it
- * as portrait cards; pick one and Appoint (`assignRole`). Every choice is the real command tried first, so a
- * card the people module would refuse says why.
+ * The Longhouse (hub building route 'building.longhouse'): entering it shows the inside of the household's own
+ * hall (render/interiors/rooms/longhouse.tsx). Its menu waits behind one person, the House-elder on his carved
+ * chair by the hearth, who knows every man and woman of the hird. His panel is laid out by ARCHITECTURE §20: one
+ * line on the hird (who holds office, who sits idle, who is hurt), then each office as a card with its holders'
+ * portraits and one line on what it does: steward, lieutenants, a governor per holding, a captain per fleet, envoy
+ * and seer. Choosing an office brings it forward with its holders (each can be relieved) and the people who could
+ * take it as portrait cards; pick one and Appoint (`assignRole`). Every choice is the real command tried first, so
+ * a card the people module would refuse says why. Route params `{ person: 'houseElder' }` open his panel at once.
+ *
+ * Test ids: longhouse (the room's picture), longhouse-work, longhouse-summary, longhouse-to-seer,
+ * longhouse-to-family, office-<key>, seat-<key>, holder-<id>, relieve-<id>, assign-<id>, longhouse-focus,
+ * longhouse-appoint.
  */
 import { useState, type ReactElement } from 'react';
 import type { Command } from '@sim/core/commands';
@@ -13,6 +19,9 @@ import type { AssignableRole } from '@sim/modules/people/types';
 import { navigation } from '../../app/navigation';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { useT } from '../../i18n/index';
+import { InteriorRoom, useRoutePerson } from '../../render/interiors/index';
+import { longhouseRoom } from '../../render/interiors/rooms/longhouse';
+import { ambienceOf } from '../../render/scenes/ambience';
 import {
   Button,
   ChoiceCard,
@@ -33,7 +42,6 @@ import {
   reasonText,
   roleText,
   runCommand,
-  ScreenFrame,
   stageOf,
   tryCommand,
   useHousehold,
@@ -41,6 +49,7 @@ import {
   type Household,
   type Trial,
 } from '../character/household';
+import { capitalOf } from '../hub/counsel';
 import './longhouse.css';
 
 /** One seat: an office kind, and the holding or fleet it is tied to. */
@@ -325,7 +334,8 @@ function OfficeFocus({ h, o, people }: { h: Household; o: Office; people: Charac
   );
 }
 
-function LonghouseView({ h }: { h: Household }): ReactElement {
+/** The House-elder's panel: the line on the hird, the offices as cards and the chosen office. */
+export function LonghouseWork({ h }: { h: Household }): ReactElement {
   const t = useT();
   const [picked, setPicked] = useState<string | null>(null);
   const members = Object.values(h.state.characters).filter(
@@ -341,13 +351,17 @@ function LonghouseView({ h }: { h: Household }): ReactElement {
   const open = offices.filter((o) => !o.closed);
   const chosen = offices.find((o) => o.key === picked && !o.closed) ?? open[0];
   return (
-    <>
+    <div className="lh-work" data-testid="longhouse-work">
       <div className="lh-top">
         <p className="hh-big" data-testid="longhouse-summary">
           {t('people.ui.longhouse.summary', { officers: officers.length, idle, wounded })}
         </p>
         {wounded > 0 && (
-          <Button icon="eye" onClick={() => navigation.open('building.seer')} data-testid="longhouse-to-seer">
+          <Button
+            icon="eye"
+            onClick={() => navigation.open('building.seer', { person: 'seer', view: 'heal' })}
+            data-testid="longhouse-to-seer"
+          >
             {t('people.ui.longhouse.toSeer', { count: wounded })}
           </Button>
         )}
@@ -368,7 +382,7 @@ function LonghouseView({ h }: { h: Household }): ReactElement {
         </Empty>
       )}
       <div className="lh-layout">
-        <ChoiceGrid columns={2} className="lh-offices" label={t('people.ui.longhouse.offices')}>
+        <ChoiceGrid columns={1} className="lh-offices" label={t('people.ui.longhouse.offices')}>
           {offices.map((o) => (
             <OfficeCard
               key={o.key}
@@ -381,24 +395,53 @@ function LonghouseView({ h }: { h: Household }): ReactElement {
         </ChoiceGrid>
         {chosen && <OfficeFocus key={chosen.key} h={h} o={chosen} people={adults} />}
       </div>
-    </>
+    </div>
   );
 }
 
-function LonghouseScreen({ close }: ScreenProps): ReactElement {
+/**
+ * The Longhouse for a household (exported for tests): the room with the House-elder in it; his panel open when
+ * `person` (controlled) or `initialPerson` says so.
+ */
+export function Longhouse({
+  h,
+  onClose,
+  person,
+  initialPerson,
+  onPersonChange,
+}: {
+  h: Household;
+  onClose(): void;
+  person?: string | null;
+  initialPerson?: 'houseElder';
+  onPersonChange?(id: string | null): void;
+}): ReactElement {
   const t = useT();
-  const h = useHousehold();
-  if (!h) return <NoGame close={close} />;
+  const capital = capitalOf(h.state);
   return (
-    <ScreenFrame id="longhouse" title={t('ui.route.building.longhouse')} close={close}>
-      <LonghouseView h={h} />
-    </ScreenFrame>
+    <InteriorRoom
+      room={longhouseRoom}
+      ambience={ambienceOf(h.state)}
+      subtitle={capital ? t('people.interior.longhouse.subtitle', { place: capital.name }) : undefined}
+      {...(person !== undefined ? { person } : { initialPerson: initialPerson ?? null })}
+      onPersonChange={onPersonChange}
+      stageTestId="longhouse"
+      onLeave={onClose}
+      panel={() => <LonghouseWork h={h} />}
+    />
   );
+}
+
+function LonghouseScreen({ params, close }: ScreenProps): ReactElement {
+  const h = useHousehold();
+  const [person, setPerson] = useRoutePerson(longhouseRoom, ['building.longhouse'], params);
+  if (!h) return <NoGame close={close} />;
+  return <Longhouse h={h} person={person} onPersonChange={setPerson} onClose={close} />;
 }
 
 export const screen: ScreenDescriptor = {
   id: 'longhouse',
-  route: 'building.longhouse',
+  route: 'building.longhouse', staysUnder: true,
   component: LonghouseScreen,
   layout: 'overlay',
   titleKey: 'ui.route.building.longhouse',

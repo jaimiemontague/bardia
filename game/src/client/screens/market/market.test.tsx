@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 /**
- * The home Market against the full module registry: one good at a time through the two-sided slider between
+ * The home Market against the full module registry, as a room whose Merchant holds the whole market (the tests
+ * open his panel): one good at a time through the two-sided slider between
  * the house storehouse and the town's market (the treasury pays and is paid; every limit is the economy's own
  * quote), "Sell all loot" and "Buy provisions for the next voyage" with their confirm steps, where else a good
  * sells best, and trade routes (set and end one with a knarr).
@@ -18,6 +19,11 @@ import { useGame } from '../../app/gameStore';
 import { missingKeysSeen } from '../../i18n/index';
 import { resetClientState } from '../../testing/clientTestKit';
 import { knownMarkets, maxBuy, priceSignal } from '../settlement/knownMarkets';
+import { App } from '../../app/App';
+import { useNavigation } from '../../app/navigation';
+import { buildRegistry } from '../../app/screenRegistry';
+import * as hub from '../hub/index';
+import * as market from './index';
 import { HomeMarket, screen as descriptor } from './index';
 import { freeKnarrs } from './routes';
 
@@ -52,7 +58,7 @@ const treasury = () => state().factions[state().player.factionId]?.treasury ?? 0
 
 function Live(): ReactElement | null {
   const st = useGame((s) => s.state);
-  return st ? <HomeMarket state={st} onClose={() => {}} /> : null;
+  return st ? <HomeMarket state={st} initialPerson="merchant" onClose={() => {}} /> : null;
 }
 
 beforeEach(() => resetClientState());
@@ -101,8 +107,27 @@ describe('the home Market', () => {
     expect(treasury()).toBeGreaterThan(mid);
     cleanup();
     render(<HomeMarket state={state()} onClose={() => (closed = true)} />);
-    fireEvent.click(screen.getByTestId('market-close'));
+    fireEvent.click(screen.getByTestId('interior-leave'));
     expect(closed).toBe(true);
+  });
+
+  it('is a room: the Merchant among his goods, his panel the whole market, a route param opens it', () => {
+    act(() => useGame.getState().attach(GameSession.newGame({ seed: 'market-1' })));
+    render(<HomeMarket state={state()} onClose={() => {}} />);
+    expect(screen.getByTestId('interior-market')).toBeTruthy();
+    expect(screen.getByTestId('home-market')).toBeTruthy();
+    expect(screen.queryByTestId('interior-panel')).toBeNull();
+    expect(screen.queryByTestId('market')).toBeNull();
+    fireEvent.click(screen.getByTestId('interior-person-merchant'));
+    expect(screen.getByTestId('interior-panel').textContent).toContain('The Merchant');
+    expect(screen.getByTestId('market-work')).toBeTruthy();
+    expect(screen.getByTestId('quick-deals')).toBeTruthy();
+    expect(screen.getByTestId('market')).toBeTruthy();
+    cleanup();
+    render(<App registry={buildRegistry({ hub, market })} />);
+    act(() => useNavigation.getState().open('building.market', { person: 'merchant' }));
+    expect(screen.getByTestId('interior-panel').getAttribute('data-person')).toBe('merchant');
+    expect(screen.getByTestId('home-stores')).toBeTruthy();
   });
 
   it('stops buying at what the treasury can pay, and says why', () => {
@@ -158,7 +183,7 @@ describe('the home Market', () => {
   it('says where else the chosen good sells best', () => {
     act(() => useGame.getState().attach(GameSession.newGame({ seed: 'market-1' })));
     const known = knownMarkets(state(), getContent(), state().player.capitalId);
-    render(<HomeMarket state={state()} onClose={() => {}} />);
+    render(<HomeMarket state={state()} initialPerson="merchant" onClose={() => {}} />);
     fireEvent.click(screen.getByTestId('market-row-salt'));
     fireEvent.click(screen.getByTestId('market-elsewhere-toggle'));
     if (known.length === 0) expect(screen.getByTestId('known-empty')).toBeTruthy();
@@ -170,7 +195,7 @@ describe('the home Market', () => {
   it('says why no route can be opened without a knarr', () => {
     act(() => useGame.getState().attach(GameSession.newGame({ seed: 'market-1' })));
     if (freeKnarrs(state(), getContent()).length > 0) return;
-    render(<HomeMarket state={state()} onClose={() => {}} />);
+    render(<HomeMarket state={state()} initialPerson="merchant" onClose={() => {}} />);
     fireEvent.click(screen.getByTestId('market-view-routes'));
     expect(screen.getByTestId('routes-empty')).toBeTruthy();
     expect((screen.getByTestId('route-set') as HTMLButtonElement).disabled).toBe(true);

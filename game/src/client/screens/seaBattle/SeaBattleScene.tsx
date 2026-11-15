@@ -4,9 +4,12 @@
  * route; the host decides what the summary's button does (`onDone`) and what "leave" means in the
  * battle menu.
  *
- * Keys (read in the 'battle' input context, so they also work in a Skirmish outside a campaign):
- * Space pause, 1 to 9 ships, Ctrl+A every ship, H hold, C follow the fight, Esc the battle menu,
- * arrows pan, + and - zoom.
+ * Keys (owner play-test 2026-11-15; read in the 'battle' input context, so they also work in a
+ * Skirmish outside a campaign): W A S D or the arrows steer the ship at your helm (held), hold Space
+ * to draw and let go to loose over the side facing the enemy, G grapnels, 1 to 9 or Tab take the
+ * helm of another ship, P pause, Esc the battle menu, C follow your ship again, + and - zoom. The
+ * mouse still commands the other ships: click or Shift+1 to 9 to select, Ctrl+A every ship, right
+ * click to sail there or attack, H hold.
  */
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactElement, type ReactNode } from 'react';
 import { playSfx, useSfxLoop } from '../../audio/index';
@@ -14,11 +17,12 @@ import { getShortcutManager } from '../../app/inputRuntime';
 import { useDevFlags } from '../../app/devFlags';
 import { useNavigation } from '../../app/navigation';
 import { comboFromEvent, type InputContext } from '../../input/bindings';
+import { SteerKeys, STEER_CODES } from '../../input/steering';
 import { useT } from '../../i18n/index';
 import { SeaView } from '../../render/seaBattle/SeaView';
 import { Button } from '../../ui/index';
 import type { SeaController } from './controller';
-import { ConfirmWithdraw, DuelCard, FastForward, FleetBar, HowTo, PauseMenu, ShipCards, Summary, Ticker, TopBar } from './hud';
+import { ConfirmWithdraw, DuelCard, FastForward, FleetBar, HelmStrip, HowTo, PauseMenu, ShipCards, Summary, Ticker, TopBar } from './hud';
 import './seaBattle.css';
 
 const CONTEXTS: ReadonlySet<InputContext> = new Set<InputContext>(['global', 'battle']);
@@ -103,6 +107,49 @@ export function SeaBattleScene({ controller: c, title, nameOf, doneLabelKey, onD
   }, [ended]);
 
   const anyCard = howTo || menu || confirm || showSummary || (c.snap.duel !== null && !c.fastForward);
+  const blockedRef = useRef(false);
+  blockedRef.current = anyCard;
+
+  // The helm: held W A S D / arrows → one 'helm' input per change (input/steering.ts reports only changes).
+  const steer = useMemo(
+    () =>
+      new SteerKeys({
+        onChange: (dir) => c.setHelmDir(dir),
+        blocked: () => blockedRef.current || useNavigation.getState().stack.length > 0 || useDevFlags.getState().consoleOpen,
+      }),
+    [c],
+  );
+
+  // A card coming up lets go of the helm and lets the bows down.
+  useEffect(() => {
+    if (!anyCard) return;
+    steer.releaseAll();
+    c.cancelDraw();
+  }, [anyCard, steer, c]);
+
+  useEffect(() => {
+    const onKeyUp = (e: KeyboardEvent) => {
+      steer.keyUp(e);
+      if (e.code === 'Space') {
+        if (c.drawing) {
+          e.preventDefault();
+          e.stopPropagation();
+          c.releaseDraw();
+        } else if (!blockedRef.current) e.preventDefault();
+      }
+    };
+    const onBlur = () => {
+      steer.releaseAll();
+      c.cancelDraw();
+    };
+    window.addEventListener('keyup', onKeyUp, true);
+    window.addEventListener('blur', onBlur);
+    return () => {
+      window.removeEventListener('keyup', onKeyUp, true);
+      window.removeEventListener('blur', onBlur);
+      steer.releaseAll();
+    };
+  }, [c, steer]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -130,10 +177,38 @@ export function SeaBattleScene({ controller: c, title, nameOf, doneLabelKey, onD
       }
       if (anyCard) return;
       const v = viewRef.current;
-      if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'ArrowUp' || e.code === 'ArrowDown') {
+      if (Object.hasOwn(STEER_CODES, e.code) && !e.ctrlKey && !e.altKey && !e.metaKey) {
+        // W A S D and the arrows are the helm (taken by SteerKeys); Shift + arrows still pans.
+        if (steer.keyDown(e)) {
+          e.stopPropagation();
+          return;
+        }
+        if (e.shiftKey && e.code.startsWith('Arrow')) {
+          stop();
+          const step = 110;
+          v?.panScreen(e.code === 'ArrowLeft' ? -step : e.code === 'ArrowRight' ? step : 0, e.code === 'ArrowUp' ? -step : e.code === 'ArrowDown' ? step : 0);
+          return;
+        }
+      }
+      if (e.code === 'Space') {
         stop();
-        const step = 110;
-        v?.panScreen(e.code === 'ArrowLeft' ? -step : e.code === 'ArrowRight' ? step : 0, e.code === 'ArrowUp' ? -step : e.code === 'ArrowDown' ? step : 0);
+        if (!e.repeat) c.beginDraw();
+        return;
+      }
+      if (combo === 'KeyP' || combo === 'Pause') {
+        stop();
+        c.togglePause();
+        return;
+      }
+      if (combo === 'KeyG') {
+        stop();
+        c.grapnels();
+        return;
+      }
+      if (combo === 'Tab') {
+        stop();
+        c.cycleHelm();
+        v?.setFollow(true);
         return;
       }
       if (combo === 'Equal' || combo === 'NumpadAdd' || combo === 'Shift+Equal') {
@@ -164,18 +239,24 @@ export function SeaBattleScene({ controller: c, title, nameOf, doneLabelKey, onD
       const digit = /^(Shift\+)?(?:Digit|Numpad)([1-9])$/.exec(combo);
       if (digit) {
         stop();
-        c.selectIndex(Number(digit[2]), e.shiftKey);
+        // A number takes the helm of that ship; Shift + number adds it to the ships the mouse commands.
+        if (e.shiftKey) c.selectIndex(Number(digit[2]), true);
+        else {
+          c.takeHelmIndex(Number(digit[2]));
+          v?.setFollow(true);
+        }
         return;
       }
+      // A rebound pause key (Space is the bows now).
       const action = getShortcutManager().resolve(combo, CONTEXTS)?.id;
-      if (action === 'time.togglePause' || e.code === 'Space') {
+      if (action === 'time.togglePause' && e.code !== 'Space') {
         stop();
         c.togglePause();
       }
     };
     window.addEventListener('keydown', onKey, true);
     return () => window.removeEventListener('keydown', onKey, true);
-  }, [c, anyCard, confirm, howTo, menu, showSummary, ended]);
+  }, [c, steer, anyCard, confirm, howTo, menu, showSummary, ended]);
 
   const summary = useMemo(() => (showSummary ? c.summary() : null), [c, showSummary]);
   const focus = (x: number, y: number) => viewRef.current?.centreOn(x, y);
@@ -190,6 +271,7 @@ export function SeaBattleScene({ controller: c, title, nameOf, doneLabelKey, onD
       <div className="sv-field" ref={hostRef} />
       <TopBar c={c} title={title} onMenu={openMenu} onWithdraw={() => setConfirm(true)} />
       {!showSummary && <FleetBar c={c} />}
+      {!showSummary && <HelmStrip c={c} />}
       {!showSummary && <ShipCards c={c} onFocus={focus} />}
       {!showSummary && <Ticker c={c} onFocus={focus} />}
       {!following && !anyCard && (

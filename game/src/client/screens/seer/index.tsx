@@ -1,9 +1,15 @@
 /**
- * The Seer's Hut (hub building route 'building.seer', SCR-20), laid out by ARCHITECTURE §20 as a quiet scene:
- * two big choices (read the omens with `readOmen`; tend the wounded with `heal`) and below them what the seer
- * says, one card per venture (the omen as a word and one line; its effect and how long it holds in a tooltip),
- * or the wounded of the house with the seer's or the church's care. Legends and relic clues belong to the quests
- * module and are not offered here yet.
+ * The Seer's hut (hub building route 'building.seer', SCR-20): entering it shows the small dark hut
+ * (render/interiors/rooms/seer.tsx). Its menu waits behind one person, the Seer at her table, and is laid out by
+ * ARCHITECTURE §20: two big choices (read the omens with `readOmen`; tend the wounded with `heal`) and below them
+ * what the seer says, one card per venture (the omen as a word and one line; its effect and how long it holds in a
+ * tooltip), or the wounded of the house with the seer's or the church's care. Legends and relic clues belong to
+ * the quests module and are not offered here yet.
+ * Route params `{ person: 'seer', view?: 'heal' }` open her panel at once (on the wounded with `view: 'heal'`).
+ *
+ * Test ids: seer (the room's picture), seer-work, seer-read, seer-heal, seer-omens, seer-readings,
+ * seer-no-readings, omen-<activity>, seer-healing, seer-no-wounded, wounded-<id>, heal-<method>-<id>,
+ * heal-why-<method>-<id>.
  */
 import { useState, type ReactElement } from 'react';
 import { OMEN_ACTIVITIES, type OmenActivity } from '@content/schemas/tunables/faith';
@@ -14,6 +20,9 @@ import { presentAt } from '@sim/modules/faith/state';
 import type { HealMethod } from '@sim/modules/people/types';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatNumber, useT } from '../../i18n/index';
+import { InteriorRoom, useRoutePerson } from '../../render/interiors/index';
+import { seerRoom } from '../../render/interiors/rooms/seer';
+import { ambienceOf } from '../../render/scenes/ambience';
 import { Button, ChoiceCard, ChoiceGrid, Portrait, recipeForCharacter, Tooltip } from '../../ui/index';
 import {
   charById,
@@ -24,7 +33,6 @@ import {
   NoGame,
   reasonText,
   runCommand,
-  ScreenFrame,
   silverDelta,
   tryCommand,
   useHousehold,
@@ -33,7 +41,8 @@ import {
 } from '../character/household';
 import './seer.css';
 
-type View = 'omens' | 'heal';
+/** What the Seer's panel shows under the two choices. */
+export type SeerView = 'omens' | 'heal';
 
 function rulerPlace(h: Household): { id: SettlementId; name: string } | undefined {
   const id = presentAt(h.state, h.content.tunables.faith, h.state.player.rulerId);
@@ -252,9 +261,10 @@ function Healing({ h }: { h: Household }): ReactElement {
   );
 }
 
-function SeerView({ h }: { h: Household }): ReactElement {
+/** The Seer's panel: the two choices, then the omens or the wounded. */
+export function SeerWork({ h, initialView = 'omens' }: { h: Household; initialView?: SeerView }): ReactElement {
   const t = useT();
-  const [view, setView] = useState<View>('omens');
+  const [view, setView] = useState<SeerView>(initialView);
   const place = rulerPlace(h);
   const cmd: Command = place ? { type: 'readOmen', settlementId: place.id } : { type: 'readOmen' };
   const trial = tryCommand(h, cmd);
@@ -271,7 +281,7 @@ function SeerView({ h }: { h: Household }): ReactElement {
     typeof ready === 'number' ? t('faith.ui.seer.readyOn', { date: dateText(ready) }) : reasonText(t, trial);
   const hurt = hurtOf(h).length;
   return (
-    <>
+    <div className="sr-work" data-testid="seer-work">
       <ChoiceGrid columns={2} className="sr-choices" label={t('faith.ui.seer.choices')}>
         <ChoiceCard
           size="lg"
@@ -296,38 +306,61 @@ function SeerView({ h }: { h: Household }): ReactElement {
         />
       </ChoiceGrid>
       {view === 'heal' ? <Healing h={h} /> : <OmenBoard h={h} />}
-    </>
+    </div>
   );
 }
 
-function SeerScreen({ close }: ScreenProps): ReactElement {
+/**
+ * The Seer's hut for a household (exported for tests): the room with the Seer in it; her panel open when `person`
+ * (controlled) or `initialPerson` says so, on the wounded when `initialView` is 'heal'.
+ */
+export function SeerHut({
+  h,
+  onClose,
+  person,
+  initialPerson,
+  onPersonChange,
+  initialView = 'omens',
+}: {
+  h: Household;
+  onClose(): void;
+  person?: string | null;
+  initialPerson?: 'seer';
+  onPersonChange?(id: string | null): void;
+  initialView?: SeerView;
+}): ReactElement {
   const t = useT();
-  const h = useHousehold();
-  if (!h) return <NoGame close={close} />;
   const place = rulerPlace(h);
   const ruler = charById(h.state, h.state.player.rulerId);
   return (
-    <ScreenFrame
-      id="seer"
-      className="sr-frame"
-      title={t('ui.route.building.seer')}
-      lede={t('faith.ui.seer.scene')}
+    <InteriorRoom
+      room={seerRoom}
+      ambience={ambienceOf(h.state)}
       subtitle={
         place
-          ? t('faith.ui.seer.at', { place: place.name })
+          ? t('faith.interior.seer.subtitle', { place: place.name })
           : t('faith.ui.seer.away', { name: ruler?.name ?? '' })
       }
-      close={close}
-      narrow
-    >
-      <SeerView h={h} />
-    </ScreenFrame>
+      {...(person !== undefined ? { person } : { initialPerson: initialPerson ?? null })}
+      onPersonChange={onPersonChange}
+      stageTestId="seer"
+      onLeave={onClose}
+      panel={() => <SeerWork h={h} initialView={initialView} />}
+    />
   );
+}
+
+function SeerScreen({ params, close }: ScreenProps): ReactElement {
+  const h = useHousehold();
+  const [person, setPerson] = useRoutePerson(seerRoom, ['building.seer'], params);
+  const [view] = useState<SeerView>(params?.['view'] === 'heal' ? 'heal' : 'omens');
+  if (!h) return <NoGame close={close} />;
+  return <SeerHut h={h} person={person} onPersonChange={setPerson} initialView={view} onClose={close} />;
 }
 
 export const screen: ScreenDescriptor = {
   id: 'seer',
-  route: 'building.seer',
+  route: 'building.seer', staysUnder: true,
   component: SeerScreen,
   layout: 'overlay',
   titleKey: 'ui.route.building.seer',
