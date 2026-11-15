@@ -129,12 +129,20 @@ export function voiceSampleKey(role: VoiceRole): string {
   return `music.voice.${role}.sample`;
 }
 
+/**
+ * Real lengths of the owner's delivered final tracks. A final track need not match the generative
+ * placeholder's loop length, so the manifest records the delivered length for the assets-index check.
+ */
+export const FINAL_TRACK_SECONDS: Partial<Record<MusicState, number>> = {
+  homeSkarn: 202.3,
+};
+
 /** Builds every audio manifest entry from the catalog (deterministic order). */
 export function buildAudioManifest(): Record<string, AssetEntry> {
   const out: Record<string, AssetEntry> = {};
   for (const state of MUSIC_STATES) {
     const style = MUSIC_STYLES[state];
-    const durationS = trackLoopSeconds(state);
+    const durationS = FINAL_TRACK_SECONDS[state] ?? trackLoopSeconds(state);
     const params = { state, mode: style.mode, tonic: style.tonic, bpm: style.bpm, meter: `${style.beats}x${style.sub}`, brief: MUSIC_BRIEFS[state] };
     out[musicTrackAssetId(state)] = {
       kind: 'music',

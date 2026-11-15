@@ -20,7 +20,7 @@
   "music.track.homeSkarn": {
     "kind": "music",
     "path": "music/home-skarn.ogg",
-    "durationS": 156,
+    "durationS": 202.3,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
