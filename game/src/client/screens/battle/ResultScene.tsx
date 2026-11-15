@@ -13,13 +13,15 @@ import { useEffect, type ReactElement, type ReactNode } from 'react';
 import type { BattleSideKey } from '@sim/battle/types';
 import type { BattleSetup, GameState } from '@sim/core/state';
 import { useGame } from '../../app/gameStore';
+import { useMusicState } from '../../audio/hooks';
+import { outcomeMusic } from '../../audio/screenMusic';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatNumber, useT } from '../../i18n/index';
 import { Disclosure } from '../../ui/index';
 import { SceneChoices } from '../../render/scenes/index';
 import { CardScene } from './cardScene';
 import { clock } from './hud';
-import { summarize, type BattleOutcome, type BattleSummary } from './summary';
+import { outcomeFor, summarize, type BattleOutcome, type BattleSummary } from './summary';
 
 /** The painting of an outcome. */
 export function battleResultAsset(outcome: BattleOutcome): string {
@@ -155,6 +157,7 @@ function BattleResultRoute({ params, close }: ScreenProps): ReactElement | null 
   useEffect(() => {
     if (!ok) close();
   }, [ok, close]);
+  useMusicState(ok && slot?.result ? outcomeMusic(outcomeFor(slot.result, playerSide(slot.setup))) : null);
   if (!ok || !state || !slot?.result) return null;
   const setup = slot.setup;
   const side = playerSide(setup);

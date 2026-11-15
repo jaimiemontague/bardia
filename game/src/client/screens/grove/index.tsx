@@ -35,6 +35,7 @@ import {
   type Household,
 } from '../character/household';
 import { favorWord } from '../character/standing';
+import { useMusicState } from '../../audio/hooks';
 import './grove.css';
 
 const KINDS: readonly OfferingKind[] = ['silver', 'livestock'];
@@ -243,6 +244,7 @@ export function Grove({
 
 function GroveScreen({ params, close }: ScreenProps): ReactElement {
   const h = useHousehold();
+  useMusicState('delve');
   const [person, setPerson] = useRoutePerson(groveRoom, ['building.grove'], params);
   if (!h) return <NoGame close={close} />;
   return <Grove h={h} person={person} onPersonChange={setPerson} onClose={close} />;

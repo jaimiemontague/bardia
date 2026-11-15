@@ -50,6 +50,7 @@ import {
   type Trial,
 } from '../character/household';
 import { capitalOf } from '../hub/counsel';
+import { useMusicState } from '../../audio/hooks';
 import './longhouse.css';
 
 /** One seat: an office kind, and the holding or fleet it is tied to. */
@@ -434,6 +435,7 @@ export function Longhouse({
 
 function LonghouseScreen({ params, close }: ScreenProps): ReactElement {
   const h = useHousehold();
+  useMusicState('longhouse');
   const [person, setPerson] = useRoutePerson(longhouseRoom, ['building.longhouse'], params);
   if (!h) return <NoGame close={close} />;
   return <Longhouse h={h} person={person} onPersonChange={setPerson} onClose={close} />;

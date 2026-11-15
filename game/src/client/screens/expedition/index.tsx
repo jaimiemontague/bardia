@@ -37,6 +37,7 @@ import {
 } from '@sim/modules/expeditions/plan';
 import type { ExpeditionIssue, ExpeditionPlan, ExpeditionPreview, TravelMode } from '@sim/modules/expeditions/types';
 import { loadContent } from '../../app/content';
+import { useMusicState } from '../../audio/hooks';
 import { useGame } from '../../app/gameStore';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatGameDate } from '../../i18n/calendar';
@@ -604,6 +605,7 @@ function Details({
  */
 function PlannerScreen({ close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  useMusicState('expedition');
   const art = useFinalPainting(PLANNER_ART);
   if (!state) return <div />;
   return (

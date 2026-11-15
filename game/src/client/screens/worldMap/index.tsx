@@ -15,6 +15,8 @@ import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
 import type { GameState } from '@sim/core/state';
 import { getStaticWorld, type StaticWorld } from '@sim/modules/world/map/index';
 import { useDevFlags } from '../../app/devFlags';
+import { useMusicState } from '../../audio/hooks';
+import { voyageMusic } from '../../audio/screenMusic';
 import { useGame } from '../../app/gameStore';
 import { useNavigation } from '../../app/navigation';
 import { useNotifications } from '../../app/notifications';
@@ -292,12 +294,14 @@ export function WorldMap({ state, onClose, orders = false }: { state: GameState 
 
 function WorldMapScreen({ close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  useMusicState('worldMap');
   return <WorldMap state={state} onClose={close} />;
 }
 
 /** The expedition scene: the chart with the fleet's orders, the settlement hub and the cargo screen. */
 function ExpeditionScene(_props: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  useMusicState(voyageMusic(state));
   return <WorldMap state={state} orders />;
 }
 

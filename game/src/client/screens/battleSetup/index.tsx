@@ -22,6 +22,8 @@ import { Disclosure, Icon, Portrait, recipeForCharacter, StatLine } from '../../
 import { CardScene } from '../battle/cardScene';
 import { battleName } from '../battle/ResultScene';
 import { unitName } from '../expedition/names';
+import { useMusicState } from '../../audio/hooks';
+import { battleMusic } from '../../audio/screenMusic';
 import './battleSetup.css';
 
 function menOf(side: SideSetup): number {
@@ -96,6 +98,7 @@ function BattleSetupScene({ pending, state }: { pending: PendingDecision; state:
   const slot = state.subsims.battle;
   const setup: BattleSetup | undefined = slot && slot.id === battleId ? (slot.setup as BattleSetup) : undefined;
   const prediction = useMemo(() => (setup && loaded.ok ? predictBattle(setup, loaded.content) : null), [setup, loaded]);
+  useMusicState(battleMusic(setup?.kind));
   const canFight = registry.forMode('battle') !== undefined;
   if (!setup || battleId === undefined) return <Missing />;
   const player = setup.attacker.isPlayer ? setup.attacker : setup.defender;

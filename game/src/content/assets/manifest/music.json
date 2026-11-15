@@ -2,7 +2,7 @@
   "music.track.mainTheme": {
     "kind": "music",
     "path": "music/main-theme.ogg",
-    "durationS": 146.7,
+    "durationS": 128.4,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -20,7 +20,7 @@
   "music.track.homeSkarn": {
     "kind": "music",
     "path": "music/home-skarn.ogg",
-    "durationS": 202.3,
+    "durationS": 202.5,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -38,7 +38,7 @@
   "music.track.homeHvarn": {
     "kind": "music",
     "path": "music/home-hvarn.ogg",
-    "durationS": 152.7,
+    "durationS": 198.5,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -56,7 +56,7 @@
   "music.track.homeEyjar": {
     "kind": "music",
     "path": "music/home-eyjar.ogg",
-    "durationS": 153.3,
+    "durationS": 188.4,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -74,7 +74,7 @@
   "music.track.sailingCalm": {
     "kind": "music",
     "path": "music/sailing-calm.ogg",
-    "durationS": 142.2,
+    "durationS": 197.2,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -164,7 +164,7 @@
   "music.track.meadHallRowdy": {
     "kind": "music",
     "path": "music/mead-hall-rowdy.ogg",
-    "durationS": 150,
+    "durationS": 173.4,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -182,7 +182,7 @@
   "music.track.meadHallLament": {
     "kind": "music",
     "path": "music/mead-hall-lament.ogg",
-    "durationS": 149,
+    "durationS": 238.8,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -200,7 +200,7 @@
   "music.track.battleShieldwall": {
     "kind": "music",
     "path": "music/battle-shieldwall.ogg",
-    "durationS": 153.6,
+    "durationS": 167.7,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -218,7 +218,7 @@
   "music.stem.battleShieldwall.low": {
     "kind": "music",
     "path": "music/stems/battle-shieldwall-low.ogg",
-    "durationS": 153.6,
+    "durationS": 167.7,
     "loop": true,
     "placeholder": {
       "generator": "audio.stem",
@@ -234,7 +234,7 @@
   "music.stem.battleShieldwall.mid": {
     "kind": "music",
     "path": "music/stems/battle-shieldwall-mid.ogg",
-    "durationS": 153.6,
+    "durationS": 167.7,
     "loop": true,
     "placeholder": {
       "generator": "audio.stem",
@@ -250,7 +250,7 @@
   "music.stem.battleShieldwall.high": {
     "kind": "music",
     "path": "music/stems/battle-shieldwall-high.ogg",
-    "durationS": 153.6,
+    "durationS": 167.7,
     "loop": true,
     "placeholder": {
       "generator": "audio.stem",
@@ -266,7 +266,7 @@
   "music.track.battleRaid": {
     "kind": "music",
     "path": "music/battle-raid.ogg",
-    "durationS": 152.7,
+    "durationS": 66.1,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -284,7 +284,7 @@
   "music.stem.battleRaid.low": {
     "kind": "music",
     "path": "music/stems/battle-raid-low.ogg",
-    "durationS": 152.7,
+    "durationS": 66.1,
     "loop": true,
     "placeholder": {
       "generator": "audio.stem",
@@ -300,7 +300,7 @@
   "music.stem.battleRaid.mid": {
     "kind": "music",
     "path": "music/stems/battle-raid-mid.ogg",
-    "durationS": 152.7,
+    "durationS": 66.1,
     "loop": true,
     "placeholder": {
       "generator": "audio.stem",
@@ -316,7 +316,7 @@
   "music.stem.battleRaid.high": {
     "kind": "music",
     "path": "music/stems/battle-raid-high.ogg",
-    "durationS": 152.7,
+    "durationS": 66.1,
     "loop": true,
     "placeholder": {
       "generator": "audio.stem",
@@ -350,7 +350,7 @@
   "music.track.delve": {
     "kind": "music",
     "path": "music/delve.ogg",
-    "durationS": 147.7,
+    "durationS": 199.7,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -368,7 +368,7 @@
   "music.track.allthing": {
     "kind": "music",
     "path": "music/allthing.ogg",
-    "durationS": 151.6,
+    "durationS": 148.1,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -386,7 +386,7 @@
   "music.track.funeral": {
     "kind": "music",
     "path": "music/funeral.ogg",
-    "durationS": 150,
+    "durationS": 180,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -404,7 +404,7 @@
   "music.track.coronation": {
     "kind": "music",
     "path": "music/coronation.ogg",
-    "durationS": 152.7,
+    "durationS": 154.8,
     "loop": true,
     "placeholder": {
       "generator": "audio.music",
@@ -417,6 +417,312 @@
         "brief": "Coronation / victory: the main-theme motif reborn in mixolydian with fanfare, choir and full drums."
       },
       "label": "Placeholder: coronation (generative score)"
+    }
+  },
+  "music.track.newSaga": {
+    "kind": "music",
+    "path": "music/new-saga.ogg",
+    "durationS": 34.8,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "newSaga",
+        "mode": "dorian",
+        "tonic": "D",
+        "bpm": 66,
+        "meter": "4x2",
+        "brief": "New saga: a short, hopeful opening as a founder and homeland are chosen; the main-theme motif in waiting."
+      },
+      "label": "Placeholder: new saga (generative score)"
+    }
+  },
+  "music.track.worldMap": {
+    "kind": "music",
+    "path": "music/world-map.ogg",
+    "durationS": 175,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "worldMap",
+        "mode": "dorian",
+        "tonic": "G",
+        "bpm": 66,
+        "meter": "2x3",
+        "brief": "World map: broad and searching, horn and strings over a slow drum; the whole whale-road laid out."
+      },
+      "label": "Placeholder: world map (generative score)"
+    }
+  },
+  "music.track.greatHall": {
+    "kind": "music",
+    "path": "music/great-hall.ogg",
+    "durationS": 157.6,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "greatHall",
+        "mode": "aeolian",
+        "tonic": "E",
+        "bpm": 76,
+        "meter": "4x2",
+        "brief": "Great hall: stately hearth-hall music for the jarl’s seat, lyre and strings with a measured drum."
+      },
+      "label": "Placeholder: great hall (generative score)"
+    }
+  },
+  "music.track.longhouse": {
+    "kind": "music",
+    "path": "music/longhouse.ogg",
+    "durationS": 192.5,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "longhouse",
+        "mode": "mixolydian",
+        "tonic": "G",
+        "bpm": 66,
+        "meter": "2x3",
+        "brief": "Longhouse: homely and close, lyre and soft flute by the family fire."
+      },
+      "label": "Placeholder: longhouse (generative score)"
+    }
+  },
+  "music.track.smithy": {
+    "kind": "music",
+    "path": "music/smithy.ogg",
+    "durationS": 159.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "smithy",
+        "mode": "dorian",
+        "tonic": "A",
+        "bpm": 72,
+        "meter": "3x2",
+        "brief": "Smithy: steady working rhythm, low strings and drum keeping time like a hammer."
+      },
+      "label": "Placeholder: smithy (generative score)"
+    }
+  },
+  "music.track.shipyard": {
+    "kind": "music",
+    "path": "music/shipyard.ogg",
+    "durationS": 172.5,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "shipyard",
+        "mode": "mixolydian",
+        "tonic": "G",
+        "bpm": 72,
+        "meter": "2x3",
+        "brief": "Shipyard: busy and salt-bright, lilting lyre and flute over the craft of keel and strake."
+      },
+      "label": "Placeholder: shipyard (generative score)"
+    }
+  },
+  "music.track.market": {
+    "kind": "music",
+    "path": "music/market.ogg",
+    "durationS": 193.3,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "market",
+        "mode": "phrygian",
+        "tonic": "D",
+        "bpm": 92,
+        "meter": "4x2",
+        "brief": "Market: bustling trade music, oud-like plucking, flute and quick hand drums."
+      },
+      "label": "Placeholder: market (generative score)"
+    }
+  },
+  "music.track.meadHallWarm": {
+    "kind": "music",
+    "path": "music/mead-hall-warm.ogg",
+    "durationS": 141.9,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "meadHallWarm",
+        "mode": "dorian",
+        "tonic": "E",
+        "bpm": 72,
+        "meter": "3x2",
+        "brief": "Mead-hall, warm (diegetic): a gentle hall band playing for friends; lyre and humming, cups and fire."
+      },
+      "label": "Placeholder: mead hall warm (generative score)"
+    }
+  },
+  "music.track.battleSea": {
+    "kind": "music",
+    "path": "music/battle-sea.ogg",
+    "durationS": 71.3,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "battleSea",
+        "mode": "phrygian",
+        "tonic": "E",
+        "bpm": 120,
+        "meter": "4x4",
+        "brief": "Battle at sea: rowing drums and driving strings, horn calls across the water; one full track, no stems."
+      },
+      "label": "Placeholder: battle sea (generative score)"
+    }
+  },
+  "music.track.arrival": {
+    "kind": "music",
+    "path": "music/arrival.ogg",
+    "durationS": 147.3,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "arrival",
+        "mode": "dorian",
+        "tonic": "D",
+        "bpm": 66,
+        "meter": "4x2",
+        "brief": "Arrival: landfall at a new shore; wide strings and horn, wonder and wariness."
+      },
+      "label": "Placeholder: arrival (generative score)"
+    }
+  },
+  "music.track.expedition": {
+    "kind": "music",
+    "path": "music/expedition.ogg",
+    "durationS": 185,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "expedition",
+        "mode": "mixolydian",
+        "tonic": "D",
+        "bpm": 60,
+        "meter": "2x3",
+        "brief": "Expedition: planning a voyage; purposeful, rocking compound time with lyre and drone."
+      },
+      "label": "Placeholder: expedition (generative score)"
+    }
+  },
+  "music.track.victory": {
+    "kind": "music",
+    "path": "music/victory.ogg",
+    "durationS": 269.9,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "victory",
+        "mode": "mixolydian",
+        "tonic": "D",
+        "bpm": 88,
+        "meter": "4x2",
+        "brief": "Victory: triumphant fanfare, choir and full drums after the battle is won."
+      },
+      "label": "Placeholder: victory (generative score)"
+    }
+  },
+  "music.track.chronicle": {
+    "kind": "music",
+    "path": "music/chronicle.ogg",
+    "durationS": 214.9,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "chronicle",
+        "mode": "dorian",
+        "tonic": "D",
+        "bpm": 60,
+        "meter": "4x2",
+        "brief": "Chronicle: reflective saga-telling music for reading the deeds of the house; lyre and voice."
+      },
+      "label": "Placeholder: chronicle (generative score)"
+    }
+  },
+  "music.track.wedding": {
+    "kind": "music",
+    "path": "music/wedding.ogg",
+    "durationS": 177.5,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "wedding",
+        "mode": "mixolydian",
+        "tonic": "G",
+        "bpm": 80,
+        "meter": "2x3",
+        "brief": "Wedding: festive and tender, lyre, flute and clapping drum for a marriage feast."
+      },
+      "label": "Placeholder: wedding (generative score)"
+    }
+  },
+  "music.track.birth": {
+    "kind": "music",
+    "path": "music/birth.ogg",
+    "durationS": 157.7,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "birth",
+        "mode": "dorian",
+        "tonic": "E",
+        "bpm": 64,
+        "meter": "3x2",
+        "brief": "Birth: soft and luminous, harp and humming for a child born to the house."
+      },
+      "label": "Placeholder: birth (generative score)"
+    }
+  },
+  "music.track.settlement": {
+    "kind": "music",
+    "path": "music/settlement.ogg",
+    "durationS": 196.9,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "settlement",
+        "mode": "aeolian",
+        "tonic": "E",
+        "bpm": 72,
+        "meter": "4x2",
+        "brief": "Settlement: steady building music for a growing steading; lyre, flute and drum."
+      },
+      "label": "Placeholder: settlement (generative score)"
+    }
+  },
+  "music.track.affairs": {
+    "kind": "music",
+    "path": "music/affairs.ogg",
+    "durationS": 160.1,
+    "loop": true,
+    "placeholder": {
+      "generator": "audio.music",
+      "params": {
+        "state": "affairs",
+        "mode": "dorian",
+        "tonic": "C",
+        "bpm": 70,
+        "meter": "4x2",
+        "brief": "Affairs of the realm: measured, thoughtful council music; strings and lyre over a quiet drum."
+      },
+      "label": "Placeholder: affairs (generative score)"
     }
   },
   "music.stinger.omen": {

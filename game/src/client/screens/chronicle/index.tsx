@@ -20,6 +20,7 @@ import {
   useHousehold,
   type Household,
 } from '../character/household';
+import { useMusicState } from '../../audio/hooks';
 import './chronicle.css';
 
 type Filter = 'all' | 'notable';
@@ -121,6 +122,7 @@ function ChronicleView({ h }: { h: Household }): ReactElement {
 function ChronicleScreen({ close }: ScreenProps): ReactElement {
   const t = useT();
   const h = useHousehold();
+  useMusicState('chronicle');
   if (!h) return <NoGame close={close} />;
   return (
     <ScreenFrame

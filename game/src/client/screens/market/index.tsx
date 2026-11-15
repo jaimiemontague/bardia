@@ -30,6 +30,7 @@ import { hasMarket, knownMarkets } from '../settlement/knownMarkets';
 import { MarketBoard } from '../settlement/market';
 import { QuickCards, QuickConfirm, type QuickKind } from './quickDeals';
 import { RoutesPanel } from './routes';
+import { useMusicState } from '../../audio/hooks';
 import './market.css';
 
 type View = 'goods' | 'routes';
@@ -140,6 +141,7 @@ export function HomeMarket({ state, onClose, person, initialPerson, onPersonChan
 
 function HomeMarketScreen({ params, close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  useMusicState('market');
   const [person, setPerson] = useRoutePerson(marketRoom, ['building.market'], params);
   if (!state) return <div />;
   return <HomeMarket state={state} person={person} onPersonChange={setPerson} onClose={close} />;

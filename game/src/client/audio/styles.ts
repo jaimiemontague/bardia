@@ -177,8 +177,8 @@ export const MAIN_THEME: readonly FigureNote[] = [
 
 const call = (...notes: [number, number, number][]): FigureNote[] => notes.map(([d, at, len]) => ({ d, at, len }));
 
-/** Every music state's style. */
-export const MUSIC_STYLES: Readonly<Record<MusicState, MusicStyle>> = {
+/** The styles of the §28.1 states; the owner's further tracks borrow one of these below. */
+const CORE_STYLES = {
   mainTheme: {
     id: 'mainTheme', mode: 'dorian', tonic: 'D', octave: 3, bpm: 72, beats: 4, sub: 2, phraseBars: 4, chordBars: 1,
     progressions: [[0, 6, 3, 0], [0, 3, 6, 0]], theme: MAIN_THEME, reverb: 0.45, crossfadeS: 4, gain: 0.9,
@@ -386,4 +386,32 @@ export const MUSIC_STYLES: Readonly<Record<MusicState, MusicStyle>> = {
       { id: 'drums', kind: 'drums', patterns: ['B.tSB.tS', 'B.ttB.tS'], fills: true, gain: 0.48 },
     ],
   },
+} satisfies Partial<Record<MusicState, MusicStyle>>;
+
+/** A placeholder style for a further track: a core style under a new id, with optional tweaks. */
+function like(base: MusicStyle, id: MusicState, patch: Partial<Omit<MusicStyle, 'id'>> = {}): MusicStyle {
+  return { ...base, ...patch, id };
+}
+
+/** Every music state's style. */
+export const MUSIC_STYLES: Readonly<Record<MusicState, MusicStyle>> = {
+  ...CORE_STYLES,
+  newSaga: like(CORE_STYLES.mainTheme, 'newSaga', { bpm: 66 }),
+  worldMap: like(CORE_STYLES.albrennCael, 'worldMap'),
+  greatHall: like(CORE_STYLES.homeSkarn, 'greatHall', { bpm: 76 }),
+  longhouse: like(CORE_STYLES.homeEyjar, 'longhouse', { bpm: 66 }),
+  smithy: like(CORE_STYLES.homeHvarn, 'smithy', { bpm: 72 }),
+  shipyard: like(CORE_STYLES.homeEyjar, 'shipyard'),
+  market: like(CORE_STYLES.velkarSaraleon, 'market'),
+  meadHallWarm: like(CORE_STYLES.meadHallLament, 'meadHallWarm', { bpm: 72 }),
+  // A sea battle is one full track (no intensity stems), so the raid score loses its stem tags.
+  battleSea: like(CORE_STYLES.battleRaid, 'battleSea', { bpm: 120, layers: CORE_STYLES.battleRaid.layers.map((l) => ({ ...l, stem: undefined })) }),
+  arrival: like(CORE_STYLES.mainTheme, 'arrival', { bpm: 66 }),
+  expedition: like(CORE_STYLES.sailingCalm, 'expedition', { bpm: 60 }),
+  victory: like(CORE_STYLES.coronation, 'victory'),
+  chronicle: like(CORE_STYLES.mainTheme, 'chronicle', { bpm: 60 }),
+  wedding: like(CORE_STYLES.homeEyjar, 'wedding', { bpm: 80 }),
+  birth: like(CORE_STYLES.meadHallLament, 'birth', { bpm: 64 }),
+  settlement: like(CORE_STYLES.homeSkarn, 'settlement', { bpm: 72 }),
+  affairs: like(CORE_STYLES.allthing, 'affairs', { bpm: 70 }),
 };

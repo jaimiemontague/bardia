@@ -12,6 +12,8 @@
 import { useEffect, type ReactElement, type ReactNode } from 'react';
 import type { SeaBattleSetup } from '@sim/core/state';
 import { useGame } from '../../app/gameStore';
+import { useMusicState } from '../../audio/hooks';
+import { outcomeMusic } from '../../audio/screenMusic';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatNumber, hasKey, useT } from '../../i18n/index';
 import { SceneChoices } from '../../render/scenes/index';
@@ -128,9 +130,10 @@ function SeaBattleResultRoute({ params, close }: ScreenProps): ReactElement | nu
   useEffect(() => {
     if (!ok) close();
   }, [ok, close]);
-  if (!ok || !slot?.result) return null;
-  const side = slot.setup.attacker.isPlayer ? 'attacker' : 'defender';
-  const summary = summarizeSea(slot.setup, slot.result, side);
+  const side = slot?.setup.attacker.isPlayer ? 'attacker' : 'defender';
+  const summary = ok && slot?.result ? summarizeSea(slot.setup, slot.result, side) : null;
+  useMusicState(summary ? outcomeMusic(summary.outcome) : null);
+  if (!summary || !slot) return null;
   return (
     <SeaResultScene summary={summary} title={seaTitle(slot.setup, t)}>
       <SceneChoices

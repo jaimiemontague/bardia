@@ -34,6 +34,7 @@ import { t } from '../../i18n/index';
 import { ChoiceCard, Frame, IconButton } from '../../ui/index';
 import { buildingName } from './format';
 import { BuildingsPanel, FolkPanel, GarrisonPanel } from './sections';
+import { useMusicState } from '../../audio/hooks';
 import './affairs.css';
 
 /** Props of the Affairs of State view (also rendered directly by tests). */
@@ -138,6 +139,7 @@ export function Affairs({ state, content, dispatch, onClose, holdingId, panel: f
 function AffairsScreen({ close, params }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
   const dispatch = useGame((s) => s.dispatch);
+  useMusicState('affairs');
   const loaded = loadContent();
   if (!state || !loaded.ok) return <div />;
   const id = typeof params?.['id'] === 'string' ? (params['id'] as SettlementId) : undefined;

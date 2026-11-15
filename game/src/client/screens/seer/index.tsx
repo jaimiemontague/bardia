@@ -39,6 +39,7 @@ import {
   Why,
   type Household,
 } from '../character/household';
+import { useMusicState } from '../../audio/hooks';
 import './seer.css';
 
 /** What the Seer's panel shows under the two choices. */
@@ -352,6 +353,7 @@ export function SeerHut({
 
 function SeerScreen({ params, close }: ScreenProps): ReactElement {
   const h = useHousehold();
+  useMusicState('delve');
   const [person, setPerson] = useRoutePerson(seerRoom, ['building.seer'], params);
   const [view] = useState<SeerView>(params?.['view'] === 'heal' ? 'heal' : 'omens');
   if (!h) return <NoGame close={close} />;

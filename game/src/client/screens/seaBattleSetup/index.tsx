@@ -22,6 +22,7 @@ import { Disclosure } from '../../ui/index';
 import { CardScene } from '../battle/cardScene';
 import { compassPoint } from '../seaBattle/logic';
 import { ShipGlyph } from '../seaBattle/ShipGlyph';
+import { useMusicState } from '../../audio/hooks';
 import './seaBattleSetup.css';
 
 /** Odds band of a win probability (balance.autoresolve.outcomeBands; same cut-offs as the land battle). */
@@ -122,6 +123,7 @@ function SeaBattleSetupScene({ pending, state }: { pending: PendingDecision; sta
   const dispatch = useGame((s) => s.dispatch);
   const registry = useScreenRegistry();
   const loaded = loadContent();
+  useMusicState('battleSea');
   const seaBattleId = (pending.payload as { seaBattleId?: string }).seaBattleId;
   const slot = state.subsims.seaBattle;
   const setup: SeaBattleSetup | undefined = slot && slot.id === seaBattleId ? slot.setup : undefined;

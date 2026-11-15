@@ -12,7 +12,8 @@
  * click to sail there or attack, H hold.
  */
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactElement, type ReactNode } from 'react';
-import { playSfx, useSfxLoop } from '../../audio/index';
+import { playSfx, useMusicState, useSfxLoop } from '../../audio/index';
+import { outcomeMusic } from '../../audio/screenMusic';
 import { getShortcutManager } from '../../app/inputRuntime';
 import { useDevFlags } from '../../app/devFlags';
 import { useNavigation } from '../../app/navigation';
@@ -260,6 +261,8 @@ export function SeaBattleScene({ controller: c, title, nameOf, doneLabelKey, onD
   }, [c, steer, anyCard, confirm, howTo, menu, showSummary, ended]);
 
   const summary = useMemo(() => (showSummary ? c.summary() : null), [c, showSummary]);
+  // The sea fight's music, then victory (or the funeral music for a loss) when the result scene is up.
+  useMusicState((summary && outcomeMusic(summary.outcome)) ?? 'battleSea');
   const focus = (x: number, y: number) => viewRef.current?.centreOn(x, y);
   const notice = c.notice && c.realTime - c.notice.at < 2.6 ? c.notice.key : null;
   const openMenu = () => {

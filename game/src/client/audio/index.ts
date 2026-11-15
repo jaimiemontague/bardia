@@ -91,3 +91,4 @@ export {
 export { cuesForEvents, installSimAudioCues, type AudioCue } from './simCues';
 export { connectAudioSettings, patchFromClientSettings, clientAudioFromSettings, NARRATION_SPEED_FACTORS } from './settingsBridge';
 export { bootAudio, type BootAudioOptions } from './boot';
+export { menuMusic, hubMusic, battleMusic, outcomeMusic, voyageMusic, meadHallMusic, eventMusic } from './screenMusic';

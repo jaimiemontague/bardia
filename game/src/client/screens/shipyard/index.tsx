@@ -42,6 +42,7 @@ import { Button, ChoiceCard, Disclosure, Meter, ShipPicture, StatLine } from '..
 import { shipTypeName } from '../expedition/names';
 import { WhyNot } from '../hub/BuildingFrame';
 import { capitalOf } from '../hub/counsel';
+import { useMusicState } from '../../audio/hooks';
 import './shipyard.css';
 
 /** The places in the Shipyard (route param `person`). */
@@ -386,6 +387,7 @@ export function Shipyard({
 
 function ShipyardScreen({ params, close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  useMusicState('shipyard');
   const [person, setPerson] = useRoutePerson(shipyardRoom, ['building.shipyard'], params);
   if (!state) return <div />;
   return <Shipyard state={state} person={person} onPersonChange={setPerson} onClose={close} />;

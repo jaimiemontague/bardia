@@ -13,6 +13,8 @@ import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import type { Content } from '@content/index';
 import type { GameState } from '@sim/core/state';
 import { loadContent } from '../../app/content';
+import { useMusicState } from '../../audio/hooks';
+import { hubMusic } from '../../audio/screenMusic';
 import { useGame } from '../../app/gameStore';
 import { navigation } from '../../app/navigation';
 import { useNotifications } from '../../app/notifications';
@@ -360,6 +362,8 @@ function HubScreen(_props: ScreenProps): ReactElement {
   const t = useT();
   const state = useGame((s) => s.state);
   const unreadImportant = useNotifications((s) => s.inbox.filter((n) => !n.read && n.tier !== 'info').length);
+  // The homeland's hall theme (the same culture the village painting is chosen by).
+  useMusicState(hubMusic(state ? (capitalOf(state)?.culture ?? state.factions[state.player.factionId]?.culture) : undefined));
   const loaded = loadContent();
   const content = loaded.ok ? loaded.content : null;
   const ice = useMemo(() => (state ? harbourIce(state) : { iced: false }), [state]);

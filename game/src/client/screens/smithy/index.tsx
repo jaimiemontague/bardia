@@ -30,6 +30,7 @@ import { ambienceOf } from '../../render/scenes/ambience';
 import { Button, Disclosure, Icon, type IconName } from '../../ui/index';
 import { WhyNot } from '../hub/BuildingFrame';
 import { capitalOf } from '../hub/counsel';
+import { useMusicState } from '../../audio/hooks';
 import './smithy.css';
 
 const TRACKS: readonly ArmouryTrack[] = ['armour', 'weapons'];
@@ -244,6 +245,7 @@ export function Smithy({ state, onClose, person, initialPerson, onPersonChange }
 
 function SmithyScreen({ params, close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  useMusicState('smithy');
   const [person, setPerson] = useRoutePerson(smithyRoom, ['building.smithy'], params);
   if (!state) return <div />;
   return <Smithy state={state} person={person} onPersonChange={setPerson} onClose={close} />;

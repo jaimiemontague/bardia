@@ -16,6 +16,7 @@ import { useEffect, type ReactElement } from 'react';
 import type { SimEvent } from '@sim/core/events';
 import type { GameState } from '@sim/core/state';
 import { navigation } from '../../app/navigation';
+import { useMusicState } from '../../audio/hooks';
 import { useNotifications } from '../../app/notifications';
 import { eventField, onSimEvents, type SimEventBatch } from '../../app/simEvents';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
@@ -124,6 +125,8 @@ export function ReturnScene({ params, close }: ScreenProps): ReactElement {
   const p = readParams(params);
   const lost = p.kind === 'lost';
   const way = p.overland ? 'march' : 'sea';
+  // A lost expedition is mourned; a homecoming keeps the hall's own music.
+  useMusicState(lost ? 'funeral' : null);
   // The lost scene tells what the critical alert told: take that alert away.
   useEffect(() => {
     if (!lost) return;

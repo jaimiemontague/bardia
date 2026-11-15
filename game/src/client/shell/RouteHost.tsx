@@ -9,6 +9,8 @@
 import { useEffect, useRef, type ReactElement, type RefObject } from 'react';
 import { useNavigation, type Route } from '../app/navigation';
 import { RouteActiveContext } from '../app/routeActive';
+import { useMusicState } from '../audio/hooks';
+import { menuMusic } from '../audio/screenMusic';
 import type { ScreenRegistry } from '../app/screenRegistry';
 import { ComingSoonModal, ComingSoonPage } from './ComingSoon';
 
@@ -91,6 +93,8 @@ export function RouteHost({ registry }: { registry: ScreenRegistry }): ReactElem
 export function MenuHost({ registry }: { registry: ScreenRegistry }): ReactElement {
   const page = useNavigation((s) => s.menuPage);
   const ref = useInitialFocus(page.key);
+  // One request for every menu page, so moving between them never restarts the main theme.
+  useMusicState(menuMusic(page.id));
   const screen = registry.forRoute(page.id);
   const back = () => useNavigation.getState().showMenu('mainMenu');
   return (

@@ -8,6 +8,8 @@ import type { ReactElement } from 'react';
 import { followLink, linkLabelKey } from '../app/links';
 import { manifestEntry } from '../assets/index';
 import { useNotifications } from '../app/notifications';
+import { useMusicState } from '../audio/hooks';
+import { eventMusic } from '../audio/screenMusic';
 import { formatGameDate } from '../i18n/calendar';
 import { useT } from '../i18n/index';
 import { Button, ButtonRow, Icon, Modal } from '../ui/index';
@@ -19,6 +21,7 @@ export function CriticalHost(): ReactElement | null {
   const first = useNotifications((s) => s.critical[0]);
   const remaining = useNotifications((s) => s.critical.length);
   const acknowledge = useNotifications((s) => s.acknowledgeCritical);
+  useMusicState(eventMusic(first?.illustration));
   if (!first) return null;
   const close = () => acknowledge(first.id);
   const picture = first.illustration !== undefined && manifestEntry(first.illustration)?.kind === 'image' ? first.illustration : undefined;

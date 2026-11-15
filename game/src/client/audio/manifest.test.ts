@@ -12,7 +12,7 @@ import { validateAssetManifest } from '@content/assets/index';
 import { AssetManifestFragmentSchema } from '@content/schemas/assets';
 import musicStrings from '@content/locales/en/music.json';
 import { expectedAudioAssetIds, MUSIC_STATES, SFX, SFX_IDS, sfxDef, STINGERS, VOICE_ROLES, voiceRoleAssetId } from './catalog';
-import { AUDIO_GENERATORS, buildAudioManifest } from './manifestSpec';
+import { AUDIO_GENERATORS, buildAudioManifest, FINAL_TRACK_SECONDS } from './manifestSpec';
 import { SFX_SYNTHS } from './sfxSynth';
 import { STINGER_DEFS } from './stingers';
 import { MUSIC_STYLES } from './styles';
@@ -46,7 +46,9 @@ describe('audio manifest (music.json)', () => {
       expect(e?.kind).toBe('music');
       if (e?.kind !== 'music') continue;
       expect(e.loop).toBe(true);
-      expect(e.durationS).toBeGreaterThan(60);
+      // Placeholder loops are whole phrases near 2½ minutes; a delivered track keeps its own length
+      // (the new-saga sting is about half a minute).
+      expect(e.durationS).toBeGreaterThan(FINAL_TRACK_SECONDS[s] === undefined ? 60 : 20);
       expect(String(e.placeholder.params?.brief ?? '').length).toBeGreaterThan(20);
       expect(e.placeholder.generator).toBe(AUDIO_GENERATORS.music);
     }

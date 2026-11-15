@@ -703,10 +703,155 @@
    "width": 640,
    "height": 360
   },
+  "music/affairs.ogg": {
+   "bytes": 2902276,
+   "hash": "294df2b3",
+   "durationS": 160.1
+  },
+  "music/allthing.ogg": {
+   "bytes": 2594594,
+   "hash": "f545adda",
+   "durationS": 148.1
+  },
+  "music/arrival.ogg": {
+   "bytes": 2556322,
+   "hash": "66f7bb63",
+   "durationS": 147.3
+  },
+  "music/battle-raid.ogg": {
+   "bytes": 1086960,
+   "hash": "26e29639",
+   "durationS": 66.1
+  },
+  "music/battle-sea.ogg": {
+   "bytes": 1195487,
+   "hash": "d6c765db",
+   "durationS": 71.3
+  },
+  "music/battle-shieldwall.ogg": {
+   "bytes": 2809940,
+   "hash": "6e8e630a",
+   "durationS": 167.7
+  },
+  "music/birth.ogg": {
+   "bytes": 2937365,
+   "hash": "8ae76c90",
+   "durationS": 157.7
+  },
+  "music/chronicle.ogg": {
+   "bytes": 3824662,
+   "hash": "40c5fecf",
+   "durationS": 214.9
+  },
+  "music/coronation.ogg": {
+   "bytes": 2708840,
+   "hash": "37795e13",
+   "durationS": 154.8
+  },
+  "music/delve.ogg": {
+   "bytes": 3716831,
+   "hash": "039eeb6b",
+   "durationS": 199.7
+  },
+  "music/expedition.ogg": {
+   "bytes": 3362189,
+   "hash": "0faf871f",
+   "durationS": 185
+  },
+  "music/funeral.ogg": {
+   "bytes": 3157181,
+   "hash": "2c0bc6d0",
+   "durationS": 180
+  },
+  "music/great-hall.ogg": {
+   "bytes": 3001211,
+   "hash": "f8375e39",
+   "durationS": 157.6
+  },
+  "music/home-eyjar.ogg": {
+   "bytes": 3395843,
+   "hash": "d1bcd28a",
+   "durationS": 188.4
+  },
+  "music/home-hvarn.ogg": {
+   "bytes": 3525258,
+   "hash": "462e2f32",
+   "durationS": 198.5
+  },
   "music/home-skarn.ogg": {
-   "bytes": 3581557,
-   "hash": "8655cb38",
-   "durationS": 202.25
+   "bytes": 3586615,
+   "hash": "174d6a5f",
+   "durationS": 202.5
+  },
+  "music/longhouse.ogg": {
+   "bytes": 3401460,
+   "hash": "9c99868e",
+   "durationS": 192.5
+  },
+  "music/main-theme.ogg": {
+   "bytes": 2361221,
+   "hash": "f17cd648",
+   "durationS": 128.4
+  },
+  "music/market.ogg": {
+   "bytes": 3529790,
+   "hash": "78f6426f",
+   "durationS": 193.3
+  },
+  "music/mead-hall-lament.ogg": {
+   "bytes": 4414094,
+   "hash": "20399de5",
+   "durationS": 238.8
+  },
+  "music/mead-hall-rowdy.ogg": {
+   "bytes": 3290519,
+   "hash": "1163ae0b",
+   "durationS": 173.4
+  },
+  "music/mead-hall-warm.ogg": {
+   "bytes": 2672266,
+   "hash": "fd10c9da",
+   "durationS": 141.9
+  },
+  "music/new-saga.ogg": {
+   "bytes": 590317,
+   "hash": "172e3c33",
+   "durationS": 34.8
+  },
+  "music/sailing-calm.ogg": {
+   "bytes": 3549243,
+   "hash": "a74331dd",
+   "durationS": 197.2
+  },
+  "music/settlement.ogg": {
+   "bytes": 3610363,
+   "hash": "fa8e88b7",
+   "durationS": 196.9
+  },
+  "music/shipyard.ogg": {
+   "bytes": 3118822,
+   "hash": "fdbae6ab",
+   "durationS": 172.5
+  },
+  "music/smithy.ogg": {
+   "bytes": 2975880,
+   "hash": "09a6cbce",
+   "durationS": 159.7
+  },
+  "music/victory.ogg": {
+   "bytes": 4787127,
+   "hash": "9835d82f",
+   "durationS": 269.9
+  },
+  "music/wedding.ogg": {
+   "bytes": 3318717,
+   "hash": "f50f5799",
+   "durationS": 177.5
+  },
+  "music/world-map.ogg": {
+   "bytes": 3224416,
+   "hash": "b62ba2c6",
+   "durationS": 175
   },
   "narrative/storylets/after-the-shield-wall-autumn.jpg": {
    "bytes": 83867,

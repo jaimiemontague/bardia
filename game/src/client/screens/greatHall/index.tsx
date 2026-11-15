@@ -26,6 +26,7 @@ import { Button, ChoiceCard, ChoiceGrid, Disclosure, Icon, StatLine, Tabs } from
 import { capitalOf, garrisonMen } from '../hub/counsel';
 import { shipsAtHome } from '../hub/village';
 import { MusterPanel } from './muster';
+import { useMusicState } from '../../audio/hooks';
 import './greatHall.css';
 
 /** Tabs of the Hirdmaster's panel. */
@@ -237,6 +238,7 @@ export function GreatHall({
 
 function HallRoute({ params, close, muster }: ScreenProps & { muster: boolean }): ReactElement {
   const state = useGame((s) => s.state);
+  useMusicState('greatHall');
   // The muster route opens the Hirdmaster's panel on the muster.
   const routeParams = muster ? { person: 'hirdmaster', view: 'muster', ...(params ?? {}) } : params;
   const [person, setPerson] = useRoutePerson(greatHallRoom, ROUTES, routeParams);

@@ -9,6 +9,7 @@ import type { CharId, GameState, PendingDecision, Settlement, SettlementId } fro
 import { governorCandidates } from '@sim/modules/settlements/index';
 import type { AftermathFate, ArrivalChoice, DecisionOption } from '@sim/modules/settlements/types';
 import { useGame, usePending } from '../../app/gameStore';
+import { useMusicState } from '../../audio/hooks';
 import type { ScreenDescriptor, ScreenProps } from '../../app/screenTypes';
 import { formatGameDate } from '../../i18n/calendar';
 import { formatNumber, tOr, useT } from '../../i18n/index';
@@ -178,6 +179,7 @@ function AftermathScreen({ pending, state }: { pending: PendingDecision; state: 
 function ArrivalScreen(_props: ScreenProps): ReactElement | null {
   const pending = usePending();
   const state = useGame((s) => s.state);
+  useMusicState(pending?.kind === 'arrival' ? 'arrival' : null);
   if (!pending || !state || pending.kind !== 'arrival') return null;
   return <ArrivalCard pending={pending} state={state} />;
 }
@@ -185,6 +187,7 @@ function ArrivalScreen(_props: ScreenProps): ReactElement | null {
 function AftermathHost(_props: ScreenProps): ReactElement | null {
   const pending = usePending();
   const state = useGame((s) => s.state);
+  useMusicState(pending?.kind === 'aftermath' ? 'settlement' : null);
   if (!pending || !state || pending.kind !== 'aftermath') return null;
   return <AftermathScreen pending={pending} state={state} />;
 }

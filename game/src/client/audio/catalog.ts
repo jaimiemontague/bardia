@@ -26,7 +26,8 @@ export const OUTPUT_BUSES: readonly OutputBus[] = ['music', 'sfx', 'ambience', '
 /**
  * Music states (§28.1: main theme, home hall ×3, sailing calm/storm, three regional themes,
  * mead-hall ×2 (diegetic), battle ×2 with intensity stems, duel, delve, Allthing, funeral,
- * coronation). Screens request one with `useMusicState(state)`.
+ * coronation), plus the owner's further tracks for screens and occasions. Screens request one
+ * with `useMusicState(state)`.
  */
 export const MUSIC_STATES = [
   'mainTheme',
@@ -47,6 +48,25 @@ export const MUSIC_STATES = [
   'allthing',
   'funeral',
   'coronation',
+  // Owner's delivered score beyond the §28.1 list: menus, rooms of the home, the map, voyages,
+  // sea battles, outcomes and the saga's family and rule screens.
+  'newSaga',
+  'worldMap',
+  'greatHall',
+  'longhouse',
+  'smithy',
+  'shipyard',
+  'market',
+  'meadHallWarm',
+  'battleSea',
+  'arrival',
+  'expedition',
+  'victory',
+  'chronicle',
+  'wedding',
+  'birth',
+  'settlement',
+  'affairs',
 ] as const;
 export type MusicState = (typeof MUSIC_STATES)[number];
 /** A music request: a state, or explicit silence. */

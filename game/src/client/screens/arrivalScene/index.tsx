@@ -8,11 +8,13 @@ import { useGame, usePending } from '../../app/gameStore';
 import { GenericDecision } from '../../shell/DecisionHost';
 import { ArrivalScene } from './ArrivalScene';
 import { arrivalView } from './model';
+import { useMusicState } from '../../audio/hooks';
 
 function ArrivalSceneScreen(_props: ScreenProps): ReactElement | null {
   const pending = usePending();
   const state = useGame((s) => s.state);
   const dispatch = useGame((s) => s.dispatch);
+  useMusicState(pending?.kind === 'arrival' ? 'arrival' : null);
   const view = useMemo(() => (pending && state && pending.kind === 'arrival' ? arrivalView(state, pending) : null), [pending, state]);
   if (!pending || pending.kind !== 'arrival') return null;
   // An unknown settlement still gets an answerable decision (the generic modal with the payload's choices).

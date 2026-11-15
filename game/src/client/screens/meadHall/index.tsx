@@ -16,7 +16,7 @@
  * those of the shared pieces (meadhall, tavern-<action>, tavern-result, news-log, hall-places, sellswords,
  * hire-<n>).
  */
-import type { ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 import type { Content } from '@content/index';
 import type { GameState, SettlementId } from '@sim/core/state';
 import { loadContent } from '../../app/content';
@@ -28,6 +28,8 @@ import { meadHallRoom } from '../../render/interiors/rooms/meadHall';
 import { ambienceOf } from '../../render/scenes/ambience';
 import { Disclosure } from '../../ui/index';
 import { IntelPanel, NewsLog, SellswordPanel, TavernPanel } from '../settlement/meadHall';
+import { useMusicState } from '../../audio/hooks';
+import { meadHallMusic } from '../../audio/screenMusic';
 import './meadHall.css';
 
 /** The people of the hall (route param `person`). */
@@ -103,6 +105,9 @@ export function HomeMeadHall({
 
 function HomeMeadHallScreen({ params, close }: ScreenProps): ReactElement {
   const state = useGame((s) => s.state);
+  // One mood per visit, rolled when the hall opens (client-only: the sim's randomness is untouched).
+  const [mood] = useState(() => meadHallMusic(Math.random()));
+  useMusicState(mood);
   const [person, setPerson] = useRoutePerson(meadHallRoom, ['building.meadHall'], params);
   if (!state) return <div />;
   return <HomeMeadHall state={state} person={person} onPersonChange={setPerson} onClose={close} />;

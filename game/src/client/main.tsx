@@ -1,7 +1,8 @@
 /**
  * Client entry point. Boot order: theme and fonts → the registry-bound session factory → settings
- * applied to <html> (and kept in sync) → client services on the sim-event bus → keyboard shortcuts
- * and controller polling → the screen registry → React.
+ * applied to <html> (and kept in sync) → client services on the sim-event bus → audio (first-gesture
+ * unlock, settings bridge, sim-event stingers) → keyboard shortcuts and controller polling → the
+ * screen registry → React.
  */
 import './theme/fonts';
 import './theme/theme.css';
@@ -15,6 +16,7 @@ import { setSessionFactory } from './app/gameStore';
 import { getShortcutManager } from './app/inputRuntime';
 import { getScreenRegistry } from './app/registry';
 import { installGameServices } from './app/services';
+import { bootAudio } from './audio/boot';
 import { installEventLog } from './devtools/eventLog';
 import { setLanguage } from './i18n/index';
 import { actionBus } from './input/actions';
@@ -52,6 +54,7 @@ useSettings.subscribe((s, prev) => {
 installFavicon();
 installGameServices();
 installEventLog();
+bootAudio();
 getShortcutManager().attach(window);
 startGamepadPolling(actionBus, () => useSettings.getState().settings.controls.gamepad);
 

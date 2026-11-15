@@ -23,6 +23,8 @@ import { useFinalPaintingInfo } from '../render/scenes/finalArt';
 import { PENDING_OWNERS } from '@sim/core/ownership';
 import type { PendingDecision, TextVars } from '@sim/core/state';
 import { useGame, usePending } from '../app/gameStore';
+import { useMusicState } from '../audio/hooks';
+import { eventMusic } from '../audio/screenMusic';
 import type { ScreenRegistry } from '../app/screenRegistry';
 import { formatGameDate } from '../i18n/calendar';
 import { hasKey, useT } from '../i18n/index';
@@ -119,6 +121,7 @@ export function GenericDecision({ pending }: { pending: PendingDecision }): Reac
   const t = useT();
   const dispatch = useGame((s) => s.dispatch);
   const { titleKey, textKey, vars, choices, illustration } = describePending(pending);
+  useMusicState(eventMusic(illustration));
   const isMessage = pending.kind === 'message';
   const priority = isMessage ? (rec(pending.payload).priority as string | undefined) : undefined;
   const owner = Object.hasOwn(PENDING_OWNERS, pending.kind) ? PENDING_OWNERS[pending.kind] : undefined;

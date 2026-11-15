@@ -15,6 +15,8 @@ import { comboFromEvent, type InputContext } from '../../input/bindings';
 import { getShortcutManager } from '../../app/inputRuntime';
 import { useNavigation } from '../../app/navigation';
 import { useDevFlags } from '../../app/devFlags';
+import { useMusicState } from '../../audio/hooks';
+import { battleMusic, outcomeMusic } from '../../audio/screenMusic';
 import { useT } from '../../i18n/index';
 import { BattleView, type BattleHover } from '../../render/battle/BattleView';
 import { Button } from '../../ui/index';
@@ -231,6 +233,8 @@ export function BattleScene({ controller: c, title, nameOf, doneLabelKey, onDone
     const r = c.result();
     return r && showSummary ? summarize(c.setup, r, c.side, (id) => nameOf?.(id)) : null;
   }, [c, showSummary, nameOf]);
+  // The fight's music, then victory (or the funeral music for a loss) when the result scene is up.
+  useMusicState((summary && outcomeMusic(summary.outcome)) ?? battleMusic(c.setup.kind));
 
   const focus = (x: number, y: number) => {
     c.setFollow(false);
