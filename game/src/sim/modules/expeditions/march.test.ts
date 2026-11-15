@@ -180,7 +180,7 @@ describe('the march', () => {
     expect(missingEventKeys(launch)).toEqual([]);
   });
 
-  it('steers the war-band (the baggage follows), eats daily, and stands down when it walks back into the hall', () => {
+  it('steers the war-band (the baggage follows), eats daily, halts when it walks back into the hall, and Come home stands it down', () => {
     const { s, fleetId, armyId } = marched();
     const st0 = s.getState();
     const g0 = sumMen(st0.settlements[st0.player.capitalId]?.garrison);
@@ -189,6 +189,7 @@ describe('the march', () => {
     const dir = landHeading(start, 6);
     expect(dir).toBeDefined();
     if (!dir) return;
+    expect(st0.fleets[fleetId]?.cameHome).toBeUndefined();
     ok(s, { type: 'steer', dir });
     expect(s.getState().armies[armyId]?.steer).toBe(dir);
     const rations0 = s.getState().fleets[fleetId]?.rations ?? 0;
@@ -205,8 +206,19 @@ describe('the march', () => {
     hours(s, 24 - (mid.time.hour % 24) + 1);
     expect(s.getState().fleets[fleetId]?.rations ?? 0).toBeLessThanOrEqual(rations0 - Math.floor(men * (1 - content.balance.food.forageCap)));
     ok(s, { type: 'steer', dir: OPPOSITE[dir] });
-    const back = hours(s, 96, (st) => st.player.expeditionFleetId === undefined);
-    expect(back.some((e) => e.type === 'ExpeditionReturned')).toBe(true);
+    const back = hours(s, 96, (st) => st.armies[armyId]?.steer === undefined);
+    // Walking into the hall halts the war-band there; the march goes on until the player ends it.
+    const touch = back.find((e) => e.type === 'Arrived' && (e as { touch?: boolean }).touch === true) as { settlementId?: string } | undefined;
+    expect(touch?.settlementId).toBe(st0.player.capitalId);
+    expect(back.some((e) => e.type === 'ExpeditionReturned')).toBe(false);
+    expect(back.some((e) => e.type === 'Notification' && (e as { key?: string }).key === 'expeditions.notify.atHomeMarch')).toBe(true);
+    expect(s.getState().player.expeditionFleetId).toBe(fleetId);
+    expect(s.getState().meta.mode).toBe('map');
+    expect(armyMenTotal(s.getState(), armyId)).toBe(men);
+    expect(s.getState().fleets[fleetId]?.cameHome).toBe(true);
+    // Come home: returnHome there stands the march down at once.
+    const r = ok(s, { type: 'returnHome' });
+    expect(r.events.some((e) => e.type === 'ExpeditionReturned')).toBe(true);
     expectHome(s, fleetId, armyId);
     const st = s.getState();
     expect(sumMen(st.settlements[st.player.capitalId]?.garrison)).toBe(g0 + armyMenTotal(st0, armyId));

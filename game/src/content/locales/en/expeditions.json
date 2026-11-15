@@ -206,5 +206,12 @@
   "expeditions.hud.march.next.lowFood": "Food is low. March home before hunger comes.",
   "expeditions.hud.march.next.after": "March on, or march home to bring the plunder to the storehouse.",
   "expeditions.hud.march.next.noMen": "No man of the war-band is left standing. Let time run: the leaders make their way home.",
-  "expeditions.hud.march.next.noLeader": "No one is left to lead. The men are marching home; let time run."
+  "expeditions.hud.march.next.noLeader": "No one is left to lead. The men are marching home; let time run.",
+  "expeditions.notify.atHome": "Home waters: {place}. Press Come home to end the voyage.",
+  "expeditions.notify.atHomeMarch": "Home again: {place}. Press Come home to end the march.",
+  "expeditions.hud.comeHome": "Come home",
+  "expeditions.hud.tip.comeHome": "End the voyage here: the men stand down, silver goes to the treasury and plunder to your storehouse.",
+  "expeditions.hud.march.tip.comeHome": "End the march here: the men stand down, silver goes to the treasury and plunder to your storehouse.",
+  "expeditions.hud.next.atHome": "You lie at home. Press Come home to end the voyage, or steer out again.",
+  "expeditions.hud.march.next.atHome": "You stand at your own gates. Press Come home to end the march, or march out again."
 }

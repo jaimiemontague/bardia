@@ -8,7 +8,7 @@ import { GameSession } from '@sim/game';
 import { suggestPlan } from '@sim/modules/expeditions/plan';
 import { inDraft } from '@sim/testing';
 import { describe, expect, it } from 'vitest';
-import { hudBlocks, hudNextStep, knownOverland, marchNextStep, marchTargetOf, whereWords } from './hud';
+import { hudBlocks, hudNextStep, knownOverland, lyingAtHome, marchNextStep, marchTargetOf, whereWords } from './hud';
 
 function atSea(change?: (d: GameState) => void): GameState {
   const s = GameSession.newGame({ seed: 'slice-1' });
@@ -116,5 +116,36 @@ describe('the march helm', () => {
     const fid = st.player.expeditionFleetId as FleetId;
     const pos = st.fleets[fid]?.pos as { x: number; y: number };
     for (const id of knownOverland(st, pos)) expect(st.settlements[id]?.factionId).not.toBe(st.player.factionId);
+  });
+});
+
+describe('lying at home (Come home)', () => {
+  it('a fleet in its home harbour and a march at its own gates lie at home; out at sea neither does', () => {
+    const r = getContent().tunables.expeditions.homeRadius;
+    const sea = atSea((d) => {
+      const f = fleetOf(d);
+      if (f) f.cameHome = true;
+    });
+    // Right after launch (the flag not yet set) it is not "lying at home" yet.
+    expect(lyingAtHome(atSea(), r)).toBe(false);
+    expect(lyingAtHome(sea, r)).toBe(true);
+    const away = inDraft(sea, GameSession.newGame({ seed: 'slice-1' }).env, (d) => {
+      const f = fleetOf(d);
+      if (f) {
+        f.pos = { x: f.pos.x + 30, y: f.pos.y };
+        f.mode = 'sailing';
+      }
+    }).state;
+    expect(lyingAtHome(away, r)).toBe(false);
+    const s = GameSession.newGame({ seed: 'slice-1' });
+    s.dispatch({ type: 'launchExpedition', ...suggestPlan(s.getState(), getContent(), 30, { travel: 'land' }) });
+    expect(lyingAtHome(s.getState(), r)).toBe(false);
+    const marchHome = inDraft(s.getState(), s.env, (d) => {
+      const f = fleetOf(d);
+      if (f) f.cameHome = true;
+    }).state;
+    expect(lyingAtHome(marchHome, r)).toBe(true);
+    expect(hudNextStep({ ashore: false, homeward: false, sailing: false, iced: false, foodDays: 9, cargoTons: 0, atHome: true })).toBe('atHome');
+    expect(marchNextStep({ homeward: false, routed: false, steered: false, foodDays: 9, cargoTons: 0, atHome: true })).toBe('atHome');
   });
 });

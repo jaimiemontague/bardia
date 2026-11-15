@@ -26,33 +26,38 @@ async function answerOther(page: Page): Promise<boolean> {
   return true;
 }
 
-/** Runs a dev-console command and returns the text of its last output line. */
-async function devRun(page: Page, line: string): Promise<string> {
-  const input = page.getByTestId('dev-console-input');
-  await input.fill(line);
-  await input.press('Enter');
-  return (await page.getByTestId('dev-console').locator('.devconsole-line').last().textContent()) ?? '';
+/**
+ * Sets a long course with the map's own "Chart a course" picker, which lists the known harbours of other houses
+ * nearest first: the last one is the farthest. (Courses to the house's own harbours end the voyage at home.)
+ */
+async function sailFar(page: Page): Promise<boolean> {
+  const sail = page.getByTestId('order-sail-destination');
+  if (!(await sail.isVisible())) await page.getByTestId('order-chart').click({ timeout: 3000 }).catch(() => undefined);
+  if (!(await sail.isVisible({ timeout: 3000 }).catch(() => false))) return false;
+  const select = page.getByTestId('order-destination');
+  const values = await select.locator('option').evaluateAll((os) => os.map((o) => (o as HTMLOptionElement).value));
+  const last = values[values.length - 1];
+  if (last !== undefined) await select.selectOption(last);
+  if (!(await sail.isEnabled())) return false;
+  await sail.click();
+  return true;
 }
 
-/**
- * Sets a long course through the dev console: from the fleet's last port (or the capital), the sea lane with
- * the most days that the router accepts. Returns the settlement id sailed for.
- */
-async function sailFar(page: Page, from: string | null): Promise<string | null> {
-  await page.keyboard.press('Backquote');
-  await expect(page.getByTestId('dev-console-input')).toBeVisible();
-  const origin = from ?? JSON.parse(await devRun(page, 'state player.capitalId')) as string;
-  const lanes = JSON.parse(await devRun(page, `state worldIndex.settlements.${origin}.lanes`)) as { to: string; seaDays: number | null }[];
-  const far = lanes.filter((l) => l.seaDays !== null).sort((x, y) => (y.seaDays ?? 0) - (x.seaDays ?? 0));
-  let chosen: string | null = null;
-  for (const l of far) {
-    if (/Dispatched/.test(await devRun(page, `cmd {"type":"setRoute","to":{"settlementId":"${l.to}"}}`))) {
-      chosen = l.to;
-      break;
-    }
+/** The voyage ended at home (a storm, a lost ship, a course that touched the home harbour): put out again. */
+async function relaunchIfHome(page: Page): Promise<boolean> {
+  if (!(await page.locator('[data-testid="game-shell"][data-mode="hub"]').isVisible())) return false;
+  const plan = page.getByTestId('hub-expedition');
+  if (!(await plan.isEnabled().catch(() => false))) return false;
+  await plan.click();
+  const launch = page.getByTestId('planner-launch');
+  if (!(await launch.isEnabled({ timeout: 3000 }).catch(() => false))) {
+    await page.getByTestId('planner-close').click({ timeout: 1500 }).catch(() => undefined);
+    return false;
   }
-  await page.keyboard.press('Backquote');
-  return chosen;
+  await launch.click();
+  await expect(page.locator('[data-testid="game-shell"][data-mode="map"]')).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByTestId('world-map-loading')).toHaveCount(0, { timeout: 60_000 });
+  return true;
 }
 
 test('encounters at sea: a readable card with a safe first choice, and an attack that reaches the battle setup', async ({ page }) => {
@@ -81,8 +86,7 @@ test('encounters at sea: a readable card with a safe first choice, and an attack
   await page.getByTestId('planner-launch').click();
   await expect(page.locator('[data-testid="game-shell"][data-mode="map"]')).toBeVisible({ timeout: 10_000 });
   await expect(page.getByTestId('world-map-loading')).toHaveCount(0, { timeout: 60_000 });
-  let target = await sailFar(page, null);
-  expect(target).not.toBeNull();
+  expect(await sailFar(page)).toBe(true);
 
   // The encounter is a full-screen scene now (§20.7), shown after its attention cue.
   const encounterCard = page.getByTestId('encounter-scene');
@@ -133,9 +137,8 @@ test('encounters at sea: a readable card with a safe first choice, and an attack
     }
     // Arrived or stopped: set another long course.
     const status = (await page.getByTestId('expedition-status').textContent().catch(() => '')) ?? '';
-    if (!/Bound for/.test(status)) {
-      target = (await sailFar(page, target)) ?? (await sailFar(page, null));
-    }
+    if (await relaunchIfHome(page)) await sailFar(page);
+    else if (!/Bound for/.test(status)) await sailFar(page);
     const play = page.getByTestId('time-speed-4');
     const pressed = await play.getAttribute('aria-pressed', { timeout: 300 }).catch(() => null);
     if (pressed === 'false') await play.click({ timeout: 1000 }).catch(() => undefined);

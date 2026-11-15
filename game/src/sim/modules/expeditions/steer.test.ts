@@ -1,6 +1,7 @@
 /**
  * The player steers the expedition (the `steer` command, world's steerEntity) with the full module registry:
- * launching does not touch the home harbour, steering back into it after leaving ends the voyage, the war-band
+ * launching does not touch the home harbour, steering back into it after leaving only stops the ship there (Come
+ * home, returnHome, ends the voyage), the war-band
  * ashore is steered by the same command and boards again when it walks back to the ships, a set course and
  * steering cancel each other, and the same commands replay to the same state.
  */
@@ -77,9 +78,10 @@ function openHeading(from: MapPos, cells: number): SteerDir | undefined {
 }
 
 describe('steering the expedition', () => {
-  it('sets out without touching home, and steering back into the home harbour ends the voyage', () => {
+  it('sets out without touching home; steering back into the home harbour stops there, and returnHome ends the voyage', () => {
     const { s, fleetId } = launched();
     // First a heading to get off the berth, then one with open water ahead.
+    expect(s.getState().fleets[fleetId]?.cameHome).toBeUndefined();
     ok(s, { type: 'steer', dir: 'n' });
     const berth = { ...(s.getState().fleets[fleetId]?.pos as MapPos) };
     expect(s.getState().world?.touch?.[fleetId]).toContain(s.getState().player.capitalId);
@@ -97,12 +99,24 @@ describe('steering the expedition', () => {
     expect(s.getState().world?.touch?.[fleetId]).not.toContain(s.getState().player.capitalId);
     ok(s, { type: 'steer', dir: 'stop' });
     expect(s.getState().fleets[fleetId]?.steer).toBeUndefined();
-    // Back the way it came: the voyage ends at home.
+    // Back the way it came: the ship comes to rest at home, but the voyage goes on until the player says so.
     ok(s, { type: 'steer', dir: OPPOSITE[out] });
-    const events = sail(s, 24, (st) => st.player.expeditionFleetId === undefined);
+    const men = Object.values(s.getState().fleets[fleetId]?.men ?? {}).reduce((a, b) => a + b, 0);
+    const events = sail(s, 24, (st) => st.fleets[fleetId]?.steer === undefined);
+    const touch = events.find((e) => e.type === 'Arrived' && (e as { touch?: boolean }).touch === true) as { settlementId?: string } | undefined;
+    expect(touch?.settlementId).toBe(s.getState().player.capitalId);
+    expect(events.some((e) => e.type === 'ExpeditionReturned')).toBe(false);
+    expect(events.some((e) => e.type === 'Notification' && (e as { key?: string }).key === 'expeditions.notify.atHome')).toBe(true);
+    expect(s.getState().player.expeditionFleetId).toBe(fleetId);
+    expect(s.getState().meta.mode).toBe('map');
+    expect(Object.values(s.getState().fleets[fleetId]?.men ?? {}).reduce((a, b) => a + b, 0)).toBe(men);
+    expect(s.getState().fleets[fleetId]?.mode).toBe('docked');
+    expect(s.getState().fleets[fleetId]?.cameHome).toBe(true);
+    // Come home: returnHome there ends the voyage at once.
+    const r = ok(s, { type: 'returnHome' });
+    expect(r.events.some((e) => e.type === 'ExpeditionReturned')).toBe(true);
     expect(s.getState().player.expeditionFleetId).toBeUndefined();
     expect(s.getState().meta.mode).toBe('hub');
-    expect(events.some((e) => e.type === 'ExpeditionReturned')).toBe(true);
     expect(checkInvariants(s.getState(), s.env)).toEqual([]);
   });
 

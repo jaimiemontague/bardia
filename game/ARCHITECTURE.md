@@ -458,7 +458,8 @@ Modules that cannot import each other's runtime code read these documented shape
   land party (`landParties[army] = fleet`, the army the player steers). Hourly the baggage takes the war-band's position
   and stragglers in it join the war-band; daily `carryT` follows the marchers (goods beyond it are left behind).
   Economy trades from it (`carryT` is its hold, the war-band's position counts), settlements loads plunder into it and
-  garrisons an annexed town from the war-band; it stands down when the war-band walks back into the hall.
+  garrisons an annexed town from the war-band. Touching home (sea or land) only stops the expedition there; `returnHome`
+  within reach of home stands it down.
 - **The visit** (settlements): `state.settlementsState` = `{ battles: battleId → { settlementId, approach, fleetId? },
   inside?: settlementId (the hub screen), loot?: { settlementId, fleetId, untilHour } (the Cargo screen) }`;
   settlements gain `tributaryOf`, `raidedHour`, `lastFate`. Battles it starts carry `origin: 'settlements'`; its

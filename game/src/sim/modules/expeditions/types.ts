@@ -131,6 +131,8 @@ declare module '@sim/core/state' {
     homeward?: boolean;
     /** The holding a homeward fleet stands down at when it is not the capital (the capital cannot be reached). */
     homewardTo?: SettlementId;
+    /** Set when the expedition has come back to its home settlement without standing down (touch, or the end of a course); the helm then offers "Come home". */
+    cameHome?: boolean;
     /**
      * A march (a land expedition): this fleet record is the war-band's baggage and has no ships. Settlements (the
      * Cargo window) and economy read `carryT` as the hold's capacity.

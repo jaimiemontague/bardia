@@ -54,7 +54,7 @@ What to look for: is each screen calm and readable now, is anything you want mis
 4. On the map your war-band is a banner-bearer. Hold **W A S D** or the arrow keys to walk; let go to halt.
 5. Walk into a settlement, or use **March to** and pick one, then hold a speed button at the top to let time run.
 6. On arrival you get the banner, then the full-screen scene: **Enter**, **Raid**, **Assault** or leave.
-7. **March home**, or walk back into your own village, to end the march.
+7. To end the march: press **March home** from anywhere, or walk back into your own village and press **Come home**.
 
 ## Test 4: sail (10 minutes)
 
@@ -65,7 +65,7 @@ What to look for: is each screen calm and readable now, is anything you want mis
 5. Or use **Chart a course**, pick a harbour, and press a speed button to let the ship sail itself.
 6. Somewhere at sea you will meet other ships: horn, banner, scene. Keys 1 to 4 pick a choice. **Attack** leads to the new sea-battle card: **Take the helm**.
 7. Stop against a coast and press **Go ashore** to walk a party inland with the same keys; walk back onto the ship to re-board.
-8. Steer into your home harbour, or press **Sail home**, to end the voyage. At the **Market**, **Sell all loot**.
+8. To end the voyage: press **Sail home** from anywhere, or steer into your home harbour and press **Come home**. At the **Market**, **Sell all loot**.
 
 What to look for: does steering feel right (speed, turning, the camera), do the scenes get your attention, was it always clear what to do next.
 

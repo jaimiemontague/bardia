@@ -122,3 +122,22 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Muster at 1366×768 (§20.3: the gold button stays in view): the kinds fit one row and the cost line with
+   "Send the war-arrow" sticks to the bottom of the screen while the rest scrolls. */
+.gh-kinds {
+  grid-template-columns: repeat(auto-fill, minmax(10.25rem, 1fr));
+}
+.gh-kinds .choice {
+  padding: var(--sp-2) var(--sp-5) var(--sp-2) var(--sp-3);
+}
+.gh-kinds .choice-picture {
+  display: none;
+}
+.gh-muster-foot {
+  position: sticky;
+  bottom: -2px;
+  z-index: 2;
+  padding-bottom: var(--sp-2);
+  background: linear-gradient(180deg, rgba(25, 18, 12, 0.92), var(--oak-1) 55%);
+}

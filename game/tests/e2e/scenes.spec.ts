@@ -168,6 +168,29 @@ test('meeting another party: the cue, then the encounter scene, answered safely'
       seen = true;
       break;
     }
+    // An arrival scene whose cue was missed: sail on and set the course again.
+    const leave = page.getByTestId('choose-leave');
+    if (await leave.isVisible()) {
+      await leave.click();
+      await sailFar();
+      continue;
+    }
+    // The voyage ended at home: put out again.
+    if (await page.locator('[data-testid="game-shell"][data-mode="hub"]').isVisible()) {
+      const plan = page.getByTestId('hub-expedition');
+      if (await plan.isEnabled().catch(() => false)) {
+        await plan.click();
+        const launch = page.getByTestId('planner-launch');
+        if (await launch.isEnabled({ timeout: 3000 }).catch(() => false)) {
+          await launch.click();
+          await expect(page.locator('[data-testid="game-shell"][data-mode="map"]')).toBeVisible({ timeout: 10_000 });
+          await expect(page.getByTestId('world-map-loading')).toHaveCount(0, { timeout: 60_000 });
+          await sailFar();
+        } else await page.getByTestId('planner-close').click({ timeout: 1500 }).catch(() => undefined);
+      }
+      await page.waitForTimeout(250);
+      continue;
+    }
     if (!(await answerOther(page))) {
       const status = (await page.getByTestId('expedition-status').textContent().catch(() => '')) ?? '';
       // The map's status line is being reworked: re-set the course at most every 25 s (opening the console pauses time).

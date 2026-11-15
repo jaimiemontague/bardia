@@ -144,6 +144,7 @@ test('march overland from the iced-in hall: steer the war-band, reach a neighbou
   await expect(page.locator('[data-testid="game-shell"][data-mode="map"]')).toBeVisible({ timeout: 10_000 });
   await expect(page.getByTestId('world-map-loading')).toHaveCount(0, { timeout: 60_000 });
   await expect(page.locator('[data-testid="expedition-hud"][data-travel="land"]')).toBeVisible();
+  // Just launched: the home order is the normal "March home" (Come home waits until the band has come back).
   await expect(page.getByTestId('order-home')).toContainText('March home');
   await expect(page.getByTestId('expedition-where')).toContainText('On the march');
 
@@ -242,5 +243,72 @@ test('march overland from the iced-in hall: steer the war-band, reach a neighbou
   });
   await expect(hub).toBeVisible();
   await expect(page.getByTestId('hub')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('walking back into the hall only halts the war-band; Come home ends the march', async ({ page }) => {
+  test.setTimeout(240_000);
+  const errors: string[] = [];
+  page.on('pageerror', (err) => errors.push(err.message));
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto('/');
+  // Release builds keep the developer console off until it is switched on in Options (the test reads positions with it).
+  await page.getByTestId('menu-options').click();
+  await page.getByRole('tab', { name: 'Gameplay' }).click();
+  const devSwitch = page.getByRole('switch', { name: /Developer console/ });
+  if ((await devSwitch.getAttribute('aria-checked')) !== 'true') await devSwitch.click();
+  await page.getByTestId('options-done').click();
+  await page.getByTestId('menu-newSaga').click();
+  await page.getByTestId('quick-start').click();
+  await expect(page.locator('[data-testid="game-shell"][data-mode="hub"]')).toBeVisible({ timeout: 20_000 });
+  while (await answerOne(page)) await page.waitForTimeout(200);
+  await page.getByTestId('hub-expedition').click();
+  await page.getByTestId('planner-travel-land').click();
+  await page.getByTestId('planner-launch').click();
+  const map = page.locator('[data-testid="game-shell"][data-mode="map"]');
+  await expect(map).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByTestId('world-map-loading')).toHaveCount(0, { timeout: 60_000 });
+  const home = page.getByTestId('order-home');
+  // Just launched, at the gates: the home order is "March home", not "Come home".
+  await expect(home).toHaveAttribute('data-at-home', 'false');
+  await expect(home).toContainText('March home');
+  const [fid, parties] = (await readState(page, ['player.expeditionFleetId', 'expeditions.landParties'])) as [string, Record<string, string>];
+  const armyId = Object.keys(parties).find((a) => parties[a] === fid) as string;
+  const origin = (await bandAndHour(page, armyId)).pos;
+  const away = async (): Promise<boolean> => {
+    const p = (await bandAndHour(page, armyId)).pos;
+    return Math.hypot(p.x - origin.x, p.y - origin.y) > 3.2;
+  };
+
+  // Walk out of reach of home, then straight back in.
+  const back: Record<Dir, Dir> = { n: 's', ne: 'sw', e: 'w', se: 'nw', s: 'n', sw: 'ne', w: 'e', nw: 'se' };
+  let out: Dir | null = null;
+  for (const dir of ['n', 'e', 's', 'w', 'ne', 'se', 'sw', 'nw'] as Dir[]) {
+    // (The state read opens the dev console, so never read while a key is held.)
+    await hold(page, dir, 3000);
+    if (await page.getByTestId('pending-arrival').isVisible()) await page.getByTestId('choose-leave').click();
+    await settle(page);
+    if (await away()) {
+      out = dir;
+      break;
+    }
+  }
+  expect(out).not.toBeNull();
+  if (!out) return;
+  await expect(home).toContainText('March home');
+  for (const k of KEYS[back[out]]) await page.keyboard.down(k);
+  const end = Date.now() + 8000;
+  while (Date.now() < end && (await home.getAttribute('data-at-home')) !== 'true') await page.waitForTimeout(100);
+  // On into the gates: the touch halts the war-band there.
+  await page.waitForTimeout(1500);
+  for (const k of KEYS[back[out]]) await page.keyboard.up(k);
+  await settle(page);
+  // Still out on the march, lying at home: the gold Come home ends it.
+  await expect(map).toBeVisible();
+  await expect(home).toHaveAttribute('data-at-home', 'true');
+  await expect(home).toContainText('Come home');
+  await page.screenshot({ path: `${OUT}/march-come-home.png` });
+  await home.click();
+  await expect(page.locator('[data-testid="game-shell"][data-mode="hub"]')).toBeVisible({ timeout: 10_000 });
   expect(errors).toEqual([]);
 });

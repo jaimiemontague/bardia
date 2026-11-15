@@ -12,6 +12,9 @@
  * war-band is ("On the march near X"), food in days, men, and two orders: "March to" (known places on this land,
  * or the place selected on the map; expeditions' setRoute sends the war-band by road) and "March home"
  * (returnHome). The same keys steer the war-band.
+ *
+ * Touching home only brings the expedition to rest there (a notice says so). While it lies within reach of home
+ * (`lyingAtHome`) the home order is the gold "Come home", which ends the voyage at once (returnHome).
  */
 import { useMemo, useState, type ReactElement } from 'react';
 import { create } from 'zustand';
@@ -34,7 +37,7 @@ import { harbourIce, zoneIce, type HarbourIce } from './seaIce';
 import './helm.css';
 
 /** What the player should do next with the fleet (a locale key under `expeditions.hud.next.`). */
-export type HudNextStep = ExpeditionBlock | 'ashore' | 'homeward' | 'sailing' | 'steering' | 'iced' | 'lowFood' | 'after' | 'pick';
+export type HudNextStep = ExpeditionBlock | 'ashore' | 'homeward' | 'sailing' | 'steering' | 'atHome' | 'iced' | 'lowFood' | 'after' | 'pick';
 
 /** Picks the HUD's next-step hint from the fleet's situation (most pressing first). */
 export function hudNextStep(f: {
@@ -47,15 +50,40 @@ export function hudNextStep(f: {
   iced: boolean;
   foodDays: number;
   cargoTons: number;
+  /** The fleet lies within reach of home: "Come home" ends the voyage. */
+  atHome?: boolean;
 }): HudNextStep {
   if (f.block !== undefined && (f.block !== 'noLeader' || !f.ashore)) return f.block;
   if (f.ashore) return 'ashore';
   if (f.homeward) return 'homeward';
   if (f.sailing) return f.steered === true ? 'steering' : 'sailing';
+  if (f.atHome === true) return 'atHome';
   if (f.iced) return 'iced';
   if (f.foodDays <= 3) return 'lowFood';
   if (f.cargoTons > 0) return 'after';
   return 'pick';
+}
+
+/**
+ * Does the expedition lie within reach of home, so that the home order ends the voyage at once ("Come home")?
+ * Only once it has come back home (`fleet.cameHome`), never right after launch.
+ * A fleet: at rest (not under sail) within `homeRadius` of the capital or at its harbour (the world's touch list
+ * names the capital: it touched it and has not left). A march: its war-band within `homeRadius` of the capital.
+ */
+export function lyingAtHome(state: GameState, homeRadius: number): boolean {
+  const fid = state.player.expeditionFleetId;
+  const fleet = fid !== undefined ? state.fleets[fid] : undefined;
+  const home = state.settlements[state.player.capitalId];
+  if (!fleet || fid === undefined || !home || home.factionId !== state.player.factionId) return false;
+  if (fleet.cameHome !== true) return false;
+  const near = (p: { x: number; y: number }) => (p.x - home.mapPos.x) ** 2 + (p.y - home.mapPos.y) ** 2 <= homeRadius ** 2;
+  if (fleet.overland !== undefined) {
+    const armyId = warBandOf(state, fid);
+    const band = armyId !== undefined ? state.armies[armyId] : undefined;
+    return band !== undefined && near(band.pos);
+  }
+  if (fleet.mode === 'sailing') return false;
+  return near(fleet.pos) || (state.world?.touch?.[fid] ?? []).includes(home.id);
 }
 
 /** Why each of the HUD's orders cannot succeed now (a locale key under `expeditions.hud.blocked.`), if it cannot. */
@@ -214,10 +242,7 @@ export function ExpeditionHud({
   const loaded = loadContent();
   const home = state.settlements[state.player.capitalId];
   const homeRadius = loaded.ok ? loaded.content.tunables.expeditions.homeRadius : 0;
-  const atHome =
-    home !== undefined &&
-    fleet.mode !== 'sailing' &&
-    (fleet.pos.x - home.mapPos.x) ** 2 + (fleet.pos.y - home.mapPos.y) ** 2 <= homeRadius ** 2;
+  const atHome = home !== undefined && lyingAtHome(state, homeRadius);
   const homeIce = harbourIce(state);
   const blocks = hudBlocks(state, { homeIced: homeIce.iced, atHome });
   const blockedTip = (key: string | undefined, tip: string): string =>
@@ -258,7 +283,9 @@ export function ExpeditionHud({
     iced: ice.iced,
     foodDays: days,
     cargoTons: cargo,
+    atHome: atHome && !landParty,
   });
+  const comeHome = atHome && !landParty && !blocks.lost;
   // Men can go ashore when the ship lies still against a coast (not in harbour, not under way).
   const world = getStaticWorld();
   const cell = Math.floor(fleet.pos.y) * world.width + Math.floor(fleet.pos.x);
@@ -407,17 +434,20 @@ export function ExpeditionHud({
               content={
                 blocks.lost
                   ? t('expeditions.hud.tip.homeLost')
-                  : blockedTip(blocks.home, 'expeditions.hud.tip.homeStores')
+                  : comeHome
+                    ? t('expeditions.hud.tip.comeHome')
+                    : blockedTip(blocks.home, 'expeditions.hud.tip.homeStores')
               }
             >
               <Button
-                variant="secondary"
+                variant={comeHome ? 'primary' : 'secondary'}
                 icon="crown"
                 disabled={pending || blocks.home !== undefined}
                 onClick={() => dispatch({ type: 'returnHome' })}
                 data-testid="order-home"
+                data-at-home={comeHome ? 'true' : 'false'}
               >
-                {t('expeditions.hud.home')}
+                {comeHome ? t('expeditions.hud.comeHome') : t('expeditions.hud.home')}
               </Button>
             </Tooltip>
           )}
@@ -441,14 +471,15 @@ export function ExpeditionHud({
 // The march: the helm strip of a land expedition.
 
 /** What the player should do next on the march (a locale key under `expeditions.hud.march.next.`). */
-export type MarchNextStep = 'noMen' | 'noLeader' | 'homeward' | 'routed' | 'steering' | 'lowFood' | 'after' | 'pick';
+export type MarchNextStep = 'noMen' | 'noLeader' | 'homeward' | 'routed' | 'steering' | 'atHome' | 'lowFood' | 'after' | 'pick';
 
 /** Picks the march's next-step hint (most pressing first). */
-export function marchNextStep(f: { block?: ExpeditionBlock; homeward: boolean; routed: boolean; steered: boolean; foodDays: number; cargoTons: number }): MarchNextStep {
+export function marchNextStep(f: { block?: ExpeditionBlock; homeward: boolean; routed: boolean; steered: boolean; foodDays: number; cargoTons: number; atHome?: boolean }): MarchNextStep {
   if (f.block === 'noMen' || f.block === 'noLeader') return f.block;
   if (f.homeward) return 'homeward';
   if (f.steered) return 'steering';
   if (f.routed) return 'routed';
+  if (f.atHome === true) return 'atHome';
   if (f.foodDays <= 3) return 'lowFood';
   if (f.cargoTons > 0) return 'after';
   return 'pick';
@@ -526,7 +557,9 @@ function MarchHelm({ state, selected }: { state: GameState; selected: MapTarget 
           ? t('expeditions.hud.march.to', { place: bound, eta })
           : t('expeditions.hud.march.onRoad')
         : t('expeditions.hud.march.halted');
-  const next = marchNextStep({ ...(block !== undefined ? { block } : {}), homeward: fleet.homeward === true, routed, steered, foodDays: days, cargoTons: cargo });
+  const homeRadius = loaded.ok ? loaded.content.tunables.expeditions.homeRadius : 0;
+  const comeHome = block !== 'noMen' && lyingAtHome(state, homeRadius);
+  const next = marchNextStep({ ...(block !== undefined ? { block } : {}), homeward: fleet.homeward === true, routed, steered, foodDays: days, cargoTons: cargo, atHome: comeHome });
   const to = marchTargetOf(selected);
   const pick = dest !== '' && places.includes(dest as SettlementId) ? (dest as SettlementId) : places[0];
   const orderBlock = block === 'noLeader' ? block : undefined;
@@ -615,9 +648,9 @@ function MarchHelm({ state, selected }: { state: GameState; selected: MapTarget 
             </Button>
           )}
           {(!fleet.homeward || block === 'noMen') && (
-            <Tooltip content={block === 'noMen' ? t('expeditions.hud.march.tip.homeLost') : t('expeditions.hud.march.tip.home')}>
-              <Button variant="secondary" icon="crown" disabled={pending} onClick={() => dispatch({ type: 'returnHome' })} data-testid="order-home">
-                {t('expeditions.hud.march.home')}
+            <Tooltip content={block === 'noMen' ? t('expeditions.hud.march.tip.homeLost') : comeHome ? t('expeditions.hud.march.tip.comeHome') : t('expeditions.hud.march.tip.home')}>
+              <Button variant={comeHome ? 'primary' : 'secondary'} icon="crown" disabled={pending} onClick={() => dispatch({ type: 'returnHome' })} data-testid="order-home" data-at-home={comeHome ? 'true' : 'false'}>
+                {comeHome ? t('expeditions.hud.comeHome') : t('expeditions.hud.march.home')}
               </Button>
             </Tooltip>
           )}

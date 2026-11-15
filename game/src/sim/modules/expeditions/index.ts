@@ -23,7 +23,8 @@
  *   - setRoute: world's computeRoute; the world module sails the fleet hourly and emits Arrived.
  *   - steer: world's steerEntity for the expedition fleet, or the war-band ashore. The world module moves it hourly
  *     along the heading and emits Arrived (touch) when it comes within reach of a settlement or, for a war-band,
- *     of its ships (it boards again). Touching the home harbour after having left it ends the voyage.
+ *     of its ships (it boards again). Touching the home harbour after having left it only stops the ship there
+ *     (a notice says so); "Come home" (returnHome within reach of home) ends the voyage.
  *   - daily: rations (1 per man per day, Towering eats double), coastal foraging (§31.6), starvation (morale −10
  *     a day, after 3 days 1 % of the men a day), voyage fatigue after day 20 (morale −1 a day), low-food warning.
  *   - Arrived at one of the house's harbours: the voyage counter resets; at the home port after `returnHome`
@@ -40,7 +41,7 @@
  *     season (ice closes only the sea). The player steers the war-band (steer), sends it to a place (setRoute) or
  *     home (returnHome: "March home"); it eats from the baggage daily, meets land encounters, reaches settlements
  *     by touch (settlements' arrival for a war-band; plunder rides in the baggage within men × carryTonsPerMan
- *     tons) and stands down when it walks back into the hall. makeLandfall and returnToShips do not apply.
+ *     tons). Walking into the hall halts it there; "Come home" (returnHome) stands it down. makeLandfall and returnToShips do not apply.
  */
 import { CommandError } from '@sim/core/commands';
 import { clamp } from '@sim/core/dmath';
@@ -553,7 +554,12 @@ function marchArrived(draft: GameState, ctx: SimContext, fleetId: FleetId, settl
   }
   if (f.voyageDays !== 0) f.voyageDays = 0;
   const expedition = fleetId === draft.player.expeditionFleetId;
-  if ((f.homeward && settlementId === home) || (touched && expedition && settlementId === draft.player.capitalId)) standDownMarch(draft, ctx, fleetId, settlementId);
+  if (f.homeward && settlementId === home) standDownMarch(draft, ctx, fleetId, settlementId);
+  // Walking into the hall only halts the war-band there: the player ends the march with "Come home".
+  else if (expedition && settlementId === draft.player.capitalId) {
+    f.cameHome = true;
+    if (touched) ctx.notify('expeditions.notify.atHomeMarch', { priority: 'normal', vars: { place: s.name }, link: { kind: 'settlement', id: settlementId } });
+  }
 }
 
 type Loose = Record<string, unknown>;
@@ -593,8 +599,12 @@ const REACTIONS: Record<string, (draft: GameState, e: Loose, ctx: SimContext) =>
     // Landfall at a friendly harbour resets the voyage-fatigue counter (§8.5).
     if (f.voyageDays !== 0) f.voyageDays = 0;
     if (f.homeward && settlementId === home) standDown(draft, ctx, fleetId, settlementId);
-    // Steering (or sailing) into the home harbour after having left it ends the voyage, as Sail home does.
-    else if (touched && fleetId === draft.player.expeditionFleetId && settlementId === draft.player.capitalId) standDown(draft, ctx, fleetId, settlementId);
+    // Steering into the home harbour only brings the ship to rest there (owner walk-through 2026-11-14): the
+    // player ends the voyage with "Come home" (returnHome), never by an accidental touch.
+    else if (fleetId === draft.player.expeditionFleetId && settlementId === draft.player.capitalId) {
+      f.cameHome = true;
+      if (touched) ctx.notify('expeditions.notify.atHome', { priority: 'normal', vars: { place: s.name }, link: { kind: 'settlement', id: settlementId } });
+    }
   },
   /** Sea battles and encounters are settled through commands: check the expedition once everything has reacted. */
   PendingResolved(draft, _e, ctx) {
